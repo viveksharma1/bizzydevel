@@ -172,7 +172,7 @@ rcf/
 
 # Windows Store app package directories and files
 AppPackages/
-BundleArtifacts/
+BundleArtifacts/n
 Package.StoreAssociation.xml
 _pkginfo.txt
 
@@ -190,7 +190,7 @@ ClientBin/
 *.dbproj.schemaview
 *.pfx
 *.publishsettings
-node_modules/
+
 orleans.codegen.cs
 
 # Since there are multiple workflows, uncomment next line to ignore bower_components
