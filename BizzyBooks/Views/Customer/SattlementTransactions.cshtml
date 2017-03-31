@@ -1,0 +1,106 @@
+﻿@{
+    ViewBag.Title = "SattlementTransactions";
+    Layout = null;
+}
+
+<div class="panel lightblue bluebrdr marginbottom content" style="padding-bottom:10px">
+    <div class="panel-heading">
+        <strong class="heading">Settlement Transactions</strong>
+        <div class="col-sm-12 padding">
+            <div class="col-sm-3 padding">
+                <h4 class="tabheading">From</h4>
+                <div class='input-group'>
+                    <input type='text' class="form-control text-right" id="FromDate" />
+                    <span class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </span>
+
+                </div>
+            </div>
+
+            <div class="col-sm-3">
+                <h4 class="tabheading">To</h4>
+                <div class='input-group'>
+                    <input type='text' class="form-control text-right" id="ToDate" />
+                    <span class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </span>
+
+                </div>
+            </div>
+
+            <div class="col-sm-3 pull-right">
+                <h4 class="tabheading">Account</h4>
+                <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
+                           ui-select-focuser
+                           theme="selectize">
+                    <ui-select-match placeholder="">{{ $select.selected.company }}</ui-select-match>
+
+                    <ui-select-choices repeat="person in supliers  | filter: $select.search">
+                        <div>
+                            <span ng-model="supplier1" ng-bind-html="person.company | highlight: $select.search"></span>
+                        </div>
+
+
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-sm-12" style="padding:10px">
+    <input type="text" class="form-control" placeholder="Filter by name" ng-model="search" style="width:250px; float:left" />
+    <div class="pull-right" style="margin-top:5px">
+        <i class="fa fa-pencil tableicon" title="Batch Edit"></i>
+        <i class="fa fa-print tableicon" title="Print List"></i>
+        <i class="fa fa-gear tableicon" title="Settings"></i>
+    </div>
+
+    <table class="table-condensed" style="margin-top:10px; width:100%; float:left;table-layout:fixed; border:none">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Ref. No.</th>
+                <th>Account Name</th>
+                <th style="text-align:right">Total Amount</th>
+                <th style="text-align:right">Balance Amount</th>
+                <th style="text-align:right">Payment</th>
+                <th style="text-align:right">Receipt</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1/1/2017</td>
+                <td style="vertical-align:top">Inv/01</td>
+                <td style="vertical-align:top">Bhawani</td>
+                <td style="text-align:right; vertical-align:top">5,00,000</td>
+                <td style="text-align:right; vertical-align:top">4,00,000</td>
+                <td style="text-align:right; vertical-align:top">
+                <div class="content datelink cursor"><em class="pull-left text-primary">12/03/2017</em> 3,000</div>
+                <div class="content datelink cursor"><em class="pull-left text-primary">15/03/2017</em>4,000</div>
+                <div class="content datelink cursor"><em class="pull-left text-primary">18/03/2017</em>5,000</div>
+                </td>
+                <td style="text-align:right; vertical-align:top">&nbsp;</td>
+            </tr>
+            <tr>
+                <td style="vertical-align:top">Inv/01</td>
+                <td style="vertical-align:top">Bhawani</td>
+                <td style="text-align:right; vertical-align:top">5,00,000</td>
+                <td style="text-align:right; vertical-align:top">4,00,000</td>
+                <td style="text-align:right; vertical-align:top">&nbsp;</td>
+                <td style="text-align:right; vertical-align:top">
+                    <div class="content datelink cursor"><em class="pull-left text-primary">12/03/2017</em> 3,000</div>
+                    <div class="content datelink cursor"><em class="pull-left text-primary">15/03/2017</em>4,000</div>
+                    <div class="content datelink cursor"><em class="pull-left text-primary">18/03/2017</em>5,000</div>
+                </td>
+              
+            </tr>
+        </tbody>
+    </table>
+
+
+</div>
+
+
+

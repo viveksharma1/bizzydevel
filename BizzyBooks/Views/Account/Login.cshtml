@@ -1,0 +1,99 @@
+﻿@{
+    ViewBag.Title = "Login";
+    Layout = null;
+}
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
+<script>
+        $(function () {
+            try{
+                window.external.SetCompCode('hello');
+            }catch(e)
+            { }
+            
+        });
+        function test(message)
+        {
+            sessionStorage["CompCode"] = message;
+            angular.element($('.main_container')).scope().loggedin(message);
+        }
+
+
+        //$('#Move').click(function () {
+        //    if ($('#usernamedetail').val() == 'admin' && $('#userpassword').val() == 'admin@321')
+        //    {
+        //        window.location.href = '#/Customer/Customer';
+        //    }
+            
+        //});
+
+    </script>
+<style>
+    body{background:#0b4462;}
+    body{background:url('../images/bg2.png');}
+</style>
+<div class="overlay" >
+        <a class="hiddenanchor" id="toregister"></a>
+        <a class="hiddenanchor" id="tologin"></a>
+        <div id="wrapper" style="padding-left:0px; padding-top:7%;">
+            <div id="login" class="animate form" style="border:3px solid #075163; box-shadow:0px 2px 72px 14px #075163">
+                <div>
+                    <h1><i class="fa fa-compass" style="color:#57bbf0"></i> <span style="color:#57bbf0">Account</span> Books</h1>
+
+                   
+                </div>
+                <section class="login_content" >
+                    <form>
+                        <div>
+                            <p id="Invalidbtn" style="cursor:pointer">Login to your account.</p>
+                            <div class="loginwidth">
+                                <label>Email or user ID</label>
+                                <input id="usernamedetail" type="text" class="form-control" placeholder="" required="" />
+                            </div>
+                           
+                            <div  class="loginwidth" style="margin-top:20px">
+                                <label>Password</label>
+                                <input id="userpassword" type="password" class="form-control" placeholder="" required="" />
+                            </div>
+                            <div id="CaptchaDiv" class="loginwidth">
+                                <strong class="text-primary pull-left" style="font-style:italic; color:#000; margin-bottom:10px; width:100%; text-align:left">Enter again with captcha.</strong>
+                                <div class="col-sm-5" style="padding:0px">@*<img src="../images/captcha.png"/>*@ <h2 type="text" id="mainCaptcha" style="font-size: 19px; color: inherit; text-align: center; background: url('../images/captcha-bg.jpg'); height: 38px; margin-top: 2px; padding-top: 9px; border: 2px solid; font-weight: bold; "></h2></div>
+                                
+                                <div class="col-sm-7" style="padding:0px 0px 0px 10px; margin-top:2px"><input type="text" id="txtInput" style="height:38px; font-size:16px; font-weight:bold; color:#000" class="form-control" /></div>
+                            </div>
+                            <div style="text-align:center; width:100%; float:left" class="loginwidth">
+
+                                <button id="Move" class="btn btn-primary submit" type="submit" title="Log In">Log In</button>
+
+                            </div>
+                            <div class="clearfix"></div>
+                         
+                        </div>
+                    </form>
+                </section>
+            </div>
+            <!-- InvalidModal -->
+            <div id="InvalidModal" class="modal fade" role="dialog">
+                <div class="modal-dialog modal-sm" style="margin-top:100px">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+
+                        <div class="modal-body text-center" style="font-size:20px; padding:30px 15px 15px 15px">
+                            <p><img src="../images/warning-icon-24.png" style="cursor:pointer" data-dismiss="modal" id="okbtn" ng-click="errorpopup()" /></p>
+
+                            <span class="invalid">Invalid</span>
+
+                            <p>Username or Password</p>
+                        </div>
+                        <div class="modal-footer" style="text-align:center">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" >OK</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            
+           
+    </div>
+
+    </div>

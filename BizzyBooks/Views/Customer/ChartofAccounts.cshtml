@@ -1,0 +1,268 @@
+﻿
+@{
+    ViewBag.Title = "ChartofAccounts";
+    Layout = null;
+}
+<div class="panel lightblue bluebrdr marginbottom">
+    <div class="panel-heading">
+        <strong class="heading">Chart of Accounts</strong>
+        <div class="pull-right">
+            <button class="btn btn-sm btn-default" type="button">Run Report</button>
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary btn-sm" ng-click="Accountbtn()"id="NewCustomerCreate"> New</button>
+                <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="#/Customer/Import">Import Customers</a></li>
+
+                </ul>
+            </div>
+        </div>
+        </div>
+    </div>
+<div class="col-sm-12" style="padding:10px">
+    <input type="text" class="form-control" placeholder="Filter by name" ng-model="search"  style="width:250px; float:left"/>
+    <div class="pull-right" style="margin-top:5px">
+        <i class="fa fa-pencil tableicon" title="Batch Edit"></i>
+        <i class="fa fa-print tableicon" title="Print List"></i>
+        <i class="fa fa-gear tableicon" title="Settings"></i>
+    </div>
+
+    <table class="table-bordered table-condensed table-hover " style="margin-top:10px; width:100%; float:left;table-layout:fixed">
+        <thead>
+            <tr>
+                <th>NAME</th>
+                <th>GROUP</th>
+                
+                <th style="text-align:right">BALANCE</th>              
+                <th style="text-align:center">ACTION</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="data in account |filter:search">
+                <td>{{data.accountName}}</td>
+                <td>{{data.Under}} <span style="color:darkblue">({{data.type}})</span></td>
+             
+                <td style="text-align:right">{{data.credit- data.debit |number : fractionSize}}</td>
+             
+                <td style="text-align:right; width:150px">
+                    <button type="button" class="editbtn"><a ui-sref="Customer.accountHistory({accountName:data.accountName})" style="font-weight:bold">Account History</a></button>
+                    <class class="linkseparator" style="margin-top:4px; margin-right:0px"></class>
+                    <div class="btn-group editcaret">
+                        <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>
+                        <ul class="dropdown-menu editdrpdwn" role="menu" style="left:-135px">
+
+                            <li><a ui-sref="">Edit</a></li>
+                            <li><a href="">Delete</a></li>
+                            <li><a href="">Run Report</a></li>
+                           
+                        </ul>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+   
+
+</div>
+@*Account*@
+<div class="modal fade" id="formaccount">
+    <div class="modal-dialog">
+        <div class="modal-content content">
+            <div class="modal-header popupheader content" style="padding:10px 20px">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <div class="btn-group btn-toggle" style="top: 0px !important;margin-right: 5px;">
+                    <button class="btn btn-sm btn-default" ng-click="createAccountBtn()">Account</button>
+                    <button class="btn btn-sm btn-success active" ng-click="createGroupBtn()">Group</button>
+                </div>
+            </div>
+            <div class="modal-body content" style="padding:10px 20px;height:300px">
+                <div class="col-sm-6 paddinright">
+                   
+
+                    @*
+    <div class="col-sm-12 form-group padding5">
+        <label>Account Type</label>
+        <select class="form-control" ng-model="accountType">
+            <option>Current assets</option>
+            <option>Current liabilities</option>
+            <option>Equity</option>
+            <option>Bank</option>
+            <option>Fixed assets</option>
+            <option>Equity</option>
+            <option>Income</option>
+            <option>Direct Expense</option>
+            <option>Tax And Duties</option>
+
+        </select>
+    </div>
+                    *@
+                    <div class="col-sm-12 form-group padding5">
+                        <label><span class="red">*</span>Name</label>
+                        <input ng-model="accountName" type="text" class="form-control" />
+                    </div>
+                    
+                    <div class="col-sm-12 form-group padding5">
+                        <label><span class="red">*</span>Under</label>
+                        <div>
+                         
+                            <ui-select ng-model="groupMasters.selected" id="countryCode"
+                                      >
+                                
+                                <ui-select-match placeholder="Choose Group" 
+                                     >{{$select.selected.name}}</ui-select-match>
+                                   
+                                   
+                                    
+                                <ui-select-header>Top of the list!</ui-select-header>
+                                
+                               
+                                <ui-select-choices repeat="person in groupMaster  | filter: $select.search">
+                                    <div ng-init="balanceType = $select.selected.balanceType">
+                                        <span style="color:black"ng-model="supplier1" ng-bind-html="person.name | highlight: $select.search">{{person.type}}</span>
+                                        <span style="color:forestgreen">({{person.type}})</span>
+                                       
+                                    </div>
+
+
+                                </ui-select-choices>
+                            </ui-select>
+
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 form-group padding5">
+                        <label>Balance Type </label>
+                        
+                        <span style="padding-top:12px;margin-top:12px">
+                            <select  ng-model="balanceType"  
+                                    >
+                                <option value="credit">Credit</option>
+
+                                <option value="debit">Debit</option>
+                            </select>
+                        </span>
+                  
+
+                    </div>
+
+                   
+                </div>
+
+                <div id="form-popoverPopup" class="popupbox">
+                    <div>
+                        <label style="color:firebrick"><b>New Group</b></label>
+                        <i class="fa fa-times-circle cursor pull-right" title="close" ng-click="popuclose()"></i>
+                    </div>
+                    <div class="form-content" style="height:200px">
+                        <div class="form-group">
+                            <label><span class="red">*</span>Group Name</label>
+                            <input type="text" ng-model="groupName" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label><span class="red">*</span>Under<br /></label>
+                            <span>
+                                <select style="width:200px;height:300px"
+                                        class="js-example-basic-single">
+                                    <option value="AL">Alabama</option>
+
+                                    <option value="WY">Wyoming</option>
+                                </select>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+
+                    
+                    <div class="col-sm-12 form-group padding5">
+                        <label>Description</label>
+                        <input  ng-model="description" type="text"  class="form-control" ng-disabled="isDisabled" />
+                    </div>
+                    @*<div class="col-sm-12 form-group padding5" style="margin:20px 0px;">
+                        <label><input type="checkbox" ng-disabled="isDisabled" ng-model="checkboxModel.value1"ng-true-value="'true'" ng-false-value="'false'"/> Is sub-account </label>
+                        <div >
+                           
+                            <ui-select ng-model="accounts.selected" id="countryCode" ng-disabled="isDisabled"
+                                       ui-select-focuser
+                                       theme="bootstrap">
+                                <ui-select-match placeholder="Choose an account">{{$select.selected.accountName}}</ui-select-match>
+
+                                <ui-select-choices repeat="person in parentAccount  | filter: $select.search">
+                                    <div>
+                                        <span ng-model="supplier1" ng-bind-html="person.accountName | highlight: $select.search"></span>
+                                    </div>
+
+
+                                </ui-select-choices>
+                            </ui-select>
+
+                        </div>
+                    </div>*@
+
+                    
+                    <div class="col-sm-6 form-group padding5">
+                        <label>Rate (%)</label>
+                        <input ng-model="rate" ng-disabled="isDisabled" type="text" class="form-control"  />
+                       
+                        <label>Opening Balance</label>
+                        <input ng-model="openingBalance"  ng-disabled="isDisabled" type="text" class="form-control" />
+
+                    </div>
+                   
+
+                    
+                </div>
+
+
+
+            </div>
+            <div class="modal-footer content">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary btn-sm"  ng-click="createAccount()">Save changes</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+
+<!-- moreEmployeeModal -->
+<div id="newGroupModal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="width:251px">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header ">
+                <button type="button" class="close active" data-dismiss="modal">&times;</button>
+                <h2 class="modal-title ">New Group</h2>
+            </div>
+            <div style="height:200px">
+                <div class="form-group">
+                    <label><span class="red">*</span>Group Name</label>
+                    <input type="text" ng-model="groupName" class="form-control" />
+                </div>
+                <div class="col-sm-12 form-group padding5" style="margin:20px 0px;">
+                    
+                    
+                        <select style="width:200px;height:300px"
+                                class="js-example-basic-single">
+                            <option value="AL">Alabama</option>
+
+                            <option value="WY">Wyoming</option>
+                        </select>
+                  
+                </div>
+            </div>
+           
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,347 @@
+﻿
+@{
+    ViewBag.Title = "Logistics";
+    Layout = null;
+}
+
+<script type="text/ng-template" id="/ui-tree-select.html">
+    <ui-select ng-model="model.$selected"
+               ui-select-focuser
+               theme="selectize">
+        <ui-select-match placeholder="Select Customer">
+            {{ $select.selected.title }}
+        </ui-select-match>
+        <ui-select-choices repeat="group in groups | filter: $select.search">
+            <div>
+                <span ng-bind-html="group.title | highlight: $select.search"></span>
+                <!--<span ng-bind-html="'('+group.size+' users)'"></span>
+                <a href
+                  ng-show="group.parent"
+                  class="goto-child-group"
+                  ng-click="loadChildGroupsOf(group, $select)">
+                  <i class="fa fa-angle-right"></i>
+                </a>-->
+            </div>
+        </ui-select-choices>
+    </ui-select>
+</script>
+<script>
+    function CopyMe(oFileInput, sTargetID) {
+        var arrTemp = oFileInput.value.split('\\');
+        document.getElementById(sTargetID).value = arrTemp[arrTemp.length - 1];
+    }
+</script>
+    <div class="content" ng-init="model = {}">
+        <div class="panel lightblue bluebrdr marginbottom content">
+            <div class="panel-heading">
+                <strong class="heading">Logistics</strong>
+
+                <div class="btn-group pull-right">
+                    <button type="button" class="btn btn-primary btn-sm" ng-click="NewLogistics()"> New Logistics</button>
+                    <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu my">
+                        <li><a href="#/Customer/Import">Import Logistics</a></li>
+                    </ul>
+                </div>
+                
+                    <div class="col-sm-12" style="padding:0px">
+
+                        <div class="col-sm-7 padding">
+                            <div class="col-sm-6" style="margin-top:10px">
+                                <input type="text" class="form-control" placeholder="Shipping" />
+
+                            </div>
+
+                            <div class="col-sm-6" style="margin-top:10px">
+                                <input type="text" class="form-control" placeholder="Suppliers" />
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="col-sm-7 padding">
+                            <div class="col-sm-6" style="margin-top:10px">
+                                <ui-tree-select model="model">
+                                </ui-tree-select>
+
+
+                            </div>
+
+                            <div class="col-sm-6" style="margin-top:10px">
+                                <input type="text" class="form-control" placeholder="Email address" />
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="Additem"><i class="fa fa-plus"></i> Add</div>
+
+                        <div class="additemlist scrollbar scrollbarAngular col-sm-7 padding"></div>
+
+
+                        <div style="margin:10px; float:right; margin-top:-28px">
+                           
+                            <div class="dropdown" title="Status">
+                                <strong class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-tint text-info"></i>  Shipped on board
+                                    <span class="caret cursor"></span>
+                                </strong>
+                                <ul class="dropdown-menu my logisticsfilter">
+                                    <li><a href="#">Broking</a></li>
+                                    <li><a href="#">Shipped on board</a></li>
+                                    <li><a href="#">Tracking</a></li>
+                                    <li><a href="#">Destination</a></li>
+                                    <li><a href="#">IGM Filling</a></li>
+                                    <li><a href="#">Custom clearance</a></li>
+                                    <li><a href="#">Transportation | Delivery</a></li>
+                                    <li><a href="#">Return</a></li>
+                                    <li><a href="#">GPS</a></li>
+                                </ul>
+                            </div>
+                            <h4 class="tabheading">Logistics Id: <em class="text-info">01231</em></h4>
+                            <h4 class="tabheading">Date : <em class="text-info">17/08/2016</em></h4>
+                            <h4 class="tabheading">Remarks : <em class="text-info">-</em> </h4>
+                        </div>
+
+                    </div>
+                 
+
+            </div>
+
+            
+        </div>
+      
+
+        <div class="col-sm-12" style="padding-top:20px">
+            <div class="col-sm-3 padding5">
+                <input type="search" class="reportSearch" placeholder="Go to report" />
+
+            </div>
+
+            <div class="scroller-header my">
+                <a href="#panel-1" rel="panel" class="selected">Transaction List</a>
+                <a href="#panel-2" rel="panel">Customer Details</a>
+
+            </div>
+            <div class="scroller-body">
+                <div class="Tabmask">
+                    <div class="panelbox">
+                        <section id="panel-1" style="display:block">
+                            <div class="col-sm-12" style="padding-top:10px">
+                                <div class="dropdown pull-left" style="margin-bottom:10px">
+
+                                    <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" style="text-align:left">
+                                        Batch actions
+                                        <i class="fa fa-caret-down pull-right" style="margin-top:3px"></i>
+                                    </button>
+
+                                    <ul class="dropdown-menu my">
+                                        <li><a href="#" style="font-weight:bold">Print transactions</a></li>
+                                        <li><a href="#" style="font-weight:bold">Category selected</a></li>
+                                        <li><a href="#" style="font-weight:bold">Void transactions</a></li>
+                                    </ul>
+
+                                </div>
+
+                                <div class="pull-right">
+                                    <i class="fa fa-print tableicon" title="Print list"></i>
+                                    <i class="fa fa-clipboard tableicon" title="Export to excel"></i>
+                                    <i class="fa fa-gear tableicon" title="Settingd"></i>
+                                </div>
+                                <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                    <thead style="background:#e3eaf3; color:#486C8F; text-transform:uppercase">
+                                        <tr>
+                                            <th style="background:#c0d0e4; width:150px">Date</th>
+                                            <th class="fontnormal" style="width:150px">Stage</th>
+                                            <th class="fontnormal">Remarks</th>
+                                           
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr ng-click>
+                                            <td>23/07/2016</td>
+                                            <td style="color:forestgreen; width:100px">Open</td>
+                                            <td>Invoice</td>
+                                           
+                                        </tr>
+
+                                        <tr ng-click>
+                                            <td>17/07/2016</td>
+                                            <td style="color:red; width:100px">Cancel</td>
+                                            <td>Sales reciept</td>
+
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+                        </section>
+
+
+
+                        <section id="panel-2" style="padding-top:10px">
+                            <div class="col-sm-12">
+                                <button type="button" class="btn btn-default btn-sm pull-right" ng-click="NewLogistics()">Edit</button>
+                            </div>
+
+                            <div class="col-sm-6">
+
+                                <div class="info">
+                                    <div class="tableCell">
+                                        <div class="tableCell labelCell">
+                                            <span class="label">Upload Docs</span>
+                                        </div>
+                                        <div class="tableCell">
+                                            <span class="value">
+                                               item.doc
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="info">
+                                    <div class="tableCell">
+                                        <div class="tableCell labelCell">
+                                            <span class="label">Packing List</span>
+                                        </div>
+                                        <div class="tableCell">
+                                            <span class="value">
+                                                Packinglist.xlsx
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="info">
+                                    <div class="tableCell">
+                                        <div class="tableCell labelCell">
+                                            <span class="label">Bill of Ladline</span>
+                                        </div>
+                                        <div class="tableCell">
+                                            <span class="value">
+                                               LadlineBill.xlsx
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="info">
+                                    <div class="tableCell">
+                                        <div class="tableCell labelCell">
+                                            <span class="label">Form</span>
+                                        </div>
+                                        <div class="tableCell">
+                                            <span class="value">
+                                                Form.xlsx
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                              
+
+                            </div>
+
+
+                            
+
+                        </section>
+
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+
+
+
+        <div class="modal fade" id="NewLogisticsDiv">
+            <div class="modal-dialog" style="width:460px; margin-top:60px">
+                <div class="modal-content content">
+                    <div class="modal-header popupheader content" style="border-bottom:1px solid #e5e5e5">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">Logistics</h4>
+                    </div>
+                    <div class="modal-body content modalbodyexchange" style="padding:15px;">
+
+                        <div class="col-sm-6 padding5" style="margin-bottom:10px">
+                            <input type="text" class="form-control" placeholder="Shipping" />
+                          </div>
+                        <div class="col-sm-6 padding5" style="margin-bottom:10px">
+                            <input type="text" class="form-control" placeholder="Suppliers" />
+                        </div>
+
+                        <div class="col-sm-6 padding5" style="margin-bottom:10px">
+                            <ui-tree-select model="model">
+                            </ui-tree-select>
+                        </div>
+                        <div class="col-sm-6 padding5" style="margin-bottom:10px">
+                            <input type="text" class="form-control" placeholder="Email address"  style="height:32px; margin-bottom:5px" />
+                        </div>
+
+
+
+                         
+
+                                <div class="col-sm-6 padding5">
+                                    <select class="form-control selectcss">
+                                        <option>Upload Docs</option>
+                                        <option>Packing List</option>
+                                        <option>Bill of Ladline</option>
+                                        <option>Form</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-sm-5 padding5">
+                                    <input type="text" id="txtFileName" class="form-control" placeholder="Upload an EXCEL or CSV file" style="width:132px; margin-right:5px; float:left" />
+                                    <button type="button" class="btn btn-sm btn-default"><i class="fa fa-upload"></i></button>
+                                    <input type="file" class="uploaded logisticsUpload" onchange="CopyMe(this, 'txtFileName');" />
+                                </div>
+
+                                <div class="col-sm-1 padding5 delete" style="margin-top:0px">
+                                   <button type="button" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
+                                </div>
+
+                       
+
+                            
+
+
+                        </div>
+                    <div class="modal-footer content">
+                        <button type="button" class="btn btn-default btn-sm pull-left addexchange">Add Line</button>
+
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary btn-sm">Save changes</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div>
+
+    </div>
+
+
+
+    
+
+
+
+
+
+

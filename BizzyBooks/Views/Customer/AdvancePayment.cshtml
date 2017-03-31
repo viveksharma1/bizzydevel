@@ -1,0 +1,150 @@
+﻿
+@{
+    ViewBag.Title = "AdvancePayment";
+    Layout = null;
+}
+
+<script type="text/ng-template" id="/ui-tree-select.html">
+    <ui-select ng-model="model.$selected"
+               ui-select-focuser
+               theme="selectize">
+        <ui-select-match placeholder="Select a group">
+            {{ $select.selected.title }}
+        </ui-select-match>
+        <ui-select-choices repeat="group in groups | filter: $select.search">
+            <div>
+                <span ng-bind-html="group.title | highlight: $select.search"></span>
+                <!--<span ng-bind-html="'('+group.size+' users)'"></span>
+                <a href
+                  ng-show="group.parent"
+                  class="goto-child-group"
+                  ng-click="loadChildGroupsOf(group, $select)">
+                  <i class="fa fa-angle-right"></i>
+                </a>-->
+            </div>
+        </ui-select-choices>
+    </ui-select>
+</script>
+
+<div class="FlexPopup" style="display:block" ng-init="model = {}">
+    <div class="flexheader">
+        <ul class="list-unstyled submenu InvoiceMenu" style="float:left">
+            <li><a href="#"><i class="fa fa-history"></i></a></li>
+            <li><a href="#"><span>Advance Payment</span></a></li>
+        </ul>
+        <ul class="list-unstyled submenu InvoiceMenu">
+            <li><a href="#"><i class="fa fa-question-circle"></i></a></li>
+            <li><a href="" ng-click="goBack()"><i class="fa fa-times"></i></a></li>
+        </ul>
+    </div>
+    <div class="flexcontainer">
+        <div class="lightblue bluebrdr content" style="padding:10px 10px">
+            <div class="col-sm-3 padding5" style="margin-top:10px">
+                <ui-tree-select model="model">
+                </ui-tree-select>
+            </div>
+            <div class="col-sm-3" style="margin-top:10px">
+                <ui-tree-select model="model">
+                </ui-tree-select>
+            </div>
+
+            <div class="pull-right">
+                <p class="text-right">PAYMENT STATUS</p>
+                <span class="balancedue">OPEN</span>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="col-sm-2 padding5">
+                <h4 class="tabheading">Mailing address</h4>
+                <textarea class="form-control" style="height:80px"></textarea>
+            </div>
+            <div class="col-sm-2 padding5">
+                <h4 class="tabheading">Payment date</h4>
+                <div class='input-group'>
+                    <input type='text' class="form-control" id="PaymentdateAdvance" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+
+
+
+
+
+            <div class="col-sm-1 padding5 pull-right">
+                <h4 class="tabheading">Ref no.</h4>
+                <input type="text" class="form-control" />
+            </div>
+        </div>
+
+
+        <div class="col-sm-12">
+            <div class="col-sm-3 padding" style="padding-top:20px !important">
+
+                <div class="form-group">
+                    <h4 class="tabheading">Memo</h4>
+                    <textarea class="form-control" style="height:80px"></textarea>
+                </div>
+            </div>
+            <span class="pull-right" style="width:350px">
+
+                <h4 class="tabheading text-right">Amount</h4>
+                <input type="text" class="form-control pull-right text-right" placeholder="0.00" style="width:80px; margin-bottom:10px" />
+                <p class="pull-right">
+                    <label class="subtotal" style="font-size:1.5rem;">Total</label>
+                    <span class="subtotalvalue" style="font-size:1.5rem; font-weight:bold">Rs0.00</span>
+                </p>
+            </span>
+        </div>
+        <hr style="float:left; width:100%; margin:5px 0px" />
+
+        <div class="col-sm-12" style="margin-bottom:20px">
+            <div class="col-sm-4 padding">
+
+                <div class="form-group">
+                    <h4 class="tabheading">Attachments</h4>
+                    <div class="attachmets">
+                        <input type="file" id="uploadBtn" multiple="multiple" name="browsefile">
+                        <div>
+                            <i class="fa fa-plus"></i>
+                            <p>Add file</p>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <div id="upload_prev" class="upload_prev"></div>
+        </div>
+    </div>
+
+
+    <div class="flexfooter">
+        <span class="pull-left">
+            <button type="button" class="btn btn-sm btn-primary">Cancel</button>
+            <button type="button" class="btn btn-sm btn-primary">Clear</button>
+        </span>
+
+        <div class="pull-right">
+            <button type="button" class="btn btn-sm btn-primary">Save</button>
+            <div class="btn-group dropup">
+                <button type="button" class="btn btn-info btn-sm">Save and send</button>
+                <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:25px">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" style="right:-2px !important">
+                    <li><a href="#">Save and close</a></li>
+                    <li><a href="#">Save and send</a></li>
+                    <li><a href="#">Save and new</a></li>
+                    <li><a href="#">Save and share link</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+

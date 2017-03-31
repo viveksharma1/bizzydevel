@@ -1,0 +1,182 @@
+﻿
+@{
+    ViewBag.Title = "SearchTransactions";
+    Layout = null;
+}
+
+<div class="content">
+    <div class="panel lightblue bluebrdr marginbottom content">
+        <div class="panel-heading">
+            <strong class="heading">Search Transactions</strong>
+
+            <div class="col-sm-12" style="padding:10px 0px">
+
+                <div class="btn-group pull-left" style="margin-right:10px">
+                    <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" style="width:180px; color:#000 !important; text-align:left">
+                        All Transactions
+                        <i class="fa fa-sort pull-right" style="margin-top:3px"></i>
+                    </button>
+
+                    <ul class="dropdown-menu my searchfilter" style="width:180px;">
+                        <li><a href="#" style="font-weight:bold">All Transactions</a></li>
+                        <li><a href="#">Pending Approval</a></li>
+                       <li><a href="#">Bill Payments</a></li>
+                        <li><a href="#">Billable Expense Charges</a></li>
+                        <li><a href="#">Bills</a></li>
+                        <li><a href="#">Enquiry</a></li>
+                        <li><a href="#">Inventory</a></li>
+                        <li><a href="#">Invoices</a></li>
+                    </ul>
+
+                </div>
+
+
+                
+
+                </div>
+
+
+            <div class="col-sm-12" style="padding: 0px">
+
+                <div class="btn-group pull-left" style="margin-right:10px">
+                    <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" style="width:180px; color:#000 !important; text-align:left">
+                        Reference no.
+                        <i class="fa fa-sort pull-right" style="margin-top:3px"></i>
+                    </button>
+
+                    <ul class="dropdown-menu my Referencefilter" style="width:180px;">
+                        <li><a href="#" style="font-weight:bold">Amount</a></li>
+                        <li><a href="#">Amount (Line or Total)</a></li>
+                        <li><a href="#">Display Name</a></li>
+                        <li><a href="#">Last Modified Date</a></li>
+                        <li><a href="#">Line Description</a></li>
+                        <li><a href="#">Memo</a></li>
+                        <li><a href="#"> Reference no.</a></li>
+
+                    </ul>
+                </div>
+
+                <div class="btn-group pull-left" style="margin-right:10px">
+                    <button type="button" class="btn btn-sm  dropdown-toggle" data-toggle="dropdown" style="width:150px; color:#000 !important; text-align:left; background:#fff; border:1px solid #ccc">
+                        Equals
+                        <i class="fa fa-sort pull-right" style="margin-top:3px"></i>
+                    </button>
+
+                    <ul class="dropdown-menu my searchfilter" style="width:150px;">
+                        <li><a href="#">Contains</a></li>
+                        <li><a href="#">Equals</a></li>
+                        <li><a href="#">Does Not Contains</a></li>
+                        <li><a href="#">Not Equals</a></li>
+                        
+                    </ul>
+
+                </div>
+
+
+                <input type="text" class="form-control" style="width:150px;" placeholder="Enter Reference no."/>
+
+            </div>
+
+
+            <div class="col-sm-12" style="padding:10px 0px">
+                <button type="button" class="btn btn-sm btn-primary" id="SearchFilter">Search</button>
+                <button type="button" class="btn btn-sm btn-default">Add Filter</button>
+                </div>
+
+
+            </div>
+
+        
+    </div>
+
+    <div class="col-sm-12" style="padding:20px" id="SearchFilterDiv">
+
+        <p>Search: All Transactions</p>
+
+        <button type="button" class="btn btn-sm btn-default pull-left" id="DateFilter" style="margin-bottom:10px">Date Filter <i class="fa fa-caret-down pull-right" style="margin-top:4px; margin-left:15px"></i> </button>
+
+        <div id="DatefilterDiv">
+            <p>
+                <i class="fa fa-times-circle pull-right filterClose"></i>
+            </p>
+
+           <div class="col-sm-4">
+               <label>Date</label>
+               <select class="form-control selectcss">
+                   <option>Custom</option>
+                   <option>Today</option>
+                   <option>Yesterday and Today</option>
+                   <option>This Week</option>
+                   <option>This Month</option>
+                   <option>Past 7 Days</option>
+                   <option>Past 30 Days</option>
+                   <option>Custome</option>
+               </select>
+           </div>
+
+
+            <div class="col-sm-4">
+                <label>From</label>
+              <div class="input-group">
+                    <input type="text" class="form-control" id="DatefilterFrom">
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+
+
+            <div class="col-sm-4">
+                <label>TO</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="DatefilterTo">
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+            <div class="col-sm-12" style="padding:30px 10px 10px 10px">
+                <button type="button" class="btn btn-sm btn-default">Reset</button>
+
+                <button type="button" class="btn btn-sm btn-primary pull-right filterClose">Apply</button>
+            </div>
+        </div>
+
+        <span class="searchdate"> From 01/04/2015</span>
+
+        <div class="pull-right" style="margin-top:10px">
+            <i class="fa fa-print tableicon" title="Print list"></i>
+            <i class="fa fa-clipboard tableicon" title="Export to excel"></i>
+            <i class="fa fa-gear tableicon" title="Settingd"></i>
+        </div>
+
+        <table class="table NewTable" id="InvoiceTable">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>No.</th>
+                    <th>Contact</th>
+                    <th>Last Modified Date</th>
+                    <th class="text-right">Amount</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>22/08/2016</td>
+                    <td>Bill Payment (Cheque)</td>
+                    <td>2</td>
+                    <td>Manoj Kumar</td>
+                    <td>17/08/2016, 03:41 PM</td>
+                    <td class="text-right">Rs10,000.00</td>
+                    <td>Pending</td>
+                </tr>
+               
+            </tbody>
+        </table>
+    </div>
+   
+
+</div>
+

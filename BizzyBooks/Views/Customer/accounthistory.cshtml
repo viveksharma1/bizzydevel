@@ -1,0 +1,238 @@
+﻿
+@{
+    ViewBag.Title = "accountHistory";
+    Layout = null;
+}
+<div class="panel lightblue bluebrdr ">
+
+
+
+
+
+    <div class="panel-heading">
+        <label>Edit :</label>
+        <div class="btn-group btnhover">
+            <button type="button" class="btn btn-xs btn-default active" ng-click="LedgercheckOff()">Off</button>
+            <button type="button" class="btn btn-xs  btn-default" ng-click="LedgercheckOn()">On</button>
+
+        </div>
+        <button type="button" class="btn btn-xs  btn-success" id="HideLedger">Hide</button>
+        @*<div class="totalIncomeSection  card accordion">
+                <span style="font-size: 120%; color: #1E294B; "> <b>{{credit-debit |number : fractionSize}}</b></span>
+                <div class="subheading">Ending Balance</div>
+            </div>*@
+        @*
+            <div >
+
+                <i class="fa fa-print purple  tableicon " ng-click="generatePDF()" title="Print list"></i>
+                <i class="fa fa-clipboard tableicon" title="Export to excel"></i>
+                <i class="fa fa-gear tableicon" title="Settingd"></i>
+            </div>
+        *@
+    </div>
+</div>
+<div id="upperdivId" class="col-sm-12" style="padding-top:1px; height:auto; overflow:auto ">
+
+
+    <table style="border:1px solid #e3e3e3; background-color:#FDFEFE; width:100%; height:auto;" class="table-bordered table-condensed " cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="padding:10px; text-align:center">
+                <h1 style="border-bottom:3px solid #807C7B; font-size:20px;padding-left:100px width:70%;font-weight:bold; padding-bottom:10px; text-transform:uppercase; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">{{accountName}}</h1>
+                <strong>Account History</strong>
+                <p style="font-size:12px; line-height:20px">
+                    As Of <span ng-bind="currentDate | date :'dd MMM yyyy'"></span>
+                </p>
+            </td>
+        </tr>
+
+
+        <tr>
+            <td style="padding:10px">
+                <table class="table-condensed" fixed-header style="text-transform:uppercase; border:none; width:100%;height:260px">
+                    <thead>
+                        <tr>
+                            <th style="text-align:center; width:50px" class="Ledgercheck"><input type="checkbox" /></th>
+                            <th style="text-align:left; padding:5px;">Date</th>
+                            <th style="text-align:left; padding:5px">Particular</th>
+                            <th style="padding:5px; width:200px">VCH Type</th>
+                            <th style="text-align:center; padding:5px; width:80px">NO</th>
+                            <th style="text-align:right; padding:5px; width:150px">Debit</th>
+                            <th style="text-align:right; padding:5px; width:150px">Credit</th>
+
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr ng-repeat="data in ledgerData" class="cursor" ng-click="openTransaction(data.voRefId,data.voType)">
+                            <td style="text-align:center" class="Ledgercheck"><input type="checkbox" /></td>
+                            <td style="padding:5px" class="text-primary cursor" ng-bind="data.date  | date :'dd MMM yyyy'"></td>
+                            <td style="padding:5px;font-family: 'Gill Sans MT', 'Trebuchet MS', sans-serif">
+                                {{data.particular}}
+                            </td>
+                            <td style="padding:5px;font-family: 'Gill Sans MT', 'Trebuchet MS', sans-serif">
+                                {{data.voType}}
+                            </td>
+                            <td style="text-align:center; padding:5px;font-family: 'Gill Sans MT', 'Trebuchet MS', sans-serif">
+                                {{data.refNo}}
+
+                            </td>
+                            <td style="text-align:right;font:bold; padding:5px;font-family: 'Gill Sans MT', 'Trebuchet MS', sans-serif">
+                                <strong>{{data.debit}}</strong>
+
+                            </td>
+                            <td style="text-align:right;font:bold; padding:5px">
+                                <strong> {{data.credit}}</strong>
+
+                            </td>
+
+
+
+                        </tr>
+
+                    </tbody>
+                    <tfoot style="background:#f4f4f4">
+                        <tr style="border-top:1px solid #ccc;">
+                            <th style="padding:5px; text-align:right; font-weight:normal" colspan="4">Opening Balance</th>
+                            <th style="text-align:right;  padding:5px">{{debitOpening}}</th>
+                            <th style="text-align:right;  padding:5px">{{creditOpening}}</th>
+
+                        </tr>
+                        <tr>
+                            <th style="padding:5px; text-align:right; font-weight:normal" colspan="4">Current Total</th>
+                            <th style="text-align:right;  padding:5px">{{debit}}</th>
+                            <th style="text-align:right;  padding:5px">{{credit}}</th>
+
+                        </tr>
+                        <tr style="border-top:1px solid #ccc">
+                            <th style="padding:5px; text-align:right" colspan="4">Closing Balance</th>
+                            <th style="text-align:right;  padding:5px">&nbsp;</th>
+                            <th style="text-align:right;  padding:5px">{{ledgerBalance + accountData.openingBalance |number : fractionSize}}</th>
+
+                        </tr>
+                    </tfoot>
+                </table>
+
+            </td>
+        </tr>
+
+    </table>
+
+</div>
+
+@*Account*@
+<div class="modal fade" id="formaccount">
+    <div class="modal-dialog">
+        <div class="modal-content content">
+            <div class="modal-header popupheader content" style="padding:10px 20px">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Account</h4>
+            </div>
+            <div class="modal-body content" style="padding:10px 20px">
+                <div class="col-sm-6 paddinright">
+
+                    <div class="col-sm-12 form-group padding5">
+                        <label>Account Type</label>
+                        <select class="form-control" ng-model="accountType">
+                            <option>Current assets</option>
+                            <option>Current liabilities</option>
+                            <option>Equity</option>
+                            <option>Bank</option>
+                            <option>Fixed assets</option>
+                            <option>Equity</option>
+                            <option>Income</option>
+                            <option>Expenses</option>
+
+                        </select>
+                    </div>
+                    <div class="col-sm-12 form-group padding5">
+                        <label><span class="red">*</span>Group</label>
+                        <select class="form-control" multiple style="height:120px; width:75%" ng-model="accountgroup">
+                            <option>Sundry Creditor</option>
+                            <option>Sundry Debitor</option>
+                        </select>
+                    </div>
+
+                    <div class="col-sm-12 form-group padding5" style="margin-top:10px">
+                        <div class="form-control" style="height:200px; overflow-y:scroll; background:#f4f4f4; font-size:14px">
+                            <p><strong>Credit card</strong> accounts track the balance due on your business credit cards.</p>
+
+                            <p>Create one <strong>Credit card</strong> account for each credit card account your business uses.</p>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="col-sm-6">
+
+                    <div class="col-sm-12 form-group padding5">
+                        <label><span class="red">*</span>Name</label>
+                        <input ng-model="accountName" type="text" class="form-control" />
+                    </div>
+                    <div class="col-sm-12 form-group padding5">
+                        <label>Description</label>
+                        <input ng-model="description" type="text" class="form-control" />
+                    </div>
+                    <div class="col-sm-12 form-group padding5" style="margin:20px 0px;">
+                        <label><input type="checkbox" /> Is sub-account </label>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" style="width:280px; color:#000 !important; text-align:left;">
+                                Enter parent account
+                                <i class="fa fa-sort pull-right" style="margin-top:3px"></i>
+                            </button>
+
+                            <ul class="dropdown-menu my parentaccount" style="width:310px; height:300px; overflow-y:auto">
+                                <li class="panelSearch">
+                                    <input type="text" class="form-control" placeholder="Enter parent account" id="SearchFilter" />
+                                </li>
+                                <li style="margin-top:50px;"><a href="#">Cash on hold <em>Bank</em></a></li>
+                                <li><a href="#">Inventory Asset <em>Current Assets</em></a></li>
+                                <li><a href="#">TDS Receivable <em>Current Assets</em></a></li>
+                                <li><a href="#">Undeposited Funds <em>Current Assets</em></a></li>
+                                <li><a href="#">Uncategorised Asset <em>Current Assets</em></a></li>
+                                <li><a href="#">TDS Payable <em>Current Liabilities</em></a></li>
+                                <li><a href="#">Accounts Payable (Creditors) <em>Creditors</em></a></li>
+                                <li><a href="#">Opening Balance Equity <em>Equity</em></a></li>
+                                <li><a href="#">Retained Earnings <em>Equity</em></a></li>
+                                <li><a href="#">Billable Expense Income <em>Income</em></a></li>
+                                <li><a href="#">Discounts given <em>Income</em></a></li>
+                                <li><a href="#">Sales of Product Income <em>Income</em></a></li>
+                                <li><a href="#">Services <em>Income</em></a></li>
+                                <li><a href="#">Uncategorised Income <em>Income</em></a></li>
+                                <li><a href="#">Cost of sales <em>Cost of Goods Sold</em></a></li>
+                                <li><a href="#">Inventory Shrinkage <em>Cost of Goods Sold</em></a></li>
+                                <li><a href="#">Purchases <em>Expenses</em></a></li>
+                                <li><a href="#">Unapplied Cash Bill Payment Expense <em>Expenses</em></a></li>
+                                <li><a href="#">Uncategorised Expense <em>Expenses</em></a></li>
+                                <li><a href="#">Other Expense <em>Other Expenses</em></a></li>
+                            </ul>
+
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4 form-group padding5">
+                        <label>Balance</label>
+                        <input ng-model="balance" type="text" class="form-control" />
+                    </div>
+
+                    <div class="col-sm-4 form-group padding5">
+                        <label>as of</label>
+                        <input type="text" class="form-control" id="asofdate" placeholder="dd/mm/yyy" />
+                    </div>
+
+                </div>
+
+
+
+            </div>
+            <div class="modal-footer content">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" ng-click="createAccount()">Save changes</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+

@@ -1,0 +1,843 @@
+﻿
+@{
+    ViewBag.Title = "ExciseInvoice";
+    Layout = null;
+}
+
+
+<script type="text/ng-template" id="/ui-tree-select.html">
+    <ui-select ng-model="model.$selected"
+               ui-select-focuser
+               theme="selectize">
+        <ui-select-match placeholder="Select a group">
+            {{ $select.selected.title }}
+        </ui-select-match>
+        <ui-select-choices repeat="group in groups | filter: $select.search">
+            <div>
+                <span ng-bind-html="group.title | highlight: $select.search"></span>
+                <!--<span ng-bind-html="'('+group.size+' users)'"></span>
+                <a href
+                  ng-show="group.parent"
+                  class="goto-child-group"
+                  ng-click="loadChildGroupsOf(group, $select)">
+                  <i class="fa fa-angle-right"></i>
+                </a>-->
+            </div>
+        </ui-select-choices>
+    </ui-select>
+</script>
+
+<div class="FlexPopup" style="display:block" ng-init="model = {}">
+    <div class="flexheader lightblue  ">
+        <label style="float:left;padding:15px ">
+
+            <strong><span style="font-size:20px;  color:#585655">Excise Invoice</span></strong>
+        </label>
+
+        <label style="float:right;padding:15px">
+            <span style="float:left; font-size:18px; margin-top:-2px">
+                <label style="color:#000">State :</label>
+                <span class="dropdown my" style="width:auto; margin-right:20px;">
+                    <a href="#" class="dropdown-toggle stagesdrpdwn" data-toggle="dropdown" style="color:#ff9800">Closed<span class="caret" style="margin-top:0px;color:#000"></span></a>
+                    <ul class="dropdown-menu dropmenu">
+                        <li>Closed</li>
+                        <li>Edit</li>
+                        <li>New</li>
+                        <li>Discard</li>
+
+                    </ul>
+                </span>
+            </span>
+            <strong style="font-size:24px; margin-top:-7px; float:right"><a href="" ng-click="goBack()"><i class="fa fa-times"></i></a></strong>
+
+
+        </label>
+
+    </div>
+    <div class="flexcontainer">
+        <div class="lightblue bluebrdr content" style="padding:10px 10px">
+
+            <div class="col-sm-5 padding">
+                <div class="col-sm-12" style="padding-left:0px">
+                    <label>Type  :</label>
+                    <div class="btn-group btnhover">
+                        <button type="button" class="btn btn-xs active btn-default">Consignee</button>
+                        <button type="button" class="btn btn-xs  btn-default">Buyer</button>
+
+                    </div>
+                </div>
+
+                <div class="col-sm-8"  style="padding-left:0px">
+                    <h4 class="tabheading font_11">Name</h4>
+                    <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
+                               ui-select-focuser
+                               theme="selectize">
+                        <ui-select-match placeholder="">{{ $select.selected.company }}</ui-select-match>
+
+                        <ui-select-choices repeat="person in supliers  | filter: $select.search">
+                            <div>
+                                <span ng-model="supplier1" ng-bind-html="person.company | highlight: $select.search"></span>
+                            </div>
+
+
+                        </ui-select-choices>
+                    </ui-select>
+                    </div>
+                <div class="col-sm-4 padding">
+                    <h4 class="tabheading font_11">ECC No.</h4>
+                    <input type="text" class="form-control" />
+                    </div>
+                    <div class="col-sm-8" style="padding-left:0px">
+                        <h4 class="tabheading font_11">Shipping address</h4>
+
+                        <textarea class="form-control" style="height:88px"></textarea>
+                    </div>
+
+                <div class="col-sm-4 padding">
+
+                    <h4 class="tabheading font_11">Excise No.</h4>
+                    <input type="text" class="form-control" />
+                    <div class="col-sm-6 padding">
+                        <h4 class="tabheading font_11">CST TIN NO. </h4>
+                        <input type="text" class="form-control" />
+                        </div>
+                    <div class="col-sm-6 padding">
+                        <h4 class="tabheading font_11">VAT TIN NO. </h4>
+                        <input type="text" class="form-control" />
+                    </div>
+
+                    </div>
+                </div>
+
+
+            <div class="col-sm-4 padding">
+                <div class="col-sm-12" style="padding-left:0px; height:23px">&nbsp;</div>
+                    <div class="col-sm-8 padding">
+                        <h4 class="tabheading font_11">Transporter Name</h4>
+                        <input type="text" class="form-control" />
+                    </div>
+
+                    <div class="col-sm-4 padding">
+                        <h4 class="tabheading font_11">Vehicle No.</h4>
+                        <input type="text" class="form-control" />
+                    </div>
+                    <div class="col-sm-4 padding"  style="margin-top:8px" >
+
+                        <h4 class="tabheading font_11">Invoice Date</h4>
+                        <div class='input-group'>
+                            <input type='text' class="form-control" id='InvoiceDate' />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-4 padding"  style="margin-top:8px" >
+                        <h4 class="tabheading font_11">Payment Days</h4>
+
+                        <input type="text" class="form-control" />
+
+                    </div>
+                    <div class="col-sm-4 padding"  style="margin-top:8px" >
+                        <h4 class="tabheading font_11">Due Date</h4>
+                        <div class='input-group'>
+                            <input type='text' class="form-control" ng-model="billDueDate" id='DueDate' />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+
+
+                    </div>
+
+
+
+
+                </div>
+
+    
+
+
+
+            <div class="col-sm-3 padding text-right pull-right">
+                <p class="text-right">Balance Due</p>
+                <p class="balancedue" style="float:none">&#8377; {{totaltax + totalcharges }}</p>
+
+                <button type="button" class="btn btn-sm btn-default pull-right">Make Payment</button>
+                <small style="float:right; width:100%; margin:10px 0px"><span class="text-primary cursor" id="myPopover" data-toggle="popover" data-placement="left">1 reciept </span> made on 12/march/2017</small>
+                <h4 class="tabheading" style="float:right; width:100%; margin-top:0px !important">Invoice no.</h4>
+                <input type="text" class="form-control pull-right" ng-model="expenseNo" disabled style="width:100px" />
+            </div>
+
+
+            <div id="ammountAlert" class="modal fade" role="dialog">
+                <div class="modal-alert">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+
+                        <div class="modal-body fa fa-exclamation-triangle fa-1x co-dan" style="background-color:#ffffff">
+                            <label style="text-align:center;color:#0A0503">Please Add Amount</label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div id="accountAlert" class="modal fade" role="dialog">
+                <div class="modal-alert">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+
+                        <div class="modal-body fa fa-exclamation-triangle fa-1x co-dan" style="background-color:#ffffff">
+                            <label style="text-align:center;color:#0A0503">Please Select Account</label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div id="form-popoverPopup" class="popupbox">
+                <div class="dijitDialogTitle">
+                    New Suppliers
+                    <i class="fa fa-times-circle cursor pull-right" title="close" ng-click="popuclose()"></i>
+                </div>
+                <div class="form-content">
+                    <div class="form-group">
+                        <label><span class="red">*</span>Suppliers Name</label>
+                        <input type="text" ng-model="suppliersName" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label><span class="red">*</span>Email</label>
+                        <input type="text" ng-model="email1" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label><span class="red">*</span>Mobile No.</label>
+                        <input type="text" ng-model="mobile" class="form-control" />
+                    </div>
+
+
+
+                    <div class="form-footer">
+                        <button type="button" class="btn btn-sm btn-default" ng-click="saveSuppliers()">Save</button>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+
+
+        <div class="col-sm-12">
+            <h4 data-toggle="collapse" data-target="#ItemDetail2" class="cursor pull-left" style="margin-top: 15px; margin-bottom: 0px;">
+                <i class="fa fa-caret-right"></i> Item details
+            </h4>
+
+            <div class="pull-right" style="margin-top:10px;"> 
+                <label><input type="checkbox" /> Rate duty inclusive</label>&nbsp;
+                <button ng-click="AddLineItem()" class="btn btn-info btn-sm" style="font-size:12px;"> Edit</button>
+                <button ng-click="AddLineItem()" class="btn btn-primary btn-sm" style="font-size:12px;"> Add Inventory</button>
+
+
+            </div>
+
+
+
+            <!-- AddLineItemModal -->
+            <div id="AddLineItemModal" class="modal fade" role="dialog">
+                <div class="modal-dialog modal-lg" style="margin-top:5px">
+
+                    <!-- Modal content-->
+                    <div class="modal-content" style="float:left; width:100%">
+                        <div class="modal-header" style="float:left; width:100%">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Inventory Management</h4>
+                        </div>
+                        <div class="modal-body" style="float:left; width:100%; padding:10px;">
+                            <div class="col-sm-2 padding">
+
+                                <div class="col-sm-12 filterBox" style="margin-bottom:10px">
+                                    <h3>Sales</h3>
+                                    <div class="form-group">
+                                        <h4 class="tabheading font_11">Rate</h4>
+                                        <input type="text" class="form-control" />
+                                    </div>
+                                    <div class="form-group">
+                                        <h4 class="tabheading font_11">Amount</h4>
+                                        <input type="text" class="form-control" />
+                                    </div>
+                                    <div class="form-group" style="margin-top:5px">
+                                        <label><input type="checkbox" /> All Qty</label>
+                                    </div>
+                                    <hr style="margin:0px 0px 10px 0px" />
+                                    <span class="pull-right">
+                                        <button class="btn btn-sm btn-default" type="button">Clear</button>
+                                        <button class="btn btn-sm btn-primary" type="button">Add</button>
+                                    </span>
+                                </div>
+
+
+                                <div class="col-sm-12 filterBox">
+                                    <h3>Search Filter</h3>
+                                    <div class="form-group">
+                                        <h4 class="tabheading font_11">Godown</h4>
+                                        <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
+                                                   ui-select-focuser
+                                                   theme="selectize">
+                                            <ui-select-match placeholder="">{{ $select.selected.company }}</ui-select-match>
+
+                                            <ui-select-choices repeat="person in supliers  | filter: $select.search">
+                                                <div>
+                                                    <span ng-model="supplier1" ng-bind-html="person.company | highlight: $select.search"></span>
+                                                </div>
+
+
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <h4 class="tabheading font_11">Description</h4>
+                                        <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
+                                                   ui-select-focuser
+                                                   theme="selectize">
+                                            <ui-select-match placeholder="">{{ $select.selected.company }}</ui-select-match>
+
+                                            <ui-select-choices repeat="person in supliers  | filter: $select.search">
+                                                <div>
+                                                    <span ng-model="supplier1" ng-bind-html="person.company | highlight: $select.search"></span>
+                                                </div>
+
+
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <h4 class="tabheading font_11">Remarks</h4>
+                                        <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
+                                                   ui-select-focuser
+                                                   theme="selectize">
+                                            <ui-select-match placeholder="">{{ $select.selected.company }}</ui-select-match>
+
+                                            <ui-select-choices repeat="person in supliers  | filter: $select.search">
+                                                <div>
+                                                    <span ng-model="supplier1" ng-bind-html="person.company | highlight: $select.search"></span>
+                                                </div>
+
+
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <h4 class="tabheading font_11">Rg No.</h4>
+                                        <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
+                                                   ui-select-focuser
+                                                   theme="selectize">
+                                            <ui-select-match placeholder="">{{ $select.selected.company }}</ui-select-match>
+
+                                            <ui-select-choices repeat="person in supliers  | filter: $select.search">
+                                                <div>
+                                                    <span ng-model="supplier1" ng-bind-html="person.company | highlight: $select.search"></span>
+                                                </div>
+
+
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <h4 class="tabheading font_11">Excise per unit</h4>
+                                        <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
+                                                   ui-select-focuser
+                                                   theme="selectize">
+                                            <ui-select-match placeholder="">{{ $select.selected.company }}</ui-select-match>
+
+                                            <ui-select-choices repeat="person in supliers  | filter: $select.search">
+                                                <div>
+                                                    <span ng-model="supplier1" ng-bind-html="person.company | highlight: $select.search"></span>
+                                                </div>
+
+
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <h4 class="tabheading font_11">SAD per unit</h4>
+                                        <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
+                                                   ui-select-focuser
+                                                   theme="selectize">
+                                            <ui-select-match placeholder="">{{ $select.selected.company }}</ui-select-match>
+
+                                            <ui-select-choices repeat="person in supliers  | filter: $select.search">
+                                                <div>
+                                                    <span ng-model="supplier1" ng-bind-html="person.company | highlight: $select.search"></span>
+                                                </div>
+
+
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <h4 class="tabheading font_11">Net Wt</h4>
+                                        <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
+                                                   ui-select-focuser
+                                                   theme="selectize">
+                                            <ui-select-match placeholder="">{{ $select.selected.company }}</ui-select-match>
+
+                                            <ui-select-choices repeat="person in supliers  | filter: $select.search">
+                                                <div>
+                                                    <span ng-model="supplier1" ng-bind-html="person.company | highlight: $select.search"></span>
+                                                </div>
+
+
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+
+
+                                    <hr style="margin:0px 0px 10px 0px" />
+                                    <span class="pull-right">
+                                        <button class="btn btn-sm btn-default" type="button">Clear</button>
+                                        <button class="btn btn-sm btn-primary" type="button">Search</button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-10">
+                                <table style="width:100%; margin:10px 0px; border:1px solid #e3e3e3; background:rgba(158, 158, 158, 0.03)">
+                                    <tr>
+                                        <th class="tablepadding lightblue">Stock</th>
+                                        <td class="tablepadding">
+                                            <strong>Total Item :</strong>
+                                            <span class="text-primary">12</span>
+                                        </td>
+                                        <td class="tablepadding">
+                                            <strong>Total Qty :</strong>
+                                            <span class="text-primary">3</span>
+                                        </td>
+                                        <td class="tablepadding">
+                                            <strong>Total Amount :</strong>
+                                            <span class="text-primary">2000</span>
+                                        </td>
+                                        <td style="text-align:right" class="tablepadding">
+                                            <button class="btn btn-xs btn-warning" style="margin-right:5px">View</button>
+                                            <button class="btn btn-xs btn-danger" style="margin-right:5px">Remove</button>
+                                            <button class="btn btn-xs btn-primary">Add</button>
+                                        </td>
+                                    </tr>
+
+                                </table>
+                                <table class="table-bordered table-condensed table-hover table" style="font-size:13px !important;">
+                                    <thead>
+
+                                        <tr style="background:#F0EEEE">
+                                            <th style="text-align:center"><input type="checkbox" /></th>
+                                            <th style="text-align:center">Godown</th>
+                                            <th>Description</th>
+                                            <th>Remarks</th>
+                                            <th style="text-align:center">RG No.</th>
+                                            <th style="text-align:center;">Excise per unit</th>
+                                            <th style="text-align:center;">SAD per unit</th>
+                                            <th style="text-align:center">Net Wt</th>
+                                            <th style="text-align:center">Sale Qty</th>
+                                            <th style="text-align:right">Rate</th>
+                                            <th style="text-align:right">AMOUNT(&#8377;)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td style="text-align:center"><input type="checkbox" /></td>
+                                            <td class="Count" style="text-align:center">Shiv Shankar</td>
+                                            <td class="Count">CRSS Stainless Sheet/Coil</td>
+                                            <td class="Count">304 No.4</td>
+                                            <td class="Count" style="text-align:center">143</td>
+                                            <td class="Count" style="text-align:center">23.5626</td>
+                                            <td class="Count" style="text-align:center">&nbsp;</td>
+                                            <td class="Count" style="text-align:center">1740.00</td>
+                                            <td class="Count" style="text-align:center"><input type="text" class="form-control text-center" value="2" /></td>
+                                            <td style="text-align:right"><input type="text" class="form-control text-right" value="200" /></td>
+                                            <td style="text-align:right"><input type="text" class="form-control text-right" value="2000" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:center"><input type="checkbox" /></td>
+                                            <td class="Count" style="text-align:center">Shiv Shankar</td>
+                                            <td class="Count">CRSS Stainless Sheet/Coil</td>
+                                            <td class="Count">304 No.4</td>
+                                            <td class="Count" style="text-align:center">143</td>
+                                            <td class="Count" style="text-align:center">23.5626</td>
+                                            <td class="Count" style="text-align:center">&nbsp;</td>
+                                            <td class="Count" style="text-align:center">1740.00</td>
+                                            <td class="Count" style="text-align:center"><input type="text" class="form-control text-center" value="2" /></td>
+                                            <td style="text-align:right"><input type="text" class="form-control text-right" value="200" /></td>
+                                            <td style="text-align:right"><input type="text" class="form-control text-right" value="2000" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:center"><input type="checkbox" /></td>
+                                            <td class="Count" style="text-align:center">Shiv Shankar</td>
+                                            <td class="Count">CRSS Stainless Sheet/Coil</td>
+                                            <td class="Count">304 No.4</td>
+                                            <td class="Count" style="text-align:center">143</td>
+                                            <td class="Count" style="text-align:center">23.5626</td>
+                                            <td class="Count" style="text-align:center">&nbsp;</td>
+                                            <td class="Count" style="text-align:center">1740.00</td>
+                                            <td class="Count" style="text-align:center"><input type="text" class="form-control text-center" value="2" /></td>
+                                            <td style="text-align:right"><input type="text" class="form-control text-right" value="200" /></td>
+                                            <td style="text-align:right"><input type="text" class="form-control text-right" value="2000" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:center"><input type="checkbox" /></td>
+                                            <td class="Count" style="text-align:center">Shiv Shankar</td>
+                                            <td class="Count">CRSS Stainless Sheet/Coil</td>
+                                            <td class="Count">304 No.4</td>
+                                            <td class="Count" style="text-align:center">143</td>
+                                            <td class="Count" style="text-align:center">23.5626</td>
+                                            <td class="Count" style="text-align:center">&nbsp;</td>
+                                            <td class="Count" style="text-align:center">1740.00</td>
+                                            <td class="Count" style="text-align:center"><input type="text" class="form-control text-center" value="2" /></td>
+                                            <td style="text-align:right"><input type="text" class="form-control text-right" value="200" /></td>
+                                            <td style="text-align:right"><input type="text" class="form-control text-right" value="2000" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:center"><input type="checkbox" /></td>
+                                            <td class="Count" style="text-align:center">Shiv Shankar</td>
+                                            <td class="Count">CRSS Stainless Sheet/Coil</td>
+                                            <td class="Count">304 No.4</td>
+                                            <td class="Count" style="text-align:center">143</td>
+                                            <td class="Count" style="text-align:center">23.5626</td>
+                                            <td class="Count" style="text-align:center">&nbsp;</td>
+                                            <td class="Count" style="text-align:center">1740.00</td>
+                                            <td class="Count" style="text-align:center"><input type="text" class="form-control text-center" value="2" /></td>
+                                            <td style="text-align:right"><input type="text" class="form-control text-right" value="200" /></td>
+                                            <td style="text-align:right"><input type="text" class="form-control text-right" value="2000" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:center"><input type="checkbox" /></td>
+                                            <td class="Count" style="text-align:center">Shiv Shankar</td>
+                                            <td class="Count">CRSS Stainless Sheet/Coil</td>
+                                            <td class="Count">304 No.4</td>
+                                            <td class="Count" style="text-align:center">143</td>
+                                            <td class="Count" style="text-align:center">23.5626</td>
+                                            <td class="Count" style="text-align:center">&nbsp;</td>
+                                            <td class="Count" style="text-align:center">1740.00</td>
+                                            <td class="Count" style="text-align:center"><input type="text" class="form-control text-center" value="2" /></td>
+                                            <td style="text-align:right"><input type="text" class="form-control text-right" value="200" /></td>
+                                            <td style="text-align:right"><input type="text" class="form-control text-right" value="2000" /></td>
+                                        </tr>
+
+                                    </tbody>
+                                    <tfoot>
+                                        <tr style="background:#F0EEEE">
+                                            <th style="text-align:center"><input type="checkbox" /></th>
+                                            <th style="text-align:center">Godown</th>
+                                            <th>Description</th>
+                                            <th>Remarks</th>
+                                            <th style="text-align:center">RG No.</th>
+                                            <th style="text-align:center;">Excise per unit</th>
+                                            <th style="text-align:center;">SAD per unit</th>
+                                            <th style="text-align:center">Net Wt</th>
+                                            <th style="text-align:center">Sale Qty</th>
+                                            <th style="text-align:right">Rate</th>
+                                            <th style="text-align:right">AMOUNT(&#8377;)</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+
+
+                            </div>
+
+                        </div>
+                        <div class="modal-footer" style="float:left; width:100%">
+
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+
+            <hr style="float:left; width:100%; margin-bottom:10px; margin-top: 10px;" />
+
+
+            <div class="collapse in" id="ItemDetail3" ng-init="role = admin">
+
+                <table class="table-bordered table-condensed table-hover table" fixed-header id="ItemTable" style="height:180px">
+                    <thead>
+
+                        <tr>
+                            <th style="width:50px">S.No.</th>
+                            <th>Description</th>
+                            <th style="text-align:center;">RG</th>
+                            <th style="text-align:center;">Qty (Kg)</th>
+                            <th style="text-align:right;">Rate</th>
+                            <th style="text-align:center;">Excise per unit</th>
+                            <th style="text-align:center;">SAD per unit</th>
+                            <th style="text-align:right" width="200">AMOUNT(&#8377;)</th>
+                            <th style="width:50px">&nbsp;</th>
+
+                        </tr>
+                    </thead>
+
+
+
+                    <tbody>
+
+
+                        <tr>
+                            <td style="text-align:center">1</td>
+                            <td class="Count">CRSS Shets/Plates</td>
+                            <td class="Count" style="text-align:center">&nbsp;</td>
+                            <td class="Count" style="text-align:center">2554.00</td>
+                            <td class="Count" style="text-align:right">&nbsp;</td>
+                            <td class="Count" style="text-align:center">23.5626</td>
+                            <td class="Count" style="text-align:center">&nbsp;</td>
+                            <td class="Count" style="text-align:right">2000</td>
+                            <td class="text-center Count" value="0.00"><a class="edit" title="Edit"> <i class="fa fa-times-circle cursor RemoveTR" style="font-size:16px" ng-click="remove($index)"></i></a></td>
+                        </tr>
+
+                    </tbody>
+
+                    <tfoot>
+                        <tr style="background:#F0EEEE">
+                            <th style="width:50px">S.No.</th>
+                            <th>Description</th>
+                            <th style="text-align:center;">RG</th>
+                            <th style="text-align:center;">Qty (Kg)</th>
+                            <th style="text-align:right;">Rate</th>
+                            <th style="text-align:center;">Excise per unit</th>
+                            <th style="text-align:center;">SAD per unit</th>
+                            <th style="text-align:right" width="200">AMOUNT(&#8377;)</th>
+                            <th style="width:50px">&nbsp;</th>
+
+                        </tr>
+                    </tfoot>
+                </table>
+
+
+            </div>
+
+        </div>
+
+        <div class="col-sm-12">
+            <h4 data-toggle="collapse" data-target="#ItemDetail1234" class="cursor pull-left" style="margin-top: 15px; margin-bottom: 0px;">
+                <i class="fa fa-caret-right"></i> Account details
+            </h4>
+            <hr style="float:left; width:100%; margin:5px 0px" />
+
+            <div class="collapse in" id="ItemDetail1234" style="float:left; width:100%">
+
+                <table class="table-bordered table-condensed table-hover selectTable" fixed-header id="ItemTable" style="width:100%; margin-right:10px; height:180px">
+
+                    <thead>
+                        <tr style="background:rgb(243, 245, 248)">
+                            <th>
+                                <ui-select ui-tree-select ng-model="accounts.selected.accountName" id="countryCode"
+                                           ui-select-focuser
+                                           theme="selectize">
+
+                                    <ui-select-match placeholder="ACCOUNT">
+                                        <span class="selectuiTable" style="width:100%">
+                                            <span>{{ $select.selected.accountName || $select.search }}</span>
+                                            <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
+                                        </span>
+
+                                    </ui-select-match>
+
+                                    <ui-select-choices repeat="person.accountName as person in account  | filter: $select.search" refresh="refreshAccountTable($select)" refresh-delay="2">
+
+                                        <div>
+                                            <span ng-bind-html="person.accountName | highlight: $select.search"></span>
+                                        </div>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                            </th>
+
+                            @*<th><input type="text" id="arshiyaCharge"
+                                ng-model="accountDescription" placeholder="DESCRIPTION" class="form-control" style="margin-top:-5px"  /></th>*@
+
+                            <th>
+                                <input type="text" id="arshiyaCharge"
+                                       ng-model="accountAmount" placeholder="AMOUNT" class="form-control text-right" style="margin-top:-5px" />
+                            </th>
+                            <th style="text-align:center"><button ng-click="addAccount()" class="btn btn-primary btn-sm">Add</button></th>
+                        </tr>
+
+
+                        <tr>
+                            <th style="padding:5px;">ACCOUNT</th>
+                            @*<th style="padding:5px;width:300px;">DESCRIPTION</th>*@
+                            <th style="width:150px; white-space:nowrap; padding:5px; text-align:right">AMOUNT (&#8377;)</th>
+                            <th style="width:15px; padding:5px;">&nbsp;</th>
+                        </tr>
+                    </thead>
+
+                    <tbody ng-repeat="item in accountTable">
+                        <tr>
+                            <td class="Count" ng-click="editAccountTable(item,$index)">{{item.accountName}}</td>
+                            @*<td class="Count">{{item.description}}</td>*@
+                            <td class="Count" style="text-align:right">{{item.amount}}</td>
+                            <td class="text-center Count" value="0.00"><a class="edit" title="Edit"> <i class="fa fa-times-circle cursor RemoveTR" style="font-size:16px" ng-click="removeAccountTable($index)"></i></a></td>
+                        </tr>
+
+                    </tbody>
+                    <tfoot>
+                        <tr style="background:#F0EEEE">
+                            <th style="padding:5px;">Total</th>
+                            @*<th style="padding:5px;width:300px;">&nbsp;</th>*@
+                            <th style="width:150px; white-space:nowrap; padding:5px; text-align:right">{{netweight |number : 2}}</th>
+                            <th style="width:15px; padding:5px;">&nbsp;</th>
+                        </tr>
+                    </tfoot>
+                </table>
+
+            </div>
+        </div>
+
+        <hr style="float:left; width:100%; margin:10px 0px" />
+        <div class="col-sm-12">
+            <div class="col-sm-4 padding">
+
+                <div class="form-group">
+                    <h4 style="margin-top: 15px; margin-bottom:10px;">
+                        <i class="fa fa-caret-right"></i> Narration
+                    </h4>
+                    <textarea class="form-control" style="height:80px"></textarea>
+                </div>
+            </div>
+
+            <div class="pull-right" style="margin-right:10px; margin-top:5px">
+                <p class="text-right"></p>
+                <h4> Total : <span style="float:right; width:150px">{{subtotal}}</span> </h4>
+            </div>
+        </div>
+
+        <hr style="float:left; width:100%; margin:10px 0px" />
+
+        <div class="col-sm-12" style="margin-bottom:20px">
+            @*<div class="col-sm-4 padding">
+
+                    <div class="form-group">
+                        <h4 class="tabheading">Attachments</h4>
+                        <div class="attachmets">
+                            <input type="file" id="uploadBtn" multiple="multiple" name="browsefile">
+                            <div>
+                                <i class="fa fa-plus"></i>
+                                <p>Add file</p>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div id="upload_prev" class="upload_prev"></div>*@
+
+
+
+            <ul ng-repeat="data in datapath">
+                <li>
+                    <span> <a href="" style="font-size:medium" class="pointer fa fa-file-pdf-o" aria-hidden="true"> <b ng-click="getfile(data)">{{data.replace("server/boot/uploads/"+ billNo,'')}}</b></a></span>
+                    <i class="fa fa-times" aria-hidden="true" ng-click="deletefile(data,$index)"></i>
+                </li>
+            </ul>
+
+            <div class="col-sm-12" style="padding:0px">
+                <div class="col-sm-6" style="padding:0px">
+
+                    <div class="form-group">
+                        <h4 style="margin-top: 15px; margin-bottom:10px;">
+                            <i class="fa fa-caret-right"></i> Attachments
+                            <small class="text-primary cursor dwn">(<i class="fa fa-download"></i> Download all files)</small>
+                        </h4>
+
+                        @*<div class="attachmets">*@
+                        @*<input type="file" id="uploadBtn" multiple="multiple" name="browsefile">*@
+                        @*<div id="uploadAttchments">
+                                    <i class="fa fa-plus"></i>
+                                    <p>Add file</p>
+                                </div>
+                            </div>*@
+                        <div class="col-sm-5 padding5">
+                            <input type="text" class="form-control" id="NameInput" placeholder="Title" />
+                        </div>
+                        <div class="col-sm-5 padding5">
+                            @*<input type="file" class="form-control" id="id=" uploadBtn" />*@
+                            <input type="file" class="filestyle" id="uploadBtn" data-buttonName="btn-info">
+                        </div>
+
+                        <div class="col-sm-2 padding5">
+                            <button type="button" class="btn btn-sm btn-primary Attechmentdetail" style="width:100%">Add</button>
+                        </div>
+
+
+                        <div style="float:left; width:100%; padding:10px 10px; border-bottom:1px dotted #ccc;" class="filenameDiv">
+
+
+                            <div class="col-sm-5 padding5" style="word-break:break-all">
+                                <strong id="name"></strong>
+                            </div>
+
+                            <div class="col-sm-5 padding5 cursor" style="word-break:break-all">
+                                <a id="type" class="cursor"></a>
+                            </div>
+
+                            <div class="col-sm-2">
+                                <i class="fa fa-times pull-right text-danger" id="removeattachment"></i>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+
+
+    <div class="flexfooter">
+        <span class="pull-left">
+
+            <button type="button" class="btn btn-sm btn-primary">Clear</button>
+        </span>
+
+        <div class="pull-right">
+            <button type="button" class="btn btn-sm btn-primary" ng-click="makePayment(paymentAmount-amount)">Save</button>
+            <div class="btn-group dropup">
+                @*
+                    <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:25px">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" style="right:-2px !important">
+                        <li><a href="#">Save and close</a></li>
+                        <li><a href="#">Save and send</a></li>
+                        <li><a href="#">Save and new</a></li>
+                        <li><a href="#">Save and share link</a></li>
+                    </ul>
+                *@
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+
+
+
+
+
+
+

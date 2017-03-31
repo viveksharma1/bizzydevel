@@ -1,0 +1,1352 @@
+﻿
+@{
+    ViewBag.Title = "Suppliers";
+    Layout = null;
+}
+
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
+
+<script type="text/ng-template" id="/ui-tree-select.html">
+
+    
+    <ui-select ng-model="model.$selected"
+               ui-select-focuser
+               theme="selectize">
+        <ui-select-match placeholder="Enter text">
+            {{ $select.selected.title }}
+        </ui-select-match>
+        <ui-select-choices repeat="group in groups | filter: $select.search">
+            <div>
+                <span ng-bind-html="group.title | highlight: $select.search"></span>
+                <!--<span ng-bind-html="'('+group.size+' users)'"></span>
+                <a href
+                  ng-show="group.parent"
+                  class="goto-child-group"
+                  ng-click="loadChildGroupsOf(group, $select)">
+                  <i class="fa fa-angle-right"></i>
+                </a>-->
+            </div>
+        </ui-select-choices>
+    </ui-select>
+</script>
+
+
+
+<div id="upperdivId" ng-init="model = {}">
+
+
+    
+
+
+    <div class="content">
+
+        
+        <div class="panel lightblue bluebrdr marginbottom">
+            <div class="panel-heading">
+                <strong class="heading"> </strong>
+
+                <div class="btn-group pull-right">
+                    <button type="button" class="btn btn-primary btn-sm"  id="NewCustomerCreate"> New Supplier</button>
+                    <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#/Customer/Import">Import Suppliers</a></li>
+
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="pulltab" id="menuUp" ng-click="menuUp();"><i class="fa fa-chevron-up"></i> </div>
+
+            <div class="panel-body statusBody"  style="margin-top:10px">
+                <div class="col-sm-3 cursor padding">
+
+                    <div class="col-sm-12 estimate" ng-click="SuppliersTablebtn()" style="background:#e91e63">
+                       
+                        <p class="text-uppercase marginbottom status fa-address-book"><span style="font-size: 200%; color: #1E294B; "> <b>{{suppliersCount.count}}</b></span> suppliers</p>
+                    </div>
+                   
+                </div>
+              
+
+                <div class="col-sm-3 cursor padding">
+
+                    <div class="col-sm-12 estimate"  ng-click="EnquiryTablebtn('OPEN')"style="background:#486C8F" >
+                       
+                        <p class="text-uppercase marginbottom status"><span style="font-size: 200%; color: white; "><b>{{enquiryCount.count}} </b> </span> Enquiry</p>
+                    </div>
+
+                </div>
+                <div class="col-sm-3 cursor padding">
+
+                    <div class="col-sm-12 estimate blue padding" ng-click="PurchaseOrderTable('OPEN')">
+                        <div class="col-sm-12" style="padding:10px">
+                            <p class="text-uppercase marginbottom status"><span  style="font-size: 200%; color: yellowgreen; "> <b>{{purchaseCount.count}}</b></span> Purchase Order</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3 cursor padding">
+
+                    <div class="col-sm-12 estimate bg-yellow padding" ng-click="OpenBillTable('OPEN')">
+                        <div class="col-sm-12" style="padding:10px">
+                            
+                            <p class="text-uppercase marginbottom status"><span  style="font-size: 200%; color: #2D2D65; "><b>{{billCount.count}}</b></span> OPEN BILL</p>
+                        </div>
+                      
+                    </div>
+                </div>
+
+               
+
+            </div>
+           
+        </div>
+
+       
+
+
+
+        <div class="col-sm-12" style="padding-top:37px">
+
+            <div class="dropdown pull-left" style="margin-bottom:10px">
+                @*
+                <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" style="text-align:left">
+                    Batch actions
+                    <i class="fa fa-caret-down pull-right" style="margin-top:3px"></i>
+                </button>
+
+                <ul class="dropdown-menu my">
+                    <li><a href="#" style="font-weight:bold">Email</a></li>
+
+                </ul>
+                *@
+            </div>
+        </div>
+            @*
+                
+    <div class="pull-right">
+        <i class="fa fa-print tableicon" title="Print list"></i>
+        <i class="fa fa-clipboard tableicon" title="Export to excel"></i>
+        <i class="fa fa-gear tableicon" title="Settingd"></i>
+    </div>
+          gfrg  *@
+
+
+
+
+
+
+            <div id="example"  class="col-sm-12" style="height:500px">
+                <div>
+                    <input class="pull-right reportSearch" type="search" placeholder="search" name="lastname" ng-model="search" style="width:200px;height:30px;color:rebeccapurple; margin:10px 0px">
+                </div>
+                <table  class="table table-striped table-bordered  table-hover" cellspacing="0" width="100%" >
+                    <thead style="background:#75757A; color:white; text-transform:uppercase">
+                        <tr>
+                            <th style="padding-left:30px; width:15px"></th>
+                            <th class="fontnormal">Company Name </th>
+                            <th class="fontnormal">Email</th>
+                            <th class="fontnormal">contact No</th>
+                            <th class="fontnormal">Oppening Balance</th>
+
+                            <th class="fontnormal text-right">Action</th>
+                        </tr>
+                    </thead>
+
+
+                    <tbody>
+                        <tr ng-repeat="data in InventoryList |filter:search">
+                            <td style="padding-left:15px; width:15px"><input type="checkbox" class="checkboxcss" /></td>
+                            <td><a href="#/Customer/Supplierdetail{{data.supCode}}" style="color:#000">{{data.company}}<br /></a></td>
+                            <td>{{data.email}}</td>
+                            <td>{{data.mobile}}</td>
+                            <td>{{data.paymentInfo[0].openingBalance}}</td>
+
+
+                            <td style="text-align:right; width:150px">
+                                <button type="button" class="editbtn"><a ui-sref="Customer.Enquiry({email:data.company})">Add Enquiry</a></button>
+                                <class class="linkseparator" style="margin-top:4px; margin-right:0px"></class>
+                                <div class="btn-group editcaret">
+                                    <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>
+                                    <ul class="dropdown-menu editdrpdwn" role="menu" style="left:-135px">
+                                      
+                                        <li><a ui-sref="Customer.PurchaseOrder()">Create Purchase Order</a></li>
+                                        <li><a ui-sref="Customer.Bill({suppliers:data.company})">Create Bill</a></li>
+                                        <li><a ui-sref="Customer.CreateInventory()">Create Inventory</a></li>
+                                        <li><a ui-sref="Customer.Expense()">Create Expense</a></li>
+                                        <li><a ui-sref="Customer.MakePayment()">Make Payment</a></li>
+                                        <li><a ui-sref="Customer.PurchaseInvoiceSattlement()">Purchase Settlement</a></li>
+                                        <li><a ui-sref="Customer.SalesInvoiceSattlement()">Sales Settlement</a></li>
+                                    </ul>
+
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+
+
+
+                </table>
+
+                <div class="pagination-div" style="float:left; width:100%;">
+                    Total :  {{TotalCount}} entries
+                    <h3 class="center" id="nodataimageview"></h3>
+                    <ul class="pagination pull-right" style="margin-top:-10px">
+
+                        <li ng-class="DisablePrevPage()">
+
+                            <a href="" ng-click="prevPage1()"> Prev</a>
+
+                        </li>
+
+                        <li ng-repeat="n in range()"
+                            ng-class="{active: n == currentPage}"
+                            ng-click="setPage1(n)">
+
+                            <a href="">{{n+1}}</a>
+
+                        </li>
+
+                        <li ng-class="DisableNextPage()"
+                            ng-click="nextPage1()">
+
+                            <a href="" ng-click="nextPage1()">Next </a>
+
+                        </li>
+
+                    </ul>
+                   
+
+                </div>
+            </div>
+
+
+
+            
+            <div id="EnquiryTable" class="col-sm-12" style="height:500px" >
+                <div>
+                    <select ng-model="changestatus" ng-change="EnquiryTablebtn(changestatus)" class="form-control pull-left" style="width:100px; margin-top:10px; height:30px" >
+                        <option value="OPEN">OPEN</option>
+                        <option value="CLOSED">CLOSED</option>
+                        <option value="CANCEL">CANCEL</option>
+
+                    </select>
+                </div>
+               
+                <div>
+                    <input class="pull-right reportSearch" type="search" placeholder="search" name="lastname" ng-model="search" style="width:200px;height:30px; margin:10px 0px">
+                </div>
+                    <table id="EnquiryTable" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%" dt-options="dtOptions" dt-columns="dtColumns">
+
+                        <thead style="background:#75757A; color:white; text-transform:uppercase">
+                            <tr>
+                                <th style="padding-left:30px; width:30px"><input type="checkbox" class="checkboxcss" /></th>
+                                <th class="fontnormal" ng-click="order('no')">Enquiry No </th>
+                                <th class="fontnormal"ng-click="order('date')">Enquiry Date</th>
+                                <th class="fontnormal">Enquiry Due Date</th>
+                                <th class="fontnormal">Suppliers </th>
+                                <th class="fontnormal text-right">Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr ng-repeat="data in InventoryList | orderBy: orderData|filter:search">
+                                <td style="padding-left:30px; width:30px"><input type="checkbox" class="checkboxcss" /></td>
+                                <td ng-click="GRNDetail(data.no)">{{data.no}}</td>
+                                <td ng-bind="data.date | date:'dd MMM yyyy'"></td>
+                                <td style="color:red"ng-bind="data.billDueDate | date :'dd MMM yyyy'"></td>
+                                <td><a href="#/Customer/Supplierdetail{{data.email}}" style="color:#000">{{data.supliersName}} </a> <span class="badge" ng-click="moreEmployeebtn(data.no)">{{data.sentSupplier.length}} more </span><br /> <span class="badge" ></span></td>
+                                <td style="text-align:right; width:150px">
+                                    <button type="button" class="editbtn" ng-click="GRNDetail(data.no)">View</button>
+
+                                    <class class="linkseparator" style="margin-top:4px; margin-right:0px">|</class>
+                                    <div class="btn-group editcaret">
+                                        <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>
+                                        <ul class="dropdown-menu editdrpdwn" role="menu" style="left:-135px">
+
+                                            <li><a ui-sref="Customer.Enquiry({email:data.no,edit:1})">Edit</a></li>
+                                            <li><a ui-sref="Customer.PurchaseOrder({poNo:data.no})">Create Purchase Order</a></li>
+                                            <li><a ui-sref="Customer.PurchaseInvoiceSattlement()">Purchase Settlement</a></li>
+                                            <li><a ui-sref="Customer.SalesInvoiceSattlement()">Sales Settlement</a></li>
+                                            <li><a href="">Cancel</a></li>
+
+
+                                        </ul>
+
+                                    </div>
+                                </td>
+                            </tr>
+
+
+
+                        </tbody>
+
+                    </table>
+
+                    <div class="pagination-div" style="float:left; width:100%;">
+                        Total :  {{TotalCount}} entries
+                        <h3 class="center" id="nodataimageview"></h3>
+                        <ul class="pagination pull-right" style="margin-top:-10px">
+
+                            <li ng-class="DisablePrevPage()">
+
+                                <a href="" ng-click="prevPage()"> Prev</a>
+
+                            </li>
+
+                            <li ng-repeat="n in range()"
+                                ng-class="{active: n == currentPage}"
+                                ng-click="setPage(n)">
+
+                                <a href="">{{n+1}}</a>
+
+                            </li>
+
+                            <li ng-class="DisableNextPage()"
+                                ng-click="nextPage()">
+
+                                <a href="" ng-click="nextPage()">Next </a>
+
+                            </li>
+
+                        </ul>
+                       
+
+                    </div>
+                </div>
+
+            <div id="moreEmployeeModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Suppliers List</h4>
+                        </div>
+                        <div class="modal-body" style="height:400px; overflow:auto;">
+                            <table class="table" cellpadding="10" cellspacing="10">
+                                <tr ng-repeat="supplier in supplierList">
+                                    <td style="border-bottom:1px solid #ddd; border-top:none">
+                                        <strong><i class="fa fa-user"></i> {{supplier.supplier}} </strong>
+                                        <p><i class="fa fa-envelope"></i> {{supplier.email}}</p>
+
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>   
+           
+        <div id="PurchaseOrderTable" class="col-sm-12 "  ng-init="role = admin"  style="height:500px">
+            
+            
+                <select ng-model="changestatus2" ng-change="PurchaseOrderTable(changestatus2)" class="form-control pull-left" style="width:100px; margin-top:10px; height:30px">
+                    <option value="OPEN">OPEN</option>
+                    <option value="CLOSED">CLOSED</option>
+                    <option value="CANCEL">CANCEL</option>
+
+                </select>
+
+                <input class="pull-right reportSearch" type="search" placeholder="search" name="lastname" ng-model="search" style="width:200px;height:30px; margin:10px 0px">
+           
+            <table  class="table table-bordered table-hover" cellspacing="0" width="100%" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs">
+                <thead style="background:#75757A; color:white; text-transform:uppercase">
+                    
+                    <tr>
+                        <th style="padding-left:30px; width:30px"></th>
+                        <th class="fontnormal">PO No.</th>
+                        <th class="fontnormal">PO Dt.</th>
+                        <th class="fontnormal">Due Dt.</th>
+                        <th class="fontnormal">Supplier</th>
+                        <th class="fontnormal">PO Amount</th>
+                        <th class="fontnormal text-right">Action</th>
+                    </tr>
+                </thead>
+               
+                <tbody>
+
+                   
+                    <tr ng-repeat="data in InventoryList | filter :search" >
+                        <td style="padding-left:15px; width:15px"><input type="checkbox" class="checkboxcss" /></td>
+                        <td ng-click="poView(data.no)">{{data.no}}</td>
+                        <td ng-bind="data.date | date:'dd MMM yyyy'"></td>
+                        <td style="color:red" ng-bind="data.billDueDate | date :'dd MMM yyyy'"></td>
+                        
+
+                        
+                        <td>{{data.supliersName}}</td>
+                        <td>{{data.amount |number : fractionSize}}</td>
+                       
+                        <td style="text-align:right; width:150px">
+                            <button type="button" class="editbtn" ng-click="poView(data.no)">View</button>
+                            <class class="linkseparator" style="margin-top:4px; margin-right:0px"></class>
+                            <div class="btn-group editcaret">
+                                <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>
+                                <ul class="dropdown-menu editdrpdwn" role="menu" style="left:-135px">
+                                    <li><a ui-sref="Customer.PurchaseOrder({enqNo:data.no,edit:1})">Edit</a></li>
+
+                                    <li><a ui-sref="Customer.PurchaseInvoiceSattlement()">Purchase Settlement</a></li>
+                                    <li><a ui-sref="Customer.SalesInvoiceSattlement()">Sales Settlement</a></li>
+                                    <li><a ui-sref="Customer.Bill({billNo:data.no,suppliers:data.supliersName})">Create Bill</a></li>
+                                    <li><a href="">Cancel</a></li>
+                                </ul>
+
+                            </div>
+                        </td>
+                    </tr>
+
+                </tbody>
+
+                
+            </table>
+           
+            <div class="pagination-div" style="float:left; width:100%;">
+                Total :  {{TotalCount}} entries
+                <ul class="pagination pull-right" style="margin-top:-10px">
+
+                    <li ng-class="DisablePrevPage()">
+
+                        <a href="" ng-click="prevPage()"> Prev</a>
+
+                    </li>
+
+                    <li ng-repeat="n in range()"
+                        ng-class="{active: n == currentPage}"
+                        ng-click="setPage(n)">
+
+                        <a href="">{{n+1}}</a>
+
+                    </li>
+
+                    <li ng-class="DisableNextPage()">
+
+                        <a href="" ng-click="nextPage()">Next </a>
+
+                    </li>
+
+                </ul>
+                
+            </div>
+           
+
+        </div>
+            
+        <div id=OpenBill class="col-sm-12"  style="height:500px">
+            <select ng-model="changestatus1"  ng-change="OpenBillTable(changestatus1)"class="form-control pull-left" style="width:100px; margin-top:10px; height:30px">
+                <option value="OPEN">UNPAID</option>
+                <option value="CLOSED">PAID</option>
+             
+
+            </select>
+            
+            <input class="pull-right reportSearch" type="search" placeholder="search" name="lastname" ng-model="search" style="border-color:cadetblue;   width:200px;height:30px; margin:10px 0px">
+            <table  class="table table-bordered table-hover" cellspacing="0" width="100%" dt-options="dtOptions" dt-columns="dtColumns">
+
+                <thead style="background:#75757A; height:25px;color:white; text-transform:uppercase">
+                    <tr>
+                        <th style="padding-left:30px; width:30px"></th>
+                        <th class="fontnormal">Suppliers / Company</th>
+                        <th class="fontnormal">Email</th>
+                        <th class="fontnormal">Invoice No.</th>
+                        <th class="fontnormal">Bill Date</th>
+
+                        <th class="fontnormal">Amount</th>
+                       
+                        <th class="fontnormal">Bal Amount</th>
+
+                        <th class="fontnormal text-right">Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                   
+                    <tr ng-repeat="data in InventoryList | filter:search" class="cursor" >
+                        <td style="padding-left:15px; width:15px"><input type="checkbox" class="checkboxcss" /></td>
+                        <td>{{data.supliersName}}</td>
+                        <td>{{data.email}}</td>
+                        <td>{{data.no}}</td>
+                        <td ng-bind="data.date | date:'dd MMM yyyy'"></td>
+                      
+                        <td ng-hide="Role =='3'">{{data.amount |number : fractionSize}}</td>
+                        <td ng-show="Role =='3'">{{data.adminAmount |number : fractionSize}}</td>
+                        <td ng-show="data.balance == 0" ><span class="badge bg-green">{{"PAID"}}</span></td>
+                        <td ng-hide="data.balance == 0">{{data.balance |number : fractionSize}}</td>
+
+                        <td style="text-align:right; width:150px">
+                            <button type="button" class="editbtn"><a ui-sref="Customer.MakePayment({poNo:data.no,suppliers:data.supliersName,Code:data.supCode})">Make Payment</a></button>
+                            <class class="linkseparator" style="margin-top:4px; margin-right:0px">|</class>
+                            <div class="btn-group editcaret">
+                                <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>
+                                <ul class="dropdown-menu editdrpdwn" role="menu" style="left:-135px">
+                                    <li><a ui-sref="Customer.MakePayment({poNo:data.no,suppliers:data.supliersName})">Make Payment</a></li>
+                                    <li><a ui-sref="Customer.Bill({billNo:data.id,suppliers:data.supliersName})">Edit Bill</a></li>
+                                    <li><a ui-sref="Customer.Expense({no:data.no,suppliers:data.supliersName})">Add Expense</a></li>
+                                    <li ng-click="addInventrybtn(data)"><a href="">Add Enventory</a></li>
+                                    <li><a ui-sref="Customer.PurchaseInvoiceSattlement()">Purchase Settlement</a></li>
+                                    <li><a ui-sref="Customer.SalesInvoiceSattlement()">Sales Settlement</a></li>
+                                </ul>
+
+                            </div>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+            <div class="pagination-div" style="float:left; width:100%;">
+                Total :  {{TotalCount}} entries
+                <ul class="pagination pull-right" style="margin-top:-10px">
+
+                    <li ng-class="DisablePrevPage()">
+
+                        <a href="" ng-click="prevPage()"> Prev</a>
+
+                    </li>
+
+                    <li ng-repeat="n in range()"
+                        ng-class="{active: n == currentPage}"
+                        ng-click="setPage(n)">
+
+                        <a href="">{{n+1}}</a>
+
+                    </li>
+
+                    <li ng-class="DisableNextPage()">
+
+                        <a href="" ng-click="nextPage()">Next </a>
+
+                    </li>
+
+                </ul>
+               
+
+            </div>
+
+      
+            </div>
+
+            <div>
+                <table id="PaidBillTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead style="background:#e3eaf3; height:25px; color:#486C8F; text-transform:uppercase">
+                        <tr>
+                            <th style="padding-left:30px; width:30px"></th>
+                            <th class="fontnormal">Suppliers / Company</th>
+                            <th class="fontnormal">Email</th>
+                            <th class="fontnormal">Bill no.</th>
+                            <th class="fontnormal">Bill Amount</th>
+                            <th style="background:#c0d0e4">Bal Amount</th>
+                            <th class="fontnormal text-right">Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr ng-repeat="data in bill">
+                            <td style="padding-left:15px; width:15px"><input type="checkbox" class="checkboxcss" /></td>
+                            <td>{{data.suppliers}}</td>
+                            <td>{{data.email}}</td>
+                            <td>{{data.billno}}</td>
+                            <td>{{data.bilamt}}</td>
+                            <td>{{data.balamt}}</td>
+                            <td style="text-align:right; width:150px">
+                                <button type="button" class="editbtn"><a href="#/Customer/MakePayment">{{data.action}}</a></button>
+                                <class class="linkseparator" style="margin-top:4px; margin-right:0px"></class>
+                                <div class="btn-group editcaret">
+                                    <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>
+                                    <ul class="dropdown-menu editdrpdwn" role="menu" style="left:-135px">
+                                        <li><a ui-sref="Customer.Expense({no:data.no,suppliers:data.suppliers})">Add Expense</a></li>
+                                        <li><a ui-sref="Customer.PurchaseInvoiceSattlement()">Purchase Settlement</a></li>
+                                        <li><a ui-sref="Customer.SalesInvoiceSattlement()">Sales Settlement</a></li>
+                                         <li><a href="">Cancel</a></li>
+
+                                    </ul>
+
+                                </div>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+                
+
+            </div>
+
+        </div>
+
+
+
+
+
+        @*New supplier*@
+        <div class="modal fade" id="NewCustomerCreateModal">
+            <div class="modal-dialog modal-lg" style="margin-top:100px">
+                <div class="modal-content content">
+                    <div class="modal-header popupheader content">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">Supplier Information</h4>
+                    </div>
+                    <div class="modal-body content" style="padding:0px 15px">
+                       
+
+
+                        <div class="col-sm-12 paddinright">
+                            <div class="col-sm-4 form-group padding5">
+                                <label>Company</label>
+                                <input type="text" ng-model="company" class="form-control" />
+                            </div>
+                            <div class="col-sm-4 form-group padding5">
+                                <label>Email</label>
+                                <input type="text" ng-model="email" class="form-control" placeholder="Separate multiple emails with commas" />
+                            </div>
+                            <div class="col-sm-4 form-group padding5">
+                                <label>Account</label>
+                                <ui-select ng-model="groupMasters.selected" id="countryCode">
+
+                                    <ui-select-match placeholder="Choose Group">{{$select.selected.name}}</ui-select-match>
+
+
+
+                                    <ui-select-header>Top of the list!</ui-select-header>
+
+
+                                    <ui-select-choices repeat="person in groupMaster  | filter: $select.search">
+                                        <div ng-init="balanceType = $select.selected.balanceType">
+                                            <span style="color:black" ng-model="supplier1" ng-bind-html="person.name | highlight: $select.search">{{person.type}}</span>
+                                            <span style="color:forestgreen">({{person.type}})</span>
+
+                                        </div>
+
+
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <div class="col-sm-4 form-group padding5">
+                                <label>Phone</label>
+                                <input type="text" ng-model="phone" class="form-control" />
+                            </div>
+                            <div class="col-sm-4 form-group padding5">
+                                <label>Mobile</label>
+                                <input type="text" ng-model="mobile" class="form-control" />
+                            </div>
+                            
+                            <div class="col-sm-4 form-group padding5">
+                                <label>Opening balance</label>
+                                <input type="text" ng-model="openingBalance" class="form-control" />
+                            </div>
+                            
+                        </div>
+                        <div class="col-sm-12 UODiv padding">
+                            <h4>
+                                is UO &nbsp;
+                                <div class="btn-group btnhover">
+                                    <button type="button" class="btn btn-xs active btn-default">On</button>
+                                    <button type="button" class="btn btn-xs  btn-default">Off</button>
+
+                                </div>
+                            </h4>
+
+                        </div>
+                        <div class="col-sm-12 padding" style="padding-top:20px !important">
+                            <ul class="nav nav-tabs tabnav my">
+                                <li class="active"><a href="#Address" data-toggle="tab"><i class="fa fa-map-marker"></i> Address</a></li>
+                                <li><a href="#Notes" data-toggle="tab"><i class="fa fa-file"></i> Notes</a></li>
+                                <li><a href="#TaxInfo" data-toggle="tab"><i class="fa fa-info"></i> Tax Info</a></li>
+                              
+                                <li><a href="#Attachments" data-toggle="tab"><i class="fa fa-paperclip"></i> Attachments</a></li>
+                            </ul>
+
+                            <div class="tab-content tabcontent">
+
+                                <div id="Address" class="tab-pane fade in active">
+                                    <div class="col-sm-6 padding">
+                                        <h4 class="tabheading">Billing Address</h4>
+                                        <div class="form-group col-sm-12 padding5">
+                                            <textarea class="form-control" ng-model="street" placeholder="Street"></textarea>
+                                        </div>
+                                        <div class="form-group col-sm-6 padding5">
+                                            <input type="text" class="form-control" ng-model="city" placeholder="City/Town" />
+                                        </div>
+                                        <div class="form-group col-sm-6 padding5">
+                                            <input type="text" class="form-control" ng-model="state" placeholder="State" />
+                                        </div>
+                                        <div class="form-group col-sm-6 padding5">
+                                            <input type="text" class="form-control" ng-model="postalCode" placeholder="Postal Code" />
+                                        </div>
+                                        <div class="form-group col-sm-6 padding5">
+                                            <input type="text" class="form-control" ng-model="country" placeholder="Country" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6 padding">
+                                        <h4 class="tabheading">Shipping Address <small class="pull-right" style="line-height:13px"><input type="checkbox" class="pull-left" style="margin:0px" /> Same as billing address</small></h4>
+                                        <div class="form-group col-sm-12 padding5">
+                                            <textarea class="form-control" ng-model="street1" placeholder="Street"></textarea>
+                                        </div>
+                                        <div class="form-group col-sm-6 padding5">
+                                            <input type="text" class="form-control" ng-model="city1" placeholder="City/Town" />
+                                        </div>
+                                        <div class="form-group col-sm-6 padding5">
+                                            <input type="text" class="form-control" ng-model="state1" placeholder="State" />
+                                        </div>
+                                        <div class="form-group col-sm-6 padding5">
+                                            <input type="text" class="form-control" ng-model="postalCode1" placeholder="Postal Code" />
+                                        </div>
+                                        <div class="form-group col-sm-6 padding5">
+                                            <input type="text" class="form-control" ng-model="country1" placeholder="Country" />
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div id="Notes" class="tab-pane fade">
+                                    <h4 class="tabheading">Notes</h4>
+                                    <textarea class="form-control" ng-model="notes" style="height:100px"></textarea>
+                                </div>
+
+                                <div id="TaxInfo" class="tab-pane fade">
+                                    <div class="col-sm-4">
+                                        <label class="tabheading">TIN No.</label>
+                                        <input type="text" ng-model="taxRegNo" class="form-control" />
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label class="tabheading">CST Reg. No.</label>
+                                        <input type="text" ng-model="cstRegNo" class="form-control" />
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label class="tabheading">PAN No.</label>
+                                        <input type="text" ng-model="panNo" class="form-control" />
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label class="tabheading">Range</label>
+                                        <input type="text" ng-model="Range" class="form-control" />
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <label class="tabheading">Division</label>
+                                        <input type="text" ng-model="division" class="form-control" />
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label class="tabheading">Address</label>
+                                        <input type="text" ng-model="address" class="form-control" />
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label class="tabheading">Commisionerate</label>
+                                        <input type="text" ng-model="commisionerate" class="form-control" />
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label class="tabheading">CE Region No.</label>
+                                        <input type="text" ng-model="ceRegionNo" class="form-control" />
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label class="tabheading">ECC Code No.</label>
+                                        <input type="text" ng-model="eccCodeNo" class="form-control" />
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label class="tabheading">IEC No.</label>
+                                        <input type="text" ng-model="iecNo" class="form-control" />
+                                    </div>
+
+
+                                   
+                                </div>
+                              
+
+                                <div id="Attachments" class="tab-pane fade">
+                                    <div class="col-sm-12" style="margin:20px 0px">
+
+
+                                        @*<ul ng-repeat="data in datapath">
+                <li>
+                    <span> <a href="" style="font-size:medium" class="pointer fa fa-file-pdf-o" aria-hidden="true"> <b ng-click="getfile(data)">{{data.replace("server/boot/uploads/"+ billNo,'')}}</b></a></span>
+                    <i class="fa fa-times" aria-hidden="true" ng-click="deletefile(data,$index)"></i>
+                </li>
+            </ul>*@
+
+                                        <div class="col-sm-12" style="padding:0px">
+
+
+                                            <div class="col-sm-5 padding5">
+                                                <input type="text" class="form-control" id="NameInput" placeholder="Title" />
+                                            </div>
+                                            <div class="col-sm-5 padding5">
+                                                @*<input type="file" class="form-control" id="id=" uploadBtn" />*@
+                                                <input type="file" class="filestyle" id="uploadBtn" data-buttonName="btn-info">
+                                            </div>
+
+                                            <div class="col-sm-2 padding5">
+                                                <button type="button" class="btn btn-sm btn-primary Attechmentdetail" style="width:100%">Add</button>
+                                            </div>
+
+
+                                            <div style="float:left; width:100%; padding:10px 10px; border-bottom:1px dotted #ccc;" class="filenameDiv">
+
+
+                                                <div class="col-sm-5 padding5" style="word-break:break-all">
+                                                    <strong id="name"></strong>
+                                                </div>
+
+                                                <div class="col-sm-5 padding5 cursor" style="word-break:break-all">
+                                                    <a id="type" class="cursor"></a>
+                                                </div>
+
+                                                <div class="col-sm-2">
+                                                    <i class="fa fa-times pull-right text-danger" id="removeattachment"></i>
+                                                </div>
+
+
+
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer content">
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" ng-click="createNewSupplier()">Save changes</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    </div>
+
+
+
+    @*Enquiry table*@
+
+    <div id="GRNDetailDiv" class="FlexPopup">
+
+        <div class="flexheader">
+            <ul class="list-unstyled submenu InvoiceMenu" style="float:left">
+
+                <li><a ui-sref="Customer.PurchaseOrder()" style="font-size:18px">Enquiry</a></li>
+
+
+            </ul>
+            <ul class="list-unstyled submenu InvoiceMenu">
+                <li><a ui-sref="Customer.Enquiry({email:no,edit:1})" style="font-size:18px"><i class="fa fa-edit"></i> Edit</a></li>
+                <li><a href="javascript:void(0);" ng-click="supplierclose();" id="invoiceclose"><i class="fa fa-times"></i></a></li>
+               
+</ul>
+
+        </div>
+
+
+
+        <div class="flexcontainer">
+
+
+
+
+
+            <div id="upperdivId">
+                <div class="page" ng-hide="type =='2'">
+                    <table style="border:1px solid #e3e3e3;" class="subpage" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td style="padding:10px;">
+                                <table style="width:100%">
+                                    <tr>
+                                        <td style="vertical-align:middle; width:10%; text-align:center"><img src="../images/logo-black.png" width="100" /></td>
+                                        <td style="text-align:center; width:80%;">
+                                            <h1 style="border-bottom:1px solid #e3e3e3; font-size:28px; font-weight:bold; padding-bottom:10px; text-transform:uppercase; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">{{CompanyName}}</h1>
+                                            <p style="font-size:12px; line-height:20px">
+                                                Office No. 1515, 15th Floor, Plot 1487, Prasad Chamber, Tata Road No. 2, Roxy Cinema, Opera House, Girgaon Mumbai 400 004 <strong><i class="fa fa-circle" style="font-size:8px;"></i> Tel:</strong> +91-22-66151448 / 66109826 / 67496231 <strong><i class="fa fa-circle" style="font-size:8px;"></i> Telefax:</strong> 66159068 <br /> <strong>Email:</strong> shashwatstainless@gmail.com
+                                            </p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center; font-weight:bold;  text-transform:uppercase; font-size:16px">Enquiry</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:10px;">
+                                <table style="width:100%; line-height:20px; font-size:14px">
+                                    <tr>
+                                        <td style="width:65%; text-transform:uppercase; padding-right:20%">
+                                            <strong>Consignee :</strong><br />
+                                            <strong>{{suppliersName}}</strong><br />
+                                            <p style="margin-bottom:0px">
+                                                {{suppliersdata1}}
+                                            </p>
+                                            <p>vat tin no: {{taxRegNo}}</p>
+                                        </td>
+                                        <td style="font-weight:bold; text-transform:uppercase; width:45%">
+                                            <p style="margin-bottom:5px">Enquiry No: {{no}}</p>
+                                            <p style="margin-bottom:0px">Date : {{date | date: "dd/MM/yyyy"}}</p>
+                                            <p style="margin-bottom:0px">Due Date : {{billDueDate | date: "dd/MM/yyyy"}}</p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:10px">
+                                <table class="table-bordered table-condensed"width="100%" border="1" cellspacing="10" cellpadding="10" style="text-transform:uppercase; font-size:14px;" ng-init="role = admin">
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align:center">Grade</th>
+                                            <th style="text-align:center">Finish</th>
+                                            <th style="text-align:center">Thickness (MM)</th>
+                                            <th style="text-align:center">Width (MM)</th>
+                                            <th style="text-align:center">Length</th>
+                                            <th style="text-align:center">Net Weight (MT)</th>
+                                            <th style="text-align:center">Gross Weight (MT)</th>
+                                            <th style="text-align:center">Sheets NOS</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tr ng-repeat="item in itemDetail">
+                                        <td style="text-align:center">{{item.grade}}</td>
+                                        <td style="text-align:center">{{item.finish}}</td>
+                                        <td style="text-align:center">{{item.thickness}}</td>
+                                        <td style="text-align:center">{{item.width}}</td>
+                                        <td style="text-align:center">{{item.length}}</td>
+                                        <td style="text-align:center">{{item.netweight}}</td>
+                                        <td style="text-align:center">{{item.grossweight}}</td>
+                                        <td>{{item.sheetNo}}</td>
+
+
+                                    </tr>
+
+
+                                </table>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:10px 10px; text-transform:uppercase">
+                                <p>for <strong>{{CompanyName}}</strong></p>
+                                <br /><br />
+                                <strong style="margin-bottom:10px; float:left;width:100%">authorised signatory</strong>
+                                <p>Vat Tin No.: 27160870532 v w.e.f. 14.09.2011</p>
+                                <p>vat tin no.: 27160870532 w.e.f. 14.09.2011</p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+
+    @*po table*@
+    <div id="poView" class="FlexPopup">
+
+        <div class="flexheader">
+            <ul class="list-unstyled submenu InvoiceMenu" style="float:left">
+
+                <li><a ui-sref="Customer.PurchaseOrder()" style="font-size:18px">Purchase Order</a></li>
+
+
+            </ul>
+            <ul class="list-unstyled submenu InvoiceMenu">
+                <li><a ui-sref="Customer.PurchaseOrder({enqNo:no,edit:1})" style="font-size:18px"><i class="fa fa-edit"></i> Edit</a></li>
+                <li><a href="javascript:void(0);" ng-click="supplierclose();" id="invoiceclose"><i class="fa fa-times"></i></a></li>
+               
+            </ul>
+
+        </div>
+
+
+
+        <div class="flexcontainer">
+
+            <div id="upperdivId">
+                <div class="page" ng-hide="type =='1'">
+                    <table style="border:1px solid #e3e3e3;" class="subpage" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td style="padding:10px;">
+                                <table style="width:100%">
+                                    <tr>
+                                        <td style="vertical-align:middle; width:10%; text-align:center"><img src="../images/logo-black.png" width="100" /></td>
+                                        <td style="text-align:center; width:80%;">
+                                            <h1 style="border-bottom:1px solid #e3e3e3; font-size:28px; font-weight:bold; padding-bottom:10px; text-transform:uppercase; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">{{CompanyName}}</h1>
+                                            <p style="font-size:12px; line-height:20px">
+                                                Office No. 1515, 15th Floor, Plot 1487, Prasad Chamber, Tata Road No. 2, Roxy Cinema, Opera House, Girgaon Mumbai 400 004 <strong><i class="fa fa-circle" style="font-size:8px;"></i> Tel:</strong> +91-22-66151448 / 66109826 / 67496231 <strong><i class="fa fa-circle" style="font-size:8px;"></i> Telefax:</strong> 66159068 <br /> <strong>Email:</strong> shashwatstainless@gmail.com
+                                            </p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center; font-weight:bold;  text-transform:uppercase; font-size:16px">Commercial - Invoice</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:10px;">
+                                <table style="width:100%; line-height:20px; font-size:14px">
+                                    <tr>
+                                        <td style="width:65%; text-transform:uppercase; padding-right:20%">
+                                            <strong>Consignee :</strong><br />
+                                            <strong>{{suppliersName}}</strong><br />
+                                            <p style="margin-bottom:0px">
+                                                {{suppliersdata1}}
+                                            </p>
+                                            <p>vat tin no: {{taxRegNo}}</p>
+                                        </td>
+                                        <td style="font-weight:bold; text-transform:uppercase; width:45%">
+                                            <p style="margin-bottom:5px">Invoice No: {{no}}</p>
+                                            <p style="margin-bottom:0px">Date : {{date | date: "dd-MMM-yyyy"}}</p>
+                                            <p style="margin-bottom:0px">Due Date : {{billDueDate | date: "dd-MMM-yyyy"}}</p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:10px">
+                                <table width="100%" border="1" cellspacing="10" cellpadding="10" style="text-transform:uppercase; font-size:14px;" ng-init="role = admin">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:50px; text-align:center">Sr. No.</th>
+                                            <th style="text-align:center">Description of goods</th>
+                                            <th style="text-align:center">Quantity Net<br /> WT (MT)</th>
+                                            <th style="text-align:center">Unit Price<br /> FOB USD / MT</th>
+                                            <th style="text-align:center">Unit Price<br /> CIF USD / MT</th>
+                                            <th style="text-align:center">Amount FOB<br /> (USD)</th>
+                                            <th style="text-align:center">Amount CIF<br /> (USD)</th>
+                                            <th style="text-align:center">Exchange<br /> Rate</th>
+                                            <th ng-hide="role =='2'||role =='1'" style="text-align:center">MiSC<br /> Charges</th>
+                                            <th style="text-align:center">Amount<br /> (INR)</th>
+                                        </tr>
+                                    </thead>
+                                    <tr ng-repeat="item in itemDetail">
+                                        <td style="text-align:center">{{$index+1}}</td>
+                                        <td style="text-align:center; vertical-align:bottom">
+                                            <strong style="padding-bottom:10px; float:left; width:100%">
+
+                                            </strong>
+                                            {{item.grade}} {{item.finish}} {{item.thickness}} {{item.width}} {{item.length}}
+
+                                        </td>
+                                        <td style="text-align:center">
+                                            <p> {{item.netweight}}</p>
+
+
+
+                                        </td>
+                                        <td style="text-align:center">
+                                            <p> {{item.fobunitprice}}</p>
+
+                                        </td>
+                                        <td style="text-align:center">
+                                            <p> {{item.fobRate}}</p>
+
+                                        </td>
+                                        <td style="text-align:center">
+                                            <p>{{item.fob |number : fractionSize}}</p>
+
+                                        </td>
+                                       
+                                        <td style="text-align:center">
+                                            <p>{{item.cif |number : fractionSize}}</p>
+
+                                        </td>
+                                        <td style="text-align:center">
+                                            <p>{{exchangeRate}}</p>
+
+                                        </td>
+                                        <td style="text-align:center; vertical-align:bottom" ng-hide="role =='2'||role =='1'">
+                                            <p>{{item.miscCharge |number : fractionSize}}</p>
+
+                                        </td>
+                                        <td style="text-align:center; vertical-align:bottom" ng-show="role =='2'||role =='1'">
+                                            <p>{{item.adminCharge |number : fractionSize}}</p>
+
+                                        </td>
+                                        <td style="text-align:center; vertical-align:bottom" ng-hide="role =='2'||role =='1'">
+                                            <p>{{item.charges |number : fractionSize}}</p>
+
+                                        </td>
+
+                                    </tr>
+
+
+                                    <tr>
+                                        <th>&nbsp;</th>
+                                        <th style="text-align:center">Total</th>
+                                        <th style="text-align:center">{{totalweight}}</th>
+                                        <th style="text-align:center">&nbsp;</th>
+                                        <th style="text-align:center">&nbsp;</th>
+                                        
+                                        <th style="text-align:center">{{fobtotal  |number : fractionSize}}</th>
+                                        <th style="text-align:center">{{ciftotal  |number : fractionSize}}</th>
+                                        <th style="text-align:center">&nbsp;</th>
+                                        <th ng-hide="role =='2'||role =='1'" style="text-align:center">&nbsp;</th>
+                                        <th ng-hide="role =='2'||role =='1'" style="text-align:center">{{amount |number : fractionSize}}</th>
+                                        <th ng-show="role =='2'||role =='1'" style="text-align:center">{{adminAmount |number : fractionSize}}</th>
+                                    </tr>
+
+                                </table>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:10px 10px; text-transform:uppercase">
+                                <p>for <strong>{{CompanyName}}</strong></p>
+                                <br /><br />
+                                <strong style="margin-bottom:10px; float:left;width:100%">authorised signatory</strong>
+                                <p>Vat Tin No.: 27160870532 v w.e.f. 14.09.2011</p>
+                                <p>vat tin no.: 27160870532 w.e.f. 14.09.2011</p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        </div>
+
+@*Bill View *@
+
+
+
+<div id="billView" class="FlexPopup">
+
+    <div class="flexheader">
+        <ul class="list-unstyled submenu InvoiceMenu" style="float:left">
+
+            <li><a ui-sref="Customer.PurchaseOrder()" style="font-size:18px">BILL</a></li>
+
+
+        </ul>
+        <ul class="list-unstyled submenu InvoiceMenu">
+            <li><a ui-sref="Customer.Expense({no:no,suppliers:suppliersName})" style="font-size:18px"> Add Expense</a></li>
+            <li><a href="javascript:void(0);" ng-click="supplierclose();" id="invoiceclose"><i class="fa fa-times"></i></a></li>
+
+        </ul>
+
+    </div>
+
+
+
+    <div class="flexcontainer">
+
+        <div id="upperdivId">
+            <div class="page" ng-hide="type =='1'">
+                <table style="border:1px solid #e3e3e3;" class="subpage" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td style="padding:10px;">
+                            <table style="width:100%">
+                                <tr>
+                                    <td style="vertical-align:middle; width:10%; text-align:center"><img src="../images/logo-black.png" width="100" /></td>
+                                    <td style="text-align:center; width:80%;">
+                                        <h1 style="border-bottom:1px solid #e3e3e3; font-size:28px; font-weight:bold; padding-bottom:10px; text-transform:uppercase; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">{{CompanyName}}</h1>
+                                        <p style="font-size:12px; line-height:20px">
+                                            Office No. 1515, 15th Floor, Plot 1487, Prasad Chamber, Tata Road No. 2, Roxy Cinema, Opera House, Girgaon Mumbai 400 004 <strong><i class="fa fa-circle" style="font-size:8px;"></i> Tel:</strong> +91-22-66151448 / 66109826 / 67496231 <strong><i class="fa fa-circle" style="font-size:8px;"></i> Telefax:</strong> 66159068 <br /> <strong>Email:</strong> shashwatstainless@gmail.com
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center; font-weight:bold;  text-transform:uppercase; font-size:16px">BILL</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">
+                            <table style="width:100%; line-height:20px; font-size:14px">
+                                <tr>
+                                    <td style="width:65%; text-transform:uppercase; padding-right:20%">
+                                        <strong>Consignee :</strong><br />
+                                        <strong>{{suppliersName}}</strong><br />
+                                        <p style="margin-bottom:0px">
+                                            {{suppliersdata1}}
+                                        </p>
+                                        <p>vat tin no: {{taxRegNo}}</p>
+                                    </td>
+                                    <td style="font-weight:bold; text-transform:uppercase; width:45%">
+                                        <p style="margin-bottom:5px">BILL No: {{no}}</p>
+                                        <p style="margin-bottom:0px">Date : {{date | date: "dd MM yyyy"}}</p>
+                                        <p style="margin-bottom:0px">Due Date : {{billDueDate | date: "dd MM yyyy"}}</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px">
+                            <table width="100%" border="1" cellspacing="10" cellpadding="10" style="text-transform:uppercase; font-size:14px;" ng-init="role = admin">
+                                <thead>
+                                    <tr>
+                                        <th style="width:50px; text-align:center">Sr. No.</th>
+                                        <th style="text-align:center">Description of goods</th>
+                                        <th style="text-align:center">Quantity Net<br /> WT (MT)</th>
+                                        <th style="text-align:center">Unit Price<br /> FOB USD / MT</th>
+                                        <th style="text-align:center">Unit Price<br /> CIF USD / MT</th>
+                                        <th style="text-align:center">Amount FOB<br /> (USD)</th>
+                                        <th style="text-align:center">Amount CIF<br /> (USD)</th>
+                                        <th style="text-align:center">Exchange Rate<br /> </th>
+                                        <th ng-hide="role =='2'||role =='1'" style="text-align:center">MiSC<br /> Charges</th>
+                                        <th style="text-align:center">Amount<br /> (INR)</th>
+                                    </tr>
+                                </thead>
+                                <tr ng-repeat="item in itemDetail">
+                                    <td style="text-align:center">{{$index+1}}</td>
+                                    <td style="text-align:center; vertical-align:bottom">
+                                        <strong style="padding-bottom:10px; float:left; width:100%">
+
+                                        </strong>
+                                        {{item.grade}} {{item.finish}} {{item.thickness}} {{item.width}} {{item.length}}
+
+                                    </td>
+                                    <td style="text-align:center">
+                                        <p> {{item.netweight}}</p>
+
+
+
+                                    <td style="text-align:center">
+                                        <p> {{item.fobrate}}</p>
+
+                                    </td>
+                                    <td style="text-align:center">
+                                        <p> {{item.cifrate}}</p>
+
+                                    </td>
+                                    <td style="text-align:center">
+                                        <p>{{item.fobamount |number : fractionSize}}</p>
+
+                                    </td>
+
+                                    <td style="text-align:center">
+                                        <p>{{item.cifamount |number : fractionSize}}</p>
+
+                                    </td>
+                                    <td style="text-align:center">
+                                        <p>{{item.exchangeRate}}</p>
+
+                                    </td>
+                                    <td style="text-align:center; vertical-align:bottom" ng-hide="role =='2'||role =='1'">
+                                        <p>{{item.miscCharge |number : fractionSize}}</p>
+
+                                    </td>
+                                    <td style="text-align:center; vertical-align:bottom" ng-show="role =='2'||role =='1'">
+                                        <p>{{item.adminCharge |number : fractionSize}}</p>
+
+                                    </td>
+                                    <td style="text-align:center; vertical-align:bottom" ng-hide="role =='2'||role =='1'">
+                                        <p>{{item.charges |number : fractionSize}}</p>
+
+                                    </td>
+
+                                </tr>
+
+
+                                <tr>
+                                    <th>&nbsp;</th>
+                                    <th style="text-align:center">Total</th>
+                                    <th style="text-align:center">{{totalweight}}</th>
+                                    <th style="text-align:center">&nbsp;</th>
+                                    <th style="text-align:center">&nbsp;</th>
+
+                                    <th style="text-align:center">{{fobtotal  |number : fractionSize}}</th>
+                                    <th style="text-align:center">{{ciftotal  |number : fractionSize}}</th>
+                                    <th style="text-align:center">&nbsp;</th>
+                                    <th ng-hide="role =='2'||role =='1'" style="text-align:center">&nbsp;</th>
+                                    <th ng-hide="role =='2'||role =='1'" style="text-align:center">{{amount |number : fractionSize}}</th>
+                                    <th ng-show="role =='2'||role =='1'" style="text-align:center">{{adminAmount |number : fractionSize}}</th>
+                                </tr>
+
+                            </table>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px 10px; text-transform:uppercase">
+                            <p>for <strong>{{CompanyName}}</strong></p>
+                            <br /><br />
+                            <strong style="margin-bottom:10px; float:left;width:100%">authorised signatory</strong>
+                            <p>Vat Tin No.: 27160870532 v w.e.f. 14.09.2011</p>
+                            <p>vat tin no.: 27160870532 w.e.f. 14.09.2011</p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+
+      <!-- addInventryModal -->
+<div id="addInventryModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+            </div>
+            <div class="modal-body" style="height:450px; overflow:auto">
+                <table class="table NewTable" id="InvoiceTable" style="margin-top:10px;">
+                    <thead style="font-size:11px; font-weight:bold">
+                        <tr>
+
+
+                            <th>Grade</th>
+                            <th>Finish</th>
+                            <th>Thickness (MM)</th>
+                            <th>Width (MM)</th>
+                            <th>Length</th>
+                            <th>Net Weight (MT)</th>
+                            <th>Gross Weight (MT)</th>
+                            <th>Sheets NO</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+                        <tr ng-repeat="item in billtable1">
+
+                            <td> {{item.grade}}</td>
+                            <td> {{item.finish}}</td>
+                            <td> {{item.thickness}}</td>
+                            <td> {{item.width}}</td>
+                            <td> {{item.length}}</td>
+                            <td> {{item.netweight}}</td>
+                            <td> {{item.grossweight}}</td>
+                            <td> {{item.sheetNo}}</td>
+
+
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="addEnventory()">Add</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+

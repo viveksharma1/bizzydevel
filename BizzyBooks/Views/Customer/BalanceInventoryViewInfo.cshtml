@@ -1,0 +1,582 @@
+﻿
+@{
+    ViewBag.Title = "BalanceInventoryViewInfo";
+    Layout = null;
+}
+
+<div class="FlexPopup" style="display:block" ng-init="model = {}">
+    <div class="flexheader lightblue">
+        <label style="float:left;padding:15px ">
+
+            <strong><span style="font-size:20px;  color:#585655">View Info</span></strong>
+        </label>
+
+        <label style="float:right;padding:15px">
+            <span style="float:left; font-size:18px; margin-top:-2px">
+                <label style="color:#000">State :</label>
+                <span class="dropdown my" style="width:auto; margin-right:20px;">
+                    <a href="#" class="dropdown-toggle stagesdrpdwn" data-toggle="dropdown" style="color:#ff9800">Closed<span class="caret" style="margin-top:0px;color:#000"></span></a>
+                    <ul class="dropdown-menu dropmenu">
+                        <li>Closed</li>
+                        <li>Edit</li>
+                        <li>New</li>
+                        <li>Discard</li>
+                    </ul>
+                </span>
+            </span>
+            <strong style="font-size:24px; margin-top:-7px; float:right"><a href="" ng-click="goBack()"><i class="fa fa-times"></i></a></strong>
+
+
+        </label>
+
+    </div>
+    <div class="flexcontainer">
+        <div class="col-sm-4" style="min-height:560px; border-right:1px solid #808080; padding:0px 8px; background:rgba(158, 158, 158, 0.17)">
+
+
+            <div style="height:850px" class="scrollbar scrollbarAngular">
+                <div class="card  border-aero border-green">
+                    <label class="heading">
+                        Item Detail
+
+                    </label>
+
+                    <ul>
+
+                        <li>
+                            <span>Qty (KG)  </span>
+                            <span class="pull-right">{{Item.NETWEIGHT}}(KG)</span>
+                        </li>
+                        <li>
+                            <span>INVOICE NO </span>
+                            <span class="pull-right">{{Item.no}}</span>
+                        </li>
+
+                        <li>
+                            <span>Item Amount  </span>
+                            <span class="pull-right">{{Item.AMOUNTINR}}</span>
+                        </li>
+
+                        <li>
+                            <span>Cost/KG  </span>
+                            <span class="pull-right">{{costPerMTinINR}}</span>
+                        </li>
+
+
+                    </ul>
+
+
+                </div>
+                <div class="card border-orange">
+                    <label class="heading active">
+                        Expense
+
+                    </label>
+                    <ul ng-repeat="data in expenseData">
+                        <li>
+                            <span>{{data.supliersName}}  </span>
+                            <span class="pull-right"> {{data.amount/NetWeight |number : fractionSize}}</span>
+                        </li>
+
+
+                    </ul>
+                </div>
+                <div class="card border-orange">
+                    <label class="heading active">
+                        Tax & Duties
+
+                    </label>
+                    <ul>
+                        <li>
+                            <span>Custom Per KG </span>
+                            <span class="pull-right"> {{totalCustom |number : fractionSize}}</span>
+                        </li>
+
+
+                    </ul>
+                </div>
+                <div class="card border-orange">
+                    <label class="heading active">
+                        UO Expense
+
+                    </label>
+                    <ul ng-repeat="data in taxData">
+                        <li>
+                            <span>{{data.accountName}}  </span>
+                            <span class="pull-right"> {{data.credit/NetWeight |number : fractionSize}}</span>
+                        </li>
+
+
+                    </ul>
+                </div>
+                <div class="card border-blue">
+                    <ul>
+                        <li>
+                            <span>
+                                Total Expense
+                                <span class="pull-right"><b>{{tatalExpense/NetWeight |number : fractionSize}}</b></span>
+                            </span>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <span>
+                                Total Cost/KG
+                                <span class="pull-right"><b>{{totalCostPerMT |number : fractionSize}}</b></span>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-sm-8" style="padding:0px">
+            <div class="content" style="padding:10px 10px">
+
+                <div class="col-sm-3 padding">
+
+                    <h4 class="tabheading text-primary">Invoice Date</h4>
+                    <p>12/3/2017</p>
+
+                </div>
+
+                <div class="col-sm-3 padding">
+
+                    <h4 class="tabheading text-primary">Invoice No.</h4>
+                    <p>564564</p>
+
+                </div>
+
+                <div class="col-sm-3 padding">
+
+                    <h4 class="tabheading text-primary">Actual Date</h4>
+                    <p>12/3/2017</p>
+                </div>
+
+
+
+
+                <div class="col-sm-3 padding">
+                    <h4 class="tabheading text-primary">Supplier Name</h4>
+                    <p>Paynna Anugrah Indonesia</p>
+                </div>
+
+
+
+
+            </div>
+
+            <hr style="float:left; width:100%; margin-bottom:0px; margin-top: 10px;" />
+
+            <div class="col-sm-12" style="padding:0px">
+                <h4 class="cursor pull-left text-primary" data-toggle="collapse" data-target="#ItemDetail1234" style="margin-top: 15px; margin-left:20px;  margin-bottom: 0px;">
+                    <i class="fa fa-caret-right"></i> Item details
+                </h4>
+
+
+                <hr style="float:left; width:100%; margin-bottom:10px; margin-top: 10px;" />
+                <div class="collapse in" id="ItemDetail1234" style="float:left; width:100%; padding-bottom:20px;">
+
+                    <div class="col-sm-4">
+
+                        <div class="info">
+                            <div class="tableCell">
+                                <div class="tableCell labelCell">
+                                    <span class="label"><span class="red">*</span>Warehouse Coil No. :</span>
+                                </div>
+                                <div class="tableCell">
+                                    <span class="value">
+
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="info">
+                            <div class="tableCell">
+                                <div class="tableCell labelCell">
+                                    <span class="label">Container No. :</span>
+                                </div>
+                                <div class="tableCell">
+                                    <span class="value">
+                                        {{Item.CONTNO}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="info">
+                            <div class="tableCell">
+                                <div class="tableCell labelCell">
+                                    <span class="label">Sub-Category :</span>
+                                </div>
+                                <div class="tableCell">
+                                    <span class="value">
+                                        {{Item.SUBCATEGORY}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info">
+                            <div class="tableCell">
+                                <div class="tableCell labelCell">
+                                    <span class="label">Coil/Sheet no. :</span>
+                                </div>
+                                <div class="tableCell">
+                                    <span class="value">
+                                        {{Item.COILSHEETNO}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info">
+                            <div class="tableCell">
+                                <div class="tableCell labelCell">
+                                    <span class="label">Incoming Date :</span>
+                                </div>
+                                <div class="tableCell">
+                                    <span class="value">
+                                        {{Item.INCOMINGDATE}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info">
+                            <div class="tableCell">
+                                <div class="tableCell labelCell">
+                                    <span class="label">Lot Weight :</span>
+                                </div>
+                                <div class="tableCell">
+                                    <span class="value">
+                                        {{Item.LotWeight}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="info">
+                            <div class="tableCell">
+                                <div class="tableCell labelCell">
+                                    <span class="label">Location</span>
+                                </div>
+                                <div class="tableCell">
+                                    <span class="value">
+                                        {{Item.LOCATION}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="info">
+                            <div class="tableCell">
+                                <div class="tableCell labelCell">
+                                    <span class="label">Finish</span>
+                                </div>
+                                <div class="tableCell">
+                                    <span class="value">
+                                        {{Item.FINISH}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-4">
+
+                        <div class="info">
+                            <div class="tableCell">
+                                <div class="tableCell labelCell">
+                                    <span class="label">Thickness</span>
+                                </div>
+                                <div class="tableCell">
+                                    <span class="value">
+                                        {{Item.THICKNESS}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info">
+                            <div class="tableCell">
+                                <div class="tableCell labelCell">
+                                    <span class="label">Width</span>
+                                </div>
+                                <div class="tableCell">
+                                    <span class="value">
+                                        {{Item.WIDTH}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info">
+                            <div class="tableCell">
+                                <div class="tableCell labelCell">
+                                    <span class="label">Length</span>
+                                </div>
+                                <div class="tableCell">
+                                    <span class="value">
+                                        {{Item.LENGTH}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info">
+                            <div class="tableCell">
+                                <div class="tableCell labelCell">
+                                    <span class="label">Net Weight</span>
+                                </div>
+                                <div class="tableCell">
+                                    <span class="value">
+                                        {{Item.NETWEIGHT}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info">
+                            <div class="tableCell">
+                                <div class="tableCell labelCell">
+                                    <span class="label">Grade</span>
+                                </div>
+                                <div class="tableCell">
+                                    <span class="value">
+                                        {{Item.GRADE}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="info">
+                            <div class="tableCell">
+                                <div class="tableCell labelCell">
+                                    <span class="label"><span class="red">*</span>Adjust Wt</span>
+                                </div>
+                                <div class="tableCell">
+                                    <span class="value">
+
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info">
+                            <div class="tableCell">
+                                <div class="tableCell labelCell">
+                                    <span class="label"><span class="red">*</span>T. Net Wt</span>
+                                </div>
+                                <div class="tableCell">
+                                    <span class="value">
+
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="info">
+                            <div class="tableCell">
+                                <div class="tableCell labelCell">
+                                    <span class="label">Gross Wt</span>
+                                </div>
+                                <div class="tableCell">
+                                    <span class="value">
+                                        {{Item.GROSSWT}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-4">
+
+
+
+                        <div class="info">
+                            <div class="tableCell">
+                                <div class="tableCell labelCell">
+                                    <span class="label">PCS</span>
+                                </div>
+                                <div class="tableCell">
+                                    <span class="value">
+                                        12
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info">
+                            <div class="tableCell">
+                                <div class="tableCell labelCell">
+                                    <span class="label"><span class="red">*</span>Balance</span>
+                                </div>
+                                <div class="tableCell">
+                                    <span class="value">
+
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info">
+                            <div class="tableCell">
+                                <div class="tableCell labelCell">
+                                    <span class="label"><span class="red">*</span>Ageing</span>
+                                </div>
+                                <div class="tableCell">
+                                    <span class="value">
+
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info">
+                            <div class="tableCell">
+                                <div class="tableCell labelCell">
+                                    <span class="label"><span class="red">*</span>Current Status</span>
+                                </div>
+                                <div class="tableCell">
+                                    <span class="value">
+                                        {{Item.currentStatus}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info">
+                            <div class="tableCell">
+                                <div class="tableCell labelCell">
+                                    <span class="label">Remarks</span>
+                                </div>
+                                <div class="tableCell">
+                                    <span class="value">
+                                        {{Item.REMARK}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info">
+                            <div class="tableCell">
+                                <div class="tableCell labelCell">
+                                    <span class="label">Remarks 1</span>
+                                </div>
+                                <div class="tableCell">
+                                    <span class="value">
+                                        {{Item.REMARK1}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="info">
+                            <div class="tableCell">
+                                <div class="tableCell labelCell">
+                                    <span class="label">Remarks 2</span>
+                                </div>
+                                <div class="tableCell">
+                                    <span class="value">
+                                        {{Item.REMARK2}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-sm-7" style="padding-left:0px">
+                <h4 class="cursor pull-left text-primary" data-toggle="collapse" data-target="#ItemDetail1" style="margin-top: 15px; margin-left:20px; margin-bottom:0px;">
+                    <i class="fa fa-caret-right"></i> Transactions
+                </h4>
+
+
+                <hr style="float:left; width:100%; margin-bottom:10px; margin-top: 10px;" />
+                <div class="collapse in" id="ItemDetail1" style="float:left; width:100%; padding-left:10px">
+
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr style="background:rgb(243, 245, 248)">
+                                <th style="padding:10px">Date</th>
+                                <th style="padding:10px">Status</th>
+                                <th style="padding:10px">Remarks</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="status in Item.statusTransaction">
+                                <td>{{status.dt|date:'dd MMM yyyy HH:mm:a'}}</td>
+                                <td>{{status.status}}</td>
+                                <td>{{status.remarks}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+            <div class="col-sm-5" style="padding-right:0px">
+                <h4 class="cursor pull-left text-primary" style="margin-top: 15px; margin-bottom: 0px;">
+                    <i class="fa fa-caret-right"></i> Additional Remarks
+                </h4>
+                <hr style="float:left; width:100%; margin-bottom:10px; margin-top: 10px;" />
+
+                <div ng-repeat="addRemark in Item.addRemarks" class="row msg_container base_receive">
+                    <label class="badge">{{addRemark.dt|date:'dd MMM yyyy HH:mm:a'}}</label>
+                    <div class="col-md-10 col-xs-10">
+                        <div class="messages msg_receive">
+                            <p>
+                                {{addRemark.remarks}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                @*<div class="row msg_container base_receive">
+                        <label class="badge">12/03/2017</label>
+                        <div class="col-md-10 col-xs-10">
+                            <div class="messages msg_receive">
+                                <p>
+                                    that mongodb thing looks good, huh?
+                                    tiny master db, and huge document store
+                                </p>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row msg_container base_receive">
+                        <label class="badge">12/03/2017</label>
+                        <div class="col-md-10 col-xs-10">
+                            <div class="messages msg_receive">
+                                <p>
+                                    that mongodb thing looks good, huh?
+                                    tiny master db, and huge document store
+                                </p>
+
+                            </div>
+                        </div>
+                    </div>*@
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="flexfooter">&nbsp;    </div>
+
+
+
+</div>
+
+

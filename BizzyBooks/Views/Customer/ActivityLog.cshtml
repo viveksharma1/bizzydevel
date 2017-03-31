@@ -1,0 +1,360 @@
+﻿
+@{
+    ViewBag.Title = "ActivityLog";
+    Layout = null;
+}
+
+
+<div>
+    <div class="content">
+        <div class="panel lightblue bluebrdr marginbottom content">
+            <div class="panel-heading">
+                <strong class="heading">Activity Log</strong>
+                <div class="col-sm-12 padding">
+                    <div class="col-sm-2 padding">
+                        <h4 class="tabheading">Date</h4>
+                        <div class='input-group date' id='DateFilter'>
+                            <input type='text' class="form-control" placeholder="dd/mm/yyyy" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3 padding">
+                        <h4 class="tabheading">Activity Type</h4>
+                        <select class="form-control">
+                            <option>Select</option>
+                        </select>
+                    </div>
+
+                    <div class="col-sm-3 padding">
+                        <h4 class="tabheading">Voucher No.</h4>
+                       <input type="text" class="form-control" />
+                    </div>
+
+                    <div class="col-sm-3 padding">
+                        <h4 class="tabheading">User</h4>
+                        <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
+                                   ui-select-focuser
+                                   theme="selectize">
+                            <ui-select-match placeholder="">{{ $select.selected.company }}</ui-select-match>
+
+                            <ui-select-choices repeat="person in supliers  | filter: $select.search">
+                                <div>
+                                    <span ng-model="supplier1" ng-bind-html="person.company | highlight: $select.search"></span>
+                                </div>
+
+
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="col-sm-1 padding">
+                        <label>&nbsp;</label>
+                        <button type="button" class="btn btn-sm btn-primary pull-left" style="margin-top:29px">Search</button>
+                        </div>
+                    </div>
+            </div>
+
+
+        </div>
+
+        <div class="col-sm-12">
+
+            <table class="table-bordered table-condensed table-hover" fixed-header style="margin-top:10px;width:100%; height:400px">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Activity Type </th>
+                        <th>Voucher No.</th>
+                        <th>User</th>
+                        <th style="text-align:center; width:100px">Action</th>
+                  
+                    </tr>
+                </thead>
+                <tbody>
+<tr>
+    <td>12/03/2017</td>
+    <td>-</td>
+    <td>PX/01</td>
+    <td>-</td>
+    <td style="text-align:center"><label class="badge" style="width:50px">Edit</label></td>
+</tr>
+
+                    <tr>
+                        <td>12/03/2017</td>
+                        <td>-</td>
+                        <td>PX/01</td>
+                        <td>-</td> 
+                        <td style="text-align:center"><label class="badge bg-warning" style="width:50px">View</label></td>
+                    </tr>
+
+                    <tr>
+                        <td>12/03/2017</td>
+                        <td>-</td>
+                        <td>PX/01</td>
+                        <td>-</td>
+                        <td style="text-align:center"><label class="badge bg-danger" style="width:50px">Delete</label></td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+
+
+
+        <div id="GRNDetailDiv" class="FlexPopup HomeWrapper">
+            <div class="flexheader">
+                <ul class="list-unstyled submenu InvoiceMenu" style="float:left">
+                    <li><a href="#"><i class="fa fa-history"></i></a></li>
+                    <li><a href="#"><span>Item Detail</span></a></li>
+                </ul>
+                <ul class="list-unstyled submenu InvoiceMenu">
+                    <li><a href="#"><i class="fa fa-question-circle"></i></a></li>
+                    <li><a href="javascript:void(0);" ng-click="invoiceclose();" id="invoiceclose"><i class="fa fa-times"></i></a></li>
+                </ul>
+            </div>
+            <div class="col-sm-4" style="min-height:560px; border-right:1px solid #808080; padding:0px 8px">
+
+
+
+                <div style="height:600px" class="scrollbar scrollbarAngular">
+                    <div class="card active-sm border-aero padding:5px border-green">
+                        <label class="heading active">
+                            Item Detail
+
+                        </label>
+
+                        <ul>
+
+                            <li>
+                                <span>Qty (KG)  </span>
+                                <span class="pull-right">{{NetWeight}}(KG)</span>
+                            </li>
+                            <li>
+                                <span>INVOICE NO </span>
+                                <span class="pull-right">{{billNo}}</span>
+                            </li>
+
+                            <li>
+                                <span>Item Amount  </span>
+                                <span class="pull-right">{{itemAmountinINR}}</span>
+                            </li>
+
+                            <li>
+                                <span>Cost/KG  </span>
+                                <span class="pull-right">{{costPerMTinINR}}</span>
+                            </li>
+
+
+                        </ul>
+                    </div>
+                    <div class="card border-orange">
+                        <label class="heading active">
+                            Expense
+
+                        </label>
+                        <ul ng-repeat="data in expenseData">
+                            <li>
+                                <span>{{data.supliersName}}  </span>
+                                <span class="pull-right"> {{data.amount/NetWeight |number : fractionSize}}</span>
+                            </li>
+
+
+                        </ul>
+                    </div>
+                    <div class="card border-orange">
+                        <label class="heading active">
+                            Tax & Duties
+
+                        </label>
+                        <ul>
+                            <li>
+                                <span>Custom Per KG </span>
+                                <span class="pull-right"> {{totalCustom |number : fractionSize}}</span>
+                            </li>
+
+
+                        </ul>
+                    </div>
+                    <div class="card border-orange">
+                        <label class="heading active">
+                            UO Expense
+
+                        </label>
+                        <ul ng-repeat="data in taxData">
+                            <li>
+                                <span>{{data.accountName}}  </span>
+                                <span class="pull-right"> {{data.credit/NetWeight |number : fractionSize}}</span>
+                            </li>
+
+
+                        </ul>
+                    </div>
+                    <div class="card border-blue">
+                        <ul>
+                            <li>
+                                <span>
+                                    Total Expense
+                                    <span class="pull-right"><b>{{tatalExpense/NetWeight |number : fractionSize}}</b></span>
+                                </span>
+                            </li>
+                        </ul>
+                        <ul>
+                            <li>
+                                <span>
+                                    Total Cost/KG
+                                    <span class="pull-right"><b>{{totalCostPerMT |number : fractionSize}}</b></span>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    @*
+                                        <ul class="list-unstyled GRNInvoice" ng-repeat="item in taxData">
+                                            <li>
+                                                <label>{{item.accountName}}  <i class="fa fa-minus"></i></label>
+                                                <span>{{item.credit}}</span>
+                                            </li>
+
+
+                                        </ul>
+
+                        <h3 class="GRNHeading">Account <small>(Laibility)</small> <span class="badge">20/08/2016</span></h3>
+                        <ul class="list-unstyled GRNInvoice">
+                            <li>
+                                <label>Vat <i class="fa fa-minus"></i></label>
+                                <span>&nbsp;</span>
+                            </li>
+                            <li>
+                                <label>Tax <i class="fa fa-minus"></i></label>
+                                <span>&nbsp;</span>
+                            </li>
+                            <li>
+                                <label>O Tax <i class="fa fa-minus"></i></label>
+                                <span>&nbsp;</span>
+                            </li>
+
+                        </ul>
+                    *@
+
+                </div>
+            </div>
+
+            <div class="col-sm-8" style="padding:10px">
+                <table class="table-bordered table-condensed table-hover borderless" style="width:100%; background:#fff; margin-bottom:10px">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Due Date</th>
+                            <th>Original Amount</th>
+                            <th>Open Balance</th>
+                            <th>Payment</th>
+                        </tr>
+                    </thead>
+                    <tbody ng-repeat="data in bill">
+
+                        <tr>
+                            <td ng-bind="data.date | date:'dd MMM yyyy'"></td>
+                            <td ng-bind="data.billDueDate | date:'dd MMM yyyy'"></td>
+
+                            <td>{{data.amount |number : fractionSize}}</td>
+                            <td>{{data.balance |number : fractionSize}}</td>
+                            <td><input type="text" id="abc" /></td>
+                        </tr>
+
+
+                    </tbody>
+                </table>
+
+                <div class="card text-right">
+
+                    <div class="pull-right col-sm-7" style="margin-bottom:10px; padding-right:0px">
+                        <label>Total Expense :</label>
+                        <span class="col-sm-3 pull-right" style="padding-right:0px">
+                            <input type="text" class="form-control" />
+                        </span>
+                    </div>
+
+                    <div class="pull-right col-sm-7" style="margin-bottom:10px; padding-right:0px">
+                        <label>Total In :</label>
+                        <span class="col-sm-3 pull-right" style="padding-right:0px">
+                            <input type="text" class="form-control" />
+                        </span>
+                    </div>
+
+                    <div class="pull-right col-sm-7" style="margin-bottom:10px; padding-right:0px">
+                        <label>Total Out :</label>
+                        <span class="col-sm-3 pull-right" style="padding-right:0px">
+                            <input type="text" class="form-control" />
+                        </span>
+                    </div>
+
+                    <div class="pull-right col-sm-7" style="padding-right:0px">
+                        <label>Balance :</label>
+                        <span class="col-sm-3 pull-right" style="padding-right:0px">
+                            <input type="text" class="form-control" />
+                        </span>
+                    </div>
+
+
+                </div>
+
+                <h3 class="GRNHeading" style="font-weight:bold; width:100%; padding-right:10px">
+                    Stock Ledger
+
+                    <div class="btn-group pull-right">
+                        <button type="button" class="btn btn-primary btn-sm"><a href="#/Customer/GRNEntry" style="color:#fff">Action</a></button>
+                        <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret" style="border-top-color:#fff !important"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#/Customer/Import">Import GRN Entry</a></li>
+
+                        </ul>
+                    </div>
+                </h3>
+
+                <table class="table-bordered table-condensed table-hover borderless" style="width:100%; background:#fff">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Particular</th>
+                            <th>Ref. Type</th>
+                            <th>Ref. Id</th>
+                            <th>In Qty</th>
+                            <th>Out Qty</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr>
+                            <td>22/feb/2017</td>
+                            <td>Wages</td>
+                            <td>test</td>
+                            <td>897989</td>
+                            <td>22</td>
+                            <td>22</td>
+                        </tr>
+
+
+                    </tbody>
+                </table>
+            </div>
+
+
+
+
+        </div>
+
+
+
+
+    </div>
+
+</div>
+

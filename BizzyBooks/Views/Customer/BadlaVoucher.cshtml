@@ -1,0 +1,308 @@
+﻿
+@{
+    ViewBag.Title = "BadlaVoucher";
+    Layout = null;
+}
+
+
+
+<script type="text/ng-template" id="/ui-tree-select.html">
+    <ui-select ng-model="model.$selected"
+               ui-select-focuser
+               theme="selectize">
+        <ui-select-match placeholder="Select a group">
+            {{ $select.selected.title }}
+        </ui-select-match>
+        <ui-select-choices repeat="group in groups | filter: $select.search">
+            <div>
+                <span ng-bind-html="group.title | highlight: $select.search"></span>
+                <!--<span ng-bind-html="'('+group.size+' users)'"></span>
+                <a href
+                  ng-show="group.parent"
+                  class="goto-child-group"
+                  ng-click="loadChildGroupsOf(group, $select)">
+                  <i class="fa fa-angle-right"></i>
+                </a>-->
+            </div>
+        </ui-select-choices>
+    </ui-select>
+</script>
+
+<div class="FlexPopup" style="display:block" ng-init="model = {}">
+    <div class="flexheader lightblue  ">
+        <label style="float:left;padding:15px ">
+
+            <strong><span style="font-size:20px;  color:#585655">Badla Voucher</span></strong>
+        </label>
+
+        <label style="float:right;padding:15px">
+            <span style="float:left; font-size:18px; margin-top:-2px">
+                <label style="color:#000">State :</label>
+                <span class="dropdown my" style="width:auto; margin-right:20px;">
+                    <a href="#" class="dropdown-toggle stagesdrpdwn" data-toggle="dropdown" style="color:#ff9800">Closed<span class="caret" style="margin-top:0px;color:#000"></span></a>
+                    <ul class="dropdown-menu dropmenu">
+                        <li>Closed</li>
+                        <li>Edit</li>
+                        <li>New</li>
+                        <li>Discard</li>
+
+                    </ul>
+                </span>
+            </span>
+            <strong style="font-size:24px; margin-top:-7px; float:right"><a href="" ng-click="goBack()"><i class="fa fa-times"></i></a></strong>
+
+
+        </label>
+
+    </div>
+    <div class="flexcontainer">
+        <div class="lightblue bluebrdr content" style="padding:10px 10px; margin-bottom:10px">
+            <div class="col-sm-5 padding">
+                <div class="col-sm-3 padding">
+
+                    <h4 class="tabheading font_11">Invoice Ref.</h4>
+                    <input type="text" class="form-control" disabled />
+
+                </div>
+
+
+                <div class="col-sm-3 padding">
+
+                    <h4 class="tabheading font_11">Invoice Date</h4>
+                    <input type='text' class="form-control" disabled />
+
+                </div>
+                <div class="col-sm-3 padding">
+
+                    <h4 class="tabheading font_11">Invoice No.</h4>
+                    <input type="text" class="form-control" disabled style="width:100px" />
+
+                </div>
+
+
+
+
+                <div class="col-sm-12 padding" style="margin-top:5px">
+
+
+                    <div class="col-sm-6 padding">
+
+                        <h4 class="tabheading font_11">Supplier Name</h4>
+                        <input type="text" class="form-control" disabled />
+
+                    </div>
+
+                    <div class="col-sm-3 padding">
+
+                        <h4 class="tabheading font_11">Payment Days</h4>
+                        <input type="text" class="form-control" disabled />
+                    </div>
+                    <div class="col-sm-3 padding">
+
+                        <h4 class="tabheading font_11">Due Date</h4>
+                        <input type="text" class="form-control" disabled style="width:100px" />
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-sm-3 padding">
+
+                <div class="totalIncomeSection card accordion" style="text-align:left; padding:5px 15px">
+                    <h4>INTEREST</h4>
+                    <div style="color: #1E294B; width:100%; float:left;">
+                        <div class="subheading" style="float: left; margin: 5px 0px; text-transform:capitalize">Rate</div> <b class="pull-right" style="font-size:22px">0</b>
+                    </div>
+                    <div style="color: #1E294B;">
+                        <div class="subheading" style="float: left; margin: 5px 0px;  text-transform:capitalize">Amount</div> <b class="pull-right" style="font-size:22px">0</b>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="col-sm-2 padding text-right pull-right" style="margin-top:0px">
+
+                <h4 class="tabheading" style="float:right; width:100%; margin-top:0px !important">B. Ref No.</h4>
+                <input type="text" class="form-control pull-right" ng-model="expenseNo" disabled style="width:100px" />
+
+
+
+            </div>
+
+
+
+
+
+            <div id="form-popoverPopup" class="popupbox">
+                <div class="dijitDialogTitle">
+                    New Suppliers
+                    <i class="fa fa-times-circle cursor pull-right" title="close" ng-click="popuclose()"></i>
+                </div>
+                <div class="form-content">
+                    <div class="form-group">
+                        <label><span class="red">*</span>Suppliers Name</label>
+                        <input type="text" ng-model="suppliersName" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label><span class="red">*</span>Email</label>
+                        <input type="text" ng-model="email1" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label><span class="red">*</span>Mobile No.</label>
+                        <input type="text" ng-model="mobile" class="form-control" />
+                    </div>
+
+
+
+                    <div class="form-footer">
+                        <button type="button" class="btn btn-sm btn-default" ng-click="saveSuppliers()">Save</button>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+        <div class="col-lg-12" style="padding:10px">
+            <div class="col-sm-4">
+                <label>Badla Person</label>
+                <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
+                           ui-select-focuser
+                           theme="selectize">
+                    <ui-select-match placeholder="Select Suppliers">{{ $select.selected.company }}</ui-select-match>
+
+                    <ui-select-choices repeat="person in supliers  | filter: $select.search">
+                        <div>
+                            <span ng-model="supplier1" ng-bind-html="person.company | highlight: $select.search"></span>
+                        </div>
+
+
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+
+            <div class="col-sm-2">
+                <label>Date of Badla</label>
+                <div class='input-group'>
+                    <input type='text' class="form-control" id='BadlaDate' />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+            <div class="col-sm-6">
+                <h4 class="cursor pull-left" style="margin-top: 15px; margin-bottom: 0px;">
+                    <i class="fa fa-caret-right"></i> Condition
+                </h4>
+                <hr style="float:left; width:100%; margin:20px 0px" />
+
+                <table style="float:left; width:100%" class="table-bordered">
+                    <thead style="background:rgb(243, 245, 248)">
+                        <tr>
+                            <th class="tablepadding">&nbsp;</th>
+                            <th class="tablepadding" width="150">Total</th>
+                            <th class="tablepadding" width="180">Manual W/o Interest</th>
+                            <th class="tablepadding" width="150">Diff</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="tablepadding"><strong>DAYS</strong></td>
+                            <td class="tablepadding"><input type="text" class="form-control" /></td>
+                            <td class="tablepadding"><input type="text" class="form-control" /></td>
+                            <td class="tablepadding"><input type="text" class="form-control" /></td>
+                        </tr>
+                        <tr>
+                            <td class="tablepadding"><strong>INTEREST (%)</strong></td>
+                            <td class="tablepadding"><input type="text" class="form-control" /></td>
+                            <td class="tablepadding"><input type="text" class="form-control" /></td>
+                            <td class="tablepadding"><input type="text" class="form-control" /></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+                </div>
+                <div class="col-sm-6">
+                    <h4 class="cursor pull-left" style="margin-top: 15px; margin-bottom: 0px;">
+                        <i class="fa fa-caret-right"></i> Extra Rate of Interest
+                    </h4>
+                    <hr style="float:left; width:100%; margin:20px 0px" />
+                    <table style="float:left; width:100%" class="table-bordered table">
+                        <thead >
+                            <tr style="background:rgb(243, 245, 248)">
+                                <th class="tablepadding">
+                                    <div class='input-group'>
+                                        <input type='text' class="form-control text-right" id="interestDate" />
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </span>
+
+                                    </div>
+                                </th>
+                                <th class="tablepadding" style="text-align:right"><input type="text" placeholder="Rate" class="form-control" /></th>
+                                <th class="tablepadding" style="text-align:center"><button class="btn btn-primary btn-sm">Add</button></th>
+                            </tr>
+                            <tr>
+                                <th class="tablepadding" style="width:150px">Date</th>
+                                <th class="tablepadding" style="text-align:right">Rate</th>
+                                <th class="tablepadding">&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tablepadding">12/3/2017</td>
+                                <td class="tablepadding" style="text-align:right">200</td>
+                                <td class="text-center Count tablepadding" value="0.00"><a class="edit" title="Edit"> <i class="fa fa-times-circle cursor RemoveTR" style="font-size:16px" ng-click="remove($index)"></i></a></td>
+                            </tr>
+
+
+                        </tbody>
+                    </table>
+                </div>
+
+          
+    </div>
+
+
+    <div class="flexfooter">
+        <span class="pull-left">
+
+            <button type="button" class="btn btn-sm btn-primary">Clear</button>
+        </span>
+
+        <div class="pull-right">
+            <button type="button" class="btn btn-sm btn-primary" ng-click="makePayment(paymentAmount-amount)">Save</button>
+            <div class="btn-group dropup">
+                @*
+                    <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:25px">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" style="right:-2px !important">
+                        <li><a href="#">Save and close</a></li>
+                        <li><a href="#">Save and send</a></li>
+                        <li><a href="#">Save and new</a></li>
+                        <li><a href="#">Save and share link</a></li>
+                    </ul>
+                *@
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+

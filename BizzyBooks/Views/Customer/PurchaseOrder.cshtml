@@ -1,0 +1,860 @@
+﻿
+@{
+    ViewBag.Title = "PurchaseOrder";
+    Layout = null;
+}
+<style>
+   .modal-backdrop{display:none}
+</style>
+
+<div class="FlexPopup" style="display:block" ng-init="model = {}">
+    <div class="flexheader lightblue ">
+
+        <label style="float:left;padding:15px ">
+
+            <strong><span style="font-size:20px;  color:#585655">Purchase Order</span></strong>
+        </label>
+        <label style="float:right;padding:15px ">
+
+            <strong style="font-size:20px"><a href="" ng-click="addInventrybtn()"><i class="fa fa-times"></i></a></strong>
+
+
+        </label>
+    </div>
+    <!-- addInventryModal -->
+    <div id="addInventryModal" class="modal fade" role="dialog">
+        <div class="modal-admin">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+               
+                <div class="modal-body" style="background-color:#525DB0">
+                    <label style="color:#FFFFFF">Do you want to leave without saving</label>
+                </div>
+
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm btn bg-purple"   data-dismiss="modal"  style="float:left">No</button>
+                    <button type="button" class="btn btn-secondary btn-sm btn-success" ng-click="goBack()" data-close="modal" >Yes</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="addInventryModal1" class="modal fade" role="dialog">
+        <div class="modal-admin">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+
+                <div class="modal-body" style="background-color:#47AF40">
+                    <label style="color:#FFFFFF">PO Saved</label>
+                </div>    
+            </div>
+
+        </div>
+    </div>
+    
+   
+   
+        <div class="flexcontainer " >
+            <div class="pulltab" id="menuUp" ng-click="menuUp();"><i class="fa fa-chevron-up"></i> </div>
+            <div class="lightblue bluebrdr content " style="padding:10px 10px 10px 10px">
+
+
+               
+
+            
+                <div class="col-sm-7 padding statusBody">
+                    <div class="col-sm-6" style="margin-top:10px">
+                        
+                        <ui-select  ng-model="model.people" id="countryCode"
+                                   ui-select-focuser
+                                   theme="selectize">
+                            <ui-select-match placeholder="Select Suppliers">{{ $select.selected.company }}</ui-select-match>
+                            
+                            <ui-select-choices repeat="group in supliers | filter: $select.search">
+                                <div>
+                                    <span ng-bind-html="group.company | highlight: $select.search"></span>
+                                </div>
+
+
+                            </ui-select-choices>
+                        </ui-select>
+
+                        <h3>{{supplier}}</h3>
+                        <p ng-init="{{sup = model.people.company}}"> </p>
+                    </div>
+                    <div id="form-popoverPopup" class="popupbox">
+                        <div class="dijitDialogTitle">
+                            New Suppliers
+                            <i class="fa fa-times-circle cursor pull-right" title="close" ng-click="popuclose()"></i>
+                        </div>
+                        <div class="form-content">
+                            <div class="form-group">
+                                <label><span class="red">*</span>Suppliers Name</label>
+                                <input type="text" ng-model="suppliersName" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label><span class="red">*</span>Email</label>
+                                <input type="text" ng-model="email1" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label><span class="red">*</span>Mobile No.</label>
+                                <input type="text" ng-model="mobile" class="form-control" />
+                            </div>
+
+
+
+                            <div class="form-footer">
+                                <button type="button" class="btn btn-sm btn-default" ng-click="saveSuppliers()">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6" style="margin-top:10px">
+                        <input type="text" class="form-control" ng-model="email" placeholder="Email address" />
+                    </div>
+
+                </div>
+                   
+
+
+
+
+
+               
+
+
+
+            </div>
+            <div class="col-sm-12 statusBody">
+
+
+                <div class="col-sm-2 padding5 claro">
+                   
+                    <table class="table NewTable" style="border: 1px solid #e3e3e3;  margin:5% 2% 0% -4%; width: 99%;">
+                        <tr>
+                            <td style="background:#f3f5f8; width:50px"><label>INR</label></td>
+                            <td><input type="text" ng-model="ExchangeRateINR" class="form-control" /></td>
+                        </tr>
+                        <tr>
+                            <td style="background:#f3f5f8; width:50px"><label>IDR</label></td>
+                            <td><input type="text" ng-model="ExchangeRateIDR" class="form-control" /></td>
+                        </tr>
+                        <tr>
+                            @*
+                            <td colspan="2" style="background:rgba(175, 175, 175, 0.21)" align="right">
+        <button class="btn btn-xs btn-primary" ng-click ="saveExchangeRate()"type="button" style="background: #fff;    color: #000 !important;
+    border: none;">Save</button>
+                            </td>
+                            *@
+                        </tr>
+                    </table>
+                    </div>
+
+
+                    <div class="col-sm-2 padding5 claro">
+
+
+
+
+                        <h4 class="tabheading">Currency</h4>
+                        <select class="form-control selectcss" ng-model = "currency" >
+
+                            <option value="Dollar">Dollar</option>
+                            <option value="Rupee">Rupee</option>
+                            <option value="Rupiah">Rupiah</option>
+                            <option value="Uro">Uro</option>
+
+                        </select>
+                        <div>
+                           
+                            <button type="button" class="btn btn-default btn-sm currencybtn" ng-click="CommodityRatesbtn()">Commodity Rates</button>
+                            <button type="button" class="btn btn-default btn-sm currencybtn" ng-click="ExchangeRatebtn()">$ Exchange Rate</button>
+
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <h4 class="tabheading">P.O Date</h4>
+                        <div class='input-group'>
+                            <input type='text' class="form-control" id='BillDate' ng-model="poDate" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+
+                        <h4 class="tabheading">Due Date</h4>
+                        <div class='input-group'>
+
+                            <input type='text' ng-model="poDueDate" class="form-control" id='billDueDate' />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+
+                    </div>
+
+                  
+
+
+
+                    <div class="col-sm-1 padding5 pull-right">
+                        <h4 class="tabheading">P.O No.</h4>
+                        <input type="text" class="form-control" ng-model="poNo" disabled />
+                    </div>
+                </div>
+
+            <div class="modal fade" id="ExchangeRateDiv">
+                <div class="modal-dialog" style="width:460px; margin-top:60px">
+                    <div class="modal-content content">
+                        <div class="modal-header popupheader content" style="border-bottom:1px solid #e5e5e5">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title">Exchange Rate</h4>
+                        </div>
+                        <div class="modal-body content modalbodyexchange" style="padding:15px;">
+
+                            <div class="col-sm-5 padding5">
+                                <h3 class="heading headingsize">$ Exchange</h3>
+                            </div>
+
+                            <div class="col-sm-5 padding5">
+                                <h3 class="heading headingsize"> Rate</h3>
+                            </div>
+
+
+
+
+
+                            <div class="ExchangeLine">
+
+                                <div class="col-sm-5 padding5">
+                                   
+                                        <label>{{data.source}} to INR</label>
+                                      
+                                    
+                                </div>
+
+                                <div class="col-sm-5 padding5">
+                                    <input id ="rs" type="text" class="form-control" />
+                                </div>
+
+                                <div class="col-sm-2 padding5 delete">
+                                    <i class="fa fa-trash"></i> Delete
+                                </div>
+
+                            </div>
+
+                            <div class="ExchangeLine">
+
+                                <div class="col-sm-5 padding5">
+                                    <label>{{data.source}} to IDR</label>
+
+                                </div>
+
+                                <div class="col-sm-5 padding5">
+                                    <input id="rs1"type="text" class="form-control" />
+                                </div>
+
+                                <div class="col-sm-2 padding5 delete">
+                                    <i class="fa fa-trash"></i> Delete
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="modal-footer content">
+                            <button type="button" class="btn btn-default btn-sm pull-left addexchange">Add Line</button>
+
+
+                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-primary btn-sm">Save changes</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div>
+
+
+            <div class="modal fade" id="CommodityRatesDiv">
+                <div class="modal-dialog" style="width:460px; margin-top:100px">
+                    <div class="modal-content content">
+                        <div class="modal-header popupheader content" style="border-bottom:1px solid #e5e5e5">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title">Commodity Rates</h4>
+                        </div>
+                        <div class="modal-body content modalbodycommodity" style="padding:15px;">
+
+                            <div class="col-sm-6 padding5">
+                                <h3 class="heading headingsize">Commodity</h3>
+                            </div>
+
+                            <div class="col-sm-6 padding5">
+                                <h3 class="heading headingsize"> Rate</h3>
+                            </div>
+
+
+
+
+
+                            <div class="ExchangeLine">
+
+                                <div class="col-sm-6 padding5">
+@*
+    <select class="form-control selectcss">
+
+
+        <option>Select</option>
+        <option>Nickel</option>
+        <option>Copper</option>
+        <option>Fe</option>
+        <option>Molybdenum</option>
+        <option>Ferrous</option>
+    </select>
+*@
+                                        <h4>Nicale</h4>
+                                </div>
+
+                                <div class="col-sm-6 padding5">
+                                    <input  ng-model="rate1" type="text" class="form-control" />
+                                </div>
+
+
+
+                            </div>
+
+                            <div class="ExchangeLine">
+
+                                <div class="col-sm-6 padding5">
+                                    <h4>Iron</h4>
+@*
+    <select class="form-control selectcss">
+        <option>Select</option>
+        <option>Nickel</option>
+        <option>Copper</option>
+        <option>Fe</option>
+        <option>Molybdenum</option>
+        <option>Ferrous</option>
+    </select>
+*@
+                                    </div>
+
+                                    <div class="col-sm-6 padding5">
+                                        <input ng-model="rate2" type="text" class="form-control" />
+                                    </div>
+
+
+
+                                </div>
+
+                            <div class="ExchangeLine">
+
+                                <div class="col-sm-6 padding5">
+                                    <h4>Steel</h4>
+                                    @*
+                <select class="form-control selectcss">
+                    <option>Select</option>
+                    <option>Nickel</option>
+                    <option>Copper</option>
+                    <option>Fe</option>
+                    <option>Molybdenum</option>
+                    <option>Ferrous</option>
+                </select>
+                                    *@
+                                </div>
+
+                                <div class="col-sm-6 padding5">
+                                    <input ng-model="rate3"type="text" class="form-control" />
+                                </div>
+
+
+
+                            </div>
+
+
+
+                            </div>
+                            <div class="modal-footer content">
+                                <button type="button" class="btn btn-default btn-sm pull-left addcommodity">Add Line</button>
+
+                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary btn-sm">Save changes</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div>
+               @*
+                <div class="col-sm-12" style="padding-top:10px">
+                    <h4 data-toggle="collapse" data-target="#AccountDetail3" class="cursor pull-left"><i class="fa fa-caret-right"></i> Purchage Order details</h4>
+                    <div class="collapse in" id="AccountDetail3">
+                        <table class="table NewTable" style="width:100%" id="AccountTableLine">
+                            <thead>
+                                <tr>
+
+                                    @*<th>Name</th>
+                                    <th>Description</th>
+                                    <th class="text">Amount</th>
+
+                                </tr>
+                            </thead>
+                            <tbody  ng-repeat="data in purchage">
+
+                                <tr >
+
+                                    <td>{{data.dsc}}</td>
+                                    <td>{{data.ammount}}</td>
+                                </tr>
+
+
+                                @*
+                                <tr class="Countedit">
+                                    <td class="text-right Count" style="width:50px" data-field="Count">1</td>
+                                    <td class="Count" data-field="Account">Custom Duty</td>
+                                    <td class="Count" id="dsc" data-field="Description"{{purchageorder.dsc}}>&nbsp;</td>
+                                    <td class="text-right Count" id="amount" data-field="Amount">&nbsp;</td>
+                                    <td class="text-right Count"><a> <i class="fa fa-pencil" style="font-size:16px"></i></a></td>
+
+                                    <td class="text-right Count2" style="width:50px" data-field="Count"><input type="text" class="form-control" value="1"/></td>
+                                    <td class="Count2" data-field="Account"><ui-tree-Account model="model">
+    </ui-tree-Account></td>
+                                    <td class="Count2" data-field="Description"><input id="dsc"type="text" class="form-control" /></td>
+                                    <td class="text-right Count2" data-field="Amount"><input type="text" class="form-control" /></td>
+                                    <td class="text-right Count2 savetr"><a> <i class="fa fa-save" style="font-size:16px"></i></a></td>
+                                </tr>
+
+
+                                <tr class="Countedit">
+                                    <td class="text-right Count" style="width:50px" data-field="Count">2</td>
+                                    <td class="Count" data-field="Account">VAT</td>
+                                    <td class="Count" data-field="Description">&nbsp;</td>
+                                    <td class="text-right Count" data-field="Amount">&nbsp;</td>
+                                    <td class="text-right Count"><a> <i class="fa fa-pencil" style="font-size:16px"></i></a></td>
+
+                                    <td class="text-right Count2" style="width:50px" data-field="Count"><input type="text" class="form-control" value="2" /></td>
+                                    <td class="Count2" data-field="Account">
+                                        <ui-tree-Account model="model">
+                                        </ui-tree-Account>
+                                    </td>
+                                    <td class="Count2" data-field="Description"><input type="text" class="form-control" /></td>
+                                    <td class="text-right Count2" data-field="Amount"><input type="text" class="form-control" /></td>
+                                    <td class="text-right Count2 savetr"><a> <i class="fa fa-save" style="font-size:16px"></i></a></td>
+                                </tr>
+
+
+                                <tr class="Countedit">
+                                    <td class="text-right Count" style="width:50px" data-field="Count">3</td>
+                                    <td class="Count" data-field="Account">O TAX</td>
+                                    <td class="Count" data-field="Description">&nbsp;</td>
+                                    <td class="text-right Count" data-field="Amount">&nbsp;</td>
+                                    <td class="text-right Count"><a> <i class="fa fa-pencil" style="font-size:16px"></i></a></td>
+
+                                    <td class="text-right Count2" style="width:50px" data-field="Count"><input type="text" class="form-control" value="3" /></td>
+                                    <td class="Count2" data-field="Account">
+                                        <ui-tree-Account model="model">
+                                        </ui-tree-Account>
+                                    </td>
+                                    <td class="Count2" data-field="Description"><input type="text" class="form-control" /></td>
+                                    <td class="text-right Count2" data-field="Amount"><input type="text" class="form-control" /></td>
+                                    <td class="text-right Count2 savetr"><a> <i class="fa fa-save" style="font-size:16px"></i></a></td>
+                                </tr>
+
+                                <tr class="Countedit">
+                                    <td class="text-right Count" style="width:50px" data-field="Count">4</td>
+                                    <td class="Count" data-field="Account">TAX</td>
+                                    <td class="Count" data-field="Description">&nbsp;</td>
+                                    <td class="text-right Count" data-field="Amount">&nbsp;</td>
+                                    <td class="text-right Count"><a> <i class="fa fa-pencil" style="font-size:16px"></i></a></td>
+
+                                    <td class="text-right Count2" style="width:50px" data-field="Count"><input type="text" class="form-control" value="4" /></td>
+                                    <td class="Count2" data-field="Account">
+                                        <ui-tree-Account model="model">
+                                        </ui-tree-Account>
+                                    </td>
+                                    <td class="Count2" data-field="Description"><input type="text" class="form-control" /></td>
+                                    <td class="text-right Count2" data-field="Amount"><input type="text" class="form-control" /></td>
+                                    <td class="text-right Count2 savetr"><a> <i class="fa fa-save" style="font-size:16px"></i></a></td>
+                                </tr>
+
+                                <tr class="Countedit">
+                                    <td class="text-right Count" style="width:50px" data-field="Count">&nbsp;</td>
+                                    <td class="Count" data-field="Account">&nbsp;</td>
+                                    <td class="Count" data-field="Description">&nbsp;</td>
+                                    <td class="text-right Count" data-field="Amount">&nbsp;</td>
+                                    <td class="text-right Count"><a> <i class="fa fa-pencil" style="font-size:16px"></i></a></td>
+
+                                    <td class="text-right Count2" style="width:50px" data-field="Count"><input type="text" class="form-control" value="4" /></td>
+                                    <td class="Count2" data-field="Account">
+                                        <ui-tree-Account model="model">
+                                        </ui-tree-Account>
+                                    </td>
+                                    <td class="Count2" data-field="Description"><input type="text" class="form-control" /></td>
+                                    <td class="text-right Count2" data-field="Amount"><input type="text" class="form-control" /></td>
+                                    <td class="text-right Count2 savetr"><a> <i class="fa fa-save" style="font-size:16px"></i></a></td>
+                                </tr>
+
+
+                            </tbody>
+                        </table>
+
+                        <button type="button" class="btn btn-default btn-sm btn-xs" ng-click="AddAccountTableLine()">Add lines</button>
+                    </div>
+                </div>
+
+            *@
+
+
+  
+
+
+            <hr style="float:left; width:100%;" />
+
+
+            <div class="col-sm-12 ">
+                <h4 data-toggle="collapse" data-target="#ItemDetail2" class="cursor"><i class="fa fa-caret-right"></i> Item details</h4>
+              
+                <div class="collapse in" id="ItemDetail2" ng-init="role = admin" >
+                   
+                    <table class="table-bordered table-condensed table-hover " id="ItemTable">
+                        <thead style="width:70px">
+                            <tr>
+
+                                <th style="text-align:center">Grade</th>
+                                <th style="text-align:center">Finish</th>
+                                <th style="text-align:center">Thickness (MM)</th>
+                                <th style="text-align:center">Width (MM)</th>
+                                <th style="text-align:center">Length (MM)</th>
+                                <th style="text-align:center">Net Weight (MT)</th>
+                                <th style="text-align:center">Gross Weight (MT)</th>
+                                <th style="text-align:center">Sheets NO</th>
+                                <th style="text-align:center">Unit Price FOB USD/MT($)</th>
+                                <th style="text-align:center">Unit Price CIF USD/MT($)</th>
+                                <th style="text-align:center">Amount CIF($)</th>
+                                <th style="text-align:center">Amount FOB($)</th>
+                                <th style="text-align:center" ng-hide="role =='2'||role =='1'"> Msc.Charges($)</th>
+                                <th style="text-align:center">Amount(INR)</th>
+                                <th>&nbsp;</th>
+
+                            </tr>
+                        </thead>
+                        <tbody ng-repeat="item in poTable">
+                            <tr>
+
+
+                                <td class="Count"><input style="text-align:center"ng:model="item.grade" class="form-control" value="0.00" ng:required ng:validate="number" style="border:none;" /></td>
+                                <td class="Count"><input style="text-align:center"ng:model="item.finish" class="form-control" value="0.00" ng:required ng:validate="number" style="border:none;" /></td>
+                                <td class="Count"><input style="text-align:center"ng:model="item.thickness" class="form-control" value="0.00" ng:required ng:validate="number" style="border:none;" /></td>
+                                <td class="Count"><input style="text-align:center" ng:model="item.width" class="form-control" value="0.00" ng:required ng:validate="number" style="border:none;" /></td>
+                                <td class="Count"><input style="text-align:center" ng:model="item.length" class="form-control" value="0.00" ng:required ng:validate="number" style="border:none;" /></td>
+                                <td class="Count"><input style="text-align:center"ng:model="item.netweight" class="form-control" value="0.00" ng:required  ng:validate="number" style="border:none;" /></td>
+                                <td class="Count"><input style="text-align:center"ng:model="item.grossweight" class="form-control" value="0.00" ng:required ng:validate="number" style="border:none;" /></td>
+                                <td class="Count"><input style="text-align:center"ng:model="item.sheetNo" class="form-control" value="0.00" ng:required ng:validate="number" style="border:none;" /></td>
+                                <td class="Count"><input style="text-align:center" ng:model="item.fobRate" class="form-control" value="0.00" ng:required type="number"ng:validate="number" style="border:none;" /></td>
+                                <td class="Count"><input style="text-align:center"ng:model="item.fobunitprice" class="form-control" value="0.00" ng:required type="number" ng:validate="number" style="border:none;" /></td>
+                               
+                                <td class="Count"><input style="text-align:center"ng:model="item.cif=item.netweight*item.fobRate " class="form-control" value="0.00" ng:required type="number" ng:validate="number" style="border:none;" /></td>
+                                <td class="Count"><input style="text-align:center"ng:model="item.fob=item.netweight*item.fobunitprice " class="form-control" value="0.00" ng:required type="number" ng:validate="number" style="border:none;" /></td>
+                                <td class="Count" ng-hide="role =='2'||role =='1'"><input style="text-align:center" ng:model="item.miscCharge" class="form-control" value="0.00" ng:required type="number"ng:validate="number" style="border:none;" /></td>
+                                <td class="Count"  ng-show="role =='2'||role =='1'"><input style="text-align:center" ng:model="item.adminCharge |number : fractionSize"" class="form-control" value="0.00"ng:required ng:validate="number" style="border:none;" /></td>
+                                <td class="Count" ng-hide="role =='2'||role =='1'"><input style="text-align:center" ng:model="item.charges=(item.netweight*item.fobRate*ExchangeRate)+item.miscCharge |number : fractionSize" class="form-control" value="0.00"  ng:required ng:validate="number" style="border:none;" /></td>
+                                <td class="text-right Count"ng:model="item.adminCharge = item.charges-item.miscCharge" value="0.00" ><a class="edit" title="Edit"> <i class="fa fa-times-circle cursor RemoveTR" style="font-size:16px" ng-click="remove($index)"></i></a></td>
+
+                            </tr>
+
+
+                        </tbody>
+                    </table>
+                   
+                    <button style="margin-top:7px" type="button" class="btn btn-default" ng-click="addrow(count = count + 1)" ng-init="count=-1">Add Lines</button>
+                    <button style="margin-top:7px" type="button" class="btn btn-default" ng-click="clearTable()">Clear Lines</button>
+
+                    
+
+                </div>
+            </div>
+          
+
+            <hr style="float:left; width:100%; margin:5px 0px" />
+            <div class="col-sm-12" ng-click="addrow1()">
+                <div class="col-sm-4 padding">
+
+                    <div class="form-group">
+                        <h4 class="tabheading">Memo</h4>
+                        <textarea class="form-control" style="height:80px"></textarea>
+                    </div>
+                </div>
+                <span class="pull-right" style="width:350px">
+                    <label class="subtotal" style="font-size:1.3rem;">Subtotal</label>
+                    <span class="subtotalvalue" style="font-size:1.3rem; font-weight:bold">Rs {{subtotalnew |number : fractionSize}}</span>
+                    <label class="subtotal" style="font-size:1.5rem;">Total</label>
+                    <span class="subtotalvalue" style="font-size:1.5rem; font-weight:bold">Rs {{subtotalnew |number : fractionSize}}</span>
+                </span>
+            </div>
+
+            <hr style="float:left; width:100%; margin:5px 0px" />
+
+            <div class="col-sm-12" style="margin-bottom:20px">
+                <div class="col-sm-4 padding">
+
+                    <div class="form-group">
+                        <h4 class="tabheading">Attachments</h4>
+                        <div class="attachmets">
+                            <input type="file" id="uploadBtn" multiple="multiple" name="browsefile">
+                            <div>
+                                <i class="fa fa-plus"></i>
+                                <p>Add file</p>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div id="upload_prev" class="upload_prev"></div>
+            </div>
+
+
+
+
+            <div class="col-sm-6">
+
+                <div class="form-group">
+                    <h4 class="tabheading">Attachments</h4>
+                    @*<div class="attachmets">*@
+                    @*<input type="file" id="uploadBtn" multiple="multiple" name="browsefile">*@
+                    @*<div id="uploadAttchments">
+                        <i class="fa fa-plus"></i>
+                        <p>Add file</p>
+                    </div>
+                </div>*@
+
+                    <div class="col-sm-5 padding5">
+                        <input type="file" class="form-control" id="id="uploadBtn" />
+                    </div>
+                    <div class="col-sm-5 padding5">
+                        <input type="text" class="form-control" id="NameInput" placeholder="Title" />
+                    </div>
+                    <div class="col-sm-2 padding5">
+                        <button type="button" class="btn btn-sm btn-primary Attechmentdetail" style="width:100%">Add</button>
+                    </div>
+
+
+                    <div style="float:left; width:100%; padding:10px 10px; border-bottom:1px dotted #ccc;" class="filenameDiv">
+                        <div class="col-sm-5 padding5" style="word-break:break-all">
+                            <spam id="type"></spam>
+                        </div>
+                        <div class="col-sm-5 padding5" style="word-break:break-all">
+                            <strong id="name"></strong>
+                        </div>
+                        <div class="col-sm-2">
+                            <i class="fa fa-times pull-right text-danger" id="removeattachment"></i>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <ul ng-repeat="data in datapath">
+                <li>
+                     <span> <a href=""style="font-size:medium" class="pointer fa fa-file-pdf-o" aria-hidden="true"  > <b ng-click="getfile(data)">{{data.replace("server/boot/uploads/"+ poNo,'')}}</b></a></span> <i class="fa fa-times" aria-hidden="true" ng-click="deletefile(data,$index)"></i>
+              </li>
+            </ul>
+        </div>
+    
+
+    <div class="col-sm-2" style="padding:0px;">
+        <div class="lightblue bluebrdr flexcontainer" style="padding:0px 10px">
+            <h3 class="AddBill">Add To Purchase</h3>
+            <h4 id="noData">{{noData}}</h4>
+            <div class="sk-wave">
+                <div class="sk-rect sk-rect1"></div>
+                <div class="sk-rect sk-rect2"></div>
+                <div class="sk-rect sk-rect3"></div>
+                <div class="sk-rect sk-rect4"></div>
+                <div class="sk-rect sk-rect5"></div>
+            </div>
+
+
+         
+            <div class="PurchaseBox" ng-repeat="data in enquiryList ">
+                <h3 >{{data.supliersName}}</h3>
+                <small>{{data.date | date: "dd/MM/yyyy"}}</small>
+                <strong>{{data.no}} </strong>
+                <br /><br />
+                <ul class="Purchasefooter list-unstyled">
+                    <li ng-click="addtoPurchase($index)"><strong><i class="fa fa-long-arrow-left"></i> Add</strong></li>
+                    <li ng-click="view(data.no)">View</li>
+                </ul>
+
+            </div>
+
+
+
+
+
+
+
+
+
+        </div>
+    </div>
+
+    <div class="flexfooter">
+        <span class="pull-left">
+            
+            <button type="button" class="btn btn-sm btn-primary">Clear</button>
+        </span>
+
+        <div class="pull-right">
+            <button type="button" class="btn btn-sm btn-primary" ng-click="savePurchaseOrder()">Save</button>
+            <div class="btn-group dropup">
+               @*
+    <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:25px">
+        <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" style="right:-2px !important">
+        <li><a href="#">Save and close</a></li>
+        <li><a href="#">Save and send</a></li>
+        <li><a href="#">Save and new</a></li>
+        <li><a href="#">Save and share link</a></li>
+    </ul>
+            *@
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+
+@*Enquiry table*@
+
+<div id="GRNDetailDiv" class="FlexPopup" >
+
+    <div class="flexheader">
+        <ul class="list-unstyled submenu InvoiceMenu" style="float:left">
+
+            <li><a ui-sref="Customer.PurchaseOrder()" style="font-size:18px">Enquiry</a></li>
+
+
+        </ul>
+        <ul class="list-unstyled submenu InvoiceMenu">
+            <li><a ui-sref="Customer.Enquiry({email:no,edit:1})" style="font-size:18px"><i class="fa fa-edit"></i> Edit</a></li>
+            <li><a href="javascript:void(0);" ng-click="poclose();" id="invoiceclose"><i class="fa fa-times"></i></a></li>
+
+        </ul>
+
+    </div>
+
+
+
+    <div class="flexcontainer">
+
+
+
+
+
+        <div id="upperdivId">
+            <div class="page" ng-hide="type =='2'">
+                <table style="border:1px solid #e3e3e3;" class="subpage" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td style="padding:10px;">
+                            <table style="width:100%">
+                                <tr>
+                                    <td style="vertical-align:middle; width:10%; text-align:center"><img src="../images/logo-black.png" width="100" /></td>
+                                    <td style="text-align:center; width:80%;">
+                                        <h1 style="border-bottom:1px solid #e3e3e3; font-size:28px; font-weight:bold; padding-bottom:10px; text-transform:uppercase; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">{{CompanyName}}</h1>
+                                        <p style="font-size:12px; line-height:20px">
+                                            Office No. 1515, 15th Floor, Plot 1487, Prasad Chamber, Tata Road No. 2, Roxy Cinema, Opera House, Girgaon Mumbai 400 004 <strong><i class="fa fa-circle" style="font-size:8px;"></i> Tel:</strong> +91-22-66151448 / 66109826 / 67496231 <strong><i class="fa fa-circle" style="font-size:8px;"></i> Telefax:</strong> 66159068 <br /> <strong>Email:</strong> shashwatstainless@gmail.com
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center; font-weight:bold;  text-transform:uppercase; font-size:16px">Enquiry</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">
+                            <table style="width:100%; line-height:20px; font-size:14px">
+                                <tr>
+                                    <td style="width:65%; text-transform:uppercase; padding-right:20%">
+                                        <strong>Consignee :</strong><br />
+                                        <strong>{{suppliersName}}</strong><br />
+                                        <p style="margin-bottom:0px">
+                                            {{suppliersdata1}}
+                                        </p>
+                                        <p>vat tin no: {{taxRegNo}}</p>
+                                    </td>
+                                    <td style="font-weight:bold; text-transform:uppercase; width:45%">
+                                        <p style="margin-bottom:5px">Enquiry No: {{no}}</p>
+                                        <p style="margin-bottom:0px">Date : {{date}}</p>
+                                        <p style="margin-bottom:0px">Due Date : {{billDueDate}}</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px">
+                            <table width="100%" border="1" cellspacing="10" cellpadding="10" style="text-transform:uppercase; font-size:14px;" ng-init="role = admin">
+                                <thead>
+                                    <tr>
+                                        <th>Grade</th>
+                                        <th>Finish</th>
+                                        <th>Thickness (MM)</th>
+                                        <th>Width (MM)</th>
+                                        <th>Length</th>
+                                        <th>Net Weight (MT)</th>
+                                        <th>Gross Weight (MT)</th>
+                                        <th>Sheets NOS</th>
+
+                                    </tr>
+                                </thead>
+                                <tr ng-repeat="item in itemDetail">
+                                    <td>{{item.grade}}</td>
+                                    <td>{{item.finish}}</td>
+                                    <td>{{item.thickness}}</td>
+                                    <td>{{item.width}}</td>
+                                    <td>{{item.length}}</td>
+                                    <td>{{item.netweight}}</td>
+                                    <td>{{item.grossweight}}</td>
+                                    <td>{{item.sheetNo}}</td>
+
+
+                                </tr>
+
+
+                            </table>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px 10px; text-transform:uppercase">
+                            <p>for <strong>{{CompanyName}}</strong></p>
+                            <br /><br />
+                            <strong style="margin-bottom:10px; float:left;width:100%">authorised signatory</strong>
+                            <p>Vat Tin No.: 27160870532 v w.e.f. 14.09.2011</p>
+                            <p>vat tin no.: 27160870532 w.e.f. 14.09.2011</p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+</div>

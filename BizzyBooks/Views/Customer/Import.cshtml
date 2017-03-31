@@ -1,0 +1,257 @@
+﻿
+@{
+    ViewBag.Title = "Import";
+    Layout = null;
+}
+<script>
+    function CopyMe(oFileInput, sTargetID) {
+        var arrTemp = oFileInput.value.split('\\');
+        document.getElementById(sTargetID).value = arrTemp[arrTemp.length - 1];
+    }
+</script>
+<script type="text/ng-template" id="/ui-tree-select.html">
+    <ui-select ng-model="model.$selected"
+               ui-select-focuser
+               theme="selectize">
+        <ui-select-match placeholder="Enter text">
+            {{ $select.selected.title }}
+        </ui-select-match>
+        <ui-select-choices repeat="group in groups | filter: $select.search">
+            <div>
+                <span ng-bind-html="group.title | highlight: $select.search"></span>
+                <!--<span ng-bind-html="'('+group.size+' users)'"></span>
+                <a href
+                  ng-show="group.parent"
+                  class="goto-child-group"
+                  ng-click="loadChildGroupsOf(group, $select)">
+                  <i class="fa fa-angle-right"></i>
+                </a>-->
+            </div>
+        </ui-select-choices>
+    </ui-select>
+</script>
+<style>
+    .selectize-dropdown.group-tree .ui-select-breadcrumbs {
+        display: none !important;
+    }
+</style>
+<div class="FlexPopup" style="display:block">
+    <div class="flexheader">
+        <ul class="list-unstyled submenu InvoiceMenu" style="float:left">
+            <li><a href="#"><i class="fa fa-history"></i></a></li>
+            <li><a href="#"><span>Import</span></a></li>
+        </ul>
+        <ul class="list-unstyled submenu InvoiceMenu">
+            <li><a href="#"><i class="fa fa-question-circle"></i></a></li>
+            <li><a href="" ng-click="goBack()"><i class="fa fa-times"></i></a></li>
+        </ul>
+    </div>
+
+    <div class="flexcontainer">
+        <div class="lightblue bluebrdr content" style="padding:10px 10px">
+            <ul class="nav nav-pills nav-justified  setup-panel">
+                <li class="active">
+                    <a href="#step-1">
+                        <h4 class="list-group-item-heading">Step 1</h4>
+                        <p class="list-group-item-text">UPLOAD</p>
+                    </a>
+                </li>
+                <li class="disabled">
+                    <a href="#step-2">
+                        <h4 class="list-group-item-heading">Step 2</h4>
+                        <p class="list-group-item-text">MAP DATA</p>
+                    </a>
+                </li>
+                <li class="disabled">
+                    <a href="#step-3">
+                        <h4 class="list-group-item-heading">Step 3</h4>
+                        <p class="list-group-item-text">IMPORT</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+
+            
+            <div class="row setup-content" id="step-1">
+                <div class="col-xs-12">
+                    <div class="col-md-12" style="padding:20px 0px">
+                        <div class="col-sm-12">
+                            <h4>Select a CSV or Excel file to upload</h4>
+                            <input type="text" id="txtFileName" class="form-control" placeholder="Upload an EXCEL or CSV file" style="width:250px; float:left" />
+                            <button type="button" class="btn btn-sm btn-default" style="float:left; margin:1px 10px; width:80px">Browse</button>
+                            <input type="file" class="uploaded" onchange="CopyMe(this, 'txtFileName');" />
+
+                        </div>
+                        <div class="flexfooter importfotter">
+                            
+                            <div class="pull-right">
+                                <button type="button" id="activate-step-2" class="btn btn-sm btn-primary">Next</button>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="row setup-content" id="step-2">
+                <div class="col-xs-12">
+                    <div class="col-md-12">
+                     <h4>Map your fields to AccountBooks fields</h4>
+                        <div class="col-sm-6" style="padding:0px">
+                            
+                                <table class="table NewTable" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:215px">QUICKBOOKS ONLINE FIELD</th>
+                                            <th>YOUR FIELD</th>
+                                           
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td style="padding:10px 5px 5px 10px !important">Name</td>
+                                            <td style="padding:5px !important">
+                                            <ui-tree-select model="model" class="uiSelect">
+</ui-tree-select></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="padding:10px 5px 5px 10px !important">Company</td>
+                                            <td style="padding:5px !important">
+                                                <ui-tree-select model="model" class="uiSelect">
+                                                </ui-tree-select>
+                                            </td>
+                                        </tr>
+
+
+                                        <tr>
+                                            <td style="padding:10px 5px 5px 10px !important">Email</td>
+                                            <td style="padding:5px !important">
+                                                <ui-tree-select model="model" class="uiSelect">
+                                                </ui-tree-select>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="padding:10px 5px 5px 10px !important">Phone</td>
+                                            <td style="padding:5px !important">
+                                                <ui-tree-select model="model" class="uiSelect">
+                                                </ui-tree-select>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="padding:10px 5px 5px 10px !important">Mobile</td>
+                                            <td style="padding:5px !important">
+                                                <ui-tree-select model="model" class="uiSelect">
+                                                </ui-tree-select>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="padding:10px 5px 5px 10px !important">Fax</td>
+                                            <td style="padding:5px !important">
+                                                <ui-tree-select model="model" class="uiSelect">
+                                                </ui-tree-select>
+                                            </td>
+                                        </tr>
+
+
+                                        <tr>
+                                            <td style="padding:10px 5px 5px 10px !important">Website</td>
+                                            <td style="padding:5px !important">
+                                                <ui-tree-select model="model" class="uiSelect">
+                                                </ui-tree-select>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="padding:10px 5px 5px 10px !important">Street</td>
+                                            <td style="padding:5px !important">
+                                                <ui-tree-select model="model" class="uiSelect">
+                                                </ui-tree-select>
+                                            </td>
+                                        </tr>
+                                        
+                                    </tbody>
+                                </table>
+                          
+                        </div>
+                    </div>
+                    <div class="flexfooter importfotter">
+                        <span class="pull-left">
+                            <button type="button" class="btn btn-sm btn-primary" id="Cancel-step-2">Back</button>
+                        </span>
+
+                        <div class="pull-right">
+                            <button type="button" id="activate-step-3" class="btn btn-sm btn-primary">Next</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row setup-content" id="step-3">
+                <div class="col-xs-12">
+                    <div class="col-md-12">
+                        <h4>
+                            <span class="pull-left" style="margin-top:4px"> 3 records are ready to be imported </span>
+                            <input type="text" class="form-control" placeholder="Filter by name" style="width:150px; margin-left:10px; float:left" />
+                        </h4>
+
+                        <table class="table NewTable" style="width:100%; margin-top:20px; float:left; background:#f3f8fe">
+                            <thead>
+                                <tr>
+                                    <th style="width:50px" class="text-center"><input type="checkbox" checked /></th>
+                                    <th>Name</th>
+                                    <th>Company</th>
+                                    <th>Email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-center"><input type="checkbox" checked /> </td>
+                                    <td><input type="text" class="form-control" value="data1" style="width:150px" /></td>
+                                    <td><input type="text" class="form-control" value="data1" style="width:150px" /></td>
+                                    <td><input type="text" class="form-control" value="data1" style="width:150px" /></td>
+                                    </tr>
+                                <tr>
+                                    <td class="text-center"><input type="checkbox" checked /> </td>
+                                    <td><input type="text" class="form-control" value="data1" style="width:150px" /></td>
+                                    <td><input type="text" class="form-control" value="data1" style="width:150px" /></td>
+                                    <td><input type="text" class="form-control" value="data1" style="width:150px" /></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center"><input type="checkbox" checked /> </td>
+                                    <td><input type="text" class="form-control" value="data1" style="width:150px" /></td>
+                                    <td><input type="text" class="form-control" value="data1" style="width:150px" /></td>
+                                    <td><input type="text" class="form-control" value="data1" style="width:150px" /></td>
+                                </tr>
+                            </tbody>
+                            </table>
+                    </div>
+                    <div class="flexfooter importfotter">
+                        <span class="pull-left">
+                            <button type="button" class="btn btn-sm btn-primary" id="Cancel-step-3">Back</button>
+                        </span>
+
+                        <div class="pull-right">
+                            <button type="button" class="btn btn-sm btn-primary">Import</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        
+    </div>
+
+
+    
+</div>
+

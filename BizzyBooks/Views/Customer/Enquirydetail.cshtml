@@ -1,0 +1,566 @@
+﻿
+@{
+    ViewBag.Title = "Enquirydetail";
+    Layout = null;
+}
+
+
+
+<div class="FlexPopup" style="display:block" ng-init="model = {}">
+    <div class="flexheader">
+        <ul class="list-unstyled submenu InvoiceMenu" style="float:left">
+            <li><a href="#"><i class="fa fa-history"></i></a></li>
+            <li><a href="#"><span>Enquiry</span></a></li>
+        </ul>
+        <ul class="list-unstyled submenu InvoiceMenu">
+            <li><a href="#"><i class="fa fa-question-circle"></i></a></li>
+            <li><a href="" ng-click="goBack()"><i class="fa fa-times"></i></a></li>
+        </ul>
+    </div>
+
+    <div class="flexcontainer">
+        <div class="lightblue bluebrdr content" style="padding:10px 0px; ">
+            <div class="col-sm-8" style="padding:0px">
+                <div class="col-sm-10 padding12">
+
+                    <h1 style="margin-top:0px"> Paynna Anugrah Indonesia</h1>
+                    <h4 class="tabheading font_45">Email:Shenzhen@gmail.com</h4>
+                    <h4 class="tabheading font_45">Phone:99828732</h4>
+
+
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+
+        <div class="col-sm-12">
+            <div class="scroller-header my" style="padding-top:25px">
+                <a href="#panel-1" rel="panel" class="selected">Enquiry Details</a>
+                <a href="#panel-2" rel="panel">Purchage Details</a>
+                <a href="#panel-3" rel="panel">Bill Details</a>
+                <a href="#panel-4" rel="panel">Invoice Details</a>
+                <a href="#panel-5" rel="panel">Expense Details</a>
+            </div>
+            <div class="scroller-body">
+                <div class="Tabmask">
+                    <div class="panelbox">
+                        <section id="panel-1" style="display:block">
+                            <div class="col-sm-12" style="padding-top:10px">
+                                <div class="tabheading font_45 pull-left text-primary">
+                                    Enquiry Date : 23/09/2015
+                                    <h4 style="color:#000">Item details</h4>
+                                </div>
+                                <span class="col-sm-1 padding5 pull-right">
+                                    <h4 class="tabheading font_35">Enquiry No.</h4>
+                                    <input type="text" class="form-control" value="3242342" disabled />
+                                </span>
+
+                                <table class="table NewTable" style="width:100%" id="ItemTable">
+                                    <thead>
+                                        <tr>
+                                            <th>S.No</th>
+                                            <th>Description</th>
+                                            <th>Grade</th>
+                                            <th>Finish</th>
+                                            <th class="text-right">Qty</th>
+                                            <th class="text-right">Amount</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="Countedit">
+                                            <td class="text-left Count">1</td>
+                                            <td class="Count">Cold rolled stainless steel sheets/plates/coils cut - exstock</td>
+                                            <td class="Count">304</td>
+                                            <td class="Count">N4 2B N8</td>
+                                            <td class="text-right Count" data-field="Qty">52.889</td>
+                                            <td class="text-right Count" data-field="Amount">80889.57</td>
+
+
+
+                                        <tr class="Countedit">
+                                            <td>2</td>
+                                            <td class="Count">Cold rolled stainless steel sheets/plates/coils cut - exstock</td>
+                                            <td class="Count">430</td>
+                                            <td class="Count">BA</td>
+                                            <td class="text-right Count" data-field="Qty">58.836</td>
+                                            <td class="text-right Count" data-field="Amount">43538.64</td>
+
+                                        </tr>
+
+                                        <tr class="Countedit">
+                                            <td>3</td>
+                                            <td class="Count">Cold rolled stainless steel sheets/plates/coils cut - exstock</td>
+                                            <td class="Count">J4</td>
+                                            <td class="Count">No.4 2B</td>
+                                            <td class="text-right Count" data-field="Qty">3.310</td>
+                                            <td class="text-right Count" data-field="Amount">2323.62</td>
+
+
+                                        </tr>
+
+                                        <tr class="Countedit">
+                                            <td>4</td>
+                                            <td class="Count">Cold rolled stainless steel sheets/plates/coils cut - exstock</td>
+                                            <td class="Count">JSLU</td>
+                                            <td class="Count">N4</td>
+                                            <td class="text-right Count" data-field="Qty">9.986</td>
+                                            <td class="text-right Count" data-field="Amount">6760.52</td>
+
+
+                                        </tr>
+
+                                        <tr class="Countedit">
+                                            <td>5</td>
+                                            <td class="Count">Cold rolled stainless steel defective sheets/plates/coils cut</td>
+                                            <td class="Count">304/304L</td>
+                                            <td class="Count">2B N4</td>
+                                            <td class="text-right Count" data-field="Qty">5.638</td>
+                                            <td class="text-right Count" data-field="Amount">7656.40</td>
+
+                                        </tr>
+
+
+
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="5" style="text-align:right">
+                                                <label style="font-size:1.5rem;">Total</label>
+                                            </td>
+                                            <td><span class="subtotalvalue" style="font-size:1.5rem; font-weight:bold;text-align:right; width:100%">Rs 43.3232</span></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+
+
+                        </section>
+
+
+
+                        <section id="panel-2" style="padding-top:10px">
+                            <div class="col-sm-12">
+                                <div class="tabheading font_45 pull-left text-primary">
+                                    P.O Date : 23/09/2015<br />
+                                    Shipping Address: Mumbai,Mahrashtra
+                                    <h4 style="color:#000">Item details</h4>
+                                </div>
+                                <span class="col-sm-1 padding5 pull-right">
+                                    <h4 class="tabheading font_35">P.O No.</h4>
+                                    <input type="text" class="form-control" value="3242342" disabled />
+                                </span>
+                                <table class="table NewTable" style="width:100%" id="ItemTable">
+                                    <thead>
+                                        <tr>
+                                            <th>S.No</th>
+                                            <th>Description</th>
+                                            <th>Grade</th>
+                                            <th>Finish</th>
+                                            <th class="text-right">Qty</th>
+                                            <th class="text-right">Amount</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="Countedit">
+                                            <td class="text-left Count">1</td>
+                                            <td class="Count">Cold rolled stainless steel sheets/plates/coils cut - exstock</td>
+                                            <td class="Count">304</td>
+                                            <td class="Count">N4 2B N8</td>
+                                            <td class="text-right Count" data-field="Qty">52.889</td>
+                                            <td class="text-right Count" data-field="Amount">80889.57</td>
+
+
+
+                                        <tr class="Countedit">
+                                            <td>2</td>
+                                            <td class="Count">Cold rolled stainless steel sheets/plates/coils cut - exstock</td>
+                                            <td class="Count">430</td>
+                                            <td class="Count">BA</td>
+                                            <td class="text-right Count" data-field="Qty">58.836</td>
+                                            <td class="text-right Count" data-field="Amount">43538.64</td>
+
+                                        </tr>
+
+                                        <tr class="Countedit">
+                                            <td>3</td>
+                                            <td class="Count">Cold rolled stainless steel sheets/plates/coils cut - exstock</td>
+                                            <td class="Count">J4</td>
+                                            <td class="Count">No.4 2B</td>
+                                            <td class="text-right Count" data-field="Qty">3.310</td>
+                                            <td class="text-right Count" data-field="Amount">2323.62</td>
+
+
+                                        </tr>
+
+                                        <tr class="Countedit">
+                                            <td>4</td>
+                                            <td class="Count">Cold rolled stainless steel sheets/plates/coils cut - exstock</td>
+                                            <td class="Count">JSLU</td>
+                                            <td class="Count">N4</td>
+                                            <td class="text-right Count" data-field="Qty">9.986</td>
+                                            <td class="text-right Count" data-field="Amount">6760.52</td>
+
+
+                                        </tr>
+
+                                        <tr class="Countedit">
+                                            <td>5</td>
+                                            <td class="Count">Cold rolled stainless steel defective sheets/plates/coils cut</td>
+                                            <td class="Count">304/304L</td>
+                                            <td class="Count">2B N4</td>
+                                            <td class="text-right Count" data-field="Qty">5.638</td>
+                                            <td class="text-right Count" data-field="Amount">7656.40</td>
+
+                                        </tr>
+
+
+
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="5" style="text-align:right">
+                                                <label style="font-size:1.5rem;">Total</label>
+                                            </td>
+                                            <td><span class="subtotalvalue" style="font-size:1.5rem; font-weight:bold;text-align:right; width:100%">Rs 43.3232</span></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+
+
+                        </section>
+
+                        <section id="panel-3" style="padding-top:10px">
+                            <div class="col-sm-12">
+                                <div class="tabheading font_45 pull-left text-primary">
+                                    Bill Date : 23/09/2015
+                                    <h4 style="color:#000">Item details</h4>
+                                </div>
+                                <span class="col-sm-1 padding5 pull-right">
+                                    <h4 class="tabheading font_35">Bill No.</h4>
+                                    <input type="text" class="form-control" value="3242342" disabled />
+                                </span>
+                                <table class="table NewTable" style="width:100%" id="ItemTable">
+                                    <thead>
+                                        <tr>
+                                            <th>S.No</th>
+                                            <th>Description</th>
+                                            <th>Grade</th>
+                                            <th>Finish</th>
+                                            <th class="text-right">Qty</th>
+                                            <th class="text-right">Amount</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="Countedit">
+                                            <td class="text-left Count">1</td>
+                                            <td class="Count">Cold rolled stainless steel sheets/plates/coils cut - exstock</td>
+                                            <td class="Count">304</td>
+                                            <td class="Count">N4 2B N8</td>
+                                            <td class="text-right Count" data-field="Qty">52.889</td>
+                                            <td class="text-right Count" data-field="Amount">80889.57</td>
+
+
+
+                                        <tr class="Countedit">
+                                            <td>2</td>
+                                            <td class="Count">Cold rolled stainless steel sheets/plates/coils cut - exstock</td>
+                                            <td class="Count">430</td>
+                                            <td class="Count">BA</td>
+                                            <td class="text-right Count" data-field="Qty">58.836</td>
+                                            <td class="text-right Count" data-field="Amount">43538.64</td>
+
+                                        </tr>
+
+                                        <tr class="Countedit">
+                                            <td>3</td>
+                                            <td class="Count">Cold rolled stainless steel sheets/plates/coils cut - exstock</td>
+                                            <td class="Count">J4</td>
+                                            <td class="Count">No.4 2B</td>
+                                            <td class="text-right Count" data-field="Qty">3.310</td>
+                                            <td class="text-right Count" data-field="Amount">2323.62</td>
+
+
+                                        </tr>
+
+                                        <tr class="Countedit">
+                                            <td>4</td>
+                                            <td class="Count">Cold rolled stainless steel sheets/plates/coils cut - exstock</td>
+                                            <td class="Count">JSLU</td>
+                                            <td class="Count">N4</td>
+                                            <td class="text-right Count" data-field="Qty">9.986</td>
+                                            <td class="text-right Count" data-field="Amount">6760.52</td>
+
+
+                                        </tr>
+
+                                        <tr class="Countedit">
+                                            <td>5</td>
+                                            <td class="Count">Cold rolled stainless steel defective sheets/plates/coils cut</td>
+                                            <td class="Count">304/304L</td>
+                                            <td class="Count">2B N4</td>
+                                            <td class="text-right Count" data-field="Qty">5.638</td>
+                                            <td class="text-right Count" data-field="Amount">7656.40</td>
+
+                                        </tr>
+
+
+
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="5" style="text-align:right">
+                                                <label style="font-size:1.5rem;">Total</label>
+                                            </td>
+                                            <td><span class="subtotalvalue" style="font-size:1.5rem; font-weight:bold;text-align:right; width:100%">Rs 43.3232</span></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+
+
+                        </section>
+
+                        <section id="panel-4" style="padding-top:10px">
+                            <div class="col-sm-12">
+                                <div class="tabheading font_45 pull-left text-primary">
+                                    Invoice Date : 01 JUL 2015 | <span style="color:red">Invoice Due Date : 06 JUL 2015</span><br />
+                                    Bill Period : JUN 2015
+                                    <h4 style="color:#000">Item details</h4>
+                                </div>
+                                <span class="col-sm-1 padding5 pull-right">
+                                    <h4 class="tabheading font_35">Invoice No.</h4>
+                                    <input type="text" class="form-control" value="3242342" disabled />
+                                </span>
+                                <table class="table NewTable" style="width:100%" id="ItemTable">
+                                    <thead>
+                                        <tr>
+                                            <th>S.No</th>
+                                            <th>Description</th>
+                                            <th>Grade</th>
+                                            <th>Finish</th>
+                                            <th class="text-right">Qty</th>
+                                            <th class="text-right">Amount</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="Countedit">
+                                            <td class="text-left Count">1</td>
+                                            <td class="Count">Cold rolled stainless steel sheets/plates/coils cut - exstock</td>
+                                            <td class="Count">304</td>
+                                            <td class="Count">N4 2B N8</td>
+                                            <td class="text-right Count" data-field="Qty">52.889</td>
+                                            <td class="text-right Count" data-field="Amount">80889.57</td>
+
+
+
+                                        <tr class="Countedit">
+                                            <td>2</td>
+                                            <td class="Count">Cold rolled stainless steel sheets/plates/coils cut - exstock</td>
+                                            <td class="Count">430</td>
+                                            <td class="Count">BA</td>
+                                            <td class="text-right Count" data-field="Qty">58.836</td>
+                                            <td class="text-right Count" data-field="Amount">43538.64</td>
+
+                                        </tr>
+
+                                        <tr class="Countedit">
+                                            <td>3</td>
+                                            <td class="Count">Cold rolled stainless steel sheets/plates/coils cut - exstock</td>
+                                            <td class="Count">J4</td>
+                                            <td class="Count">No.4 2B</td>
+                                            <td class="text-right Count" data-field="Qty">3.310</td>
+                                            <td class="text-right Count" data-field="Amount">2323.62</td>
+
+
+                                        </tr>
+
+                                        <tr class="Countedit">
+                                            <td>4</td>
+                                            <td class="Count">Cold rolled stainless steel sheets/plates/coils cut - exstock</td>
+                                            <td class="Count">JSLU</td>
+                                            <td class="Count">N4</td>
+                                            <td class="text-right Count" data-field="Qty">9.986</td>
+                                            <td class="text-right Count" data-field="Amount">6760.52</td>
+
+
+                                        </tr>
+
+                                        <tr class="Countedit">
+                                            <td>5</td>
+                                            <td class="Count">Cold rolled stainless steel defective sheets/plates/coils cut</td>
+                                            <td class="Count">304/304L</td>
+                                            <td class="Count">2B N4</td>
+                                            <td class="text-right Count" data-field="Qty">5.638</td>
+                                            <td class="text-right Count" data-field="Amount">7656.40</td>
+
+                                        </tr>
+
+
+
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="5" style="text-align:right">
+                                                <label style="font-size:1.5rem;">Total</label>
+                                            </td>
+                                            <td><span class="subtotalvalue" style="font-size:1.5rem; font-weight:bold;text-align:right; width:100%">Rs 43.3232</span></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+
+
+                        </section>
+
+                        <section id="panel-5" style="padding-top:10px">
+                            <div class="col-sm-12">
+                                <div class="tabheading font_45 pull-left text-primary">
+                                    Payment Date : 01 JUL 2015<br />
+                                    Payment Amount: 2,434
+                                    <h4 style="color:#000">Item details</h4>
+                                </div>
+                                <span class="col-sm-1 padding5 pull-right">
+                                    <h4 class="tabheading font_35">Invoice No.</h4>
+                                    <input type="text" class="form-control" value="3242342" disabled />
+                                </span>
+                                <table class="table NewTable" style="width:100%" id="ItemTable">
+                                    <thead>
+                                        <tr>
+                                            <th>S.No</th>
+                                            <th> Charge Description</th>
+                                            <th> Currency</th>
+
+
+
+                                            <th>Amount</th>
+                                            <th>ExCh.Rt</th>
+                                            <th class="text-right">Total Amount(USD)</th>
+
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="Countedit">
+                                            <td class="text-left Count">1</td>
+                                            <td class="Count">Storage Charges -Loaded Ground </td>
+                                            <td class="Count">USD</td>
+                                            <td class="Count">200.00</td>
+                                            <td>1.000000</td>
+                                            <td class="text-right">200.00</td>
+
+
+
+                                        <tr class="Countedit">
+                                            <td class="text-left Count">2</td>
+                                            <td class="Count">Storage Charges -Loaded Ground </td>
+                                            <td class="Count">USD</td>
+                                            <td class="Count">200.00</td>
+                                            <td>1.000000</td>
+                                            <td class="text-right">200.00</td>
+
+
+                                        </tr>
+
+                                        <tr class="Countedit">
+                                            <td class="text-left Count">3</td>
+                                            <td class="Count">Logistics </td>
+                                            <td class="Count">USD</td>
+                                            <td class="Count">200.00</td>
+                                            <td>1.000000</td>
+                                            <td class="text-right">200.00</td>
+
+
+                                        </tr>
+
+                                        <tr class="Countedit">
+                                            <td class="text-left Count">4</td>
+                                            <td class="Count">Storage Charges -Loaded Ground </td>
+                                            <td class="Count">USD</td>
+                                            <td class="Count">200.00</td>
+                                            <td>1.000000</td>
+                                            <td class="text-right">200.00</td>
+
+
+
+                                        </tr>
+
+                                        <tr class="Countedit">
+                                            <td class="text-left Count">5</td>
+                                            <td class="Count">Print Scan Charges </td>
+                                            <td class="Count">USD</td>
+                                            <td class="Count">200.00</td>
+                                            <td>1.000000</td>
+                                            <td class="text-right">200.00</td>
+
+
+                                        </tr>
+
+
+
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="5" style="text-align:right">
+                                                <label style="font-size:1.5rem;">Total</label>
+                                            </td>
+                                            <td><span class="subtotalvalue" style="font-size:1.5rem; font-weight:bold;text-align:right; width:100%">Rs 1,000</span></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+
+
+                        </section>
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+
+
+    </div>
+
+
+
+
+    <div class="flexfooter">
+        <span class="pull-left">
+            <button type="button" class="btn btn-sm btn-primary">Cancel</button>
+            <button type="button" class="btn btn-sm btn-primary">Clear</button>
+        </span>
+
+        <div class="pull-right">
+            <button type="button" class="btn btn-sm btn-primary">Save</button>
+            <div class="btn-group dropup">
+                <button type="button" class="btn btn-info btn-sm">Save and send</button>
+                <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:25px">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" style="right:-2px !important">
+                    <li><a href="#">Save and close</a></li>
+                    <li><a href="#">Save and send</a></li>
+                    <li><a href="#">Save and new</a></li>
+                    <li><a href="#">Save and share link</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+

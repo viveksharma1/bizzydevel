@@ -1,0 +1,418 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
+<script>
+    $(document).ready(function () {
+
+
+
+    $('#menutoggle').click(function () {
+    $("#wrapper").toggleClass("toggled");
+    });
+    $('#flyoutDate').hide();
+    $('#flyoutCompany').hide();
+    $('#flyout').hide();
+    $('#flyoutChange').hide();
+
+    $(".addrotate").click(function (e) {
+    $(this).toggleClass("down");
+    $('#flyout').fadeToggle("slow", "linear");
+    $('#flyoutCompany').hide();
+    $('#flyoutChange').hide();
+    });
+
+    $('.sub-menu').click(function () {
+        $('.leftsubmenu').slideDown();
+    });
+
+
+    $("#CompanyInfo").click(function (e) {
+       $('#flyoutCompany').fadeToggle("slow", "linear");
+       $('#flyout').hide();
+       $('#flyoutChange').hide();
+       $('#flyoutDate').hide();
+    });
+
+
+    $("#Changename").click(function (e) {
+        $('#flyoutChange').fadeToggle("slow", "linear");
+        $('#flyout').hide();
+        $('#flyoutCompany').hide();
+    });
+
+
+    $("#Datefilter").click(function (e) {
+        $('#flyoutDate').fadeToggle("slow", "linear");
+        $('#flyout').hide();
+        $('#flyoutCompany').hide();
+    });
+
+    $('.flytopbar').click(function (e) {
+        e.stopPropagation();
+    });
+
+
+    $('html').click(function () {
+        $('#flyout').hide();
+        $('#flyoutCompany').hide();
+        $('#flyoutChange').hide();
+        $('#flyoutDate').hide();
+    });
+
+
+    });
+</script>
+
+<div id="wrapper" ng-app="myApp" ng-controller="LoginCntrl" ng-init="model = {}">
+
+    <!-- Sidebar -->
+    @*<div id="sidebar-wrapper">*@
+    @*<ul class="sidebar-nav">
+            <li class="sidebar-brand">
+
+                    <i class="fa fa-compass">Account Books</i>
+
+            </li>
+            <li>
+                <a ui-sref=".HomePage"><i class="fa fa-dashboard"></i> Home</a>
+            </li>
+            <li>
+                <a ui-sref=".Customer"><i class="fa fa-users"></i> Customers</a>
+            </li>
+            <li>
+                <a ui-sref=".Suppliers"><i class="fa fa-street-view"></i> Suppliers</a>
+            </li>
+
+            <li>
+                <a href="" class="sub-menu"><i class="fa fa-money"></i> Transactions</a>
+                <ul class="list-unstyled leftsubmenu">
+                    <li><a ui-sref=".Banking">Banking</a></li>
+                    <li><a ui-sref=".Sales">Sales</a></li>
+                    <li><a ui-sref=".Expenses">Expenses</a></li>
+
+                </ul>
+            </li>
+            <li>
+                <a ui-sref=".Inventory"><i class="fa fa-cubes"></i> Inventory</a>
+            </li>
+            <li>
+                <a ui-sref=".Logistics"><i class="fa fa-truck"></i>Logistics </a>
+            </li>
+            <li>
+                <a href=""><i class="fa fa-bar-chart"></i> Reports</a>
+            </li>
+
+        </ul>*@
+
+    <div id="sidebar-wrapper" ng-switch on="{{usertype}}">
+        <em ng-switch-when="3">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#" class="logo">
+                        <i class="fa fa-compass"></i> Account <span>Books</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref=".HomePage"><i class="fa fa-dashboard"></i> Home</a>
+                </li>
+                <li>
+                    <a ui-sref=".Customer"><i class="fa fa-users"></i> Customers</a>
+                </li>
+                <li>
+                    <a ui-sref=".Suppliers"><i class="fa fa-street-view"></i> Suppliers</a>
+                </li>
+
+                <li>
+                    <a href="" class="sub-menu"><i class="fa fa-money"></i> Transactions</a>
+                    <ul class="list-unstyled">
+                        <li><a ui-sref=".Banking" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Banking</a></li>
+                        @*  <li><a ui-sref=".Sales">Sales</a></li>
+                            <li><a ui-sref=".Expenses">Expenses</a></li>*@
+                        <li><a ui-sref=".ChartofAccounts" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Chart of Accounts</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="" class="sub-menu"><i class="fa fa-money"></i> Inventory</a>
+                    <ul class="list-unstyled">
+                        <li><a ui-sref=".Inventory" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Stock Line </a></li>
+                        <li><a ui-sref=".inventorystock" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Stock </a></li>
+                        <li><a ui-sref=".BalanceInventory" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Balance  </a></li>
+                        <li><a ui-sref=".StockBalanceInventory" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Stock Balance  </a></li>
+
+
+                    </ul>
+                </li>
+
+            </ul>
+        </em>
+        <em ng-switch-default>
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#" class="logo">
+                        <i class="fa fa-compass"></i> Account <span>Books</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref=".HomePage"><i class="fa fa-dashboard"></i> Home</a>
+                </li>
+                <li>
+                    <a ui-sref=".Customer"><i class="fa fa-users"></i> Customers</a>
+                </li>
+                <li>
+                    <a ui-sref=".Suppliers"><i class="fa fa-street-view"></i> Suppliers</a>
+                </li>
+
+                <li>
+                    <a href="" class="sub-menu"><i class="fa fa-money"></i> Transactions</a>
+                    <ul class="list-unstyled">
+                        <li><a ui-sref=".Banking" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Banking</a></li>
+                        @*  <li><a ui-sref=".Sales">Sales</a></li>
+                            <li><a ui-sref=".Expenses">Expenses</a></li>*@
+                        <li><a ui-sref=".ChartofAccounts" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Chart of Accounts</a></li>
+                        <li><a ui-sref=".VoucherTransactions" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Voucher </a></li>
+                        <li><a ui-sref=".SattlementTransactions" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Settlement </a></li>
+                        <li><a ui-sref=".ActivityLog" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Activity Log </a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="" class="sub-menu"><i class="fa fa-money"></i> Inventory</a>
+                    <ul class="list-unstyled">
+
+                        <li><a ui-sref=".inventorystock" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Stock </a></li>
+
+                        <li><a ui-sref=".BalanceInventory" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Balance </a></li>
+                        <li><a ui-sref=".StockBalanceInventory" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Stock Balance  </a></li>
+
+                        @*<li><a ui-sref=".DetailInventory" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Detail </a></li>
+
+                            <li><a ui-sref=".SaleInventory" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Sale </a></li>
+                            <li><a ui-sref=".ProcessInventory" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Process </a></li>*@
+
+                    </ul>
+                </li>
+
+            </ul>
+        </em>
+
+
+
+
+    </div>
+    <!-- /#sidebar-wrapper -->
+    <!-- Page Content -->
+
+
+    <div id="page-content-wrapper" style="padding:0px">
+
+
+        <div class="container-fluid" ng-init="model = {}">
+            <div class="row">
+
+                <div class="bg-info cursor topbar">
+                    <i class="fa fa-bars menutoggle" id="menutoggle"></i>
+
+                    <ul class="list-unstyled topmenu">
+                        <li><a ui-sref=".SearchTransactions"><i class="fa fa-search" style="color:#fff"></i></a></li>
+                        <li class="addrotate flytopbar"><i class="fa fa-plus"></i> </li>
+                    </ul>
+
+
+                    <ul class="list-unstyled submenu my">
+                        <li id="CompanyInfo" class="flytopbar"><a href=""><i class="fa fa-gear"></i> {{DefaultCompanyName}}</a></li>
+                        <li @*id="Changename"*@ id="Datefilter" class="flytopbar"><a href=""><i class="fa fa-calendar"></i> 1/March/2017 to 15/March/2017 </a></li>
+                    </ul>
+
+
+                    <div id="flyout" class="flytopbar">
+                        <div class="arrow-up"></div>
+                        <div class="flyoutdiv">
+                            <h3 class="title">Create</h3>
+
+                            <div class="col-sm-3" style="padding:0px">
+                                <h3 class="Subtitle">Customers</h3>
+                                <ul class="list-unstyled">
+                                    <li><a ui-sref=".Invoice">Invoice</a></li>
+                                    <li><a ui-sref=".ReceivePayment">Receive Payment</a></li>
+                                    <li><a ui-sref=".JournalEntry">Journal Entry</a></li>
+                                    <li><a ui-sref=".TaxInvoice">Tax Invoice</a></li>
+                                    <li><a ui-sref=".SalesInvoice">Sales Invoice</a></li>
+                                    <li><a ui-sref=".GeneralInvoice">General Invoice</a></li>
+                                    <li><a ui-sref=".BadlaVoucher">Badla Voucher</a></li>
+                                </ul>
+                            </div>
+
+
+
+
+
+
+                            <div class="col-sm-3" style="padding:0px">
+                                <h3 class="Subtitle">Suppliers</h3>
+                                <ul class="list-unstyled">
+                                    <li><a ui-sref=".Enquiry">Enquiry</a></li>
+                                    <li><a ui-sref=".PurchaseOrder">Purchase Order</a></li>
+                                    <li><a ui-sref=".Bill">Purchase Invoice</a></li>
+                                    <li><a ui-sref=".MakePayment">Payment</a></li>
+                                    <li><a ui-sref=".Expense">Add Expense</a></li>
+
+                                </ul>
+                            </div>
+
+
+                            <div class="col-sm-3" style="padding:0px">
+                                <h3 class="Subtitle">Inventory</h3>
+                                <ul class="list-unstyled">
+                                    <li><a ui-sref=".InventoryStock">Stock</a></li>
+                                    <li><a ui-sref=".BalanceInventory">Balance</a></li>
+                                    @*<li><a ui-sref=".DetailInventory">Detail</a></li>
+                        <li><a ui-sref=".SaleInventory">Sale</a></li>
+                        <li><a ui-sref=".ProcessInventory">Process</a></li>*@
+                                </ul>
+                            </div>
+
+
+                            <div class="col-sm-3" style="padding:0px">
+                                <h3 class="Subtitle">Transaction</h3>
+                                <ul class="list-unstyled">
+                                    <li><a ui-sref=".ForexGainLoss">Forex Gain/Loss</a></li>
+                                    <li><a ui-sref=".ChartofAccounts">Chart of Accounts</a></li>
+                                    <li><a ui-sref=".VoucherTransactions">Voucher</a></li>
+                                    <li><a ui-sref=".SattlementTransactions">Settlement </a></li>
+                                    <li><a ui-sref=".ActivityLog">Activity Log </a></li>
+                                </ul>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+
+
+                    <div id="flyoutCompany" class="flytopbar">
+                        <div class="arrow-up" style="margin-right:74%; float:right"></div>
+                        <div class="flyoutdiv">
+                            <h3 class="title">{{DefaultCompanyName}}  ({{username}})</h3>
+
+                            <div class="col-sm-8" style="padding:0px">
+                                <h3 class="Subtitle">Settings</h3>
+                                <ul class="list-unstyled my">
+                                    <li><a href="#">Company Settings</a></li>
+                                    <li><a href="#">Chart of Accounts</a></li>
+                                </ul>
+                            </div>
+
+
+
+
+
+
+                            <div class="col-sm-4" style="padding:0px">
+                                <h3 class="Subtitle">Your Company</h3>
+                                <ul class="list-unstyled my">
+                                    <li><a href="#">Your Account</a></li>
+                                    <li><a href="#">Manage Users</a></li>
+                                    <li class="logout" ng-click="logout()"><a href="#"><i class="fa fa-lock"></i> Sign Out</a></li>
+
+                                </ul>
+                            </div>
+
+
+
+
+
+
+                        </div>
+                    </div>
+
+
+                    <div id="flyoutDate" class="flytopbar">
+                        <div class="arrow-up" style="margin-right:27%; float:right"></div>
+                        <div class="flyoutdiv">
+                            <h3 class="title" style="margin-bottom:20px">Period</h3>
+
+                            <div class="col-sm-6 padding">
+                                <div class="form-group">
+                                    <small>From</small>
+                                    <div class='input-group date' id='Fromdate'>
+                                        <input type='text' class="form-control" placeholder="dd/mm/yyyy" />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 padding">
+                                <div class="form-group">
+                                    <small>To</small>
+                                    <div class='input-group date' id='Todate'>
+                                        <input type='text' class="form-control" placeholder="dd/mm/yyyy" />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr style="float:left; width:100%" />
+                            <button type="button" class="btn btn-sm btn-primary pull-right">Search</button>
+
+
+
+
+                        </div>
+                    </div>
+
+
+
+                    <div id="flyoutChange" class="flytopbar">
+                        <div class="arrow-up" style="margin-right:9%; float:right"></div>
+                        <div class="flyoutdiv">
+
+                            <div class="col-sm-12" style="padding:0px">
+                                <ul class="list-unstyled my" ng-repeat="list in CompanyList">
+                                    <li><a ng-click="BindCompanyName(list.CompanyName,list.CompanyId,list.VAT_TIN_NO,list.CST_TIN_NO)">{{list.CompanyName}}</a></li>
+
+                                </ul>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <div ui-view></div>
+
+
+            </div>
+        </div>
+
+    </div>
+    <!-- /#page-content-wrapper -->
+
+</div>
+

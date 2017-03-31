@@ -1,0 +1,496 @@
+﻿
+@{
+    ViewBag.Title = "Customer";
+    Layout = null;
+}
+
+
+
+<div>
+
+    <div class="content">
+        <div class="panel lightblue bluebrdr marginbottom">
+            <div class="panel-heading">
+                <strong class="heading">Customers</strong>
+                @*<a href="/Customer/GetExcel_Click" class="brdrnone">Download</a>*@
+                <div class="btn-group pull-right">
+                    <button type="button" class="btn btn-primary btn-sm" @*ng-click="NewCustomerCreate();"*@ id="NewCustomerCreate"> New Cutomer</button>
+                    <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#/Customer/Import">Import Customers</a></li>
+
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="panel-body statusBody" style="margin-top:10px">
+
+                <div class="col-sm-3 cursor padding">
+
+                    <div class="col-sm-12 estimate" ng-click="totalCustomerbtn()" style="background:#486C8F">
+
+                        <p class="text-uppercase marginbottom status fa-address-book"><span style="font-size: 200%; color: red; "> <b>{{customerCount.count}}</b></span> Customer</p>
+                    </div>
+
+                </div>
+                <div class="col-sm-3 cursor padding">
+
+                    <div class="col-sm-12 estimate" ng-click="openInvoicebtn()" style="background:#e91e63">
+
+                        <p class="text-uppercase marginbottom status fa-address-book"><span style="font-size: 200%; color: #1E294B; "> <b>{{openInvoiceCount.count}}</b></span> Open Invoice</p>
+                    </div>
+
+                </div>
+
+
+                <div class="col-sm-3 cursor padding">
+
+                    <div class="col-sm-12 estimate" ng-click="paidInvoicebtn()" style="background:#486C8F">
+
+                        <p class="text-uppercase marginbottom status"><span style="font-size: 200%; color: white; "><b> </b> </span> Paid Invoice</p>
+                    </div>
+
+                </div>
+                <div class="col-sm-3 cursor padding">
+
+                    <div class="col-sm-12 estimate blue padding" ng-click="overDueInvoicebtn()">
+                        <div class="col-sm-12" style="padding:10px">
+                            <p class="text-uppercase marginbottom status"><span style="font-size: 200%; color: yellowgreen; "> <b></b></span> Overdue Invoice</p>
+                        </div>
+                    </div>
+                </div>
+               
+
+
+
+            </div>
+        </div>
+        <span class="pulltab" id="menuUp" ng-click="menuUp();"><i class="fa fa-chevron-up"></i> </span>
+
+
+
+
+
+        <div class="col-sm-12" style="padding-top:37px">
+            
+
+
+            <table id="openInvoiceTable" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%" dt-options="dtOptions" dt-columns="dtColumns">
+
+                <thead style="background:#75757A; color:white; text-transform:uppercase">
+                    <tr>
+                        <th style="padding-left:30px; width:30px"><input type="checkbox" class="checkboxcss" /></th>
+                        <th class="fontnormal" ng-click="order('no')">Invoice No </th>
+                        <th class="fontnormal" ng-click="order('date')">Invoice Date</th>
+                        <th class="fontnormal">Invoice Due Date</th>
+                        <th class="fontnormal">Customers </th>
+                        <th class="fontnormal">Amount </th>
+                        <th class="fontnormal text-right">Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr ng-repeat="data in transactions | orderBy: orderData|filter:search">
+                        <td style="padding-left:30px; width:30px"><input type="checkbox" class="checkboxcss" /></td>
+                        <td ng-click="GRNDetail(data.no)">{{data.invoiceNo}}</td>
+                        <td ng-bind="data.invoiceDate | date:'dd MMM yyyy'"></td>
+                        <td style="color:red" ng-bind="data.invoiceDate | date :'dd MMM yyyy'"></td>
+                        <td style="color:#000">{{data.customerName}}</td>
+                        <td style="color:#000">{{data.amount}}</td>
+                       
+                        <td style="text-align:right; width:150px">
+                            <button type="button" class="editbtn" <a ui-sref="Customer.ReceivePayment()">Receive Payment  </a></button>
+
+                            <class class="linkseparator" style="margin-top:4px; margin-right:0px">|</class>
+                            <div class="btn-group editcaret">
+                                <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>
+                                <ul class="dropdown-menu editdrpdwn" role="menu" style="left:-135px">
+
+                                    <li><a ui-sref="Customer.Enquiry({email:data.no,edit:1})">Edit</a></li>
+                                    <li><a ui-sref="Customer.PurchaseOrder({poNo:data.no})">Receive Payment  </a></li>
+
+                                    <li><a href="">Cancel</a></li>
+
+
+                                </ul>
+
+                            </div>
+                        </td>
+                    </tr>
+
+
+
+                </tbody>
+
+            </table>
+
+            <table id="example" class="table table-striped table-bordered table-hover"cellspacing="0" width="100%">
+                <thead style="background:#75757A; color:white; text-transform:uppercase">
+                    <tr>
+                        <th style="padding-left:30px; width:30px"><input type="checkbox" class="checkboxcss" /></th>
+                        <th style="display:none">id</th>
+                        <th>Customer</th>
+
+                        <th class="fontnormal">Phone</th>
+                        <th class="fontnormal">Due Balance</th>
+                        <th class="fontnormal text-right">Action</th>
+                    </tr>
+                </thead>
+
+                <tbody ng-repeat="data in customerlist">
+                    <tr ui-sref="Customer.Customerdetail({cusCode:data.cusCode,cusName:data.company})">
+                        <td style="padding-left:30px; width:30px"><input type="checkbox" class="checkboxcss" /></td>
+                        <td style="display:none" ng-click="UpdateCustomerInfo(data.id)">{{data.id}}</td>
+
+                        <td>{{data.company}}</td>
+                        <td>{{data.mobile}}</td>
+                        <td>{{data.paymentInfo[0].openingBalance}}</td>
+                        <td style="text-align:right;">
+                            <button type="button" class="editbtn"><a ui-sref="Customer.Invoice({cusCode:data.cusCode,cusName:data.company})">Create Invoice</a></button>
+                            <class class="linkseparator" style="margin-top:4px; margin-right:0px">|</class>
+                            <div class="btn-group editcaret">
+                                <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>
+                                <ul class="dropdown-menu editdrpdwn" role="menu" style="top:18px">
+                                    <li><a ui-sref="Customer.Invoice({cusCode:data.cusCode})">Create Invoice</a></li>
+
+                                </ul>
+
+                            </div>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+           
+
+            <table id="paidInvoiceTable" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+                <thead style="background:#75757A; color:white; text-transform:uppercase">
+                    <tr>
+                        <th style="padding-left:30px; width:30px"><input type="checkbox" class="checkboxcss" /></th>
+                        <th class="fontnormal" ng-click="order('no')">Invoice No </th>
+                        <th class="fontnormal" ng-click="order('date')">Invoice Date</th>
+                        <th class="fontnormal">Invoice Due Date</th>
+                        <th class="fontnormal">Customers </th>
+                        <th class="fontnormal">Amount </th>
+                        <th class="fontnormal text-right">Action</th>
+                    </tr>
+                </thead>
+
+                <tbody ng-repeat="data in customerlist">
+                    <tr>
+                        <td style="padding-left:30px; width:30px"><input type="checkbox" class="checkboxcss" /></td>
+                        <td style="display:none" ng-click="UpdateCustomerInfo(data.id)">{{data.id}}</td>
+
+                        <td>{{data.company}}</td>
+                        <td>{{data.mobile}}</td>
+                        <td>{{data.paymentInfo[0].openingBalance}}</td>
+                        <td style="text-align:right;">
+                            <button type="button" class="editbtn"><a href="#/Customer/ReceivePayment">Receive Payment</a></button>
+                            <class class="linkseparator" style="margin-top:4px; margin-right:0px">|</class>
+                            <div class="btn-group editcaret">
+                                <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>
+                                <ul class="dropdown-menu editdrpdwn" role="menu" style="top:18px">
+                                    <li><a href="#/Customer/Invoice" ng-click="GetId_Customer(data.id)">Create Invoice</a></li>
+
+                                </ul>
+
+                            </div>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+
+
+            <table id="overdueInvoiceTable" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+                <thead style="background:#75757A; color:white; text-transform:uppercase">
+                    <tr>
+                        <th style="padding-left:30px; width:30px"><input type="checkbox" class="checkboxcss" /></th>
+                        <th class="fontnormal" ng-click="order('no')">Invoice No </th>
+                        <th class="fontnormal" ng-click="order('date')">Invoice Date</th>
+                        <th class="fontnormal">Invoice Due Date</th>
+                        <th class="fontnormal">Customers </th>
+                        <th class="fontnormal text-right">Action</th>
+                    </tr>
+                </thead>
+
+                <tbody ng-repeat="data in customerlist">
+                    <tr>
+                        <td style="padding-left:30px; width:30px"><input type="checkbox" class="checkboxcss" /></td>
+                        <td style="display:none" ng-click="UpdateCustomerInfo(data.id)">{{data.id}}</td>
+
+                        <td>{{data.company}}</td>
+                        <td>{{data.mobile}}</td>
+                        <td>{{data.paymentInfo[0].openingBalance}}</td>
+                        <td style="text-align:right;">
+                            <button type="button" class="editbtn"><a href="#/Customer/ReceivePayment">Receive Payment</a></button>
+                            <class class="linkseparator" style="margin-top:4px; margin-right:0px">|</class>
+                            <div class="btn-group editcaret">
+                                <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>
+                                <ul class="dropdown-menu editdrpdwn" role="menu" style="top:18px">
+                                    <li><a href="#/Customer/Invoice" ng-click="GetId_Customer(data.id)">Create Invoice</a></li>
+
+                                </ul>
+
+                            </div>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+            
+        </div>
+
+    </div>
+
+
+
+
+    @*New supplier*@
+    <div class="modal fade" id="NewCustomerCreateModal">
+        <div class="modal-dialog modal-lg" style="margin-top:50px">
+            <div class="modal-content content">
+                <div class="modal-header popupheader content">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Customer Information</h4>
+                </div>
+                <div class="modal-body content" style="padding:0px 15px">
+
+
+
+                    <div class="col-sm-12 paddinright">
+                        <div class="col-sm-4 form-group padding5">
+                            <label>Name</label>
+                            <input type="text" ng-model="company" class="form-control" />
+                        </div>
+                        <div class="col-sm-4 form-group padding5">
+                            <label>Email</label>
+                            <input type="text" ng-model="email" class="form-control" placeholder="Separate multiple emails with commas" />
+                        </div>
+                        <div class="col-sm-4 form-group padding5">
+                            <label>Account</label>
+                            <ui-select ng-model="groupMasters.selected" id="countryCode">
+
+                                <ui-select-match placeholder="Choose Group">{{$select.selected.name}}</ui-select-match>
+
+
+
+                                <ui-select-header>Top of the list!</ui-select-header>
+
+
+                                <ui-select-choices repeat="person in groupMaster  | filter: $select.search">
+                                    <div ng-init="balanceType = $select.selected.balanceType">
+                                        <span style="color:black" ng-model="supplier1" ng-bind-html="person.name | highlight: $select.search">{{person.type}}</span>
+                                        <span style="color:forestgreen">({{person.type}})</span>
+
+                                    </div>
+
+
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <div class="col-sm-4 form-group padding5">
+                            <label>Phone</label>
+                            <input type="text" ng-model="phone" class="form-control" />
+                        </div>
+                        <div class="col-sm-4 form-group padding5">
+                            <label>Mobile</label>
+                            <input type="text" ng-model="mobile" class="form-control" />
+                        </div>
+                   
+                        <div class="col-sm-4 form-group padding5">
+                            <label>Opening balance</label>
+                            <input type="text" ng-model="openingBalance" class="form-control" />
+                        </div>
+
+                    </div>
+
+                    <div class="col-sm-12 UODiv padding">
+                        <h4>  is UO &nbsp;
+                        <div class="btn-group btnhover">
+    <button type="button" class="btn btn-xs active btn-default">On</button>
+    <button type="button" class="btn btn-xs  btn-default">Off</button>
+
+</div></h4>
+                    
+                        </div>
+
+                    <div class="col-sm-12 padding" style="padding-top:20px !important">
+                        <ul class="nav nav-tabs tabnav my">
+                            <li class="active"><a href="#Address" data-toggle="tab"><i class="fa fa-map-marker"></i> Address</a></li>
+                            <li><a href="#Notes" data-toggle="tab"><i class="fa fa-file"></i> Notes</a></li>
+                            <li><a href="#TaxInfo" data-toggle="tab"><i class="fa fa-info"></i> Tax Info</a></li>
+
+                            <li><a href="#Attachments" data-toggle="tab"><i class="fa fa-paperclip"></i> Attachments</a></li>
+                        </ul>
+
+                        <div class="tab-content tabcontent">
+
+                            <div id="Address" class="tab-pane fade in active">
+                                <div class="col-sm-6 padding">
+                                    <h4 class="tabheading">Billing Address</h4>
+                                    <div class="form-group col-sm-12 padding5">
+                                        <textarea class="form-control" ng-model="street" placeholder="Street"></textarea>
+                                    </div>
+                                    <div class="form-group col-sm-6 padding5">
+                                        <input type="text" class="form-control" ng-model="city" placeholder="City/Town" />
+                                    </div>
+                                    <div class="form-group col-sm-6 padding5">
+                                        <input type="text" class="form-control" ng-model="state" placeholder="State" />
+                                    </div>
+                                    <div class="form-group col-sm-6 padding5">
+                                        <input type="text" class="form-control" ng-model="postalCode" placeholder="Postal Code" />
+                                    </div>
+                                    <div class="form-group col-sm-6 padding5">
+                                        <input type="text" class="form-control" ng-model="country" placeholder="Country" />
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6 padding">
+                                    <h4 class="tabheading">Shipping Address <small class="pull-right" style="line-height:13px"><input type="checkbox" class="pull-left" style="margin:0px" /> Same as billing address</small></h4>
+                                    <div class="form-group col-sm-12 padding5">
+                                        <textarea class="form-control" ng-model="street1" placeholder="Street"></textarea>
+                                    </div>
+                                    <div class="form-group col-sm-6 padding5">
+                                        <input type="text" class="form-control" ng-model="city1" placeholder="City/Town" />
+                                    </div>
+                                    <div class="form-group col-sm-6 padding5">
+                                        <input type="text" class="form-control" ng-model="state1" placeholder="State" />
+                                    </div>
+                                    <div class="form-group col-sm-6 padding5">
+                                        <input type="text" class="form-control" ng-model="postalCode1" placeholder="Postal Code" />
+                                    </div>
+                                    <div class="form-group col-sm-6 padding5">
+                                        <input type="text" class="form-control" ng-model="country1" placeholder="Country" />
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div id="Notes" class="tab-pane fade">
+                                <h4 class="tabheading">Notes</h4>
+                                <textarea class="form-control" ng-model="notes" style="height:100px"></textarea>
+                            </div>
+
+                            <div id="TaxInfo" class="tab-pane fade">
+                                <div class="col-sm-4">
+                                    <label class="tabheading">TIN No.</label>
+                                    <input type="text" ng-model="taxRegNo" class="form-control" />
+                                </div>
+                                <div class="col-sm-4">
+                                    <label class="tabheading">CST Reg. No.</label>
+                                    <input type="text" ng-model="cstRegNo" class="form-control" />
+                                </div>
+                                <div class="col-sm-4">
+                                    <label class="tabheading">PAN No.</label>
+                                    <input type="text" ng-model="panNo" class="form-control" />
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <label class="tabheading">Range</label>
+                                    <input type="text" ng-model="range" class="form-control" />
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <label class="tabheading">Division</label>
+                                    <input type="text" ng-model="division" class="form-control" />
+                                </div>
+                                <div class="col-sm-4">
+                                    <label class="tabheading">Address</label>
+                                    <input type="text" ng-model="address" class="form-control" />
+                                </div>
+                                <div class="col-sm-4">
+                                    <label class="tabheading">Commisionerate</label>
+                                    <input type="text" ng-model="commisionerate" class="form-control" />
+                                </div>
+                                <div class="col-sm-4">
+                                    <label class="tabheading">CE Region No.</label>
+                                    <input type="text" ng-model="ceRegionNo" class="form-control" />
+                                </div>
+                                <div class="col-sm-4">
+                                    <label class="tabheading">ECC Code No.</label>
+                                    <input type="text" ng-model="eccCodeNo" class="form-control" />
+                                </div>
+                                <div class="col-sm-4">
+                                    <label class="tabheading">IEC No.</label>
+                                    <input type="text" ng-model="iecNo" class="form-control" />
+                                </div>
+
+
+                            </div>
+
+
+                            <div id="Attachments" class="tab-pane fade">
+                                <div class="col-sm-12" style="margin:20px 0px">
+   
+
+                                    @*<ul ng-repeat="data in datapath">
+                                        <li>
+                                            <span> <a href="" style="font-size:medium" class="pointer fa fa-file-pdf-o" aria-hidden="true"> <b ng-click="getfile(data)">{{data.replace("server/boot/uploads/"+ billNo,'')}}</b></a></span>
+                                            <i class="fa fa-times" aria-hidden="true" ng-click="deletefile(data,$index)"></i>
+                                        </li>
+                                    </ul>*@
+
+                                    <div class="col-sm-12" style="padding:0px">
+                                  
+                             
+                                      <div class="col-sm-5 padding5">
+                                                    <input type="text" class="form-control" id="NameInput" placeholder="Title" />
+                                                </div>
+                                                <div class="col-sm-5 padding5">
+                                                    @*<input type="file" class="form-control" id="id=" uploadBtn" />*@
+                                                    <input type="file" class="filestyle" id="uploadBtn" data-buttonName="btn-info">
+                                                </div>
+
+                                                <div class="col-sm-2 padding5">
+                                                    <button type="button" class="btn btn-sm btn-primary Attechmentdetail" style="width:100%">Add</button>
+                                                </div>
+
+
+                                                <div style="float:left; width:100%; padding:10px 10px; border-bottom:1px dotted #ccc;" class="filenameDiv">
+
+
+                                                    <div class="col-sm-5 padding5" style="word-break:break-all">
+                                                        <strong id="name"></strong>
+                                                    </div>
+
+                                                    <div class="col-sm-5 padding5 cursor" style="word-break:break-all">
+                                                        <a id="type" class="cursor"></a>
+                                                    </div>
+
+                                                    <div class="col-sm-2">
+                                                        <i class="fa fa-times pull-right text-danger" id="removeattachment"></i>
+                                                    </div>
+
+
+
+                                                </div>
+                                
+                                  
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer content">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" ng-click="createNewSupplier()">Save changes</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</div>
+
+
+
+</div>

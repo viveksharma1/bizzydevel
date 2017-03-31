@@ -1,0 +1,1247 @@
+﻿
+@{
+    ViewBag.Title = "Suppliers";
+    Layout = null;
+}
+
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
+
+
+
+<script type="text/ng-template" id="/ui-tree-select.html">
+    <ui-select ng-model="model.$selected"
+               ui-select-focuser
+               theme="selectize">
+        <ui-select-match placeholder="Enter text">
+            {{ $select.selected.title }}
+        </ui-select-match>
+        <ui-select-choices repeat="group in groups | filter: $select.search">
+            <div>
+                <span ng-bind-html="group.title | highlight: $select.search"></span>
+                <!--<span ng-bind-html="'('+group.size+' users)'"></span>
+                <a href
+                  ng-show="group.parent"
+                  class="goto-child-group"
+                  ng-click="loadChildGroupsOf(group, $select)">
+                  <i class="fa fa-angle-right"></i>
+                </a>-->
+            </div>
+        </ui-select-choices>
+    </ui-select>
+</script>
+
+
+
+<div class="container-fluid" ng-init="model = {}">
+    <div class="row">
+        <div class="bg-info cursor topbar">
+            <i class="fa fa-bars menutoggle" ng-click="menutoggle();"></i>
+            <ul class="list-unstyled submenu">
+                <li><a href="#"><i class="fa fa-gear"></i> Marketing</a></li>
+                <li><a href="#"><i class="fa fa-question-circle"></i> Help</a></li>
+            </ul>
+        </div>
+
+        <div class="content">
+            <div class="panel lightblue bluebrdr marginbottom">
+                <div class="panel-heading">
+                    <strong class="heading">Suppliers</strong>
+
+                    <div class="btn-group pull-right">
+                        <button type="button" class="btn btn-primary btn-sm" @*ng-click="NewCustomerCreate();"*@ id="NewCustomerCreate"> New Supplier</button>
+                        <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Import Suppliers</a></li>
+
+                        </ul>
+                    </div>
+
+                </div>
+
+                <div class="panel-body statusBody">
+                    <div class="col-sm-4 cursor padding">
+                        <h4 class="small text-info">Unbilled Last 365 Days</h4>
+                        <div class="col-sm-12 estimate" ng-click="PurchaseOrderTable()">
+                            <span class="rupee">Rs0</span>
+                            <p class="text-uppercase marginbottom status">0 PURCHASE ORDER</p>
+                        </div>
+                        
+                    </div>
+                    <div class="col-sm-4 padding cursor">
+                        <h4 class="small text-info">Unpaid Last 365 Days</h4>
+                        <div class="col-sm-12 estimate bg-yellow padding" ng-click="OpenBillTable()">
+                            <div class="col-sm-7" style="padding:10px">
+                                <span class="rupee">Rs0</span>
+                                <p class="text-uppercase marginbottom status">0 OPEN BILL</p>
+                            </div>
+                            <div class="col-sm-5 estimate bg-red overduebox" ng-click="OverdueTable()">
+                                <span class="rupee">Rs0</span>
+                                <p class="text-uppercase marginbottom status">0 overdue</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 cursor padding">
+                        <h4 class="small text-info">Paid</h4>
+                        <div class="col-sm-12 estimate bg-green" ng-click="OpenBalanceTable()">
+                            <span class="rupee">Rs0</span>
+                            <p class="text-uppercase marginbottom status">0 Paid last 30 days</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <span class="pulltab" id="menuUp" ng-click="menuUp();"><i class="fa fa-chevron-up"></i> </span>
+
+
+
+            <div class="col-sm-12" style="padding-top:37px">
+
+                <table id="OpenBalance" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead style="background:#e3eaf3; color:#486C8F; text-transform:uppercase">
+                        <tr>
+                            <th style="padding-left:30px; width:30px"><input type="checkbox" class="checkboxcss" /></th>
+                            <th class="fontnormal">Suppliers / Company</th>
+                           <th class="fontnormal">Phone</th>
+                            <th class="fontnormal">EMAIL</th>
+                            <th style="background:#c0d0e4">Open Balance</th>
+                            <th class="fontnormal text-right">Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td style="padding-left:30px; width:30px"><input type="checkbox" class="checkboxcss" /></td>
+                            <td>System Architect</td>
+                           <td>9876543212</td>
+                            <td>Edinburgh@gmail.com</td>
+                            <td>Rs0.00</td>
+                            <td style="text-align:right; width:100px">
+                                <button type="button" class="editbtn" ng-click="CreateInvoice()" id="CreateInvoice">Create bill</button>
+                                <class class="linkseparator" style="margin-top:4px; margin-right:0px">|</class>
+                                <div class="btn-group editcaret">
+                                    <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>
+                                    <ul class="dropdown-menu editdrpdwn my" role="menu" style="left:-135px">
+                                        <li><a href="" ng-click="CreateExpense()">Create expense</a></li>
+                                        <li><a href="" ng-click="CreateCheque()">Write cheque</a></li>
+                                        <li><a href="">Create purchase order</a></li>
+                                        <li><a href="" ng-click="CreateAdvncPaymnt()">Create advance payment</a></li>
+                                        <li><a href="">Make inactive</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+
+                <table id="PurchaseOrder" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead style="background:#e3eaf3; color:#486C8F; text-transform:uppercase">
+                        <tr>
+                            <th style="padding-left:30px; width:30px"><input type="checkbox" class="checkboxcss" /></th>
+                            <th class="fontnormal">Suppliers / Company</th>
+                            <th class="fontnormal">Phone</th>
+                            <th class="fontnormal">EMAIL</th>
+                            <th class="fontnormal">OPEN PURCHASE ORDERS</th>
+                            <th style="background:#c0d0e4">PO Amount</th>
+                            <th class="fontnormal text-right">Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td style="padding-left:30px; width:30px"><input type="checkbox" class="checkboxcss" /></td>
+                            <td>System Architect</td>
+                            <td>9876543212</td>
+                            <td>Edinburgh@gmail.com</td>
+                            <td>System Architect</td>
+                            <td>Rs0.00</td>
+                            <td style="text-align:right; width:100px">
+                                <button type="button" class="editbtn" ng-click="CreateInvoice()" id="CreateInvoice">Create bill</button>
+                                <class class="linkseparator" style="margin-top:4px; margin-right:0px">|</class>
+                                <div class="btn-group editcaret">
+                                    <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>
+                                    <ul class="dropdown-menu editdrpdwn my" role="menu" style="left:-135px">
+                                        <li><a href="" ng-click="CreateExpense()">Create expense</a></li>
+                                        <li><a href="" ng-click="CreateCheque()">Write cheque</a></li>
+                                        <li><a href="">Create purchase order</a></li>
+                                        <li><a href="" ng-click="CreateAdvncPaymnt()">Create advance payment</a></li>
+                                        <li><a href="">Make inactive</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+                <table id="OpenBill" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead style="background:#e3eaf3; color:#486C8F; text-transform:uppercase">
+                        <tr>
+                            <th style="padding-left:30px; width:30px"><input type="checkbox" class="checkboxcss" /></th>
+                            <th class="fontnormal">Suppliers / Company</th>
+                            <th class="fontnormal">Phone</th>
+                            <th class="fontnormal">EMAIL</th>
+                            <th class="fontnormal">Pending Bills</th>
+                            <th style="background:#c0d0e4">PO Amount</th>
+                            <th class="fontnormal text-right">Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td style="padding-left:30px; width:30px"><input type="checkbox" class="checkboxcss" /></td>
+                            <td>System Architect</td>
+                            <td>9876543212</td>
+                            <td>Edinburgh@gmail.com</td>
+                            <td>System Architect</td>
+                            <td>Rs0.00</td>
+                            <td style="text-align:right; width:100px">
+                                <button type="button" class="editbtn" ng-click="CreateInvoice()" id="CreateInvoice">Create bill</button>
+                                <class class="linkseparator" style="margin-top:4px; margin-right:0px">|</class>
+                                <div class="btn-group editcaret">
+                                    <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>
+                                    <ul class="dropdown-menu editdrpdwn my" role="menu" style="left:-135px">
+                                        <li><a href="" ng-click="CreateExpense()">Create expense</a></li>
+                                        <li><a href="" ng-click="CreateCheque()">Write cheque</a></li>
+                                        <li><a href="">Create purchase order</a></li>
+                                        <li><a href="" ng-click="CreateAdvncPaymnt()">Create advance payment</a></li>
+                                        <li><a href="">Make inactive</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+                <table id="Overdue" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead style="background:#e3eaf3; color:#486C8F; text-transform:uppercase">
+                        <tr>
+                            <th style="padding-left:30px; width:30px"><input type="checkbox" class="checkboxcss" /></th>
+                            <th class="fontnormal">Suppliers / Company</th>
+                            <th class="fontnormal">Phone</th>
+                            <th class="fontnormal">EMAIL</th>
+                            <th class="fontnormal">Pending Bills</th>
+                            <th style="background:#c0d0e4">Overdue Balance</th>
+                            <th class="fontnormal text-right">Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td style="padding-left:30px; width:30px"><input type="checkbox" class="checkboxcss" /></td>
+                            <td>System Architect</td>
+                            <td>9876543212</td>
+                            <td>Edinburgh@gmail.com</td>
+                            <td>System Architect</td>
+                            <td>Rs0.00</td>
+                            <td style="text-align:right; width:100px">
+                                <button type="button" class="editbtn" ng-click="CreateInvoice()" id="CreateInvoice">Create bill</button>
+                                <class class="linkseparator" style="margin-top:4px; margin-right:0px">|</class>
+                                <div class="btn-group editcaret">
+                                    <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>
+                                    <ul class="dropdown-menu editdrpdwn my" role="menu" style="left:-135px">
+                                        <li><a href="" ng-click="CreateExpense()">Create expense</a></li>
+                                        <li><a href="" ng-click="CreateCheque()">Write cheque</a></li>
+                                        <li><a href="">Create purchase order</a></li>
+                                        <li><a href="" ng-click="CreateAdvncPaymnt()">Create advance payment</a></li>
+                                        <li><a href="">Make inactive</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<div id="CreateChequeDiv" class="FlexPopup">
+    <div class="flexheader">
+        <ul class="list-unstyled submenu InvoiceMenu" style="float:left">
+            <li><a href="#"><i class="fa fa-history"></i></a></li>
+            <li><a href="#"><span>Cheque</span></a></li>
+        </ul>
+        <ul class="list-unstyled submenu InvoiceMenu">
+            <li><a href="#"><i class="fa fa-question-circle"></i></a></li>
+            <li><a href="javascript:void(0);" ng-click="invoiceclose();" id="invoiceclose"><i class="fa fa-times"></i></a></li>
+        </ul>
+    </div>
+    <div class="flexcontainer">
+        <div class="lightblue bluebrdr content" style="padding:10px 10px">
+            <div class="col-sm-3 padding5" style="margin-top:10px">
+                <ui-tree-select model="model">
+                </ui-tree-select>
+            </div>
+            <div class="col-sm-3" style="margin-top:10px">
+                <ui-tree-select model="model">
+                </ui-tree-select>
+            </div>
+
+            <div class="pull-right">
+                <p class="text-right">Amount</p>
+                <span class="balancedue">Rs0.00</span>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="col-sm-2 padding5">
+                <h4 class="tabheading">Mailing address</h4>
+                <textarea class="form-control" style="height:80px"></textarea>
+            </div>
+
+
+
+            <div class="col-sm-2 padding5">
+                <h4 class="tabheading">Payment date</h4>
+                <div class='input-group'>
+                    <input type='text' class="form-control" id="PaymentdateCheque" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+
+            
+
+
+
+            <div class="col-sm-1 padding5 pull-right">
+                <h4 class="tabheading">Cheque no.</h4>
+                <input type="text" class="form-control" />
+            </div>
+        </div>
+
+        <div class="col-sm-12" style="padding-top:30px">
+            <h4 data-toggle="collapse" data-target="#AccountDetail" class="cursor"><i class="fa fa-caret-right"></i> Account details</h4>
+            <div class="collapse" id="AccountDetail">
+                <table class="table NewTable" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th class="text-right" style="width:50px">#</th>
+                            <th>Account</th>
+                            <th>Description</th>
+                            <th class="text-right">Amount</th>
+                            <th style="width:50px">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr>
+                            <td class="text-right" style="width:50px">1</td>
+                            <td>Custom Duty</td>
+                            <td>&nbsp;</td>
+                            <td class="text-right">&nbsp;</td>
+                            <td class="text-right" style="width:50px"><i class="fa fa-trash" style="font-size:16px"></i></td>
+                        </tr>
+
+                        <tr>
+                            <td class="text-right" style="width:50px">2</td>
+                            <td>Vat</td>
+                            <td>&nbsp;</td>
+                            <td class="text-right">&nbsp;</td>
+                            <td class="text-right" style="width:50px"><i class="fa fa-trash" style="font-size:16px"></i></td>
+                        </tr>
+
+                        <tr>
+                            <td class="text-right" style="width:50px">3</td>
+                            <td>O Tax</td>
+                            <td>&nbsp;</td>
+                            <td class="text-right">&nbsp;</td>
+                            <td class="text-right" style="width:50px"><i class="fa fa-trash" style="font-size:16px"></i></td>
+                        </tr>
+
+                        <tr>
+                            <td class="text-right" style="width:50px">3</td>
+                            <td>Tax</td>
+                            <td>&nbsp;</td>
+                            <td class="text-right">&nbsp;</td>
+                            <td class="text-right" style="width:50px"><i class="fa fa-trash" style="font-size:16px"></i></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <hr style="float:left; width:100%; margin:5px 0px" />
+        <div class="col-sm-12">
+            <h4 data-toggle="collapse" data-target="#ItemDetail" class="cursor"><i class="fa fa-caret-right"></i> Item details</h4>
+            <div class="collapse" id="ItemDetail">
+                <table class="table NewTable" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th class="text-right">#</th>
+                            <th>Product/Service</th>
+                            <th>Finish</th>
+                            <th>Grade</th>
+                            <th>Thickness</th>
+                            <th>Width</th>
+                            <th>Description</th>
+                            <th class="text-right">Qty</th>
+                            <th class="text-right">Rate</th>
+                            <th class="text-right">Amount</th>
+                            <th class="text-right">TAx</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-right">1</td>
+                            <td>Baby Coil</td>
+                            <td>2B</td>
+                            <td>304</td>
+                            <td>0.80</td>
+                            <td>1219</td>
+                            <td>&nbsp;</td>
+                            <td class="text-right">1</td>
+                            <td class="text-right">125.00</td>
+                            <td class="text-right">125.00</td>
+                            <td class="text-right">0.00</td>
+                            <td class="text-right"><i class="fa fa-trash" style="font-size:16px"></i></td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">2</td>
+                            <td>Defective</td>
+                            <td>2B</td>
+                            <td>304</td>
+                            <td>0.42</td>
+                            <td>1250</td>
+                            <td>-</td>
+                            <td class="text-right">1</td>
+                            <td class="text-right">100.00</td>
+                            <td class="text-right">100.00</td>
+                            <td class="text-right">0.00</td>
+                            <td class="text-right"><i class="fa fa-trash" style="font-size:16px"></i></td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">1</td>
+                            <td>Baby Coil</td>
+                            <td>2B</td>
+                            <td>304</td>
+                            <td>0.80</td>
+                            <td>1219</td>
+                            <td>&nbsp;</td>
+                            <td class="text-right">1</td>
+                            <td class="text-right">125.00</td>
+                            <td class="text-right">125.00</td>
+                            <td class="text-right">0.00</td>
+                            <td class="text-right"><i class="fa fa-trash" style="font-size:16px"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <hr style="float:left; width:100%; margin:5px 0px" />
+        <div class="col-sm-12">
+            <div class="col-sm-3 padding">
+
+                <div class="form-group">
+                    <h4 class="tabheading">Memo</h4>
+                    <textarea class="form-control" style="height:80px"></textarea>
+                </div>
+            </div>
+            <span class="pull-right" style="width:350px">
+                <label class="subtotal" style="font-size:1.5rem;">Total</label>
+                <span class="subtotalvalue" style="font-size:1.5rem; font-weight:bold">Rs0.00</span>
+            </span>
+        </div>
+    </div>
+
+
+    <div class="flexfooter">
+        <span class="pull-left">
+            <button type="button" class="btn btn-sm btn-primary">Cancel</button>
+            <button type="button" class="btn btn-sm btn-primary">Clear</button>
+        </span>
+
+        <div class="pull-right">
+            <button type="button" class="btn btn-sm btn-primary">Save</button>
+            <div class="btn-group dropup">
+                <button type="button" class="btn btn-info btn-sm">Save and send</button>
+                <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:25px">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" style="right:-2px !important">
+                    <li><a href="#">Save and close</a></li>
+                    <li><a href="#">Save and send</a></li>
+                    <li><a href="#">Save and new</a></li>
+                    <li><a href="#">Save and share link</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="CreateAdvncPaymntDiv" class="FlexPopup">
+    <div class="flexheader">
+        <ul class="list-unstyled submenu InvoiceMenu" style="float:left">
+            <li><a href="#"><i class="fa fa-history"></i></a></li>
+            <li><a href="#"><span>Advance Payment</span></a></li>
+        </ul>
+        <ul class="list-unstyled submenu InvoiceMenu">
+            <li><a href="#"><i class="fa fa-question-circle"></i></a></li>
+            <li><a href="javascript:void(0);" ng-click="invoiceclose();" id="invoiceclose"><i class="fa fa-times"></i></a></li>
+        </ul>
+    </div>
+    <div class="flexcontainer">
+        <div class="lightblue bluebrdr content" style="padding:10px 10px">
+            <div class="col-sm-3 padding5" style="margin-top:10px">
+                <ui-tree-select model="model">
+                </ui-tree-select>
+            </div>
+            <div class="col-sm-3" style="margin-top:10px">
+                <ui-tree-select model="model">
+                </ui-tree-select>
+            </div>
+
+            <div class="pull-right">
+                <p class="text-right">PAYMENT STATUS</p>
+                <span class="balancedue">OPEN</span>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="col-sm-2 padding5">
+                <h4 class="tabheading">Mailing address</h4>
+                <textarea class="form-control" style="height:80px"></textarea>
+            </div>
+            <div class="col-sm-2 padding5">
+                <h4 class="tabheading">Payment date</h4>
+                <div class='input-group'>
+                    <input type='text' class="form-control" id="PaymentdateAdvance" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+
+            
+
+
+
+            <div class="col-sm-1 padding5 pull-right">
+                <h4 class="tabheading">Ref no.</h4>
+                <input type="text" class="form-control" />
+            </div>
+        </div>
+
+       
+        <div class="col-sm-12">
+            <div class="col-sm-3 padding" style="padding-top:20px !important">
+
+                <div class="form-group">
+                    <h4 class="tabheading">Memo</h4>
+                    <textarea class="form-control" style="height:80px"></textarea>
+                </div>
+            </div>
+            <span class="pull-right" style="width:350px">
+                
+                    <h4 class="tabheading text-right">Amount</h4>
+                    <input type="text" class="form-control pull-right text-right" placeholder="0.00" style="width:80px; margin-bottom:10px" />
+                <p class="pull-right">
+                    <label class="subtotal" style="font-size:1.5rem;">Total</label>
+                    <span class="subtotalvalue" style="font-size:1.5rem; font-weight:bold">Rs0.00</span>
+                </p>
+            </span>
+        </div>
+    </div>
+
+
+    <div class="flexfooter">
+        <span class="pull-left">
+            <button type="button" class="btn btn-sm btn-primary">Cancel</button>
+            <button type="button" class="btn btn-sm btn-primary">Clear</button>
+        </span>
+
+        <div class="pull-right">
+            <button type="button" class="btn btn-sm btn-primary">Save</button>
+            <div class="btn-group dropup">
+                <button type="button" class="btn btn-info btn-sm">Save and send</button>
+                <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:25px">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" style="right:-2px !important">
+                    <li><a href="#">Save and close</a></li>
+                    <li><a href="#">Save and send</a></li>
+                    <li><a href="#">Save and new</a></li>
+                    <li><a href="#">Save and share link</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="CreateExpenseDiv" class="FlexPopup">
+    <div class="flexheader">
+        <ul class="list-unstyled submenu InvoiceMenu" style="float:left">
+            <li><a href="#"><i class="fa fa-history"></i></a></li>
+            <li><a href="#"><span>Expense</span></a></li>
+        </ul>
+        <ul class="list-unstyled submenu InvoiceMenu">
+            <li><a href="#"><i class="fa fa-question-circle"></i></a></li>
+            <li><a href="javascript:void(0);" ng-click="invoiceclose();" id="invoiceclose"><i class="fa fa-times"></i></a></li>
+        </ul>
+    </div>
+    <div class="flexcontainer">
+        <div class="lightblue bluebrdr content" style="padding:10px 10px">
+            <div class="col-sm-3 padding5" style="margin-top:10px">
+                <ui-tree-select model="model">
+                </ui-tree-select>
+            </div>
+            <div class="col-sm-3" style="margin-top:10px">
+                <ui-tree-select model="model">
+                </ui-tree-select>
+            </div>
+
+            <div class="pull-right">
+                <p class="text-right">Amount</p>
+                <span class="balancedue">Rs0.00</span>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="col-sm-2 padding5">
+                <h4 class="tabheading">Payment date</h4>
+                <div class='input-group'>
+                    <input type='text' class="form-control" id="Paymentdate" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="col-sm-2 padding5 claro">
+                <h4 class="tabheading">Payment method</h4>
+
+                <ui-tree-select model="model">
+                </ui-tree-select>
+
+                <div id="form-popoverPopup" class="popupbox">
+                    <div class="dijitDialogTitle">
+                        New Term
+                        <i class="fa fa-times-circle cursor pull-right" title="close" ng-click="popuclose()"></i>
+                    </div>
+                    <div class="form-content">
+                        <div class="form-group">
+                            <label><span class="red">*</span> Name</label>
+                            <input type="text" class="form-control" />
+                        </div>
+                        <strong>
+                            <input type="radio" class="pull-left" /> <span class="pull-left">Due in fixed number of days</span>
+                        </strong>
+                        <p>
+                            <input type="text" class="form-control pull-left" style="width:50px" /> <span class="pull-left">days</span>
+                        </p>
+                        <strong>
+                            <input type="radio" class="pull-left" /> <span class="pull-left">Due by certain day of the month</span>
+                        </strong>
+                        <p>
+                            <input type="text" class="form-control pull-left" style="width:50px" /> <span class="pull-left">day of month</span>
+                        </p>
+                        <strong>
+                            <span class="pull-left">Due the next month if issued within</span>
+                        </strong>
+                        <p>
+                            <input type="text" class="form-control pull-left" style="width:50px" /> <span class="pull-left">days of due date</span>
+                        </p>
+                        <div class="form-footer">
+                            <button type="button" class="btn btn-sm btn-default">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+
+            <div class="col-sm-1 padding5 pull-right">
+                <h4 class="tabheading">Ref no.</h4>
+                <input type="text" class="form-control" />
+            </div>
+        </div>
+
+        <div class="col-sm-12" style="padding-top:30px">
+            <h4 data-toggle="collapse" data-target="#AccountDetail" class="cursor"><i class="fa fa-caret-right"></i> Account details</h4>
+            <div class="collapse" id="AccountDetail">
+                <table class="table NewTable" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th class="text-right" style="width:50px">#</th>
+                            <th>Account</th>
+                            <th>Description</th>
+                            <th class="text-right">Amount</th>
+                            <th style="width:50px">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr>
+                            <td class="text-right" style="width:50px">1</td>
+                            <td>Custom Duty</td>
+                            <td>&nbsp;</td>
+                            <td class="text-right">&nbsp;</td>
+                            <td class="text-right" style="width:50px"><i class="fa fa-trash" style="font-size:16px"></i></td>
+                        </tr>
+
+                        <tr>
+                            <td class="text-right" style="width:50px">2</td>
+                            <td>Vat</td>
+                            <td>&nbsp;</td>
+                            <td class="text-right">&nbsp;</td>
+                            <td class="text-right" style="width:50px"><i class="fa fa-trash" style="font-size:16px"></i></td>
+                        </tr>
+
+                        <tr>
+                            <td class="text-right" style="width:50px">3</td>
+                            <td>O Tax</td>
+                            <td>&nbsp;</td>
+                            <td class="text-right">&nbsp;</td>
+                            <td class="text-right" style="width:50px"><i class="fa fa-trash" style="font-size:16px"></i></td>
+                        </tr>
+
+                        <tr>
+                            <td class="text-right" style="width:50px">3</td>
+                            <td>Tax</td>
+                            <td>&nbsp;</td>
+                            <td class="text-right">&nbsp;</td>
+                            <td class="text-right" style="width:50px"><i class="fa fa-trash" style="font-size:16px"></i></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <hr style="float:left; width:100%; margin:5px 0px" />
+        <div class="col-sm-12">
+            <h4 data-toggle="collapse" data-target="#ItemDetail" class="cursor"><i class="fa fa-caret-right"></i> Item details</h4>
+            <div class="collapse" id="ItemDetail">
+                <table class="table NewTable" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th class="text-right">#</th>
+                            <th>Product/Service</th>
+                            <th>Finish</th>
+                            <th>Grade</th>
+                            <th>Thickness</th>
+                            <th>Width</th>
+                            <th>Description</th>
+                            <th class="text-right">Qty</th>
+                            <th class="text-right">Rate</th>
+                            <th class="text-right">Amount</th>
+                            <th class="text-right">TAx</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-right">1</td>
+                            <td>Baby Coil</td>
+                            <td>2B</td>
+                            <td>304</td>
+                            <td>0.80</td>
+                            <td>1219</td>
+                            <td>&nbsp;</td>
+                            <td class="text-right">1</td>
+                            <td class="text-right">125.00</td>
+                            <td class="text-right">125.00</td>
+                            <td class="text-right">0.00</td>
+                            <td class="text-right"><i class="fa fa-trash" style="font-size:16px"></i></td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">2</td>
+                            <td>Defective</td>
+                            <td>2B</td>
+                            <td>304</td>
+                            <td>0.42</td>
+                            <td>1250</td>
+                            <td>-</td>
+                            <td class="text-right">1</td>
+                            <td class="text-right">100.00</td>
+                            <td class="text-right">100.00</td>
+                            <td class="text-right">0.00</td>
+                            <td class="text-right"><i class="fa fa-trash" style="font-size:16px"></i></td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">1</td>
+                            <td>Baby Coil</td>
+                            <td>2B</td>
+                            <td>304</td>
+                            <td>0.80</td>
+                            <td>1219</td>
+                            <td>&nbsp;</td>
+                            <td class="text-right">1</td>
+                            <td class="text-right">125.00</td>
+                            <td class="text-right">125.00</td>
+                            <td class="text-right">0.00</td>
+                            <td class="text-right"><i class="fa fa-trash" style="font-size:16px"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <hr style="float:left; width:100%; margin:5px 0px" />
+        <div class="col-sm-12">
+            <div class="col-sm-3 padding">
+
+                <div class="form-group">
+                    <h4 class="tabheading">Memo</h4>
+                    <textarea class="form-control" style="height:80px"></textarea>
+                </div>
+            </div>
+            <span class="pull-right" style="width:350px">
+                <label class="subtotal" style="font-size:1.5rem;">Total</label>
+                <span class="subtotalvalue" style="font-size:1.5rem; font-weight:bold">Rs0.00</span>
+            </span>
+        </div>
+    </div>
+
+
+    <div class="flexfooter">
+        <span class="pull-left">
+            <button type="button" class="btn btn-sm btn-primary">Cancel</button>
+            <button type="button" class="btn btn-sm btn-primary">Clear</button>
+        </span>
+
+        <div class="pull-right">
+            <button type="button" class="btn btn-sm btn-primary">Save</button>
+            <div class="btn-group dropup">
+                <button type="button" class="btn btn-info btn-sm">Save and send</button>
+                <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:25px">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" style="right:-2px !important">
+                    <li><a href="#">Save and close</a></li>
+                    <li><a href="#">Save and send</a></li>
+                    <li><a href="#">Save and new</a></li>
+                    <li><a href="#">Save and share link</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="CreateInvoiceDiv" class="FlexPopup">
+    <div class="flexheader">
+        <ul class="list-unstyled submenu InvoiceMenu" style="float:left">
+            <li><a href="#"><i class="fa fa-history"></i></a></li>
+            <li><a href="#"><span>Bill</span></a></li>
+        </ul>
+        <ul class="list-unstyled submenu InvoiceMenu">
+            <li><a href="#"><i class="fa fa-question-circle"></i></a></li>
+            <li><a href="javascript:void(0);" ng-click="invoiceclose();" id="invoiceclose"><i class="fa fa-times"></i></a></li>
+        </ul>
+    </div>
+    <div class="flexcontainer">
+        <div class="lightblue bluebrdr content" style="padding:10px 10px">
+            <div class="col-sm-3 " style="margin-top:10px">
+                <ui-tree-select model="model">
+                </ui-tree-select>
+            </div>
+            
+            <div class="pull-right">
+                <p class="text-right">BALANCE DUE</p>
+                <span class="balancedue">Rs0.00</span>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="col-sm-2 padding5">
+                <h4 class="tabheading">Mailing address</h4>
+                <textarea class="form-control" style="height:80px"></textarea>
+            </div>
+
+            <div class="col-sm-2 padding5 claro">
+                <h4 class="tabheading">Terms</h4>
+
+                <ui-tree-select model="model">
+                </ui-tree-select>
+
+                <div id="form-popoverPopup" class="popupbox">
+                    <div class="dijitDialogTitle">
+                        New Term
+                        <i class="fa fa-times-circle cursor pull-right" title="close" ng-click="popuclose()"></i>
+                    </div>
+                    <div class="form-content">
+                        <div class="form-group">
+                            <label><span class="red">*</span> Name</label>
+                            <input type="text" class="form-control" />
+                        </div>
+                        <strong>
+                            <input type="radio" class="pull-left" /> <span class="pull-left">Due in fixed number of days</span>
+                        </strong>
+                        <p>
+                            <input type="text" class="form-control pull-left" style="width:50px" /> <span class="pull-left">days</span>
+                        </p>
+                        <strong>
+                            <input type="radio" class="pull-left" /> <span class="pull-left">Due by certain day of the month</span>
+                        </strong>
+                        <p>
+                            <input type="text" class="form-control pull-left" style="width:50px" /> <span class="pull-left">day of month</span>
+                        </p>
+                        <strong>
+                            <span class="pull-left">Due the next month if issued within</span>
+                        </strong>
+                        <p>
+                            <input type="text" class="form-control pull-left" style="width:50px" /> <span class="pull-left">days of due date</span>
+                        </p>
+                        <div class="form-footer">
+                            <button type="button" class="btn btn-sm btn-default">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-2 padding5">
+                <h4 class="tabheading">Bill Date</h4>
+                <div class='input-group'>
+                    <input type='text' class="form-control" id='BillDate' />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="col-sm-2 padding5">
+                <h4 class="tabheading">Due Date</h4>
+                <div class='input-group'>
+                    <input type='text' class="form-control" id='DueDate' />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="col-sm-1 padding5 pull-right">
+                <h4 class="tabheading">Bill no.</h4>
+                <input type="text" class="form-control" />
+            </div>
+        </div>
+
+        <div class="col-sm-12" style="padding-top:30px">
+            <h4 data-toggle="collapse" data-target="#AccountDetail" class="cursor"><i class="fa fa-caret-right"></i> Account details</h4>
+            <div class="collapse" id="AccountDetail">
+                <table class="table NewTable" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th class="text-right" style="width:50px">#</th>
+                            <th>Account</th>
+                            <th>Description</th>
+                            <th class="text-right">Amount</th>
+                            <th style="width:50px">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr>
+                            <td class="text-right" style="width:50px">1</td>
+                            <td>Custom Duty</td>
+                            <td>&nbsp;</td>
+                            <td class="text-right">&nbsp;</td>
+                            <td class="text-right" style="width:50px"><i class="fa fa-trash" style="font-size:16px"></i></td>
+                        </tr>
+
+                        <tr>
+                            <td class="text-right" style="width:50px">2</td>
+                            <td>Vat</td>
+                            <td>&nbsp;</td>
+                            <td class="text-right">&nbsp;</td>
+                            <td class="text-right" style="width:50px"><i class="fa fa-trash" style="font-size:16px"></i></td>
+                        </tr>
+
+                        <tr>
+                            <td class="text-right" style="width:50px">3</td>
+                            <td>O Tax</td>
+                            <td>&nbsp;</td>
+                            <td class="text-right">&nbsp;</td>
+                            <td class="text-right" style="width:50px"><i class="fa fa-trash" style="font-size:16px"></i></td>
+                        </tr>
+
+                        <tr>
+                            <td class="text-right" style="width:50px">3</td>
+                            <td>Tax</td>
+                            <td>&nbsp;</td>
+                            <td class="text-right">&nbsp;</td>
+                            <td class="text-right" style="width:50px"><i class="fa fa-trash" style="font-size:16px"></i></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <hr style="float:left; width:100%; margin:5px 0px"/>
+        <div class="col-sm-12">
+            <h4 data-toggle="collapse" data-target="#ItemDetail" class="cursor"><i class="fa fa-caret-right"></i> Item details</h4>
+            <div class="collapse" id="ItemDetail">
+                <table class="table NewTable" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th class="text-right">#</th>
+                            <th>Product/Service</th>
+                            <th>Finish</th>
+                            <th>Grade</th>
+                            <th>Thickness</th>
+                            <th>Width</th>
+                            <th>Description</th>
+                            <th class="text-right">Qty</th>
+                            <th class="text-right">Rate</th>
+                            <th class="text-right">Amount</th>
+                            <th class="text-right">TAx</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-right">1</td>
+                            <td>Baby Coil</td>
+                            <td>2B</td>
+                            <td>304</td>
+                            <td>0.80</td>
+                            <td>1219</td>
+                            <td>&nbsp;</td>
+                            <td class="text-right">1</td>
+                            <td class="text-right">125.00</td>
+                            <td class="text-right">125.00</td>
+                            <td class="text-right">0.00</td>
+                            <td class="text-right"><i class="fa fa-trash" style="font-size:16px"></i></td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">2</td>
+                            <td>Defective</td>
+                            <td>2B</td>
+                            <td>304</td>
+                            <td>0.42</td>
+                            <td>1250</td>
+                            <td>-</td>
+                            <td class="text-right">1</td>
+                            <td class="text-right">100.00</td>
+                            <td class="text-right">100.00</td>
+                            <td class="text-right">0.00</td>
+                            <td class="text-right"><i class="fa fa-trash" style="font-size:16px"></i></td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">1</td>
+                            <td>Baby Coil</td>
+                            <td>2B</td>
+                            <td>304</td>
+                            <td>0.80</td>
+                            <td>1219</td>
+                            <td>&nbsp;</td>
+                            <td class="text-right">1</td>
+                            <td class="text-right">125.00</td>
+                            <td class="text-right">125.00</td>
+                            <td class="text-right">0.00</td>
+                            <td class="text-right"><i class="fa fa-trash" style="font-size:16px"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <hr style="float:left; width:100%; margin:5px 0px" />
+        <div class="col-sm-12">
+            <div class="col-sm-3 padding">
+               
+                <div class="form-group">
+                    <h4 class="tabheading">Memo</h4>
+                    <textarea class="form-control" style="height:80px"></textarea>
+                </div>
+            </div>
+            <span class="pull-right" style="width:350px">
+               <label class="subtotal" style="font-size:1.5rem;">Total</label>
+                <span class="subtotalvalue" style="font-size:1.5rem; font-weight:bold">Rs0.00</span>
+            </span>
+        </div>
+    </div>
+
+
+    <div class="flexfooter">
+        <span class="pull-left">
+            <button type="button" class="btn btn-sm btn-primary">Cancel</button>
+            <button type="button" class="btn btn-sm btn-primary">Clear</button>
+        </span>
+
+        <div class="pull-right">
+            <button type="button" class="btn btn-sm btn-primary">Save</button>
+            <div class="btn-group dropup">
+                <button type="button" class="btn btn-info btn-sm">Save and send</button>
+                <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:25px">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" style="right:-2px !important">
+                    <li><a href="#">Save and close</a></li>
+                    <li><a href="#">Save and send</a></li>
+                    <li><a href="#">Save and new</a></li>
+                    <li><a href="#">Save and share link</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="NewCustomerCreateModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content content">
+            <div class="modal-header popupheader content">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Add Supplier</h4>
+            </div>
+            <div class="modal-body content" style="padding:15px; overflow:auto; height:450px">
+                <div class="col-sm-6 paddinright">
+                    <div class="col-sm-1 form-group padding5">
+                        <label>Title</label>
+                        <input type="text" class="form-control" />
+                    </div>
+                    <div class="col-sm-3 form-group padding5">
+                        <label>First name</label>
+                        <input type="text" class="form-control" />
+                    </div>
+                    <div class="col-sm-3 form-group padding5">
+                        <label>Middle name</label>
+                        <input type="text" class="form-control" />
+                    </div>
+                    <div class="col-sm-3 form-group padding5">
+                        <label>Last name</label>
+                        <input type="text" class="form-control" />
+                    </div>
+                    <div class="col-sm-2 form-group padding5">
+                        <label>Suffix</label>
+                        <input type="text" class="form-control" />
+                    </div>
+                    <div class="col-sm-12 form-group padding5">
+                        <label>Company</label>
+                        <input type="text" class="form-control" />
+                    </div>
+                    <div class="col-sm-12 form-group padding5">
+                        <label><span class="red">*</span>Display name as</label>
+                        <input type="text" class="form-control" />
+                    </div>
+                    <label>Address</label>
+                    <div class="form-group col-sm-12 padding5">
+                        <textarea class="form-control" placeholder="Street"></textarea>
+                    </div>
+                    <div class="form-group col-sm-6 padding5">
+                        <input type="text" class="form-control" placeholder="City/Town" />
+                    </div>
+                    <div class="form-group col-sm-6 padding5">
+                        <input type="text" class="form-control" placeholder="State" />
+                    </div>
+                    <div class="form-group col-sm-6 padding5">
+                        <input type="text" class="form-control" placeholder="Postal Code" />
+                    </div>
+                    <div class="form-group col-sm-6 padding5">
+                        <input type="text" class="form-control" placeholder="Country" />
+                    </div>
+                   
+                    <div class="form-group col-sm-6 padding5">
+                        <label>PAN No.</label>
+                        <input type="text" class="form-control" placeholder="" />
+                        <input type="checkbox" /> <label>Apply TDS for this supplier</label>
+                    </div>
+                    
+                    <div class="form-group col-sm-12 padding5">
+                        <label>Note</label>
+                        <textarea class="form-control"></textarea>
+                    </div>
+                   
+                    <div class="form-group col-sm-12 padding5">
+                        <label>Attachments <small style="font-weight:normal; color:#486C8F">Maximum size: 25MB</small></label>
+                        <div class="attachmets">
+                            <input type="file" />
+                            <div>
+                                <i class="fa fa-plus"></i>
+                                <p>Add file</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="col-sm-6 paddinright">
+
+                    <div class="col-sm-12 form-group padding5">
+                        <label>Email</label>
+                        <input type="text" class="form-control" placeholder="Separate multiple emails with commas" />
+                    </div>
+                    <div class="col-sm-4 form-group padding5">
+                        <label>Phone</label>
+                        <input type="text" class="form-control" />
+                    </div>
+                    <div class="col-sm-4 form-group padding5">
+                        <label>Mobile</label>
+                        <input type="text" class="form-control" />
+                    </div>
+                    <div class="col-sm-4 form-group padding5">
+                        <label>Fax</label>
+                        <input type="text" class="form-control" />
+                    </div>
+                    <div class="col-sm-4 form-group padding5">
+                        <label>Other</label>
+                        <input type="text" class="form-control" />
+                    </div>
+                    <div class="col-sm-8 form-group padding5">
+                        <label>Website</label>
+                        <input type="text" class="form-control" />
+                    </div>
+
+                    
+                    <div class="col-sm-5 form-group padding5">
+                        <label>Billing rate (/hr)</label>
+                        <input type="text" class="form-control"/>
+                    </div>
+                    <div class="col-sm-5 form-group padding5">
+                        <label>Terms</label>
+                       <ui-tree-select model="model" style="background:#000">
+                </ui-tree-select>
+                    </div>
+
+                    <div class="col-sm-5 form-group padding5">
+                        <label>Opening balance</label>
+                        <input type="text" class="form-control" />
+                    </div>
+                    <div class="col-sm-5 form-group padding5">
+                        <label>as of</label>
+                        <div class='input-group'>
+                            <input type='text' class="form-control"  id='asof' />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-8 form-group padding5">
+                        <label>Account no.</label>
+                        <input type="text" class="form-control" />
+                    </div>
+                    <div class="col-sm-5 form-group padding5">
+                        <label>Tax Registration Number</label>
+                        <input type="text" class="form-control" />
+                    </div>
+                    <div class="col-sm-5 form-group padding5">
+                        <label>Effective Date</label>
+                        <input type="text" class="form-control" disabled />
+                    </div>
+                </div>
+
+                
+
+            </div>
+            <div class="modal-footer content">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary btn-sm">Save changes</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+

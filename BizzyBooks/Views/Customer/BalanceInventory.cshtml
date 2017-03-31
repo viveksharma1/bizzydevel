@@ -1,0 +1,744 @@
+﻿
+@{
+    ViewBag.Title = "BalanceInventory";
+    Layout = null;
+}
+
+<script type="text/ng-template" id="/ui-tree-select.html">
+    <ui-select ng-model="model.$selected"
+               ui-select-focuser
+               theme="selectize">
+        <ui-select-match placeholder="Select a group">
+            {{ $select.selected.title }}
+        </ui-select-match>
+        <ui-select-choices repeat="group in groups | filter: $select.search">
+            <div>
+                <span ng-bind-html="group.title | highlight: $select.search"></span>
+                <!--<span ng-bind-html="'('+group.size+' users)'"></span>
+                <a href
+                  ng-show="group.parent"
+                  class="goto-child-group"
+                  ng-click="loadChildGroupsOf(group, $select)">
+                  <i class="fa fa-angle-right"></i>
+                </a>-->
+            </div>
+        </ui-select-choices>
+    </ui-select>
+</script>
+
+
+
+
+<div>
+    <div class="content">
+        <div class="panel lightblue bluebrdr marginbottom content">
+            <div class="panel-heading">
+                <strong class="heading">Balance Inventory</strong>
+
+                <div class="btn-group pull-right">
+                    <button type="button" class="btn btn-primary btn-sm"><a href="#/Customer/GRNEntry" style="color:#fff"> GRN Entry</a></button>
+                    <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="caret" style="border-top-color:#fff !important"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#/Customer/Import">Import GRN Entry</a></li>
+
+                    </ul>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="col-sm-12" style="padding:20px 0px">
+            <div class="pull-left" style="margin-left:7px;">
+
+                <input type="text" ng-model="search" class="form-control pull-left" style="width:150px;" placeholder="Find inventory" />
+                <span id="InventoryFilter" style="margin-left:5px">
+                    <i class="fa fa-filter tableicon"></i><i class="fa fa-caret-down" style="margin-left:-6px;"></i>
+                </span>
+
+            </div>
+           
+
+
+            <div class="btn-group" style="margin-left:9px">
+                <button type="button" class="btn btn-primary btn-sm"><a href="#/Customer/GRNEntry" style="color:#fff"> Action</a></button>
+                <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="caret" style="border-top-color:#fff !important"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="" ng-click="ChangeStatus()">Change Status</a></li>
+                    <li><a ng-click="AddRemarks()" class="cursor">Add Remarks</a></li>
+                    <li><a ng-click="Addjustmentbtn()" class="cursor">Adjustment</a></li>
+                    <li><a ui-sref="Customer.BalanceInventoryViewInfo()" class="cursor">View Info</a></li>
+                    @*<li><a ui-sref="Customer.BalanceInventoryViewDetail()" class="cursor">View Detail</a></li>*@
+
+                </ul>
+            </div>
+
+            <div class="pull-right" style="margin-top:10px; margin-right:10px">
+                <i class="fa fa-print tableicon" title="Print list"></i>
+                <i class="fa fa-clipboard tableicon" title="Export to excel"></i>
+                <i class="fa fa-gear tableicon" title="Settingd"></i>
+            </div>
+            <div class="col-sm-12 padding" style="padding:10px 0px !important">
+                <div class="col-sm-2 padding">
+
+                    <div class="col-sm-12 filterBox">
+                        <h3>Search Filter</h3>
+                        <div class="form-group">
+                            <h4 class="tabheading font_11">Status</h4>
+                            <select class="form-control">
+                                <option>Select</option>
+                                <option>Sale</option>
+                                <option>Return</option>
+                                <option>Delivered</option>
+                                <option>Open</option>
+                                <option>Process</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <h4 class="tabheading font_11">Sub Category</h4>
+                            <ui-select ng-model="subcategory.selected"
+                                       ui-select-focuser
+                                       theme="selectize">
+                                <ui-select-match allow-clear="true" placeholder="Select Subcategory">{{ $select.selected.SUBCATEGORY }}</ui-select-match>
+                                <ui-select-choices repeat="invoice in ItemList  | unique:'SUBCATEGORY'|filter: $select.search">
+                                    <div>
+                                        <span style="color:forestgreen">{{invoice.SUBCATEGORY}}</span>
+                                    </div>
+
+
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+
+                        <div class="form-group">
+                            <h4 class="tabheading font_11">Coil/Sheet No.</h4>
+                            <ui-select ng-model="coilsheetno.selected"
+                                       ui-select-focuser
+                                       theme="selectize">
+                                <ui-select-match allow-clear="true" placeholder="Select Coil/Sheet">{{ $select.selected.COILSHEETNO }}</ui-select-match>
+                                <ui-select-choices repeat="invoice in ItemList  | unique:'COILSHEETNO'|filter: $select.search">
+                                    <div>
+                                        <span style="color:forestgreen">{{invoice.COILSHEETNO}}</span>
+                                    </div>
+
+
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+
+                        <div class="form-group">
+                            <h4 class="tabheading font_11">Incoming Date</h4>
+                            <ui-select ng-model="incomingdate.selected"
+                                       ui-select-focuser
+                                       theme="selectize">
+                                <ui-select-match allow-clear="true" placeholder="Select Incoming Date">{{ $select.selected.INCOMINGDATE }}</ui-select-match>
+                                <ui-select-choices repeat="invoice in ItemList  | unique:'INCOMINGDATE'|filter: $select.search">
+                                    <div>
+                                        <span style="color:forestgreen">{{invoice.INCOMINGDATE}}</span>
+                                    </div>
+
+
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+
+                        <div class="form-group">
+                            <h4 class="tabheading font_11">Lot Weight</h4>
+                            <ui-select ng-model="lotweight.selected"
+                                       ui-select-focuser
+                                       theme="selectize">
+                                <ui-select-match allow-clear="true" placeholder="Select Lot Weight">{{ $select.selected.LotWeight }}</ui-select-match>
+                                <ui-select-choices repeat="invoice in ItemList  | unique:'LotWeight'|filter: $select.search">
+                                    <div>
+                                        <span style="color:forestgreen">{{invoice.LotWeight}}</span>
+                                    </div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+
+                        <div class="form-group">
+                            <h4 class="tabheading font_11">Location</h4>
+                            <ui-select ng-model="location.selected"
+                                       ui-select-focuser
+                                       theme="selectize">
+                                <ui-select-match allow-clear="true" placeholder="Select Location">{{ $select.selected.LOCATION }}</ui-select-match>
+                                <ui-select-choices repeat="invoice in ItemList  | unique:'LOCATION'|filter: $select.search">
+                                    <div>
+                                        <span style="color:forestgreen">{{invoice.LOCATION}}</span>
+                                    </div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+
+                        <div class="form-group">
+                            <h4 class="tabheading font_11">Grade</h4>
+                            <ui-select ng-model="grade.selected"
+                                       ui-select-focuser
+                                       theme="selectize">
+                                <ui-select-match allow-clear="true" placeholder="Select Grade">{{ $select.selected.GRADE }}</ui-select-match>
+                                <ui-select-choices repeat="invoice in ItemList  | unique:'GRADE'|filter: $select.search">
+                                    <div>
+                                        <span style="color:forestgreen">{{invoice.GRADE}}</span>
+                                    </div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+
+                        <div class="form-group">
+                            <h4 class="tabheading font_11">Finish</h4>
+                            <ui-select ng-model="finish.selected"
+                                       ui-select-focuser
+                                       theme="selectize">
+                                <ui-select-match allow-clear="true" placeholder="Select Finish">{{ $select.selected.FINISH }}</ui-select-match>
+                                <ui-select-choices repeat="invoice in ItemList  | unique:'FINISH'|filter: $select.search">
+                                    <div>
+                                        <span style="color:forestgreen">{{invoice.FINISH}}</span>
+                                    </div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+
+                        <div class="form-group">
+                            <h4 class="tabheading font_11">Thickness</h4>
+                            <ui-select ng-model="thickness.selected"
+                                       ui-select-focuser
+                                       theme="selectize">
+                                <ui-select-match allow-clear="true" placeholder="Select Thickness">{{ $select.selected.THICKNESS }}</ui-select-match>
+                                <ui-select-choices repeat="invoice in ItemList  | unique:'THICKNESS'|filter: $select.search">
+                                    <div>
+                                        <span style="color:forestgreen">{{invoice.THICKNESS}}</span>
+                                    </div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+
+                        <div class="form-group">
+                            <h4 class="tabheading font_11">Width</h4>
+                            <ui-select ng-model="width.selected"
+                                       ui-select-focuser
+                                       theme="selectize">
+                                <ui-select-match allow-clear="true" placeholder="Select Width">{{ $select.selected.WIDTH }}</ui-select-match>
+                                <ui-select-choices repeat="invoice in ItemList  | unique:'WIDTH'|filter: $select.search">
+                                    <div>
+                                        <span style="color:forestgreen">{{invoice.WIDTH}}</span>
+                                    </div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+
+                        <div class="form-group">
+                            <h4 class="tabheading font_11">Length</h4>
+                            <ui-select ng-model="length.selected"
+                                       ui-select-focuser
+                                       theme="selectize">
+                                <ui-select-match allow-clear="true" placeholder="Select Length">{{ $select.selected.LENGTH }}</ui-select-match>
+                                <ui-select-choices repeat="invoice in ItemList  | unique:'LENGTH'|filter: $select.search">
+                                    <div>
+                                        <span style="color:forestgreen">{{invoice.LENGTH}}</span>
+                                    </div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+
+                        <div class="form-group">
+                            <h4 class="tabheading font_11">Net Weight</h4>
+                            <ui-select ng-model="netweight.selected"
+                                       ui-select-focuser
+                                       theme="selectize">
+                                <ui-select-match allow-clear="true" placeholder="Select Net Weight">{{ $select.selected.NETWEIGHT }}</ui-select-match>
+                                <ui-select-choices repeat="invoice in ItemList  | unique:'NETWEIGHT'|filter: $select.search">
+                                    <div>
+                                        <span style="color:forestgreen">{{invoice.NETWEIGHT}}</span>
+                                    </div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+
+                        <div class="form-group">
+                            <h4 class="tabheading font_11">Gross Wt</h4>
+                            <ui-select ng-model="grossweight.selected"
+                                       ui-select-focuser
+                                       theme="selectize">
+                                <ui-select-match allow-clear="true" placeholder="Select Gross Weight">{{ $select.selected.GROSSWT }}</ui-select-match>
+                                <ui-select-choices repeat="invoice in ItemList  | unique:'GROSSWT'|filter: $select.search">
+                                    <div>
+                                        <span style="color:forestgreen">{{invoice.GROSSWT}}</span>
+                                    </div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+
+                        <div class="form-group">
+                            <h4 class="tabheading font_11">PCS/Lenght in MTRS</h4>
+                            <ui-select ng-model="pcslengthmtr.selected"
+                                       ui-select-focuser
+                                       theme="selectize">
+                                <ui-select-match allow-clear="true" placeholder="Select Gross Weight">{{ $select.selected.PCS/LENGTHINMTRS }}</ui-select-match>
+                                <ui-select-choices repeat="invoice in ItemList  | unique:'PCS/LENGTHINMTRS'|filter: $select.search">
+                                    <div>
+                                        <span style="color:forestgreen">{{invoice.PCS/LENGTHINMTRS}}</span>
+                                    </div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+
+
+                        <hr style="margin:0px 0px 10px 0px" />
+                        <span class="pull-right">
+                            <button class="btn btn-sm btn-default" ng-click="clearFilter();" type="button">Clear</button>
+                            <button class="btn btn-sm btn-primary" ng-click="applyFilter();" type="button">Search</button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-sm-10 padding5">
+                  
+                    <div style="overflow-x:auto; float:left; width:100%;">
+
+                  
+                            <table class="table-bordered table-condensed table-hover" fixed-header id="ItemTable" style="width:100%; height:400px; font-size:12px;">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align:center"><input type="checkbox" /></th>
+                                        <th>INVOICE NO </th>
+                                        <th>SUB CATEGORY </th>
+                                        <th>COIL/SHEET NO</th>
+                                        <th>INCOMING DATE</th>
+                                        <th>LOT WEIGHT</th>
+                                        <th>LOCATION</th>
+
+                                        <th>GRADE</th>
+                                        <th>FINISH</th>
+                                        <th>THICKNESS (MM)</th>
+                                        <th>WIDTH (MM)</th>
+                                        <th>LENGTH (MM)</th>
+                                        <th>NET WEIGHT (MT)</th>
+                                        <th>GROSS WEIGHT (MT)</th>
+                                        <th>PCS/LENGTH IN MTRS </th>
+                                        <th>REMARKS</th>
+
+                                        <th>Action</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+
+                                    <tr ng-repeat="item in filterList | filter:search">
+                                        @*
+                                            <td> {{item.CONTNO}}</td>
+
+                                            <td> {{item.DESCRIPTION}}</td>
+                                        *@
+                                        <td style="text-align:center"><input type="checkbox" /></td>
+                                        <td> {{item.no}}</td>
+                                        <td> {{item.SUBCATEGORY}}</td>
+                                        <td> {{item.COILSHEETNO}}</td>
+                                        <td> {{item.INCOMINGDATE}}</td>
+                                        <td> {{item.LotWeight}}</td>
+                                        <td> {{item.LOCATION}}</td>
+                                        <td> {{item.GRADE}}</td>
+                                        <td> {{item.FINISH}}</td>
+                                        <td> {{item.THICKNESS}}</td>
+                                        <td> {{item.WIDTH}}</td>
+                                        <td> {{item.LENGTH}}</td>
+                                        <td> {{item.NETWEIGHT}}</td>
+                                        <td> {{item.GROSSWT}}</td>
+                                        <td> {{item.PCS/LENGTHINMTRS}}</td>
+                                        <td> {{item.REMARK}}</td>
+
+                                        <td style="text-align:right;">
+                                            <button type="button" class="editbtn"><a href="" ng-click="showStatusBox(item)">Change Status</a></button>
+                                            <class class="linkseparator" style="margin-top:4px; margin-right:0px"></class>
+                                            <div class="btn-group editcaret">
+                                                <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>
+                                                <ul class="dropdown-menu editdrpdwn" role="menu" style="left:-135px">
+
+                                                    <li><a ng-click="showRemarkBox(item)" class="cursor">Add Remarks</a></li>
+                                                    <li><a ng-click="showAddjustmentBox(item)" class="cursor">Adjustment</a></li>
+                                                    <li><a ng-click="viewInfo(item);" class="cursor">View Info</a></li>
+                                                    @*<li><a ui-sref="Customer.BalanceInventoryViewDetail()" class="cursor">View Detail</a></li>*@
+                                                </ul>
+
+                                            </div>
+                                        </td>
+                                        @*<td>
+                                                <button type="button" class="editbtn" ng-click="GRNDetail(item)">Detail</button>
+                                                <class class="linkseparator" style="margin-top:4px; margin-right:0px">|</class>
+                                                <div class="btn-group editcaret">
+                                                    <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>
+                                                    <ul class="dropdown-menu editdrpdwn" role="menu" style="top:18px">
+                                                        <li><a href="#/Customer/Invoice">Invoice</a></li>
+
+                                                    </ul>
+
+                                                </div>
+                                            </td>*@
+
+                                    </tr>
+
+
+
+
+                                </tbody>
+
+                            </table>
+
+
+                            <!-- ChangeStatusModal -->
+                            <div id="ChangeStatusModal" class="modal fade" role="dialog">
+                                <div class="modal-dialog modal-sm" style="margin-top:100px">
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title">Change Status</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label>Change Status</label>
+                                                <select ng-model="spnStatus" class="form-control">
+                                                    <option>Return</option>
+                                                    <option>Delivered</option>
+                                                    <option>Process</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Remarks</label>
+                                                <textarea ng-model="txtRemarks" class="form-control" style="height:100px"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" ng-click="changeStatus();" class="btn btn-primary">Change</button>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <!-- AddRemarksModal -->
+                            <div id="AddRemarksModal" class="modal fade" role="dialog">
+                                <div class="modal-dialog modal-sm" style="margin-top:100px">
+
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title">Add Remarks</h4>
+                                        </div>
+                                        <div class="modal-body">
+
+                                            <div class="form-group">
+                                                <label>Remarks</label>
+                                                <textarea ng-model="txtAddRemarks" class="form-control" style="height:100px"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" ng-click="addRemark()" class="btn btn-primary">Save</button>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- AddjustmentbtnModal -->
+                            <div id="AddjustmentbtnModal" class="modal fade" role="dialog">
+                                <div class="modal-dialog modal-sm" style="margin-top:100px">
+
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title">Adjustment</h4>
+                                        </div>
+                                        <div class="modal-body">
+
+                                            <div class="form-group">
+                                                <label>NET Wt.</label>
+                                                <input type="number" step="0.01" ng-model="netwt" class="form-control" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Adjustment Wt.</label>
+                                                <input ng-model="adjustmentWt" type="number" step="0.01" class="form-control" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Total NET Wt.</label>
+                                                <input ng-model="totalNetWt" type="number" step="0.01" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" ng-click="updateWt()" class="btn btn-primary">Save</button>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                   
+
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div id="ViewInfoDiv" class="FlexPopup HomeWrapper">
+                <div class="flexheader">
+                    <ul class="list-unstyled submenu InvoiceMenu" style="float:left">
+                        <li><a href="#"><i class="fa fa-history"></i></a></li>
+                        <li><a href="#"><span>Item Detail</span></a></li>
+                    </ul>
+                    <ul class="list-unstyled submenu InvoiceMenu">
+                        <li><a href="#"><i class="fa fa-question-circle"></i></a></li>
+                        <li><a href="javascript:void(0);" ng-click="invoiceclose();" id="invoiceclose"><i class="fa fa-times"></i></a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-4" style="min-height:560px; border-right:1px solid #808080; padding:0px 8px">
+
+
+
+                    <div style="height:600px" class="scrollbar scrollbarAngular">
+                        <div class="card active-sm border-aero padding:5px border-green">
+                            <label class="heading active">
+                                Item Detail
+
+                            </label>
+
+                            <ul>
+
+                                <li>
+                                    <span>Qty (KG)  </span>
+                                    <span class="pull-right">{{NetWeight}}(KG)</span>
+                                </li>
+                                <li>
+                                    <span>INVOICE NO </span>
+                                    <span class="pull-right">{{billNo}}</span>
+                                </li>
+
+                                <li>
+                                    <span>Item Amount  </span>
+                                    <span class="pull-right">{{itemAmountinINR}}</span>
+                                </li>
+
+                                <li>
+                                    <span>Cost/KG  </span>
+                                    <span class="pull-right">{{costPerMTinINR}}</span>
+                                </li>
+
+
+                            </ul>
+                        </div>
+                        <div class="card border-orange">
+                            <label class="heading active">
+                                Expense
+
+                            </label>
+                            <ul ng-repeat="data in expenseData">
+                                <li>
+                                    <span>{{data.supliersName}}  </span>
+                                    <span class="pull-right"> {{data.amount/NetWeight |number : fractionSize}}</span>
+                                </li>
+
+
+                            </ul>
+                        </div>
+                        <div class="card border-orange">
+                            <label class="heading active">
+                                Tax & Duties
+
+                            </label>
+                            <ul>
+                                <li>
+                                    <span>Custom Per KG </span>
+                                    <span class="pull-right"> {{totalCustom |number : fractionSize}}</span>
+                                </li>
+
+
+                            </ul>
+                        </div>
+                        <div class="card border-orange">
+                            <label class="heading active">
+                                UO Expense
+
+                            </label>
+                            <ul ng-repeat="data in taxData">
+                                <li>
+                                    <span>{{data.accountName}}  </span>
+                                    <span class="pull-right"> {{data.credit/NetWeight |number : fractionSize}}</span>
+                                </li>
+
+
+                            </ul>
+                        </div>
+                        <div class="card border-blue">
+                            <ul>
+                                <li>
+                                    <span>
+                                        Total Expense
+                                        <span class="pull-right"><b>{{tatalExpense/NetWeight |number : fractionSize}}</b></span>
+                                    </span>
+                                </li>
+                            </ul>
+                            <ul>
+                                <li>
+                                    <span>
+                                        Total Cost/KG
+                                        <span class="pull-right"><b>{{totalCostPerMT |number : fractionSize}}</b></span>
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        @*
+                                            <ul class="list-unstyled GRNInvoice" ng-repeat="item in taxData">
+                                                <li>
+                                                    <label>{{item.accountName}}  <i class="fa fa-minus"></i></label>
+                                                    <span>{{item.credit}}</span>
+                                                </li>
+
+
+                                            </ul>
+
+                            <h3 class="GRNHeading">Account <small>(Laibility)</small> <span class="badge">20/08/2016</span></h3>
+                            <ul class="list-unstyled GRNInvoice">
+                                <li>
+                                    <label>Vat <i class="fa fa-minus"></i></label>
+                                    <span>&nbsp;</span>
+                                </li>
+                                <li>
+                                    <label>Tax <i class="fa fa-minus"></i></label>
+                                    <span>&nbsp;</span>
+                                </li>
+                                <li>
+                                    <label>O Tax <i class="fa fa-minus"></i></label>
+                                    <span>&nbsp;</span>
+                                </li>
+
+                            </ul>
+                        *@
+
+                    </div>
+                </div>
+
+                <div class="col-sm-8" style="padding:10px">
+                    <table class="table-bordered table-condensed table-hover borderless" style="width:100%; background:#fff; margin-bottom:10px">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Due Date</th>
+                                <th>Original Amount</th>
+                                <th>Open Balance</th>
+                                <th>Payment</th>
+                            </tr>
+                        </thead>
+                        <tbody ng-repeat="data in bill">
+
+                            <tr>
+                                <td ng-bind="data.date | date:'dd MMM yyyy'"></td>
+                                <td ng-bind="data.billDueDate | date:'dd MMM yyyy'"></td>
+
+                                <td>{{data.amount |number : fractionSize}}</td>
+                                <td>{{data.balance |number : fractionSize}}</td>
+                                <td><input type="text" id="abc" /></td>
+                            </tr>
+
+
+                        </tbody>
+                    </table>
+
+                    <div class="card text-right">
+
+                        <div class="pull-right col-sm-7" style="margin-bottom:10px; padding-right:0px">
+                            <label>Total Expense :</label>
+                            <span class="col-sm-3 pull-right" style="padding-right:0px">
+                                <input type="text" class="form-control" />
+                            </span>
+                        </div>
+
+                        <div class="pull-right col-sm-7" style="margin-bottom:10px; padding-right:0px">
+                            <label>Total In :</label>
+                            <span class="col-sm-3 pull-right" style="padding-right:0px">
+                                <input type="text" class="form-control" />
+                            </span>
+                        </div>
+
+                        <div class="pull-right col-sm-7" style="margin-bottom:10px; padding-right:0px">
+                            <label>Total Out :</label>
+                            <span class="col-sm-3 pull-right" style="padding-right:0px">
+                                <input type="text" class="form-control" />
+                            </span>
+                        </div>
+
+                        <div class="pull-right col-sm-7" style="padding-right:0px">
+                            <label>Balance :</label>
+                            <span class="col-sm-3 pull-right" style="padding-right:0px">
+                                <input type="text" class="form-control" />
+                            </span>
+                        </div>
+
+
+                    </div>
+
+                    <h3 class="GRNHeading" style="font-weight:bold; width:100%; padding-right:10px">
+                        Stock Ledger
+
+                        <div class="btn-group pull-right">
+                            <button type="button" class="btn btn-primary btn-sm"><a href="#/Customer/GRNEntry" style="color:#fff">Action</a></button>
+                            <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="caret" style="border-top-color:#fff !important"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#/Customer/Import">Import GRN Entry</a></li>
+
+                            </ul>
+                        </div>
+                    </h3>
+
+                    <table class="table-bordered table-condensed table-hover borderless" style="width:100%; background:#fff">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Particular</th>
+                                <th>Ref. Type</th>
+                                <th>Ref. Id</th>
+                                <th>In Qty</th>
+                                <th>Out Qty</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr>
+                                <td>22/feb/2017</td>
+                                <td>Wages</td>
+                                <td>test</td>
+                                <td>897989</td>
+                                <td>22</td>
+                                <td>22</td>
+                            </tr>
+
+
+                        </tbody>
+                    </table>
+                </div>
+
+
+
+
+            </div>
+
+
+
+
+
+
+        </div>
+
+    </div>

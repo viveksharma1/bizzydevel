@@ -1,0 +1,336 @@
+﻿
+@{
+    ViewBag.Title = "ExciseInvoicePDF";
+    Layout = null;
+}
+
+<div class="FlexPopup" style="display:block" ng-init="model = {}">
+    <div class="flexheader">
+        <ul class="list-unstyled submenu InvoiceMenu" style="float:left">
+            <li><a href="#/Customer/Suppliers"><i class="fa fa-arrow-left" aria-hidden="true"></i></a></li>
+
+
+        </ul>
+        <ul class="list-unstyled submenu InvoiceMenu my">
+            <li><a ui-sref="Customer.PurchaseOrder({enqNo:no,edit:1})" style="font-size:18px"><i class="fa fa-envelope"></i> Send Email</a></li>
+            <li ng-hide="type =='1'"><a ui-sref="Customer.PurchaseOrder({enqNo:no,edit:1})" style="font-size:18px"><i class="fa fa-edit"></i> Edit</a></li>
+            <li ng-hide="type =='2'"><a ui-sref="Customer.Enquiry({email:data.no,edit:1})" style="font-size:18px"><i class="fa fa-edit"></i> Edit</a></li>
+            <li><a href="#" style="font-size:18px"><i class="fa fa-print" ng-click="generatePDF()"></i> Print</a></li>
+            <li><a href="#/Customer/Suppliers" ng-click="goBack()"><i class="fa fa-times"></i></a></li>
+        </ul>
+    </div>
+
+
+
+    <div class="flexcontainer">
+
+        <div id="upperdivId">
+            <div class="page" ng-hide="type =='1'">
+                <table style="border:1px solid #e3e3e3; vertical-align:top;" class="subpage" cellpadding="0" cellspacing="0">
+                    <tr style="vertical-align:top">
+                        <td style="vertical-align:top; height:100px;border-bottom:1px solid #e3e3e3;">
+                            <table>
+                                <tr>
+                                    <td style="border-right:1px solid #e3e3e3; vertical-align:top; padding:5px; width:200px; font-size:12px">
+                                        <p style="margin-bottom:2px">Authenticated by:</p>
+                                        <strong style="padding-bottom:100px">for NEEL RATAN STEEL</strong>
+
+                                        <p style="margin-bottom:20px; padding-top:100px; text-align:center">Proprietor/Authorised Signatory</p>
+                                    </td>
+                                    <td style="border-right:1px solid #e3e3e3; vertical-align:top; padding:5px; text-align:center">
+                                        <h4 style="text-align:center; margin:10px 0px">TAX INVOICE</h4>
+                                        <h5 style="margin:0px">FIRST/SECOND STAGE DEALER'S INVOICE</h5>
+                                        <small>(Under Rule 11 (7) of Central Excise Rules 2002)</small>
+                                        <h1 style="font-size:24px; margin:5px; font-weight:bold;  text-transform:uppercase; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">NEEL RATAN STEEL</h1>
+                                        <p style="margin:0px">Office Add :94/98, Prabhu Shree Ram Mandir Marg, 4th Kumbharwada Lane, Girgaon, Mumbai<br />Phone No. : Fax : <br />Prop : Narsiram Choudhary</p>
+                                    </td>
+                                    <td style="vertical-align:top; text-transform:uppercase; width:250px; font-size:12px; padding:3px 0px;   padding-bottom:20px">
+                                        <p style="margin-bottom:2px; padding:2px 5px">
+                                            Original For Buye
+                                            <em style="width:20px; height:15px; border:1px solid #666; float:right"></em>
+                                        </p>
+                                        <p style="margin-bottom:2px;  padding:2px 5px">
+                                            Duplicate for transporte
+                                            <em style="width:20px; height:15px; border:1px solid #666; float:right"></em>
+                                        </p>
+                                        <p style="margin-bottom:2px;  padding:2px 5px; border-bottom:1px solid #e3e3e3">
+                                            triplicate for assets
+                                            <em style="width:20px; height:15px; border:1px solid #666; float:right"></em>
+                                        </p>
+                                        <p style="padding:2px 5px; margin-bottom:0px">Range : III &nbsp; &nbsp; Division : A</p>
+                                        <p style="padding:2px 5px; margin-bottom:0px; font-size:10px">Range & Div. Add.  &nbsp; &nbsp;: Meher Bidg. Dadiseth Lane, Chowpatty, Mumbai - 7</p>
+                                        <table style="font-size:10px;">
+
+                                            <tr>
+                                                <td style="padding:2px 5px">Commissionerate</td>
+                                                <td style="padding:2px 5px">: Mumbai - 1</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:2px 5px">C.E.Regn No.</td>
+                                                <td style="padding:2px 5px">: &nbsp;</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:2px 5px">ECC Code No.</td>
+                                                <td style="padding:2px 5px">: AFNPC2099FXD001</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:2px 5px">PAN NO.</td>
+                                                <td style="padding:2px 5px">: AFNPC2099F</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr style="vertical-align:top">
+                        <td style="vertical-align:top; height:50px;border-bottom:1px solid #e3e3e3;">
+                            <table style="width:100%; vertical-align:top;" cellpadding="5" cellspacing="5">
+                                <tr>
+                                    <td width="170" style="padding:2px 5px"><strong>INVOICE NO.</strong></td>
+                                    <td width="300" style="padding:2px 5px"><strong>: DL0512</strong></td>
+
+                                    <td width="160" style="padding:2px 5px"><strong>DATE</strong></td>
+                                    <td style="padding:2px 5px"><strong>: 22-Feb-2017</strong></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:2px 5px">Date & Time of Issue</td>
+                                    <td style="padding:2px 5px">: 22-Feb-2017 13:35</td>
+                                    <td style="padding:2px 5px">Mode of Transport</td>
+                                    <td style="padding:2px 5px">: BY ROAD</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:2px 5px">Date & Time of removal</td>
+                                    <td style="padding:2px 5px">: 22-Feb-2017 16:45</td>
+                                    <td style="padding:2px 5px">Vehicle No/Lr No.</td>
+                                    <td style="padding:2px 5px">: DN 09 M 9402</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:2px 5px">Comm. Invoice No.</td>
+                                    <td style="padding:2px 5px" colspan="3">: 512 <span style="margin-left:120px">Date : 22-Feb-2017</span></td>
+
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr style="vertical-align:top">
+                        <td style="vertical-align:top; height:50px;">
+                            <table style="width:100%; vertical-align:top; font-size:12px">
+                                <tr>
+                                    <td style="vertical-align:top; border-right:1px solid #e3e3e3; width:55%">
+                                        <table>
+                                            <tr>
+                                                <td style="padding:2px 5px; width:120px; vertical-align:top">Name & Add. of</td>
+                                                <td style="text-transform:uppercase; padding:2px 5px;"><strong>: Shashwat stainless works</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:2px 5px; vertical-align:top">Consignee</td>
+                                                <td style="text-transform:uppercase; padding:2px 5px 10px 10px">Off. no. 1515, 15th floor, prasaf chamber, tata road no.2, near roxy cinema, opera house, girgaon, mumbai-400004</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:2px 5px; vertical-align:top">Range </td>
+                                                <td>
+                                                    <table style="width:100%">
+                                                        <tr>
+                                                            <td style="padding:2px 5px; vertical-align:top; width:182px">: V</td>
+                                                            <td style="padding:2px 5px; vertical-align:top; width:137px">Divison :</td>
+                                                            <td style="padding:2px 5px; vertical-align:top">A</td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:2px 5px; vertical-align:top">ECC No. </td>
+                                                <td style="vertical-align:top">
+                                                    <table style="width:100%">
+                                                        <tr>
+                                                            <td style="padding:2px 5px; vertical-align:top">: ABYFS6258HED001</td>
+                                                            <td style="padding:2px 5px; vertical-align:top">Comiisionerate :</td>
+                                                            <td style="padding:2px 5px; vertical-align:top">MUMBAI-1</td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:2px 5px;vertical-align:top">Excise Reg. No.</td>
+                                                <td style="text-transform:uppercase; padding:2px 5px">: ABYFS6258HED001</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:2px 5px; vertical-align:top">Consignee VAT TIN</td>
+                                                <td style="text-transform:uppercase; padding:2px 5px">: 27160870532V</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:2px 5px; vertical-align:top">Consignee CST</td>
+                                                <td style="text-transform:uppercase; padding:2px 5px">: 27160870532C</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+
+                                    <td style="vertical-align:top; width:45%">
+                                        <table>
+                                            <tr>
+                                                <td style="padding:2px 5px; width:120px; vertical-align:top">Name & Add. of</td>
+                                                <td style="text-transform:uppercase; padding:2px 5px;"><strong>: Shashwat stainless works</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:2px 5px; vertical-align:top">of Buyer</td>
+                                                <td style="text-transform:uppercase; padding:2px 5px 10px 10px">Off. no. 1515, 15th floor, prasaf chamber, tata road no.2, near roxy cinema, opera house, girgaon, mumbai-400004</td>
+                                            </tr>
+
+                                            <tr>
+                                                <td style="padding:2px 5px; vertical-align:top">ECC No. </td>
+                                                <td style="text-transform:uppercase; padding:2px 5px">
+                                                    : ABYFS6258HED001
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:2px 5px;vertical-align:top">Excise Reg. No.</td>
+                                                <td style="text-transform:uppercase; padding:2px 5px">: ABYFS6258HED001</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:2px 5px; vertical-align:top">Buyer VAT TIN</td>
+                                                <td style="text-transform:uppercase; padding:2px 5px">: 27160870532V</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:2px 5px; vertical-align:top">Buyer CST</td>
+                                                <td style="text-transform:uppercase; padding:2px 5px">: 27160870532C</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+
+                    </tr>
+
+                    <tr style="vertical-align:top">
+                        <td style="vertical-align:top; height:100px">
+                            <table style="vertical-align:top; width:100%; font-size:11px; border-left:none; border-right:none; border-color:rgba(227, 227, 227, 0.44)" border="1">
+                                <tr style="text-align:center; vertical-align:top">
+                                    <td style="padding:3px">Sr No.</td>
+                                    <td style="padding:3px; width:200px">Description of Goods</td>
+                                    <td style="padding:3px">ID Marks & No.</td>
+                                    <td style="padding:3px">Page No. In RG23D</td>
+                                    <td style="padding:3px">Quantity Kgs</td>
+                                    <td style="padding:3px">Rate</td>
+                                    <td style="padding:3px">Tariff No.</td>
+                                    <td style="padding:3px; width:80px">Rate of Duty %</td>
+                                    <td style="padding:0px; font-size:11px; width:300px">
+                                        Durt Per Unit/Total Amtount of Duty
+                                        <table style="vertical-align:top; width:100%; font-size:12px; border-left:none; border-right:none; border-color:rgba(227, 227, 227, 0.44); border-bottom:none; margin-bottom:0px" border="1">
+                                            <tr style="vertical-align:top">
+                                                <td style="padding:3px; width:120px">Excise</td>
+                                                <td style="padding:3px;width:120px">Cess <br />2%</td>
+                                                <td style="padding:3px;width:120px">HCess<br /> 1%</td>
+                                                <td style="padding:3px;width:120px">AddDuty 4%</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td style="padding:3px">Value in Rs. (in figures)</td>
+                                </tr>
+                                <tr style="text-align:center; vertical-align:top">
+                                    <td style="padding:3px;">1</td>
+                                    <td style="padding:3px; text-transform:uppercase">C.R.S.S Sheet/Plates</td>
+                                    <td style="padding:3px">&nbsp;</td>
+                                    <td style="padding:3px">460/460</td>
+                                    <td style="padding:3px; text-align:right">2554.000</td>
+                                    <td style="padding:3px; text-align:right">235.56</td>
+                                    <td style="padding:3px">72199012</td>
+                                    <td style="padding:3px; text-align:right">12.50</td>
+                                    <td style="padding:0px; font-size:11px; width:250px">
+                                        <table style="vertical-align:top; width:100%; font-size:12px; border-left:none; border-right:none; border-color:rgba(227, 227, 227, 0.44); border-top:none; border-bottom:none; margin-bottom:0px" border="1">
+                                            <tr style="vertical-align:top">
+                                                <td style="padding:3px; text-align:right;width:67px">
+                                                    <p style="margin-bottom:2px">23.56266</p>
+                                                    <p style="margin-bottom:2px">60178.88</p>
+                                                </td>
+                                                <td style="padding:3px; text-align:right;width:81px">
+                                                    <p style="margin-bottom:2px">0.0000</p>
+                                                    <p style="margin-bottom:2px">0.00</p>
+                                                </td>
+                                                <td style="padding:3px; text-align:right;width:93px">
+                                                    <p style="margin-bottom:2px">0.0000</p>
+                                                    <p style="margin-bottom:2px">0.00</p>
+                                                </td>
+                                                <td style="padding:3px; text-align:right;width:100px">
+                                                    <p style="margin-bottom:2px">0.0000</p>
+                                                    <p style="margin-bottom:2px">0.00</p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td style="padding:3px; text-align:right">601620.24</td>
+                                </tr>
+
+                                <tr style="text-align:center; vertical-align:top">
+                                    <td style="padding:3px; text-align:left" colspan="4">Total</td>
+                                    <td style="padding:3px; text-align:right">2554.000</td>
+                                    <td style="padding:3px; text-align:right" colspan="3">&nbsp;</td>
+                                    <td style="padding:0px; font-size:11px; width:250px">
+                                        <table style="vertical-align:top; width:100%; font-size:12px; border-left:none; border-right:none; border-color:rgba(227, 227, 227, 0.44); border-top:none; border-bottom:none; margin-bottom:0px" border="1">
+                                            <tr style="vertical-align:top">
+                                                <td style="padding:3px; text-align:right;width:67px">
+                                                    <p style="margin-bottom:2px">60178.88</p>
+
+                                                </td>
+                                                <td style="padding:3px; text-align:right;width:81px">
+                                                    <p style="margin-bottom:2px">0.00</p>
+                                                </td>
+                                                <td style="padding:3px; text-align:right;width:93px">
+                                                    <p style="margin-bottom:2px">0.00</p>
+                                                </td>
+                                                <td style="padding:3px; text-align:right;width:100px">
+                                                    <p style="margin-bottom:2px">0.00</p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td style="padding:3px; text-align:right">601620.24</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr style="vertical-align:top">
+                        <td style="vertical-align:top; padding:5px; font-size:12px">
+                            <table style="width:100%">
+                                <tr style="vertical-align:top">
+                                    <td><strong style="width:130px;">Excise Amount:</strong></td>
+                                    <td style="text-transform:uppercase">sixty thousand one hundred seventy eight and paise eighty eight only</td>
+                                    <td width="100">Freight</td>
+                                    <td style="text-align:right">1020.00</td>
+                                </tr>
+                                <tr style="vertical-align:top">
+                                    <td><strong style="width:130px;">Aed Amount:</strong></td>
+                                    <td style="text-transform:uppercase">only</td>
+                                    <td width="100">VAT@5%</td>
+                                    <td style="text-align:right">30132.00</td>
+                                </tr>
+                                <tr style="vertical-align:top">
+                                    <td><strong style="width:130px;">Coss Amount:</strong></td>
+                                    <td style="text-transform:uppercase">Only</td>
+                                    <td width="100">&nbsp;</td>
+                                    <td style="text-align:right">&nbsp;</td>
+                                </tr>
+                                <tr style="vertical-align:top">
+                                    <td><strong style="width:130px;">Hedge Amount:</strong></td>
+                                    <td style="text-transform:uppercase">Only</td>
+                                    <td width="100">Round Off</td>
+                                    <td style="text-align:right">-0.25</td>
+                                </tr>
+                                <tr style="vertical-align:top">
+                                    <td><strong style="width:130px;">Invoice Total:</strong></td>
+                                    <td style="text-transform:uppercase">six lac thirty two thousand seven hundred seventy two only
+                                    <td width="100" style="border-top:1px solid #e3e3e3; border-bottom:1px solid #e3e3e3"><strong>Invoice Total</strong></td>
+                                    <td style="text-align:right; border-top:1px solid #e3e3e3; border-bottom:1px solid #e3e3e3"><strong>632772.00</strong></td>
+                                </tr>
+                               
+                            </table>
+
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

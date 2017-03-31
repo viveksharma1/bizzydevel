@@ -1,0 +1,495 @@
+﻿
+@{
+    ViewBag.Title = "PdfView";
+    Layout = null;
+}
+
+<div class="FlexPopup" style="display:block" ng-init="model = {}">
+    <div class="flexheader">
+        <ul class="list-unstyled submenu InvoiceMenu" style="float:left">
+            <li><a href="#/Customer/Suppliers"><i class="fa fa-arrow-left" aria-hidden="true"></i></a></li>
+           
+
+        </ul>
+        <ul class="list-unstyled submenu InvoiceMenu my">
+            <li><a ui-sref="Customer.PurchaseOrder({enqNo:no,edit:1})" style="font-size:18px"><i class="fa fa-envelope"></i> Send Email</a></li>
+            <li ng-hide="type =='1'"><a ui-sref="Customer.PurchaseOrder({enqNo:no,edit:1})" style="font-size:18px"><i class="fa fa-edit"></i> Edit</a></li>
+            <li ng-hide="type =='2'"><a ui-sref="Customer.Enquiry({email:data.no,edit:1})" style="font-size:18px"><i class="fa fa-edit"></i> Edit</a></ling-hide="type>
+            <li><a href="#" style="font-size:18px"><i class="fa fa-print" ng-click="generatePDF()"></i> Print</a></li>
+            <li><a href="#/Customer/Suppliers" ng-click="goBack()"><i class="fa fa-times"></i></a></li>
+        </ul>
+    </div>
+
+
+
+    <div class="flexcontainer">
+
+        <div id="upperdivId">
+            <div class="page" ng-hide="type =='1'">
+                <table style="border:1px solid #e3e3e3;" class="subpage" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td style="padding:10px;">
+                            <table style="width:100%">
+                                <tr>
+                                    <td style="vertical-align:middle; width:10%; text-align:center"><img src="../images/logo-black.png" width="100" /></td>
+                                    <td style="text-align:center; width:80%;">
+                                        <h1 style="border-bottom:1px solid #e3e3e3; font-size:28px; font-weight:bold; padding-bottom:10px; text-transform:uppercase; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">{{CompanyName}}</h1>
+                                        <p style="font-size:12px; line-height:20px">
+                                            Office No. 1515, 15th Floor, Plot 1487, Prasad Chamber, Tata Road No. 2, Roxy Cinema, Opera House, Girgaon Mumbai 400 004 <strong><i class="fa fa-circle" style="font-size:8px;"></i> Tel:</strong> +91-22-66151448 / 66109826 / 67496231 <strong><i class="fa fa-circle" style="font-size:8px;"></i> Telefax:</strong> 66159068 <br /> <strong>Email:</strong> shashwatstainless@gmail.com
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center; font-weight:bold;  text-transform:uppercase; font-size:16px">Bill</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">
+                            <table style="width:100%; line-height:20px; font-size:14px">
+                                <tr>
+                                    <td style="width:65%; text-transform:uppercase; padding-right:20%">
+                                        <strong>Consignee :</strong><br />
+                                        <strong>{{suppliersName}}</strong><br />
+                                        <p style="margin-bottom:0px">
+                                            {{suppliersdata1}}
+                                        </p>
+                                        <p>vat tin no: {{taxRegNo}}</p>
+                                    </td>
+                                    <td style="font-weight:bold; text-transform:uppercase; width:45%">
+                                        <p style="margin-bottom:5px">Bill No: {{no}}</p>
+                                        <p style="margin-bottom:0px">Dated : {{date | date: "dd-MMM-yyyy"}}</p>
+                                        <p style="margin-bottom:0px">Due Date : {{billDueDate | date: "dd-MMM-yyyy"}}</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px">
+                            <table width="100%" border="1" cellspacing="10" cellpadding="10" style="text-transform:uppercase; font-size:14px;" ng-init="role = admin">
+                                <thead>
+                                    <tr>
+                                        <th style="width:50px; text-align:center">Sr. No.</th>
+                                        <th style="text-align:center">Description of goods</th>
+                                        <th style="text-align:center">Quantity Net<br /> WT (MT)</th>
+                                        <th style="text-align:center">Unit Price<br /> CIF USD / MT</th>
+                                        <th style="text-align:center">Amount CIF<br /> (USD)</th>
+                                        <th style="text-align:center">Exchange<br /> Rate</th>
+                                        <th ng-hide="role =='2'||role =='1'" style="text-align:center">MiSC<br /> Charges</th>
+                                        <th style="text-align:center">Amount<br /> (INR)</th>
+                                    </tr>
+                                </thead>
+                                <tr ng-repeat="item in itemDetail">
+                                    <td style="text-align:center">{{$index+1}}</td>
+                                    <td style="text-align:center; vertical-align:bottom">
+                                        <strong style="padding-bottom:10px; float:left; width:100%">
+
+                                        </strong>
+                                        {{item.grade}} {{item.finish}} {{item.thickness}}mm {{item.width}}mm {{item.length}}m
+
+                                    </td>
+                                    <td style="text-align:center">
+                                        <p> {{item.netweight}}</p>
+
+
+
+                                    </td>
+                                    <td style="text-align:center">
+                                        <p> {{item.cifrate}}</p>
+
+                                    </td>
+                                    <td style="text-align:center">
+                                        <p>{{item.cifamount}}</p>
+
+                                    </td>
+                                    <td style="text-align:center">
+                                        <p>{{item.exchangeRate}}</p>
+
+                                    </td>
+                                    <td style="text-align:center; vertical-align:bottom" ng-hide="role =='2'||role =='1'">
+                                        <p>{{item.miscCharge}}</p>
+
+                                    </td>
+                                    <td style="text-align:center; vertical-align:bottom" ng-show="role =='2'||role =='1'">
+                                        <p>{{item.adminCharge}}</p>
+
+                                    </td>
+                                    <td style="text-align:center; vertical-align:bottom" ng-hide="role =='2'||role =='1'">
+                                        <p>{{item.charges}}</p>
+
+                                    </td>
+
+                                </tr>
+
+
+                                <tr>
+                                    <th>&nbsp;</th>
+                                    <th style="text-align:center">Total</th>
+                                    <th style="text-align:center">{{totalweight}}</th>
+                                    <th style="text-align:center">&nbsp;</th>
+                                    <th style="text-align:center">&nbsp;</th>
+                                    <th style="text-align:center">&nbsp;</th>
+                                    <th ng-hide="role =='2'||role =='1'" style="text-align:center">&nbsp;</th>
+                                    <th ng-hide="role =='2'||role =='1'" style="text-align:center">{{amount}}</th>
+                                    <th ng-show="role =='2'||role =='1'" style="text-align:center">{{amount}}</th>
+                                </tr>
+
+                            </table>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px 10px; text-transform:uppercase">
+                            <p>for <strong>{{CompanyName}}</strong></p>
+                            <br /><br />
+                            <strong style="margin-bottom:10px; float:left;width:100%">authorised signatory</strong>
+                            <p>Vat Tin No.: 27160870532 v w.e.f. 14.09.2011</p>
+                            <p>vat tin no.: 27160870532 w.e.f. 14.09.2011</p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+
+
+
+
+
+            <div id="upperdivId">
+                <div class="page" ng-hide="type =='2'">
+                    <table style="border:1px solid #e3e3e3;" class="subpage" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td style="padding:10px;">
+                                <table style="width:100%">
+                                    <tr>
+                                        <td style="vertical-align:middle; width:10%; text-align:center"><img src="../images/logo-black.png" width="100" /></td>
+                                        <td style="text-align:center; width:80%;">
+                                            <h1 style="border-bottom:1px solid #e3e3e3; font-size:28px; font-weight:bold; padding-bottom:10px; text-transform:uppercase; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">{{CompanyName}}</h1>
+                                            <p style="font-size:12px; line-height:20px">
+                                                Office No. 1515, 15th Floor, Plot 1487, Prasad Chamber, Tata Road No. 2, Roxy Cinema, Opera House, Girgaon Mumbai 400 004 <strong><i class="fa fa-circle" style="font-size:8px;"></i> Tel:</strong> +91-22-66151448 / 66109826 / 67496231 <strong><i class="fa fa-circle" style="font-size:8px;"></i> Telefax:</strong> 66159068 <br /> <strong>Email:</strong> shashwatstainless@gmail.com
+                                            </p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center; font-weight:bold;  text-transform:uppercase; font-size:16px">Enquiry</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:10px;">
+                                <table style="width:100%; line-height:20px; font-size:14px">
+                                    <tr>
+                                        <td style="width:65%; text-transform:uppercase; padding-right:20%">
+                                            <strong>Consignee :</strong><br />
+                                            <strong>{{suppliersName}}</strong><br />
+                                            <p style="margin-bottom:0px">
+                                                {{suppliersdata1}}
+                                            </p>
+                                            <p>vat tin no: {{taxRegNo}}</p>
+                                        </td>
+                                        <td style="font-weight:bold; text-transform:uppercase; width:45%">
+                                            <p style="margin-bottom:5px">Enquiry No: {{no}}</p>
+                                            <p style="margin-bottom:0px">Date : {{date}}</p>
+                                            <p style="margin-bottom:0px">Due Date : {{billDueDate}}</p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:10px">
+                                <table width="100%" border="1" cellspacing="10" cellpadding="10" style="text-transform:uppercase; font-size:14px;" ng-init="role = admin">
+                                    <thead>
+                                        <tr>
+                                            <th>Grade</th>
+                                            <th>Finish</th>
+                                            <th>Thickness (MM)</th>
+                                            <th>Width (MM)</th>
+                                            <th>Length</th>
+                                            <th>Net Weight (MT)</th>
+                                            <th>Gross Weight (MT)</th>
+                                            <th>Sheets NOS</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tr ng-repeat="item in itemDetail">
+                                        <td>{{item.grade}}</td>
+                                        <td>{{item.finish}}</td>
+                                        <td>{{item.thickness}}</td>
+                                        <td>{{item.width}}</td>
+                                        <td>{{item.length}}</td>
+                                        <td>{{item.netweight}}</td>
+                                        <td>{{item.grossweight}}</td>
+                                        <td>{{item.sheetNo}}</td>
+
+
+                                    </tr>
+
+
+                                </table>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:10px 10px; text-transform:uppercase">
+                                <p>for <strong>{{CompanyName}}</strong></p>
+                                <br /><br />
+                                <strong style="margin-bottom:10px; float:left;width:100%">authorised signatory</strong>
+                                <p>Vat Tin No.: 27160870532 v w.e.f. 14.09.2011</p>
+                                <p>vat tin no.: 27160870532 w.e.f. 14.09.2011</p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+            @*
+                <div class="page">
+                    <table style="border:1px solid #e3e3e3;" class="subpage" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td style="padding:10px;">
+                                <table style="width:100%">
+                                    <tr>
+                                        <td style="vertical-align:middle; width:20%; text-align:center"><img src="../images/logo-black.png" width="100" /></td>
+                                        <td style="text-align:center; width:80%;">
+                                            <h1 style="border-bottom:1px solid #e3e3e3; font-size:28px; font-weight:bold; padding-bottom:10px; text-transform:uppercase; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">Shashwat Stainless Works</h1>
+                                            <p style="font-size:13px; line-height:20px">
+                                                Office No. 1515, 15th Floor, Plot 1487, Prasad Chamber, Tata Road No. 2, Roxy Cinema, Opera House, Girgaon Mumbai 400 004 <strong><i class="fa fa-circle" style="font-size:8px;"></i> Tel:</strong> +91-22-66151448 / 66109826 / 67496231 <strong><i class="fa fa-circle" style="font-size:8px;"></i> Telefax:</strong> 66159068 <br /> <strong>Email:</strong> shashwatstainless@gmail.com
+                                            </p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center; font-weight:bold; text-decoration:underline; text-transform:uppercase; font-size:16px">Tax Invoice</td>
+                        </tr>
+
+                        <tr>
+                            <td style="padding:10px">
+                                <table border="1" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td style="width:40%; padding:5px; line-height:20px; font-size:15px;">
+                                            Customer Details<br/>
+                                            <div style="text-transform:uppercase">
+                                                <strong>Nandishwar steel</strong>
+                                                <p>9 dhobi bldg, 51,m.g mahimtura marg, 3rd kumharwaa, mumbai -400004</p>
+                                                <br/>
+                                                <p>cst tin no.: 27980286820c</p>
+                                                <p>vat tin no.: 27980286820v</p>
+                                            </div>
+                                        </td>
+                                        <td  style="width:60%; font-size:15px">
+                                            <table style="width:100%">
+                                                <tr>
+                                                    <td style="width:50%; padding:5px; line-height:20px; border-bottom:1px solid #000;">Invice No: <strong>16-17/0025</strong></td>
+                                                    <td style="width:50%; padding:5px; line-height:20px; border-bottom:1px solid #000;">Date: <strong>19-Aug-2016</strong></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width:50%; padding:5px; line-height:20px; border-bottom:1px solid #000;">Challan No: <strong>16-17/0025</strong></td>
+                                                    <td style="width:50%; padding:5px; line-height:20px; border-bottom:1px solid #000;">Date: <strong>19-Aug-2016</strong></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2"  style="padding:5px; line-height:20px; border-bottom:1px solid #000;">Order No: <strong>-</strong></td>
+
+                                                </tr>
+                                                <tr>
+                                                    <td style="width:50%; padding:5px; line-height:20px; border-bottom:1px solid #000;">L.R No: <strong>-</strong></td>
+                                                    <td style="width:50%; padding:5px; line-height:20px; border-bottom:1px solid #000;">Date: <strong>19-Aug-2016</strong></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2" style="padding:5px; line-height:20px; border-bottom:1px solid #000;">Vehicle No: <strong style="text-transform:uppercase">MH-46-F-647</strong></td>
+
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2" style="padding:5px; line-height:20px; ">Transporter Name: <strong style="text-transform:uppercase">-</strong></td>
+
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:10px 10px 0px 10px">
+                                <table width="100%" border="1" cellspacing="10" cellpadding="10" style="text-transform:uppercase; font-size:14px; height:400px">
+                                    <tr>
+                                        <th style="width:50px; text-align:center; height:30px">Sr. No.</th>
+                                        <th style="text-align:center; height:30px">Particulars</th>
+                                        <th style="text-align:center; height:30px">Quantity</th>
+                                        <th style="text-align:center; height:30px">Rate</th>
+                                        <th style="text-align:center; height:30px">Per</th>
+                                        <th style="text-align:center; height:30px">Amount</th>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:center;border-bottom-color:#fff; vertical-align:top">1</td>
+                                        <td style="vertical-align:top;border-bottom-color:#fff;">
+                                            <strong style="padding:5px; float:left; width:100%">
+                                                Nickel alloys sheet/plate
+                                            </strong>
+
+                                        </td>
+                                        <td style="text-align:right;border-bottom-color:#fff; vertical-align:top; padding:5px;">
+                                            <strong>626 kgs</strong>
+                                        </td>
+                                        <td style="text-align:right;border-bottom-color:#fff; vertical-align:top; padding:5px;">
+                                            <strong>610.98</strong>
+                                        </td>
+                                        <td style="text-align:right;border-bottom-color:#fff; vertical-align:top; padding:5px;">
+                                          <strong>Kgs</strong>
+                                        </td>
+                                        <td style="text-align:right;border-bottom-color:#fff; vertical-align:top; padding:5px;">
+                                           <strong>3,82,473.48</strong>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:center;border-bottom-color:#fff; vertical-align:top">&nbsp;</td>
+                                        <td style="vertical-align:top;border-bottom-color:#fff; text-align:right">
+                                            <strong style="padding:5px; float:left; width:100%; font-style:italic">
+                                                &nbsp;
+                                            </strong>
+
+                                        </td>
+                                        <td style="text-align:right;border-bottom-color:#fff; vertical-align:top; padding:5px;">
+                                            <strong>&nbsp;</strong>
+                                        </td>
+                                        <td style="text-align:right;border-bottom-color:#fff; vertical-align:top; padding:5px;">
+                                            <strong>&nbsp;</strong>
+                                        </td>
+                                        <td style="text-align:right;border-bottom-color:#fff; vertical-align:top; padding:5px;">
+                                            <strong>&nbsp;</strong>
+                                        </td>
+                                        <td style="text-align:right; vertical-align:top; padding:5px; border-top:1px solid #000; height:30px">
+                                            <strong>3,82,473.48</strong>
+                                        </td>
+
+                                    </tr>
+
+                                    <tr>
+                                        <td style="text-align:center;border-bottom-color:#fff; vertical-align:top">&nbsp;</td>
+                                        <td style="vertical-align:top;border-bottom-color:#fff; text-align:right">
+                                            <strong style="padding:5px; float:left; width:100%; font-style:italic">
+                                                VAT 5%
+                                            </strong>
+
+                                        </td>
+                                        <td style="text-align:right;border-bottom-color:#fff; vertical-align:top; padding:5px;">
+                                            <strong>&nbsp;</strong>
+                                        </td>
+                                        <td style="text-align:right;border-bottom-color:#fff; vertical-align:top; padding:5px;">
+                                            <strong>5%</strong>
+                                        </td>
+                                        <td style="text-align:right;border-bottom-color:#fff; vertical-align:top; padding:5px;">
+                                            <strong>&nbsp;</strong>
+                                        </td>
+                                        <td style="text-align:right;border-bottom-color:#fff; vertical-align:top; padding:5px;">
+                                            <strong>19,123,473.67</strong>
+                                        </td>
+
+                                    </tr>
+
+                                    <tr>
+                                        <td style="text-align:center;border-bottom-color:#fff; vertical-align:top">&nbsp;</td>
+                                        <td style="vertical-align:top;border-bottom-color:#fff; text-align:right">
+                                            <strong style="padding:5px; float:left; width:100%; font-style:italic">
+                                                Round off
+                                            </strong>
+
+                                        </td>
+                                        <td style="text-align:right;border-bottom-color:#fff; vertical-align:top; padding:5px;">
+                                            <strong>&nbsp;</strong>
+                                        </td>
+                                        <td style="text-align:right;border-bottom-color:#fff; vertical-align:top; padding:5px;">
+                                            <strong>&nbsp;</strong>
+                                        </td>
+                                        <td style="text-align:right;border-bottom-color:#fff; vertical-align:top; padding:5px;">
+                                            <strong>&nbsp;</strong>
+                                        </td>
+                                        <td style="text-align:right;border-bottom-color:#fff; vertical-align:top; padding:5px;">
+                                            <strong>(-)0.15</strong>
+                                        </td>
+
+                                    </tr>
+
+
+                                    <tr>
+                                        <th style="border-top:1px solid #000; height:30px">&nbsp;</th>
+                                        <th style="text-align:right; border-top:1px solid #000; height:30px">Total</th>
+                                        <th style="text-align:right; border-top:1px solid #000; height:30px"><strong>626 Kgs</strong></th>
+                                        <th style="text-align:right; border-top:1px solid #000; height:30px">&nbsp;</th>
+                                        <th style="text-align:right; border-top:1px solid #000; height:30px">&nbsp;</th>
+                                        <th style="text-align:right; border-top:1px solid #000; height:30px">4,01,597.00</th>
+                                    </tr>
+
+                                </table>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="padding:5px; font-size:13px;">
+
+                                <p style="width:98.8%; text-transform:capitalize; font-weight:bold; margin:0px 5px; padding:5px; border:1px solid #000">
+                                    Rupees Four lakh one thousand five hundred ninety seven only
+                                </p>
+                                <p style="width:98.8%; text-transform:capitalize; margin:0px 5px; padding:5px; border:1px solid #000; border-top:none">
+                                    Payment terms: <strong>30 Days</strong>
+                                </p>
+
+                                <p style="width:98.8%; text-transform:capitalize; margin:0px 5px; padding:5px; border:1px solid #000; border-top:none">
+                                    Sales under form: <strong>Not applicable</strong>
+                                </p>
+                                <p style="width:98.8%; text-transform:capitalize; margin:0px 5px; padding:5px; border:1px solid #000; text-transform:uppercase; border-top:none">
+                                    Vat Tin No.: <strong>27160870532V  W.E.F. 14.9.2011</strong> &nbsp; CST TIN NO.: <strong>27160870532C w.e.f. 14.9.2011</strong> &nbsp; P.A.N: ABYFS6258H
+                                </p>
+                                <p style="width:98.8%; text-transform:capitalize; margin:0px 5px; padding:5px; border:1px solid #000; border-top:none; text-align:right">
+                                    <strong>E.& O.E</strong>
+                                </p>
+
+
+                                <table>
+                                    <tr>
+                                        <td style="width:50%; height:180px;">
+                                            <p style="border-right:none; float:left; font-size:12px; margin:0px 0px 0px 5px; padding:5px; border:1px solid #000; border-top:none;">
+                                                1.) We are not responsible for anything after the goods leave our godown.<br />
+                                                2.) Interest at the rate of 24% P.A. will be charged in case Payment is delayed more than agreed.<br />
+                                                3.) Goods once sold will not be taken back.<br />
+                                                4.) Payment by Cross Cheque is requested.<br />
+                                                5.) Subject to Mumbai Jurisdiction.<br />
+
+                                                <strong style="float:left; margin-top:50px;">Checked By ________________________________</strong>
+                                            </p>
+                                        </td>
+                                        <td style="width:50%; height:180px;">
+                                        <p style="font-size:12px; float:left; margin:0px 5px 0px 0px; padding:5px; border:1px solid #000; border-top:none;">
+                                            'I/We hereby certify that my/our registration certification under the Maharashtra Value Added Tax Act, 2002 is in force on the date on which sale of goods specified in this tax invoice is made by me/us and that the transaction of sale covered by this Tax invoice has been effected by me/us and it shall be accounted for in the turnover of sales while filing my return and the due tax. If any payable on the sale has been paid or shall be paid.<br />
+
+                                            <strong style="float:right">For SHASHWAT STAINLESS WORKS</strong><br />
+                                            <em style="float:right; margin-top:30px; font-size:14px">Signature</em>
+                                        </p>
+                            </td>
+                            </tr>
+                            </table>
+
+
+
+                            </td>
+                        </tr>
+
+                    </table>
+
+                    </div>
+                    </div>
+            *@
+
+
+        </div>
+    </div>
+</div>
+
+
+
