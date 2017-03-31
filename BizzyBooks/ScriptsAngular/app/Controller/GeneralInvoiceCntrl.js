@@ -133,5 +133,76 @@
             //$scope.ItemCount = response.data.length;
         });
     }
+   
+    //select line item
+
+    function sumItemTable() {
+       
+        var totalQty = 0;
+        var totalAmount = 0;
+        var totalItem = $scope.filterList.length;
+        for (var i = 0; i < $scope.filterList.length; i++) {
+            totalQty += Number($scope.filterList[i].itemQty);
+            totalAmount += Number($scope.filterList[i].itemAmount);
+        }
+        $scope.totalQty = totalQty.toFixed(2);
+        $scope.totalAmount = totalAmount.toFixed(2);
+        $scope.totalItem = totalAmount.totalItem
+
+    }
+
+    $scope.applyRate = function (rate) {
+        if (rate == 0) {
+            $scope.itemRate = '';
+        }
+        if ($scope.itemCart.length > 0) {
+          
+            for (var i = 0; i < $scope.itemCart.length; i++) {
+                $scope.itemCart[i].itemRate = rate
+                $scope.itemCart[i].itemAmount = rate * Number($scope.itemCart[i].NETWEIGHT)
+
+            }
+            $scope.filterList = $scope.itemCart;
+            sumItemTable();
+        }
+        else {
+            showSuccessToast("Please Select Item");
+        }
+       
+
+    }
+
+   
+    $scope.itemCart = [];
+    $scope.selectAllLineItem = function (selectAllItem,allItemData) {
+        if (selectAllItem == true) {
+            $scope.itemCart = allItemData;
+            $scope.selectItem = true;
+            console.log($scope.itemCart)
+        }
+        if (selectAllItem == false) {
+            $scope.selectItem = false;
+            $scope.itemCart = '';
+           
+        }
+
+    }
+    $scope.selectLineItem = function (selectItem,id,itemData) {
+        if (selectItem == true) {
+            $scope.itemCart.push(itemData);
+            console.log($scope.itemCart)
+        }
+        if (selectItem == false) {
+            for (var i = 0; i < $scope.itemCart.length; i++) {
+                if($scope.itemCart[i].id == id )
+                    $scope.itemCart.splice(i, 1)
+
+            }
+
+            console.log($scope.itemCart);
+        }
+
+    }
+
 
 }]);
