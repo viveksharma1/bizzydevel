@@ -312,19 +312,17 @@
                                     <h3>Sales</h3>
                                     <div class="form-group">
                                         <h4 class="tabheading font_11">Rate</h4>
-                                        <input type="text" class="form-control" />
+                                        <input type="text" ng-model="itemRate"class="form-control" />
                                     </div>
-                                    <div class="form-group">
-                                        <h4 class="tabheading font_11">Amount</h4>
-                                        <input type="text" class="form-control" />
-                                    </div>
+                                   
                                     <div class="form-group" style="margin-top:5px">
                                         <label><input type="checkbox" /> All Qty</label>
                                     </div>
                                     <hr style="margin:0px 0px 10px 0px" />
                                     <span class="pull-right">
-                                        <button class="btn btn-sm btn-default" type="button">Clear</button>
-                                        <button class="btn btn-sm btn-primary" type="button">Add</button>
+                                        <button class="btn btn-sm btn-default" ng-click="applyRate('0')" type="button">Clear</button>
+                                        <button class="btn btn-sm btn-primary" ng-click="applyRate(itemRate)"
+                                                type="button">Add</button>
                                     </span>
                                 </div>
 
@@ -534,15 +532,15 @@
                                         <th class="tablepadding lightblue">Stock</th>
                                         <td class="tablepadding">
                                             <strong>Total Item :</strong>
-                                            <span class="text-primary">12</span>
+                                            <span class="text-primary">{{totalItem}}</span>
                                         </td>
                                         <td class="tablepadding">
                                             <strong>Total Qty :</strong>
-                                            <span class="text-primary">3</span>
+                                            <span class="text-primary">{{totalQty}}</span>
                                         </td>
                                         <td class="tablepadding">
                                             <strong>Total Amount :</strong>
-                                            <span class="text-primary">2000</span>
+                                            <span class="text-primary">{{totalAmount}}</span>
                                         </td>
                                         <td style="text-align:right" class="tablepadding">
                                             <button class="btn btn-xs btn-warning" style="margin-right:5px">View</button>
@@ -556,7 +554,7 @@
                                     <thead>
 
                                         <tr style="background:#F0EEEE" >
-                                            <th style="text-align:center"><input type="checkbox" /></th>
+                                            <th style="text-align:center" ><input type="checkbox" ng-click="selectAllLineItem(selectAllItem,filterList)" ng-model="selectAllItem"/></th>
                                             <th style="text-align:center">Inv.No</th>
                                             <th style="text-align:center">Category</th>
                                             <th style="text-align:center">Sheet No.</th>
@@ -580,7 +578,7 @@
                                     </thead>
                                     <tbody>
                                         <tr ng-repeat="item in filterList | filter:search">
-                                            <td style="text-align:center"><input type="checkbox" /></td>
+                                            <td style="text-align:center"><input  ng-model="selectItem" ng-click="selectLineItem(selectItem,item.id,item)"type="checkbox" /></td>
                                             <td> {{item.no}}</td>
                                             <td> {{item.SUBCATEGORY}}</td>
                                             <td> {{item.COILSHEETNO}}</td>
@@ -596,9 +594,10 @@
                                             <td> {{item.GROSSWT}}</td>
                                             <td> {{item.PCS/LENGTHINMTRS}}</td>
                                             <td> {{item.REMARK}}</td>
-                                            <td class="Count" style="text-align:center"><input type="text" class="form-control text-center" value="2" /></td>
-                                            <td style="text-align:right"><input type="text" class="form-control text-right" value="200" /></td>
-                                            <td style="text-align:right"><input type="text" class="form-control text-right" value="2000" /></td>
+                                            <td style="text-align:right"><input  type="text" ng-model="item.itemQty "  ng-init="item.itemQty = item.NETWEIGHT"
+                                                                                class="form-control text-right" /></td>
+                                            <td style="text-align:right"><input type="text" ng-model="item.itemRate"class="form-control text-right"  /></td>
+                                            <td style="text-align:right"><input type="text" ng-model="item.itemAmount"class="form-control text-right"  /></td>
                                         </tr>
                                        
 
