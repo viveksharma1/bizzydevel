@@ -17,6 +17,8 @@ namespace Restaurant.Controllers
         public ActionResult Home()
         {
             return View();
+            //Test
+
         }
 
         //public ActionResult Index()
