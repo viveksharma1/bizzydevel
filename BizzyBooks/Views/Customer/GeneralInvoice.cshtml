@@ -543,9 +543,9 @@
                                             <span class="text-primary">{{totalAmount}}</span>
                                         </td>
                                         <td style="text-align:right" class="tablepadding">
-                                            <button class="btn btn-xs btn-warning" style="margin-right:5px">View</button>
+                                            <button class="btn btn-xs btn-warning"  ng-click="showItemCart()"style="margin-right:5px">View</button>
                                             <button class="btn btn-xs btn-danger" style="margin-right:5px">Remove</button>
-                                            <button class="btn btn-xs btn-primary">Add</button>
+                                            <button class="btn btn-xs btn-primary" ng-click="addItemToInvoice()" >Add</button>
                                         </td>
                                     </tr>
 
@@ -597,7 +597,7 @@
                                             <td style="text-align:right"><input  type="text" ng-model="item.itemQty "  ng-init="item.itemQty = item.NETWEIGHT"
                                                                                 class="form-control text-right" /></td>
                                             <td style="text-align:right"><input type="text" ng-model="item.itemRate"class="form-control text-right"  /></td>
-                                            <td style="text-align:right"><input type="text" ng-model="item.itemAmount"class="form-control text-right"  /></td>
+                                            <td style="text-align:right"><input type="text" ng-model="item.itemAmount = item.itemRate*item.itemQty"class="form-control text-right"  /></td>
                                         </tr>
                                        
 
@@ -650,13 +650,13 @@
                 <table class="table-bordered table-condensed table-hover table" fixed-header id="ItemTable" style="height:180px">
                     <thead>
 
-                        <tr>
+                        <tr >
                             <th style="text-align:center">Coil/Sheet No.</th>
                             <th>Sub Category</th>
                             <th style="text-align:center">Lot WT</th>
                             <th style="text-align:center">Location</th>
                             <th style="text-align:center">Grade/Finish</th>
-                            <th style="text-align:center">L W T</th>
+                          
                             <th style="text-align:center">Net WT</th>
                             <th style="text-align:center">PCS</th>
                             <th style="text-align:center">Sale Qty</th>
@@ -672,19 +672,28 @@
                     <tbody>
 
 
-                        <tr>
-                            <td class="Count" style="text-align:center">700914A14</td>
-                            <td class="Count">Prime</td>
-                            <td class="Count" style="text-align:center">144.291 M.T.</td>
-                            <td class="Count" style="text-align:center">574</td>
-                            <td class="Count" style="text-align:center">430/NO.4</td>
-                            <td class="Count" style="text-align:center">2500 1250 0.80</td>
-                            <td class="Count" style="text-align:center">1680.00</td>
-                            <td class="Count" style="text-align:center">&nbsp;</td>
-                            <td class="Count" style="text-align:center">2</td>
-                            <td class="Count" style="text-align:right">2000</td>
-                            <td class="Count" style="text-align:right">2000</td>
-                            <td class="text-center Count" value="0.00"><a class="edit" title="Edit"> <i class="fa fa-times-circle cursor RemoveTR" style="font-size:16px" ng-click="remove($index)"></i></a></td>
+                        <tr ng-repeat="item in itemTable">
+                           
+                            <td> {{item.COILSHEETNO}}</td>
+                            <td> {{item.SUBCATEGORY}}</td>
+                          
+                            <td> {{item.LotWeight}}</td>
+                            <td> {{item.LOCATION}}</td>
+                            <td> {{item.GRADE}} {{item.FINISH}}</td>
+                           
+                           
+                            <td> {{item.NETWEIGHT}}</td>
+                          
+                            <td> {{item.PCS/LENGTHINMTRS}}</td>
+                         
+                            <td style="text-align:right">
+                                {{item.itemQty}}
+                                       
+                            </td>
+                            <td style="text-align:right">{{item.itemRate}}</td>
+                            <td style="text-align:right">{{item.itemAmount}}</td>
+                            <td style="text-align:right"> &nbsp;</td>
+                       <td class="text-center Count" value="0.00"><a class="edit" title="Edit"> <i class="fa fa-times-circle cursor RemoveTR" style="font-size:16px" ng-click="removeItemTable($index)"></i></a></td>
                         </tr>
 
 
@@ -692,17 +701,17 @@
 
                     <tfoot>
                         <tr style="background:#F0EEEE">
-                            <th style="text-align:center">Coil/Sheet No.</th>
-                            <th>Sub Category</th>
-                            <th style="text-align:center">Lot WT</th>
-                            <th style="text-align:center">Location</th>
-                            <th style="text-align:center">Grade/Finish</th>
-                            <th style="text-align:center">L W T</th>
-                            <th style="text-align:center">Net WT</th>
-                            <th style="text-align:center">PCS</th>
-                            <th style="text-align:center">Sale Qty</th>
-                            <th style="text-align:right">Rate</th>
-                            <th style="text-align:right">AMOUNT(&#8377;)</th>
+                            <th style="text-align:center">&nbsp;</th>
+                            <th style="text-align:center">&nbsp;</th>
+                            <th style="text-align:center">&nbsp;</th>
+                            <th style="text-align:center">&nbsp;</th>
+                            <th style="text-align:center">&nbsp;</th>
+                          
+                            <th style="text-align:center">{{totalweight}}</th>
+                            <th style="text-align:center">&nbsp;</th>
+                            <th style="text-align:center">{{totalweight}}</th>
+                            <th style="text-align:right">&nbsp;</th>
+                            <th style="text-align:right">{{totalAmount}}(&#8377;)</th>
                             <th style="width:50px">&nbsp;</th>
 
                         </tr>

@@ -136,18 +136,23 @@
    
     //select line item
 
-    function sumItemTable() {
+    function sumItemTable(data) {
        
         var totalQty = 0;
         var totalAmount = 0;
-        var totalItem = $scope.filterList.length;
-        for (var i = 0; i < $scope.filterList.length; i++) {
-            totalQty += Number($scope.filterList[i].itemQty);
-            totalAmount += Number($scope.filterList[i].itemAmount);
+        var totalItem = data.length;
+        var totalweight = 0;
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].itemQty && data[i].itemAmount) {
+                totalQty += Number(data[i].itemQty);
+                totalAmount += Number(data[i].itemAmount);
+                totalweight += Number(data[i].itemQty);
+            }
         }
         $scope.totalQty = totalQty.toFixed(2);
         $scope.totalAmount = totalAmount.toFixed(2);
-        $scope.totalItem = totalAmount.totalItem
+        $scope.totalItem = totalAmount.totalItem;
+        $scope.totalweight = totalweight.toFixed(2);
 
     }
 
@@ -163,7 +168,7 @@
 
             }
             $scope.filterList = $scope.itemCart;
-            sumItemTable();
+            sumItemTable($scope.filterList);
         }
         else {
             showSuccessToast("Please Select Item");
@@ -174,15 +179,18 @@
 
    
     $scope.itemCart = [];
+    $scope.itemTable = [];
     $scope.selectAllLineItem = function (selectAllItem,allItemData) {
         if (selectAllItem == true) {
             $scope.itemCart = allItemData;
             $scope.selectItem = true;
-            console.log($scope.itemCart)
+            sumItemTable($scope.itemCart);
+           
         }
         if (selectAllItem == false) {
             $scope.selectItem = false;
             $scope.itemCart = '';
+            sumItemTable($scope.itemCart);
            
         }
 
@@ -190,7 +198,8 @@
     $scope.selectLineItem = function (selectItem,id,itemData) {
         if (selectItem == true) {
             $scope.itemCart.push(itemData);
-            console.log($scope.itemCart)
+            sumItemTable($scope.itemCart);
+            console.log($scope.itemCart);
         }
         if (selectItem == false) {
             for (var i = 0; i < $scope.itemCart.length; i++) {
@@ -198,10 +207,26 @@
                     $scope.itemCart.splice(i, 1)
 
             }
-
-            console.log($scope.itemCart);
+            sumItemTable($scope.itemCart);
+           
         }
+        console.log($scope.itemCart);
 
+    }
+    $scope.showItemCart = function () {
+        $scope.filterList = $scope.itemCart;
+        sumItemTable($scope.itemCart);
+    }
+
+    $scope.addItemToInvoice = function () {
+        $scope.itemTable = $scope.itemCart
+        sumItemTable($scope.itemTable);
+        $('#AddInventoryModal').modal('hide');
+        console.log($scope.itemTable);
+    }
+    $scope.removeItemTable = function (index) {
+        $scope.itemTable.splice(index, 1);
+        sumItemTable($scope.itemTable);
     }
 
 
