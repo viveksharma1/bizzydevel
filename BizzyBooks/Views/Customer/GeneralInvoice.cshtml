@@ -61,9 +61,9 @@
                 <div class="col-sm-8 padding">
                     <label>Type  :</label>
                     <div class="btn-group btnhover">
-                        <button type="button" class="btn btn-xs active btn-default">Tax</button>
-                        <button type="button" class="btn btn-xs  btn-default">Excise</button>
-                        <button type="button" class="btn btn-xs  btn-default">Non Excise</button>
+                        <button ng-click="setInvoiceType('Tax')" type="button" class="btn btn-xs active btn-default">Tax</button>
+                        <button ng-click="setInvoiceType('Excise')" type="button" class="btn btn-xs  btn-default">Excise</button>
+                        <button ng-click="setInvoiceType('Non Excise')" type="button" class="btn btn-xs  btn-default">Non Excise</button>
                     </div>
                 </div>
 
@@ -75,11 +75,11 @@
                     <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
                                ui-select-focuser
                                theme="selectize">
-                        <ui-select-match placeholder="Select Suppliers">{{ $select.selected.company }}</ui-select-match>
+                        <ui-select-match placeholder="Select Customer">{{ $select.selected.company }}</ui-select-match>
 
                         <ui-select-choices repeat="person in supliers  | filter: $select.search">
                             <div>
-                                <span ng-model="supplier1" ng-bind-html="person.company | highlight: $select.search"></span>
+                                <span ng-bind-html="person.company | highlight: $select.search"></span>
                             </div>
 
 
@@ -88,11 +88,11 @@
                     <div class="col-sm-6" style="padding-left:0px">
                         <h4 class="tabheading font_11">Shipping address</h4>
 
-                        <textarea class="form-control" style="height:88px"></textarea>
+                        <textarea class="form-control" ng-model="shippingAddress" style="height:88px"></textarea>
 
 
                         <h4 class="tabheading font_11">Interest Rate</h4>
-                        <input type="text" class="form-control" />
+                        <input type="number" step="0.01" ng-model="intRate" class="form-control" />
 
                     </div>
                     <div class="col-sm-6" style="padding:0px">
@@ -100,9 +100,9 @@
                         <input type="text" ng-model="email" class="form-control" />
 
                         <h4 class="tabheading font_11">Contact</h4>
-                        <input type="text" class="form-control" />
+                        <input type="text" ng-model="contactNo" class="form-control" />
                         <h4 class="tabheading font_11">Mode of Transport</h4>
-                        <select class="form-control">
+                        <select ng-model="modeTransport" class="form-control">
                             <option>Road</option>
                             <option>Sea</option>
                             <option>Air</option>
@@ -122,13 +122,12 @@
                 <div class="col-sm-8" style="padding:0px">
                     <label>Customer Type:</label>
                     <div class="btn-group btnhover">
-                        <button type="button" class="btn btn-xs active btn-default">Consignee</button>
-                        <button type="button" class="btn btn-xs  btn-default">Buyer</button>
-
+                        <button ng-click="setCustomerType('Consignee')" type="button" class="btn btn-xs active btn-default">Consignee</button>
+                        <button ng-click="setCustomerType('Buyer')" type="button" class="btn btn-xs  btn-default">Buyer</button>
                     </div>
                 </div>
                 <h4 class="tabheading font_11 pull-left" style="width:100%; ">Sales Ledger <span class="pull-right text-primary"><i class="fa fa-rupee"></i> 2,30,000</span></h4>
-                <ui-select ng-model="groupMasters.selected.name" id="countryCode" ui-select-focuser
+                @*<ui-select ng-model="groupMasters.selected.name" id="countryCode" ui-select-focuser
                            theme="selectize">
 
                     <ui-select-match placeholder="Choose an account">{{$select.selected.name}}</ui-select-match>
@@ -141,13 +140,28 @@
 
 
                     </ui-select-choices>
+                </ui-select>*@
+
+                <ui-select ng-model="salesAccount.selected" id="countryCode" ui-select-focuser
+                           theme="selectize">
+
+                    <ui-select-match placeholder="Choose an account">{{$select.selected.accountName}}</ui-select-match>
+                    <ui-select-header>Top of the list!</ui-select-header>
+                    <ui-select-choices repeat="account in salesAccounts  | filter: $select.search">
+                        <div>
+                            <span style="color:black" ng-bind-html="account.name | highlight: $select.search">{{account.type}}</span>
+                            <span style="color:forestgreen">{{account.accountName}}</span>
+                        </div>
+
+
+                    </ui-select-choices>
                 </ui-select>
 
 
                 <div class="col-sm-6" style="padding-left:0px">
 
                     <h4 class="tabheading font_11">Invoice Date</h4>
-                    <div class='input-group'>
+                    <div class='input-group date ' id="InvoiceDate">
                         <input type='text' class="form-control" ng-model="billDate" id='InvoiceDate' placeholder="dd/mm/yyyy" />
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
@@ -155,15 +169,15 @@
                     </div>
 
                     <h4 class="tabheading font_11">Due Date</h4>
-                    <div class='input-group'>
+                    <div class='input-group date' id="DueDate">
                         <input type='text' class="form-control" ng-model="billDueDate" id='DueDate' placeholder="dd/mm/yyyy" />
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
                     </div>
                     <h4 class="tabheading font_11">Date & time of issue</h4>
-                    <div class='input-group'>
-                        <input type='text' class="form-control" ng-model="billDate" id='IssueDate' placeholder="dd/mm/yyyy" />
+                    <div class='input-group date' id="IssueDate">
+                        <input type='text' class="form-control" ng-model="billIssueDate" id='IssueDate' placeholder="dd/mm/yyyy" />
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
@@ -174,30 +188,30 @@
                 <div class="col-sm-6" style="padding:0px">
 
                     <h4 class="tabheading font_11">Payment Days</h4>
-                    <input type='text' class="form-control" />
+                    <input type='text' ng-blur="paymentTerm()" ng-model="paymentDays" class="form-control" />
 
 
-                    <h4 class="tabheading font_11">Actual Date</h4>
+                    @*<h4 class="tabheading font_11">Actual Date</h4>
                     <div class='input-group'>
                         <input type='text' class="form-control" ng-model="actualDate" id='actualDate' placeholder="dd/mm/yyyy" />
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
-                    </div>
+                    </div>*@
 
                     <h4 class="tabheading font_11">Date & time of removal</h4>
-                    <div class='input-group'>
-                        <input type='text' class="form-control" ng-model="billDate" id='RemovalDate' placeholder="dd/mm/yyyy" />
+                    <div class='input-group date' id="RemovalDate">
+                        <input type='text' class="form-control" ng-model="billRemovalDate" id='RemovalDate' placeholder="dd/mm/yyyy" />
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
                     </div>
 
                     @*<h4 class="tabheading font_11">UNIT</h4>
-                        <select ng-model="unit" ng-change="weightUnit(unit)" class="form-control pull-left" style="width:100px">
-                            <option>KG</option>
-                            <option>MT</option>
-                        </select>*@
+                    <select ng-model="unit" ng-change="weightUnit(unit)" class="form-control pull-left" style="width:100px">
+                        <option>KG</option>
+                        <option>MT</option>
+                    </select>*@
 
                 </div>
 
@@ -212,13 +226,14 @@
 
 
                 <p class="text-right">Balance Due</p>
-                <p class="balancedue" style="float:none">&#8377; {{totaltax + totalcharges }}</p>
+                <p class="balancedue" style="float:none">&#8377; {{totalAmount}}</p>
 
 
                 <button type="button" class="btn btn-sm btn-default pull-right" style="margin-top:65px">Receipt</button>
                 <small style="float:right; width:100%; margin:10px 0px"><span class="text-primary cursor" id="myPopover" data-toggle="popover" data-placement="left">1 reciept </span> made on 12/march/2017</small>
                 <h4 class="tabheading" style="float:right; width:100%; margin-top:0px !important">Invoice no.</h4>
-                <input type="text" class="form-control pull-right" ng-model="expenseNo" disabled style="width:100px" />
+                @*<input type="text" class="form-control pull-right" ng-model="expenseNo" disabled style="width:100px" />*@
+                <input type="text" class="form-control pull-right" id="billNo" ng-model="billNo" style="width:100px" />
             </div>
 
 
@@ -280,7 +295,6 @@
 
 
         </div>
-
 
         <div class="col-sm-12">
             <h4 data-toggle="collapse" data-target="#ItemDetail2" class="cursor pull-left" style="margin-top: 15px; margin-bottom: 0px;">
@@ -897,13 +911,8 @@
                 </div>
             </div>
         </div>
-
-
-
-    </div>
-
-
     <div class="flexfooter">
+
         <span class="pull-left">
             <div class="btn-group dropup">
                 <button type="button" class="btn btn-sm btn-warning">View</button>
@@ -921,7 +930,7 @@
         </span>
 
         <div class="pull-right">
-            <button type="button" class="btn btn-sm btn-primary" ng-click="makePayment(paymentAmount-amount)">Save</button>
+            <button type="button" class="btn btn-sm btn-primary" ng-click="saveInvoice()">Save</button>
             <div class="btn-group dropup">
                 @*
                     <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:25px">
@@ -939,8 +948,14 @@
     </div>
 
 
+    </div>
 
-</div>
+
+  
+
+
+
+
 
 
 
