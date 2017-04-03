@@ -343,14 +343,14 @@
                                                        theme="selectize">
                                                 <ui-select-match allow-clear="true" placeholder="">
                                                     <span class="selectuiTable" style="width:100% !important">
-                                                        <span>{{ $select.selected.GODOWN}}</span>
+                                                        <span>{{ $select.selected._id.GODOWN}}</span>
                                                         <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
                                                     </span>
                                                 </ui-select-match>
 
-                                                <ui-select-choices repeat="invoice in ItemList  | unique:'GODOWN'|filter: $select.search">
+                                                <ui-select-choices repeat="invoice in ItemList  | unique:'_id.GODOWN'|filter: $select.search">
                                                     <div>
-                                                        <span style="color:forestgreen">{{invoice.GODOWN}}</span>
+                                                        <span style="color:forestgreen">{{invoice._id.GODOWN}}</span>
                                                     </div>
 
 
@@ -364,14 +364,14 @@
                                                        theme="selectize">
                                                 <ui-select-match allow-clear="true" placeholder="">
                                                     <span class="selectuiTable" style="width:100% !important">
-                                                        <span>{{ $select.selected.DESCRIPTION}}</span>
+                                                        <span>{{ $select.selected._id.DESCRIPTION}}</span>
                                                         <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
                                                     </span>
                                                 </ui-select-match>
 
-                                                <ui-select-choices repeat="invoice in ItemList  | unique:'DESCRIPTION'|filter: $select.search">
+                                                <ui-select-choices repeat="invoice in ItemList  | unique:'_id.DESCRIPTION'|filter: $select.search">
                                                     <div>
-                                                        <span style="color:forestgreen">{{invoice.DESCRIPTION}}</span>
+                                                        <span style="color:forestgreen">{{invoice._id.DESCRIPTION}}</span>
                                                     </div>
 
 
@@ -388,15 +388,15 @@
                                                        theme="selectize">
                                                 <ui-select-match allow-clear="true" placeholder="">
                                                     <span class="selectuiTable" style="width:100% !important">
-                                                        <span>{{ $select.selected.RRMARKS}}</span>
+                                                        <span>{{ $select.selected._id.RRMARKS}}</span>
                                                         <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
                                                     </span>
                                                 </ui-select-match>
 
-                                                <ui-select-choices repeat="invoice in ItemList  | unique:'RRMARKS'|filter: $select.search">
+                                                <ui-select-choices repeat="invoice in ItemList  | unique:'_id.RRMARKS'|filter: $select.search">
                                                     <div>
                                                         @*<span ng-model="remarks" ng-bind-html="invoice.RRMARKS | highlight: $select.search">{{invoice.RRMARKS}}</span>*@
-                                                        <span style="color:forestgreen">{{invoice.RRMARKS}}</span>
+                                                        <span style="color:forestgreen">{{invoice._id.RRMARKS}}</span>
                                                     </div>
 
 
@@ -411,14 +411,14 @@
                                                        theme="selectize">
                                                 <ui-select-match allow-clear="true" placeholder="">
                                                     <span class="selectuiTable" style="width:100% !important">
-                                                        <span>{{ $select.selected.rgNo}}</span>
+                                                        <span>{{ $select.selected._id.rgNo}}</span>
                                                         <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
                                                     </span>
                                                 </ui-select-match>
 
-                                                <ui-select-choices repeat="invoice in ItemList  | unique:'rgNo'|filter: $select.search">
+                                                <ui-select-choices repeat="invoice in ItemList  | unique:'_id.rgNo'|filter: $select.search">
                                                     <div>
-                                                        <span style="color:forestgreen">{{invoice.rgNo}}</span>
+                                                        <span style="color:forestgreen">{{invoice._id.rgNo}}</span>
                                                     </div>
 
 
@@ -432,14 +432,14 @@
                                                        theme="selectize">
                                                 <ui-select-match allow-clear="true" placeholder="">
                                                     <span class="selectuiTable" style="width:100% !important">
-                                                        <span>{{ $select.selected.exciseDuty}}</span>
+                                                        <span>{{ $select.selected._id.exciseDuty}}</span>
                                                         <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
                                                     </span>
                                                 </ui-select-match>
 
-                                                <ui-select-choices repeat="invoice in ItemList  | unique:'exciseDuty'|filter: $select.search">
+                                                <ui-select-choices repeat="invoice in ItemList  | unique:'_id.exciseDuty'|filter: $select.search">
                                                     <div>
-                                                        <span style="color:forestgreen">{{invoice.exciseDuty}}</span>
+                                                        <span style="color:forestgreen">{{invoice._id.exciseDuty}}</span>
                                                     </div>
 
 
@@ -453,14 +453,14 @@
                                                        theme="selectize">
                                                 <ui-select-match allow-clear="true" placeholder="">
                                                     <span class="selectuiTable" style="width:100% !important">
-                                                        <span>{{ $select.selected.SAD}}</span>
+                                                        <span>{{ $select.selected._id.SAD}}</span>
                                                         <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
                                                     </span>
                                                 </ui-select-match>
 
-                                                <ui-select-choices repeat="invoice in ItemList  | unique:'SAD'|filter: $select.search">
+                                                <ui-select-choices repeat="invoice in ItemList  | unique:'_id.SAD'|filter: $select.search">
                                                     <div>
-                                                        <span style="color:forestgreen">{{invoice.SAD}}</span>
+                                                        <span style="color:forestgreen">{{invoice._id.SAD}}</span>
                                                     </div>
 
 
@@ -474,14 +474,14 @@
                                                        theme="selectize">
                                                 <ui-select-match allow-clear="true" placeholder="">
                                                     <span class="selectuiTable" style="width:100% !important">
-                                                        <span>{{ $select.selected.NETWEIGHT}}</span>
+                                                        <span>{{ $select.selected._id.NETWEIGHT}}</span>
                                                         <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
                                                     </span>
                                                 </ui-select-match>
 
-                                                <ui-select-choices repeat="invoice in ItemList  | unique:'NETWEIGHT'|filter: $select.search">
+                                                <ui-select-choices repeat="invoice in ItemList  | unique:'_id.NETWEIGHT'|filter: $select.search">
                                                     <div>
-                                                        <span style="color:forestgreen">{{invoice.NETWEIGHT}}</span>
+                                                        <span style="color:forestgreen">{{invoice._id.NETWEIGHT}}</span>
                                                     </div>
 
 
