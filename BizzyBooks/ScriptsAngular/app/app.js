@@ -319,9 +319,12 @@ var myApp = angular
           });
 
           $stateProvider.state("Customer.GeneralInvoice", {
-              url: "/GeneralInvoice",
+              url: "/GeneralInvoice/:voId",
               templateUrl: "Customer/GeneralInvoice",
-              controller: "GeneralInvoiceCntrl"
+              controller: "GeneralInvoiceCntrl",
+              params: {
+                  voId: null,
+              }
           });
 
           $stateProvider.state("Customer.JournalEntry", {

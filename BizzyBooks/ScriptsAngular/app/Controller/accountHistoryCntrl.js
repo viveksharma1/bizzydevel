@@ -97,6 +97,11 @@
 
             $state.go('Customer.MakePayment', { voId: id });
         }
+        if (voType == 'General Invoice') {
+
+            $state.go('Customer.GeneralInvoice', { voId: id });
+        }
+
 
 
     }
