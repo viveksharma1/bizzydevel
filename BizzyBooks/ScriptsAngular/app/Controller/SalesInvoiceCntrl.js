@@ -1,4 +1,4 @@
-﻿myApp.controller('SalesInvoiceCntrl', ['$scope', '$http', '$timeout', '$rootScope', '$state','config', '$stateParams',function ($scope, $http, $timeout, $rootScope, $state,config,$stateParams) {
+﻿myApp.controller('SalesInvoiceCntrl', ['$scope', '$http', '$timeout', '$rootScope', '$state', 'config', '$stateParams', '$filter', function ($scope, $http, $timeout, $rootScope, $state, config, $stateParams,$filter) {
 
     $(".my a").click(function (e) {
         e.preventDefault();
@@ -125,6 +125,7 @@
             //$scope.ItemCount = response.data.length;
         });
     }
+    getSupplier();
     $http.get(config.api + "Inventories?filter[where][visible]=true&filter[limit]=20").then(function (response) {
         $scope.ItemList2 = response.data;
         $scope.filterList = $scope.ItemList2;
@@ -137,24 +138,29 @@
         //console.log($scope.ItemList);
         //$scope.ItemCount = response.data.length;
     });
-
+    
     $scope.getInvoiceData = function (id) {
         $http.get(config.api + 'voucherTransactions/' + id)
                   .then(function (response) {
 
                       $scope.salesAccount = { selected: { accountName: response.data.invoiceData.ledgerAccount } };
                       $scope.supplier = { selected: { company: response.data.invoiceData.customerAccount } };
-                      $scope.email = { selected: { company: response.data.email } };
-                      $scope.totalAmount = response.data.amount
-                      $scope.billDate = response.data.date
-                      $scope.billNo = response.data.vochNo
-                      $scope.narration = response.data.remark
-                      $scope.totalAmount = response.data.amount
+                      //$scope.email = { selected: { company: response.data.email } };
+                      $scope.totalAmount = response.data.amount;
+                      $scope.billDate = response.data.date;
+                      $scope.billNo = response.data.vochNo;
+                      $scope.narration = response.data.remark;
+                      $scope.totalAmount = response.data.amount;
 
-                      $scope.removalDate = response.data.invoiceData.removalDate
-                      $scope.itemTable = response.data.invoiceData.billData
+                      $scope.removalDate = response.data.invoiceData.removalDate;
+                      $scope.itemTable = response.data.invoiceData.billData;
+                      $scope.accountTable = response.data.invoiceData.accountlineItem;
                       $scope.issueDate = $filter('date')(response.data.invoiceData.issueDate, 'dd/MM/yyyy');
                       $scope.billDate = $filter('date')(response.data.date, 'dd/MM/yyyy');
+                      $scope.getSupplierDetail($scope.supplier.selected.company);
+                      sumItemListTable($scope.itemTable);
+                      accountTableSum();
+
 
 
                   });
@@ -167,7 +173,7 @@
     }
     $scope.$watch('supplier.selected', function () {
         if ($scope.supplier.selected) {
-            if ($scope.supplier.selected.billingAddress.length > 0) {
+            if ($scope.supplier.selected.billingAddress && $scope.supplier.selected.billingAddress.length > 0) {
                 $scope.shippingAddress = $scope.supplier.selected.billingAddress[0].street
             }
             if ($scope.supplier.selected.email) {
@@ -175,6 +181,13 @@
 
             }
 
+        }
+    });
+
+    $scope.$watch('account.selected', function () {
+        $scope.accountAmount = null;
+        if ($scope.account.selected && $scope.account.selected.rate) {
+            $scope.accountAmount = Number($scope.listTotalAmount) * Number($scope.account.selected.rate) / 100;
         }
     });
 
@@ -252,7 +265,7 @@
     }
 
 
-    $scope.getSupplier = function () {
+    function getSupplier() {
         $scope.supliers = []
         $http.get(config.api + "suppliers" + "?filter[where][compCode]=" + localStorage.CompanyId).then(function (response) {
             $scope.supliers = response.data;
@@ -270,12 +283,13 @@
 
     $http.get(config.api + "accounts").then(function (response) {
         $scope.salesAccounts = response.data;
+        angular.copy($scope.salesAccounts, $scope.accounts);
 
     });
-    $http.get(config.api + "accounts").then(function (response) {
-        $scope.accounts = response.data
-        console.log($scope.accounts);
-    });
+    //$http.get(config.api + "accounts").then(function (response) {
+    //    $scope.accounts = response.data
+    //    console.log($scope.accounts);
+    //});
 
     $scope.setInvoiceType = function (type) {
         $scope.invoiceType = type;
@@ -696,5 +710,5 @@
         $scope.isCart=val;
     }
     
-    $scope.getSupplier();
+    
 }]);

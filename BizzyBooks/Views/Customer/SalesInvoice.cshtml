@@ -65,6 +65,21 @@
                 <div class="col-sm-12 padding">
 
                     <h4 class="tabheading font_11">Customer<span class="pull-right text-primary"><i class="fa fa-rupee"></i> 2,30,000</span></h4>
+                    @*<ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
+                               ui-select-focuser
+                               theme="selectize">
+                        <ui-select-match placeholder="Select Suppliers">{{ $select.selected.company }}</ui-select-match>
+
+                        <ui-select-choices repeat="person in supliers  | filter: $select.search">
+                            <div>
+                                <span ng-model="supplier1" ng-bind-html="person.company | highlight: $select.search"></span>
+                            </div>
+
+
+                        </ui-select-choices>
+                    </ui-select>*@
+
+
                     <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
                                ui-select-focuser
                                theme="selectize">
@@ -134,83 +149,83 @@
 
                     </ui-select-choices>
                 </ui-select>*@
+                <div class="content">
+                    <ui-select ng-model="salesAccount.selected" id="countryCode" ui-select-focuser
+                               theme="selectize">
 
-                <ui-select ng-model="salesAccount.selected" id="countryCode" ui-select-focuser
-                           theme="selectize">
+                        <ui-select-match placeholder="Choose an account">{{$select.selected.accountName}}</ui-select-match>
+                        <ui-select-header>Top of the list!</ui-select-header>
+                        <ui-select-choices repeat="account in salesAccounts  | filter: $select.search">
+                            <div>
+                                <span style="color:black" ng-bind-html="account.name | highlight: $select.search">{{account.type}}</span>
+                                <span style="color:forestgreen">{{account.accountName}}</span>
+                            </div>
 
-                    <ui-select-match placeholder="Choose an account">{{$select.selected.accountName}}</ui-select-match>
-                    <ui-select-header>Top of the list!</ui-select-header>
-                    <ui-select-choices repeat="account in salesAccounts  | filter: $select.search">
-                        <div>
-                            <span style="color:black"  ng-bind-html="account.name | highlight: $select.search">{{account.type}}</span>
-                            <span style="color:forestgreen">{{account.accountName}}</span>
+
+                        </ui-select-choices>
+                    </ui-select>
+                    </div>
+
+                    <div class="col-sm-6" style="padding-left:0px">
+
+                        <h4 class="tabheading font_11">Invoice Date</h4>
+                        <div class='input-group'>
+                            <input type='text' class="form-control" ng-model="billDate" id='InvoiceDate' placeholder="dd/mm/yyyy" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
                         </div>
 
+                        <h4 class="tabheading font_11">Due Date</h4>
+                        <div class='input-group'>
+                            <input type='text' class="form-control" ng-model="billDueDate" id='DueDate' placeholder="dd/mm/yyyy" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                        <h4 class="tabheading font_11">Date & time of issue</h4>
+                        <div class='input-group'>
+                            <input type='text' class="form-control" ng-model="billIssueDate" id='IssueDate' placeholder="dd/mm/yyyy" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
 
-                    </ui-select-choices>
-                </ui-select>
-
-
-                <div class="col-sm-6" style="padding-left:0px">
-
-                    <h4 class="tabheading font_11">Invoice Date</h4>
-                    <div class='input-group'>
-                        <input type='text' class="form-control" ng-model="billDate" id='InvoiceDate'  placeholder="dd/mm/yyyy" />
-                        <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-calendar"></span>
-                        </span>
                     </div>
 
-                    <h4 class="tabheading font_11">Due Date</h4>
-                    <div class='input-group'>
-                        <input type='text' class="form-control" ng-model="billDueDate" id='DueDate'  placeholder="dd/mm/yyyy" />
-                        <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-calendar"></span>
-                        </span>
-                    </div>
-                    <h4 class="tabheading font_11">Date & time of issue</h4>
-                    <div class='input-group'>
-                        <input type='text' class="form-control" ng-model="billIssueDate" id='IssueDate' placeholder="dd/mm/yyyy" />
-                        <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-calendar"></span>
-                        </span>
-                    </div>
+                    <div class="col-sm-6" style="padding:0px">
 
-                </div>
-
-                <div class="col-sm-6" style="padding:0px">
-
-                    <h4 class="tabheading font_11">Payment Days</h4>
-                    <input type='text' ng-blur="paymentTerm()" ng-model="paymentDays" class="form-control" />
+                        <h4 class="tabheading font_11">Payment Days</h4>
+                        <input type='text' ng-blur="paymentTerm()" ng-model="paymentDays" class="form-control" />
 
 
-                    @*<h4 class="tabheading font_11">Actual Date</h4>
-                    <div class='input-group'>
-                        <input type='text' class="form-control" ng-model="actualDate" id='actualDate' placeholder="dd/mm/yyyy" />
-                        <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-calendar"></span>
-                        </span>
-                    </div>*@
+                        @*<h4 class="tabheading font_11">Actual Date</h4>
+                <div class='input-group'>
+                    <input type='text' class="form-control" ng-model="actualDate" id='actualDate' placeholder="dd/mm/yyyy" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>*@
 
-                    <h4 class="tabheading font_11">Date & time of removal</h4>
-                    <div class='input-group'>
-                        <input type='text' class="form-control" ng-model="billRemovalDate" id='RemovalDate' placeholder="dd/mm/yyyy" />
-                        <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-calendar"></span>
-                        </span>
-                    </div>
+                        <h4 class="tabheading font_11">Date & time of removal</h4>
+                        <div class='input-group'>
+                            <input type='text' class="form-control" ng-model="billRemovalDate" id='RemovalDate' placeholder="dd/mm/yyyy" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
 
-                    @*<h4 class="tabheading font_11">UNIT</h4>
+                        @*<h4 class="tabheading font_11">UNIT</h4>
                 <select ng-model="unit" ng-change="weightUnit(unit)" class="form-control pull-left" style="width:100px">
                     <option>KG</option>
                     <option>MT</option>
                 </select>*@
 
+                    </div>
+
+
+
                 </div>
-
-
-
-            </div>
 
         
 
@@ -527,7 +542,7 @@
                                     </tr>
 
                                 </table>
-                                <table class="table-bordered table-condensed table-hover table" style="font-size:13px !important;">
+                                <table class="table-bordered table-condensed table-hover table"  style="font-size:13px !important;">
                                     <thead>
 
                                         <tr style="background:#F0EEEE">
@@ -833,7 +848,18 @@
 
     <div class="flexfooter">
         <span class="pull-left">
+            <div class="btn-group dropup">
+                <button type="button" class="btn btn-sm btn-warning">View</button>
+                <button type="button" class="btn btn-warning btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:25px">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" style="right:-2px !important">
+                    <li><a href="" ui-sref="Customer.TaxInvoicePDF">Tax Invoice</a></li>
+                    <li><a href="" ui-sref="Customer.ExciseInvoicePDF">Excise Invoice</a></li>
+                    <li><a href="" ui-sref="Customer.SalesInvoicePDF">Deliver Challan</a></li>
+                </ul>
 
+            </div>
             <button type="button" class="btn btn-sm btn-primary">Clear</button>
         </span>
 
