@@ -131,7 +131,7 @@
             showErrorToast("Error while updating status.");
         });
         //TODO: remove when api will be working
-        $scope.closeStatusBox();
+        //$scope.closeStatusBox();
 
     }
     function clearStatusBox() {
@@ -152,7 +152,7 @@
 
 
     //Add Remarks...
-    $scope.showRemarkBox = function (item) {
+    $scope.showRemarkBox = function (item,multi) {
         clearRemarksBox();
         $('#AddRemarksModal').modal('show');
         if (multi) {
@@ -191,7 +191,7 @@
             showErrorToast("Error while adding remark.");
         });
         //TODO: remove when api will be working
-        $scope.closeRemarkBox();
+        //$scope.closeRemarkBox();
     }
 
     //Update Adjustment
@@ -202,7 +202,7 @@
         $scope.totalNetWt = null;
     }
 
-    $scope.showAddjustmentBox = function (item) {
+    $scope.showAddjustmentBox = function (item,multi) {
         clearAdjustmentBox();
         $('#AddjustmentbtnModal').modal('show');
         if (multi) {
@@ -238,7 +238,7 @@
             showErrorToast("Error while updating weigths.");
         });
         //TODO: remove when api will be working
-        $scope.closeAddjustmentBox();
+       // $scope.closeAddjustmentBox();
     }
 
 }]);
