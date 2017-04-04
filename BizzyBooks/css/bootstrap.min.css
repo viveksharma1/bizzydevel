@@ -2832,7 +2832,7 @@ table td[class*=col-], table th[class*=col-] {
         margin-bottom: 15px;
         overflow-y: hidden;
         -ms-overflow-style: -ms-autohiding-scrollbar;
-        border: 1px solid #ddd;
+        border: 0px solid #ddd;
     }
 
         .table-responsive > .table {
@@ -8320,7 +8320,7 @@ main {
 
 
 .scrollbarAngular::-webkit-scrollbar-thumb {
-    background-color: #666;
+    background-color: #337ab7;
     border: 2px solid #666;
 }
 .additemlist{display:none;}

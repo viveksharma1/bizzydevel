@@ -31,10 +31,10 @@
 
     </div>
     <div class="flexcontainer">
-        <div class="col-sm-4" style="min-height:560px; border-right:1px solid #808080; padding:0px 8px; background:rgba(158, 158, 158, 0.17)">
+        <div class="col-sm-4" style="min-height:500px; border-right:0px solid #5F5353; padding:3px 8px; background:#F5F5F5">
 
 
-            <div style="height:850px" class="scrollbar scrollbarAngular">
+            <div style="height:500px" class="scrollbar scrollbarAngular">
                 <div class="card  border-aero border-green">
                     <label class="heading">
                         Item Detail
@@ -130,27 +130,27 @@
 
             </div>
         </div>
-        <div class="col-sm-8" style="padding:0px">
-            <div class="content" style="padding:10px 10px">
+        <div class="col-sm-8 scrollbar" style="padding:0px;height:500px">
+            <div class="content  card " style="padding:4px 4px" >
 
                 <div class="col-sm-3 padding">
 
                     <h4 class="tabheading text-primary">Invoice Date</h4>
-                    <p>12/3/2017</p>
+                    <p>{{Item.date}}</p>
 
                 </div>
 
                 <div class="col-sm-3 padding">
 
                     <h4 class="tabheading text-primary">Invoice No.</h4>
-                    <p>564564</p>
+                    <p>{{Item.no}}</p>
 
                 </div>
 
                 <div class="col-sm-3 padding">
 
                     <h4 class="tabheading text-primary">Actual Date</h4>
-                    <p>12/3/2017</p>
+                    <p>{{billDetail.actualDate | date}}</p>
                 </div>
 
 
@@ -158,7 +158,7 @@
 
                 <div class="col-sm-3 padding">
                     <h4 class="tabheading text-primary">Supplier Name</h4>
-                    <p>Paynna Anugrah Indonesia</p>
+                    <p class="cursor" ui-sref="Customer.Bill({billNo:billDetail.id,suppliers:billDetail.supliersName})"><b>{{billDetail.supliersName}}</b></p>
                 </div>
 
 
@@ -166,7 +166,7 @@
 
             </div>
 
-            <hr style="float:left; width:100%; margin-bottom:0px; margin-top: 10px;" />
+           
 
             <div class="col-sm-12" style="padding:0px">
                 <h4 class="cursor pull-left text-primary" data-toggle="collapse" data-target="#ItemDetail1234" style="margin-top: 15px; margin-left:20px;  margin-bottom: 0px;">
@@ -174,15 +174,15 @@
                 </h4>
 
 
-                <hr style="float:left; width:100%; margin-bottom:10px; margin-top: 10px;" />
-                <div class="collapse in" id="ItemDetail1234" style="float:left; width:100%; padding-bottom:20px;">
+               
+                <div class="collapse in card" id="ItemDetail1234" style="float:left; width:100%; padding-bottom:20px;">
 
-                    <div class="col-sm-4">
+                    <div class="col-sm-4 ">
 
                         <div class="info">
                             <div class="tableCell">
                                 <div class="tableCell labelCell">
-                                    <span class="label"><span class="red">*</span>Warehouse Coil No. :</span>
+                                    <span class="label"><span class="red"></span>Warehouse Coil No. :</span>
                                 </div>
                                 <div class="tableCell">
                                     <span class="value">
@@ -417,7 +417,7 @@
                                 </div>
                                 <div class="tableCell">
                                     <span class="value">
-
+                                        <b> {{Item.NETWEIGHT - Item.BALANCE}}</b>
                                     </span>
                                 </div>
                             </div>
@@ -502,9 +502,9 @@
 
 
                 <hr style="float:left; width:100%; margin-bottom:10px; margin-top: 10px;" />
-                <div class="collapse in" id="ItemDetail1" style="float:left; width:100%; padding-left:10px">
+                <div class="collapse in card scrollbar scrollbarAngular" id="ItemDetail1" style="float:left; width:100%; padding-left:10px;height:200px ">
 
-                    <table class="table table-bordered">
+                    <table class="table">
                         <thead>
                             <tr style="background:rgb(243, 245, 248)">
                                 <th style="padding:10px">Date</th>
@@ -523,57 +523,62 @@
 
                 </div>
             </div>
-
-            <div class="col-sm-5" style="padding-right:0px">
+            <div class="col-sm-5" style="padding-right:0px" >
                 <h4 class="cursor pull-left text-primary" style="margin-top: 15px; margin-bottom: 0px;">
                     <i class="fa fa-caret-right"></i> Additional Remarks
                 </h4>
                 <hr style="float:left; width:100%; margin-bottom:10px; margin-top: 10px;" />
 
-                <div ng-repeat="addRemark in Item.addRemarks" class="row msg_container base_receive">
-                    <label class="badge">{{addRemark.dt|date:'dd MMM yyyy HH:mm:a'}}</label>
+                <div ng-repeat="addRemark in Item.addRemarks" class= "collapse in card scrollbar scrollbarAngular">
+                    <span class="">{{addRemark.dt|date:'dd MMM yyyy HH:mm:a'}}</span>
                     <div class="col-md-10 col-xs-10">
-                        <div class="messages msg_receive">
-                            <p>
-                                {{addRemark.remarks}}
+                        <div >
+                            <p >
+                               <b>{{addRemark.remarks}}</b> 
                             </p>
                         </div>
                     </div>
                 </div>
 
-                @*<div class="row msg_container base_receive">
-                        <label class="badge">12/03/2017</label>
-                        <div class="col-md-10 col-xs-10">
-                            <div class="messages msg_receive">
-                                <p>
-                                    that mongodb thing looks good, huh?
-                                    tiny master db, and huge document store
-                                </p>
 
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="row msg_container base_receive">
-                        <label class="badge">12/03/2017</label>
-                        <div class="col-md-10 col-xs-10">
-                            <div class="messages msg_receive">
-                                <p>
-                                    that mongodb thing looks good, huh?
-                                    tiny master db, and huge document store
-                                </p>
-
-                            </div>
-                        </div>
-                    </div>*@
             </div>
+            <div class="col-sm-7" style="padding-left:0px">
+                <h4 class="cursor pull-left text-primary" data-toggle="collapse" data-target="#ItemDetail1" style="margin-top: 15px; margin-left:20px; margin-bottom:0px;">
+                    <i class="fa fa-caret-right"></i> Sales Transactions
+                </h4>
+
+
+                <hr style="float:left; width:100%; margin-bottom:10px; margin-top: 10px;" />
+                <div class="collapse in"  style="float:left; width:100%; padding-left:10px">
+
+                    <table class="table">
+                        <thead>
+                            <tr style="background:rgb(243, 245, 248)" >
+                                <th style="padding:10px">Date</th>
+                                <th style="padding:10px">Voch No</th>
+                                <th style="padding:10px">Sales Qty</th>
+                               
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="cursor" ng-repeat="sales in Item.salesTransaction" ui-sref="Customer.GeneralInvoice({voId:sales.id})">
+                                <td>{{sales.date|date:'dd MMM yyyy HH:mm:a'}}</td>
+                                <td>{{sales.vochNo}}</td>
+                                <td>{{sales.saleQty}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+          
         </div>
 
     </div>
 
 
-    <div class="flexfooter">&nbsp;    </div>
+   
 
 
 

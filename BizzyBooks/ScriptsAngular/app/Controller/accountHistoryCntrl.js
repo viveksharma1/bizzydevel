@@ -101,6 +101,10 @@
 
             $state.go('Customer.GeneralInvoice', { voId: id });
         }
+        if (voType == 'Sales Invoice') {
+
+            $state.go('Customer.SalesInvoice', { voId: id });
+        }
 
 
 

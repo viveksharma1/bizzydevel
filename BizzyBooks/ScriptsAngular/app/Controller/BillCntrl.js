@@ -705,7 +705,7 @@
             billDueDate: billDueDate,
             actualDate:actualDate,
             ordertype: "BILL",
-            no: $scope.billNo,
+            no: Number($scope.billNo),
             status: ["OPEN"],
             paymentDays:$scope.paymentDays,
             itemDetail: $scope.billtable1,
@@ -956,9 +956,10 @@
                                 console.log(retObj["TOTALAMOUNTUSD"]);
                             }
 
-                            if (obj1 == "FOBUNITPRICEUSD" || obj1 == "CIFUNITPRICE" || obj1 == "NETWEIGHT" || obj1 == "TOTALPRICE") {
+                            if (obj1 == "FOBUNITPRICEUSD" || obj1 == "CIFUNITPRICE" || obj1 == "NETWEIGHT" || obj1 == "TOTALPRICE" || obj1 == "LENGTH" || obj1 == "WIDTH" || obj1 == "THICKNESS" || obj1 == "GROSSWT") {
                                 retObj[obj1] = Number(XL_row_object[key][obj]);
                             }
+                          
 
                             else {
                                 retObj[obj1] = XL_row_object[key][obj];

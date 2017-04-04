@@ -386,8 +386,9 @@
                                     <td> {{item.assesableValue/item.NETWEIGHT |number : fractionSize}}</td>
                                     <td> {{item.exciseDuty/item.NETWEIGHT |number : fractionSize}}</td>
                                     <td> {{item.SAD/item.NETWEIGHT |number : fractionSize}}</td>
+                                  
                                     <td> {{item.NETWEIGHT |number : fractionSize}}</td>
-                                    <td> {{item.NETWEIGHT |number : fractionSize}}</td>
+                                    <td> {{item.NETWEIGHT - item.BALANCE |number : fractionSize}}</td>
                                     <td style="text-align:right;">
                                         <button type="button" class="editbtn"><a href="" ng-click="showStatusBox(item)">Change Status</a></button>
                                         <class class="linkseparator" style="margin-top:4px; margin-right:0px"></class>

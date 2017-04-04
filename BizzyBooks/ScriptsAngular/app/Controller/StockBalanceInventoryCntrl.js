@@ -58,11 +58,7 @@
     //view Info
     $scope.viewInfo = function (Item) {
         if (Item != undefined) {
-
-            $rootScope.Item = Item;
-            //$rootScope.lastPath = 'order.RecentOrders';
-            $state.go('Customer.BalanceInventoryViewInfo');
-
+            $state.go('Customer.BalanceInventoryViewInfo', { voId: Item.id });
         }
     }
     $scope.currentItem = null;

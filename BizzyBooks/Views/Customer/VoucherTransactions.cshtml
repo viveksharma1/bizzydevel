@@ -51,13 +51,9 @@
 </div>
 <div class="col-sm-12" style="padding:10px">
     <input type="text" class="form-control" placeholder="Filter by name" ng-model="search" style="width:250px; float:left" />
-    <div class="pull-right" style="margin-top:5px">
-        <i class="fa fa-pencil tableicon" title="Batch Edit"></i>
-        <i class="fa fa-print tableicon" title="Print List"></i>
-        <i class="fa fa-gear tableicon" title="Settings"></i>
-    </div>
+   
 
-    <table class="table-condensed " style="margin-top:10px; width:100%; float:left;table-layout:fixed; border:none">
+    <table class="table dataTable " style="margin-top:10px; width:100%; float:left;table-layout:fixed; border:none">
         <thead>
             <tr>
                 <th>Date</th>
@@ -68,34 +64,16 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td><div class="datelink cursor text-primary padding">12/03/2017</div></td>
-                <td>Purchase Invoice</td>
-                <td>PX/01</td>
-                <td style="text-align:right">20,000</td>
+            <tr ng-repeat="data in voucherTransaction  | filter:search" class="cursor" ng-click="openTransaction(data.id,data.type)">
+                <td><div class="datelink cursor text-primary padding">{{data.date | date}}</div></td>
+                <td>{{data.type}}</td>
+                <td>{{data.vochNo}}</td>
+                <td style="text-align:right">{{data.amount}}</td>
                
             </tr>
-            <tr>
-                <td><div class="datelink cursor text-primary padding">12/03/2017</div></td>
-                <td>Purchase Invoice</td>
-                <td>PX/01</td>
-                <td style="text-align:right">20,000</td>
-
-            </tr>
-            <tr>
-                <td><div class="datelink cursor text-primary padding">12/03/2017</div></td>
-                <td>Purchase Invoice</td>
-                <td>PX/01</td>
-                <td style="text-align:right">20,000</td>
-
-            </tr>
-            <tr>
-                <td><div class="datelink cursor text-primary padding">12/03/2017</div></td>
-                <td>Purchase Invoice</td>
-                <td>PX/01</td>
-                <td style="text-align:right">20,000</td>
-
-            </tr>
+           
+          
+          
         </tbody>
     </table>
 

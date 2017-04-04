@@ -206,9 +206,12 @@ var myApp = angular
 
         });
           $stateProvider.state("Customer.SalesInvoice", {
-            url: "/SalesInvoice",
+              url: "/SalesInvoice/:voId",
             templateUrl: "Customer/SalesInvoice",
-            controller: "SalesInvoiceCntrl"
+            controller: "SalesInvoiceCntrl",
+            params: {
+                voId: null,
+            }
 
         });
           $stateProvider.state("Customer.SalesInvoicePDF", {
@@ -353,9 +356,12 @@ var myApp = angular
           });
 
           $stateProvider.state("Customer.BalanceInventoryViewInfo", {
-              url: "/BalanceInventoryViewInfo",
+              url: "/BalanceInventoryViewInfo/:voId",
               templateUrl: "Customer/BalanceInventoryViewInfo",
-              controller: "BalanceInventoryViewInfoCntrl"
+              controller: "BalanceInventoryViewInfoCntrl",
+              params: {
+                  voId: null,
+              }
              
           });
           $stateProvider.state("Customer.StockBalanceInventory", {

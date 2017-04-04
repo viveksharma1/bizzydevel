@@ -16,12 +16,19 @@
 
     //if ($rootScope.Item != undefined) {
 
-    $scope.Item = $rootScope.Item;
+   // $scope.Item = $rootScope.Item;
    
-    //console.log($stateParams.data);
+    $http.get(config.api + "Inventories/" + $stateParams.voId).then(function (response) {
+        $scope.Item = response.data;
+        console.log($scope.Item);
+        $http.get(config.api + "transactions/" + $scope.Item.invId +"?filter[fields][actualDate] =true&filter[fields][supliersName]=true&filter[fields][id]=true").then(function (response) {
+            $scope.billDetail = response.data;
+            console.log($scope.billData);
+        });
+        $scope.GRNDetail($scope.Item);
 
-    //}
-    
+    });
+   
     $scope.GRNDetail = function(data){
         $scope.itemData = data;
 
@@ -75,5 +82,5 @@
 
         })
     }
-    $scope.GRNDetail($scope.Item);
+   
 }]);

@@ -1,4 +1,4 @@
-﻿myApp.controller('SalesInvoiceCntrl', ['$scope', '$http', '$timeout', '$rootScope', '$state','config', function ($scope, $http, $timeout, $rootScope, $state,config) {
+﻿myApp.controller('SalesInvoiceCntrl', ['$scope', '$http', '$timeout', '$rootScope', '$state','config', '$stateParams',function ($scope, $http, $timeout, $rootScope, $state,config,$stateParams) {
 
     $(".my a").click(function (e) {
         e.preventDefault();
@@ -129,8 +129,33 @@
         $scope.ItemList = response.data;
         $scope.filterList = $scope.ItemList;
     });
+    $scope.getInvoiceData = function (id) {
+        $http.get(config.api + 'voucherTransactions/' + id)
+                  .then(function (response) {
+
+                      $scope.salesAccount = { selected: { accountName: response.data.invoiceData.ledgerAccount } };
+                      $scope.supplier = { selected: { company: response.data.invoiceData.customerAccount } };
+                      $scope.email = { selected: { company: response.data.email } };
+                      $scope.totalAmount = response.data.amount
+                      $scope.billDate = response.data.date
+                      $scope.billNo = response.data.vochNo
+                      $scope.narration = response.data.remark
+                      $scope.totalAmount = response.data.amount
+
+                      $scope.removalDate = response.data.invoiceData.removalDate
+                      $scope.itemTable = response.data.invoiceData.billData
+                      $scope.issueDate = $filter('date')(response.data.invoiceData.issueDate, 'dd/MM/yyyy');
+                      $scope.billDate = $filter('date')(response.data.date, 'dd/MM/yyyy');
 
 
+                  });
+
+    }
+    if ($stateParams.voId) {
+
+        $scope.getInvoiceData($stateParams.voId);
+
+    }
     $scope.$watch('supplier.selected', function () {
         if ($scope.supplier.selected) {
             if ($scope.supplier.selected.billingAddress.length > 0) {
@@ -646,12 +671,13 @@
                 saleAmount:$scope.salesAmount,
                 remarks: $scope.narration,
                 billData: $scope.paidData,
-                accountlineItem: $scope.accountTable
+                accountlineItem: $scope.accountTable,
+                billData: $scope.itemTable
             },
         }
 
 
-        $http.post(config.login + "saveVoucher", data).then(function (response) {
+        $http.post(config.login + "saveVoucher" + "?id=" + $stateParams.voId, data).then(function (response) {
             showSuccessToast("Bill Save Succesfully");
         });
 
