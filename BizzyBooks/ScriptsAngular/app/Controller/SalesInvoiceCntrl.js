@@ -100,7 +100,7 @@
         $scope.exciseDuty = {};
         $scope.SAD = {};
         $scope.NETWEIGHT = {};
-        $scope.filterList = $scope.ItemList;
+        $scope.filterList = $scope.ItemList2;
     }
     $scope.applyFilter = function () {
         var qry = "Inventories?filter[where][visible]=true";
@@ -125,10 +125,19 @@
             //$scope.ItemCount = response.data.length;
         });
     }
-    $http.get(config.api + "Inventories?filter[where][visible]=true").then(function (response) {
-        $scope.ItemList = response.data;
-        $scope.filterList = $scope.ItemList;
+    $http.get(config.api + "Inventories?filter[where][visible]=true&filter[limit]=20").then(function (response) {
+        $scope.ItemList2 = response.data;
+        $scope.filterList = $scope.ItemList2;
     });
+
+    var qryAgg = 'visible=true&group={"DESCRIPTION":"$DESCRIPTION","GODOWN": "$GODOWN","RRMARKS":"$RRMARKS","rgNo":"$rgNo","exciseDuty":"$exciseDuty","SAD":"$SAD","NETWEIGHT":"$NETWEIGHT"}';
+    $http.get(config.login + "getAggregateInventories?" + qryAgg).then(function (response) {
+        $scope.ItemList = response.data;
+        //$scope.filterList2 = $scope.ItemList2;
+        //console.log($scope.ItemList);
+        //$scope.ItemCount = response.data.length;
+    });
+
     $scope.getInvoiceData = function (id) {
         $http.get(config.api + 'voucherTransactions/' + id)
                   .then(function (response) {
@@ -523,9 +532,9 @@
     }
     $scope.showItemInventory = function () {
         setIsCart(false);
-        $scope.filterList = $scope.ItemList;
+        $scope.filterList = $scope.ItemList2;
         setCheckValue(false, $scope.filterList);
-        sumItemTable($scope.filterList);
+        sumItemTable($scope.itemChecked);
     }
     function setCheckValue(val,list) {
         $scope.selectAllItem = val;

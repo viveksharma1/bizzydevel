@@ -4,11 +4,6 @@
     Layout = null;
 }
 
-
-
-
-
-
 <div>
     <div class="content">
         
@@ -31,12 +26,9 @@
                     <span class="caret" style="border-top-color:#fff !important"></span>
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a href="" ng-click="ChangeStatus()">Change Status</a></li>
-                    <li><a ng-click="AddRemarks()" class="cursor">Add Remarks</a></li>
-                    <li><a ng-click="Addjustmentbtn()" class="cursor">Adjustment</a></li>
-                    <li><a ui-sref="Customer.BalanceInventoryViewInfo()" class="cursor">View Info</a></li>
-                    @*<li><a ui-sref="Customer.BalanceInventoryViewDetail()" class="cursor">View Detail</a></li>*@
-
+                    <li><a href="" ng-click="showStatusBox(itemChecked,true)">Change Status</a></li>
+                    <li><a ng-click="showRemarkBox(itemChecked,true)" class="cursor">Add Remarks</a></li>
+                    <li><a ng-click="showAddjustmentBox(itemChecked,true)" class="cursor">Adjustment</a></li>
                 </ul>
             </div>
 
@@ -66,16 +58,11 @@
                             <ui-select ng-model="subcategory.selected"
                                        ui-select-focuser
                                        theme="selectize">
-         
-
-                                <ui-select-match allow-clear="true" placeholder="">{{ $select.selected.SUBCATEGORY }}</ui-select-match>
-
-                                <ui-select-choices repeat="invoice in ItemList  | unique:'SUBCATEGORY'|filter: $select.search">
+                                <ui-select-match allow-clear="true" >{{ $select.selected._id.SUBCATEGORY }}</ui-select-match>
+                                <ui-select-choices repeat="invoice in ItemList  | unique:'_id.SUBCATEGORY'|filter: $select.search">
                                     <div>
-                                        <span style="color:forestgreen">{{invoice.SUBCATEGORY}}</span>
+                                        <span style="color:forestgreen">{{invoice._id.SUBCATEGORY}}</span>
                                     </div>
-
-
                                 </ui-select-choices>
                             </ui-select>
                         </div>
@@ -85,14 +72,10 @@
                             <ui-select ng-model="coilsheetno.selected"
                                        ui-select-focuser
                                        theme="selectize">
-
-                              
-
-                                <ui-select-match allow-clear="true" placeholder="">{{ $select.selected.COILSHEETNO }}</ui-select-match>
-
-                                <ui-select-choices repeat="invoice in ItemList  | unique:'COILSHEETNO'|filter: $select.search">
+                                <ui-select-match allow-clear="true" >{{ $select.selected._id.COILSHEETNO }}</ui-select-match>
+                                <ui-select-choices repeat="invoice in ItemList  | unique:'_id.COILSHEETNO'|filter: $select.search">
                                     <div>
-                                        <span style="color:forestgreen">{{invoice.COILSHEETNO}}</span>
+                                        <span style="color:forestgreen">{{invoice._id.COILSHEETNO}}</span>
                                     </div>
 
 
@@ -105,14 +88,10 @@
                             <ui-select ng-model="incomingdate.selected"
                                        ui-select-focuser
                                        theme="selectize">
-
-                             
-
-                                <ui-select-match allow-clear="true" placeholder="">{{ $select.selected.INCOMINGDATE }}</ui-select-match>
-
-                                <ui-select-choices repeat="invoice in ItemList  | unique:'INCOMINGDATE'|filter: $select.search">
+                                <ui-select-match allow-clear="true" >{{ $select.selected._id.INCOMINGDATE }}</ui-select-match>
+                                <ui-select-choices repeat="invoice in ItemList  | unique:'_id.INCOMINGDATE'|filter: $select.search">
                                     <div>
-                                        <span style="color:forestgreen">{{invoice.INCOMINGDATE}}</span>
+                                        <span style="color:forestgreen">{{invoice._id.INCOMINGDATE}}</span>
                                     </div>
 
 
@@ -125,14 +104,10 @@
                             <ui-select ng-model="lotweight.selected"
                                        ui-select-focuser
                                        theme="selectize">
-
-                              
-
-                                <ui-select-match allow-clear="true" placeholder="">{{ $select.selected.LotWeight }}</ui-select-match>
-
-                                <ui-select-choices repeat="invoice in ItemList  | unique:'LotWeight'|filter: $select.search">
+                                <ui-select-match allow-clear="true">{{ $select.selected._id.LotWeight }}</ui-select-match>
+                                <ui-select-choices repeat="invoice in ItemList  | unique:'_id.LotWeight'|filter: $select.search">
                                     <div>
-                                        <span style="color:forestgreen">{{invoice.LotWeight}}</span>
+                                        <span style="color:forestgreen">{{invoice._id.LotWeight}}</span>
                                     </div>
                                 </ui-select-choices>
                             </ui-select>
@@ -143,14 +118,10 @@
                             <ui-select ng-model="location.selected"
                                        ui-select-focuser
                                        theme="selectize">
-
-                              
-
-                                <ui-select-match allow-clear="true" placeholder="">{{ $select.selected.LOCATION }}</ui-select-match>
-
-                                <ui-select-choices repeat="invoice in ItemList  | unique:'LOCATION'|filter: $select.search">
+                                <ui-select-match allow-clear="true">{{ $select.selected._id.LOCATION }}</ui-select-match>
+                                <ui-select-choices repeat="invoice in ItemList  | unique:'_id.LOCATION'|filter: $select.search">
                                     <div>
-                                        <span style="color:forestgreen">{{invoice.LOCATION}}</span>
+                                        <span style="color:forestgreen">{{invoice._id.LOCATION}}</span>
                                     </div>
                                 </ui-select-choices>
                             </ui-select>
@@ -161,14 +132,10 @@
                             <ui-select ng-model="grade.selected"
                                        ui-select-focuser
                                        theme="selectize">
-
-                                
-
-                                <ui-select-match allow-clear="true" placeholder="">{{ $select.selected.GRADE }}</ui-select-match>
-
-                                <ui-select-choices repeat="invoice in ItemList  | unique:'GRADE'|filter: $select.search">
+                                <ui-select-match allow-clear="true" >{{ $select.selected._id.GRADE }}</ui-select-match>
+                                <ui-select-choices repeat="invoice in ItemList  | unique:'_id.GRADE'|filter: $select.search">
                                     <div>
-                                        <span style="color:forestgreen">{{invoice.GRADE}}</span>
+                                        <span style="color:forestgreen">{{invoice._id.GRADE}}</span>
                                     </div>
                                 </ui-select-choices>
                             </ui-select>
@@ -179,14 +146,10 @@
                             <ui-select ng-model="finish.selected"
                                        ui-select-focuser
                                        theme="selectize">
-
-                              
-
-                                <ui-select-match allow-clear="true" placeholder="">{{ $select.selected.FINISH }}</ui-select-match>
-
-                                <ui-select-choices repeat="invoice in ItemList  | unique:'FINISH'|filter: $select.search">
+                                <ui-select-match allow-clear="true" >{{ $select.selected._id.FINISH }}</ui-select-match>
+                                <ui-select-choices repeat="invoice in ItemList  | unique:'_id.FINISH'|filter: $select.search">
                                     <div>
-                                        <span style="color:forestgreen">{{invoice.FINISH}}</span>
+                                        <span style="color:forestgreen">{{invoice._id.FINISH}}</span>
                                     </div>
                                 </ui-select-choices>
                             </ui-select>
@@ -197,14 +160,10 @@
                             <ui-select ng-model="thickness.selected"
                                        ui-select-focuser
                                        theme="selectize">
-
-                               
-
-                                <ui-select-match allow-clear="true" placeholder="">{{ $select.selected.THICKNESS }}</ui-select-match>
-
-                                <ui-select-choices repeat="invoice in ItemList  | unique:'THICKNESS'|filter: $select.search">
+                                <ui-select-match allow-clear="true">{{ $select.selected._id.THICKNESS }}</ui-select-match>
+                                <ui-select-choices repeat="invoice in ItemList  | unique:'_id.THICKNESS'|filter: $select.search">
                                     <div>
-                                        <span style="color:forestgreen">{{invoice.THICKNESS}}</span>
+                                        <span style="color:forestgreen">{{invoice._id.THICKNESS}}</span>
                                     </div>
                                 </ui-select-choices>
                             </ui-select>
@@ -215,14 +174,10 @@
                             <ui-select ng-model="width.selected"
                                        ui-select-focuser
                                        theme="selectize">
-
-                             
-
-                                <ui-select-match allow-clear="true" placeholder="">{{ $select.selected.WIDTH }}</ui-select-match>
-
-                                <ui-select-choices repeat="invoice in ItemList  | unique:'WIDTH'|filter: $select.search">
+                                <ui-select-match allow-clear="true" >{{ $select.selected._id.WIDTH }}</ui-select-match>
+                                <ui-select-choices repeat="invoice in ItemList  | unique:'_id.WIDTH'|filter: $select.search">
                                     <div>
-                                        <span style="color:forestgreen">{{invoice.WIDTH}}</span>
+                                        <span style="color:forestgreen">{{invoice._id.WIDTH}}</span>
                                     </div>
                                 </ui-select-choices>
                             </ui-select>
@@ -233,14 +188,10 @@
                             <ui-select ng-model="length.selected"
                                        ui-select-focuser
                                        theme="selectize">
-
-                              
-
-                                <ui-select-match allow-clear="true" placeholder="">{{ $select.selected.LENGTH }}</ui-select-match>
-
-                                <ui-select-choices repeat="invoice in ItemList  | unique:'LENGTH'|filter: $select.search">
+                                <ui-select-match allow-clear="true" >{{ $select.selected._id.LENGTH }}</ui-select-match>
+                                <ui-select-choices repeat="invoice in ItemList  | unique:'_id.LENGTH'|filter: $select.search">
                                     <div>
-                                        <span style="color:forestgreen">{{invoice.LENGTH}}</span>
+                                        <span style="color:forestgreen">{{invoice._id.LENGTH}}</span>
                                     </div>
                                 </ui-select-choices>
                             </ui-select>
@@ -251,14 +202,10 @@
                             <ui-select ng-model="netweight.selected"
                                        ui-select-focuser
                                        theme="selectize">
-
-                             
-
-                                <ui-select-match allow-clear="true" placeholder="">{{ $select.selected.NETWEIGHT }}</ui-select-match>
-
-                                <ui-select-choices repeat="invoice in ItemList  | unique:'NETWEIGHT'|filter: $select.search">
+                                <ui-select-match allow-clear="true" >{{ $select.selected._id.NETWEIGHT }}</ui-select-match>
+                                <ui-select-choices repeat="invoice in ItemList  | unique:'_id.NETWEIGHT'|filter: $select.search">
                                     <div>
-                                        <span style="color:forestgreen">{{invoice.NETWEIGHT}}</span>
+                                        <span style="color:forestgreen">{{invoice._id.NETWEIGHT}}</span>
                                     </div>
                                 </ui-select-choices>
                             </ui-select>
@@ -269,14 +216,10 @@
                             <ui-select ng-model="grossweight.selected"
                                        ui-select-focuser
                                        theme="selectize">
-
-                             
-
-                                <ui-select-match allow-clear="true" placeholder="">{{ $select.selected.GROSSWT }}</ui-select-match>
-
-                                <ui-select-choices repeat="invoice in ItemList  | unique:'GROSSWT'|filter: $select.search">
+                                <ui-select-match allow-clear="true" >{{ $select.selected._id.GROSSWT }}</ui-select-match>
+                                <ui-select-choices repeat="invoice in ItemList  | unique:'_id.GROSSWT'|filter: $select.search">
                                     <div>
-                                        <span style="color:forestgreen">{{invoice.GROSSWT}}</span>
+                                        <span style="color:forestgreen">{{invoice._id.GROSSWT}}</span>
                                     </div>
                                 </ui-select-choices>
                             </ui-select>
@@ -287,14 +230,10 @@
                             <ui-select ng-model="pcslengthmtr.selected"
                                        ui-select-focuser
                                        theme="selectize">
-
-                            
-
-                                <ui-select-match allow-clear="true" placeholder="">{{ $select.selected.PCS/LENGTHINMTRS }}</ui-select-match>
-
-                                <ui-select-choices repeat="invoice in ItemList  | unique:'PCS/LENGTHINMTRS'|filter: $select.search">
+                                <ui-select-match allow-clear="true" >{{ $select.selected._id.PCS/LENGTHINMTRS }}</ui-select-match>
+                                <ui-select-choices repeat="invoice in ItemList  | unique:'_id.PCS/LENGTHINMTRS'|filter: $select.search">
                                     <div>
-                                        <span style="color:forestgreen">{{invoice.PCS/LENGTHINMTRS}}</span>
+                                        <span style="color:forestgreen">{{invoice._id.PCS/LENGTHINMTRS}}</span>
                                     </div>
                                 </ui-select-choices>
                             </ui-select>
@@ -318,7 +257,7 @@
                             <table class="table-condensed border-dark" fixed-header id="ItemTable" style="width:100%; height:400px; font-size:12px;">
                                 <thead style="background-color:floralwhite">
                                     <tr>
-                                        <th style="text-align:center"><input type="checkbox" /></th>
+                                        <th style="text-align:center"><input ng-model="selectAll" ng-click="selectAllLineItem(filterList)" type="checkbox" /></th>
                                         <th>INVOICE NO </th>
                                         <th>SUB CATEGORY </th>
                                         <th>COIL NO</th>
@@ -349,7 +288,7 @@
 
                                             <td> {{item.DESCRIPTION}}</td>
                                         *@
-                                        <td style="text-align:center"><input type="checkbox" /></td>
+                                        <td style="text-align:center"><input ng-click="selectLineItem(item)" ng-model="item.selected" type="checkbox" /></td>
                                         <td> {{item.no}}</td>
                                         <td> {{item.SUBCATEGORY}}</td>
                                         <td> {{item.COILSHEETNO}}</td>
