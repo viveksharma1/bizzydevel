@@ -80,114 +80,112 @@
                     <button class="btn btn-sm btn-success active" ng-click="createGroupBtn()">Group</button>
                 </div>
             </div>
-            <div class="modal-body content" style="padding:10px 20px;height:300px">
-                <div class="col-sm-6 paddinright">
-                   
+            <div class="modal-body content" style="padding:10px 20px;">
+                <div class="content">
+                    <div class="col-sm-6 paddinright">
 
-                    @*
-    <div class="col-sm-12 form-group padding5">
-        <label>Account Type</label>
-        <select class="form-control" ng-model="accountType">
-            <option>Current assets</option>
-            <option>Current liabilities</option>
-            <option>Equity</option>
-            <option>Bank</option>
-            <option>Fixed assets</option>
-            <option>Equity</option>
-            <option>Income</option>
-            <option>Direct Expense</option>
-            <option>Tax And Duties</option>
 
-        </select>
-    </div>
-                    *@
+                        @*
                     <div class="col-sm-12 form-group padding5">
-                        <label><span class="red">*</span>Name</label>
-                        <input ng-model="accountName" type="text" class="form-control" />
+                        <label>Account Type</label>
+                        <select class="form-control" ng-model="accountType">
+                            <option>Current assets</option>
+                            <option>Current liabilities</option>
+                            <option>Equity</option>
+                            <option>Bank</option>
+                            <option>Fixed assets</option>
+                            <option>Equity</option>
+                            <option>Income</option>
+                            <option>Direct Expense</option>
+                            <option>Tax And Duties</option>
+
+                        </select>
                     </div>
-                    
-                    <div class="col-sm-12 form-group padding5">
-                        <label><span class="red">*</span>Under</label>
-                        <div>
-                         
-                            <ui-select ng-model="groupMasters.selected" id="countryCode"
-                                      >
-                                
-                                <ui-select-match placeholder="Choose Group" 
-                                     >{{$select.selected.name}}</ui-select-match>
-                                   
-                                   
-                                    
-                                <ui-select-header>Top of the list!</ui-select-header>
-                                
-                               
-                                <ui-select-choices repeat="person in groupMaster  | filter: $select.search">
-                                    <div ng-init="balanceType = $select.selected.balanceType">
-                                        <span style="color:black"ng-model="supplier1" ng-bind-html="person.name | highlight: $select.search">{{person.type}}</span>
-                                        <span style="color:forestgreen">({{person.type}})</span>
-                                       
-                                    </div>
-
-
-                                </ui-select-choices>
-                            </ui-select>
-
+                        *@
+                        <div class="col-sm-12 form-group padding5">
+                            <label><span class="red">*</span>Name</label>
+                            <input ng-model="accountName" type="text" class="form-control" />
                         </div>
-                    </div>
 
-                    <div class="col-sm-6 form-group padding5">
-                        <label>Balance Type </label>
-                        
-                        <span style="padding-top:12px;margin-top:12px">
-                            <select  ng-model="balanceType"  
-                                    >
-                                <option value="credit">Credit</option>
+                        <div class="col-sm-12 form-group padding5">
+                            <label><span class="red">*</span>Under</label>
+                            <div>
 
-                                <option value="debit">Debit</option>
-                            </select>
-                        </span>
-                  
+                                <ui-select ng-model="groupMasters.selected" id="countryCode">
 
-                    </div>
+                                    <ui-select-match placeholder="Choose Group">{{$select.selected.name}}</ui-select-match>
 
-                   
-                </div>
 
-                <div id="form-popoverPopup" class="popupbox">
-                    <div>
-                        <label style="color:firebrick"><b>New Group</b></label>
-                        <i class="fa fa-times-circle cursor pull-right" title="close" ng-click="popuclose()"></i>
-                    </div>
-                    <div class="form-content" style="height:200px">
-                        <div class="form-group">
-                            <label><span class="red">*</span>Group Name</label>
-                            <input type="text" ng-model="groupName" class="form-control" />
+
+                                    <ui-select-header>Top of the list!</ui-select-header>
+
+
+                                    <ui-select-choices repeat="person in groupMaster  | filter: $select.search">
+                                        <div ng-init="balanceType = $select.selected.balanceType">
+                                            <span style="color:black" ng-model="supplier1" ng-bind-html="person.name | highlight: $select.search">{{person.type}}</span>
+                                            <span style="color:forestgreen">({{person.type}})</span>
+
+                                        </div>
+
+
+                                    </ui-select-choices>
+                                </ui-select>
+
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label><span class="red">*</span>Under<br /></label>
-                            <span>
-                                <select style="width:200px;height:300px"
-                                        class="js-example-basic-single">
-                                    <option value="AL">Alabama</option>
 
-                                    <option value="WY">Wyoming</option>
+                        <div class="col-sm-6 form-group padding5">
+                            <label>Balance Type </label>
+
+                            <span style="padding-top:12px;margin-top:12px;">
+                                <select ng-model="balanceType">
+                                    <option value="credit">Credit</option>
+
+                                    <option value="debit">Debit</option>
                                 </select>
                             </span>
+
+
+                        </div>
+
+
+                    </div>
+
+                    <div id="form-popoverPopup" class="popupbox">
+                        <div>
+                            <label style="color:firebrick"><b>New Group</b></label>
+                            <i class="fa fa-times-circle cursor pull-right" title="close" ng-click="popuclose()"></i>
+                        </div>
+                        <div class="form-content" style="height:200px">
+                            <div class="form-group">
+                                <label><span class="red">*</span>Group Name</label>
+                                <input type="text" ng-model="groupName" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label><span class="red">*</span>Under<br /></label>
+                                <span>
+                                    <select style="width:200px;height:300px"
+                                            class="js-example-basic-single">
+                                        <option value="AL">Alabama</option>
+
+                                        <option value="WY">Wyoming</option>
+                                    </select>
+                                </span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="col-sm-6">
+                    <div class="col-sm-6">
 
-                    
-                    <div class="col-sm-12 form-group padding5">
-                        <label>Description</label>
-                        <input  ng-model="description" type="text"  class="form-control" ng-disabled="isDisabled" />
-                    </div>
-                    @*<div class="col-sm-12 form-group padding5" style="margin:20px 0px;">
+
+                        <div class="col-sm-12 form-group padding5">
+                            <label>Description</label>
+                            <input ng-model="description" type="text" class="form-control" ng-disabled="isDisabled" />
+                        </div>
+                        @*<div class="col-sm-12 form-group padding5" style="margin:20px 0px;">
                         <label><input type="checkbox" ng-disabled="isDisabled" ng-model="checkboxModel.value1"ng-true-value="'true'" ng-false-value="'false'"/> Is sub-account </label>
                         <div >
-                           
+
                             <ui-select ng-model="accounts.selected" id="countryCode" ng-disabled="isDisabled"
                                        ui-select-focuser
                                        theme="bootstrap">
@@ -205,23 +203,204 @@
                         </div>
                     </div>*@
 
-                    
-                    <div class="col-sm-6 form-group padding5">
-                        <label>Rate (%)</label>
-                        <input ng-model="rate" ng-disabled="isDisabled" type="text" class="form-control"  />
-                       
-                        <label>Opening Balance</label>
-                        <input ng-model="openingBalance"  ng-disabled="isDisabled" type="text" class="form-control" />
+
+                        <div class="col-sm-6 form-group padding5">
+                            <label>Rate (%)</label>
+                            <input ng-model="rate" ng-disabled="isDisabled" type="text" class="form-control" />
+
+                            <label>Opening Balance</label>
+                            <input ng-model="openingBalance" ng-disabled="isDisabled" type="text" class="form-control" />
+
+                        </div>
+
+
 
                     </div>
-                   
 
-                    
+                </div>
+
+                <div class="col-sm-12 padding" style="padding-top:20px !important">
+                    <ul class="nav nav-tabs tabnav my">
+                        <li class="active"><a href="#Basic" data-toggle="tab" style="padding:5px 43px !important"><i class="fa fa-info-circle"></i> Basic</a></li>
+                        <li><a href="#Address" data-toggle="tab" style="padding:5px 43px !important"><i class="fa fa-map-marker"></i> Address</a></li>
+                        <li><a href="#Notes" data-toggle="tab" style="padding:5px 43px !important"><i class="fa fa-file"></i> Notes</a></li>
+                        <li><a href="#TaxInfo" data-toggle="tab" style="padding:5px 43px !important"><i class="fa fa-info-circle"></i> Tax Info</a></li>
+
+                        <li><a href="#Attachments" data-toggle="tab" style="padding:5px 43px !important"><i class="fa fa-paperclip"></i> Attachments</a></li>
+                    </ul>
+
+                    <div class="tab-content tabcontent">
+                        <div id="Basic" class="tab-pane fade active in ">
+                            <div class="col-sm-4">
+                                <label class="tabheading">Email</label>
+                                <input type="text" class="form-control" />
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="tabheading">Phone</label>
+                                <input type="text" class="form-control" />
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="tabheading">Mobile</label>
+                                <input type="text" class="form-control" />
+                            </div>
+
+
+
+
+                        </div>
+
+                        <div id="Address" class="tab-pane fade">
+                            <div class="col-sm-6 padding">
+                                <h4 class="tabheading">Billing Address</h4>
+                                <div class="form-group col-sm-12 padding5">
+                                    <textarea class="form-control" ng-model="street" placeholder="Street"></textarea>
+                                </div>
+                                <div class="form-group col-sm-6 padding5">
+                                    <input type="text" class="form-control" ng-model="city" placeholder="City/Town" />
+                                </div>
+                                <div class="form-group col-sm-6 padding5">
+                                    <input type="text" class="form-control" ng-model="state" placeholder="State" />
+                                </div>
+                                <div class="form-group col-sm-6 padding5">
+                                    <input type="text" class="form-control" ng-model="postalCode" placeholder="Postal Code" />
+                                </div>
+                                <div class="form-group col-sm-6 padding5">
+                                    <input type="text" class="form-control" ng-model="country" placeholder="Country" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 padding">
+                                <h4 class="tabheading">Shipping Address <small class="pull-right" style="line-height:13px"><input type="checkbox" class="pull-left" style="margin:0px" /> Same as billing address</small></h4>
+                                <div class="form-group col-sm-12 padding5">
+                                    <textarea class="form-control" ng-model="street1" placeholder="Street"></textarea>
+                                </div>
+                                <div class="form-group col-sm-6 padding5">
+                                    <input type="text" class="form-control" ng-model="city1" placeholder="City/Town" />
+                                </div>
+                                <div class="form-group col-sm-6 padding5">
+                                    <input type="text" class="form-control" ng-model="state1" placeholder="State" />
+                                </div>
+                                <div class="form-group col-sm-6 padding5">
+                                    <input type="text" class="form-control" ng-model="postalCode1" placeholder="Postal Code" />
+                                </div>
+                                <div class="form-group col-sm-6 padding5">
+                                    <input type="text" class="form-control" ng-model="country1" placeholder="Country" />
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div id="Notes" class="tab-pane fade">
+                            <h4 class="tabheading">Notes</h4>
+                            <textarea class="form-control" ng-model="notes" style="height:100px"></textarea>
+                        </div>
+
+                        <div id="TaxInfo" class="tab-pane fade" ">
+                            <div class="col-sm-4">
+                                <label class="tabheading">TIN No.</label>
+                                <input type="text" ng-model="taxRegNo" class="form-control ng-pristine ng-untouched ng-valid">
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="tabheading">CST Reg. No.</label>
+                                <input type="text" ng-model="cstRegNo" class="form-control ng-pristine ng-valid ng-touched">
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="tabheading">PAN No.</label>
+                                <input type="text" ng-model="panNo" class="form-control ng-pristine ng-untouched ng-valid">
+                            </div>
+
+                            <div class="col-sm-4">
+                                <label class="tabheading">Range</label>
+                                <input type="text" ng-model="range" class="form-control ng-pristine ng-untouched ng-valid">
+                            </div>
+
+                            <div class="col-sm-4">
+                                <label class="tabheading">Division</label>
+                                <input type="text" ng-model="division" class="form-control ng-pristine ng-untouched ng-valid">
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="tabheading">Address</label>
+                                <input type="text" ng-model="address" class="form-control ng-pristine ng-untouched ng-valid">
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="tabheading">Commisionerate</label>
+                                <input type="text" ng-model="commisionerate" class="form-control ng-pristine ng-untouched ng-valid">
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="tabheading">CE Region No.</label>
+                                <input type="text" ng-model="ceRegionNo" class="form-control ng-pristine ng-valid ng-touched">
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="tabheading">ECC Code No.</label>
+                                <input type="text" ng-model="eccCodeNo" class="form-control ng-pristine ng-untouched ng-valid">
+                            </div>
+                            <div class="col-sm-4" style="margin-bottom:10px">
+                                <label class="tabheading">IEC No.</label>
+                                <input type="text" ng-model="iecNo" class="form-control ng-pristine ng-untouched ng-valid">
+                            </div>
+
+
+                        </div>
+
+
+                        <div id="Attachments" class="tab-pane fade">
+                            <div class="col-sm-12" style="margin:20px 0px">
+
+
+                                @*<ul ng-repeat="data in datapath">
+                                <li>
+                                    <span> <a href="" style="font-size:medium" class="pointer fa fa-file-pdf-o" aria-hidden="true"> <b ng-click="getfile(data)">{{data.replace("server/boot/uploads/"+ billNo,'')}}</b></a></span>
+                                    <i class="fa fa-times" aria-hidden="true" ng-click="deletefile(data,$index)"></i>
+                                </li>
+                            </ul>*@
+
+                                <div class="col-sm-12" style="padding:0px">
+
+
+                                    <div class="col-sm-5 padding5">
+                                        <input type="text" class="form-control" id="NameInput" placeholder="Title" />
+                                    </div>
+                                    <div class="col-sm-5 padding5">
+                                        @*<input type="file" class="form-control" id="id=" uploadBtn" />*@
+                                        <input type="file" class="filestyle" id="uploadBtn" data-buttonName="btn-info">
+                                    </div>
+
+                                    <div class="col-sm-2 padding5">
+                                        <button type="button" class="btn btn-sm btn-primary Attechmentdetail" style="width:100%">Add</button>
+                                    </div>
+
+
+                                    <div style="float:left; width:100%; padding:10px 10px; border-bottom:1px dotted #ccc;" class="filenameDiv">
+
+
+                                        <div class="col-sm-5 padding5" style="word-break:break-all">
+                                            <strong id="name"></strong>
+                                        </div>
+
+                                        <div class="col-sm-5 padding5 cursor" style="word-break:break-all">
+                                            <a id="type" class="cursor"></a>
+                                        </div>
+
+                                        <div class="col-sm-2">
+                                            <i class="fa fa-times pull-right text-danger" id="removeattachment"></i>
+                                        </div>
+
+
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
 
+            
 
-            </div>
+
+                </div>
             <div class="modal-footer content">
                 <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
                 <button type="button" class="btn btn-primary btn-sm"  ng-click="createAccount()">Save changes</button>

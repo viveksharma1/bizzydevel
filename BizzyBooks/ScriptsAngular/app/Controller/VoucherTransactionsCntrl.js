@@ -31,6 +31,10 @@
 
             $state.go('Customer.SalesInvoice', { voId: id });
         }
+        if (voType == 'Receive Payment') {
+
+            $state.go('Customer.ReceivePayment', { voId: id });
+        }
 
 
 

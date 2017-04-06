@@ -10,7 +10,20 @@
 
         
     };
+    $('.filenameDiv').hide();
+    $('.attechmentDescription').hide();
+    $('.Attechmentdetail').click(function () {
+        $('.filenameDiv').show();
+        $("#name").append($("#NameInput").val());
+        $("#type").append($("#uploadBtn").val());
 
+    });
+
+    $('#removeattachment').click(function () {
+        $('.filenameDiv').hide();
+    });
+
+    $(":file").filestyle({ buttonName: "btn-sm btn-info" });
     $(".js-example-basic-single").select2();
     console.log(localStorage.DefaultCompanyName);
 

@@ -138,9 +138,12 @@ var myApp = angular
         });
 
         $stateProvider.state("Customer.ReceivePayment", {
-            url: "/ReceivePayment",
+            url: "/ReceivePayment/:voId",
             templateUrl: "Customer/ReceivePayment",
-            controller: "ReceivePaymentCntrl"
+            controller: "ReceivePaymentCntrl",
+            params: {
+                voId: null
+            }
 
         });
 

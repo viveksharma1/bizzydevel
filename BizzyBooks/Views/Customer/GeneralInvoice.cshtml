@@ -4,7 +4,10 @@
     Layout = null;
 }
 
+<script type="text/ng-template" id="popover_template.html">
 
+    <table style='width:100%'><tr><th>Date</th><th>Amount Paid</th><th>Voch No.</th></tr><tr ng-repeat='data in friends' class="cursor" ui-sref="Customer.MakePayment({voId:data.id})"><td style="color:forestgreen">{{data.date}}</td><td>Rs{{data.amount}}</td><td>{{data.vochNo}}</td></tr><tr></tr></table>
+</script>
 <script type="text/ng-template" id="/ui-tree-select.html">
     <ui-select ng-model="model.$selected"
                ui-select-focuser
@@ -230,7 +233,9 @@
 
 
                 <button type="button" class="btn btn-sm btn-default pull-right" style="margin-top:65px">Receipt</button>
-                <small style="float:right; width:100%; margin:10px 0px"><span class="text-primary cursor" id="myPopover" data-toggle="popover" data-placement="left">1 reciept </span> made on 12/march/2017</small>
+                <div ng-repeat="data in paymentLog | limitTo:1">
+                    <small style="float:right; width:100%; margin:10px 0px"> <a class="cursor" pop-over friends="paymentLog" , title="Payment Log">{{paymentLog.length}} Payment Made</a></small>
+                </div>
                 <h4 class="tabheading" style="float:right; width:100%; margin-top:0px !important">Invoice no.</h4>
                 @*<input type="text" class="form-control pull-right" ng-model="expenseNo" disabled style="width:100px" />*@
                 <input type="text" class="form-control pull-right" id="billNo" ng-model="billNo" style="width:100px" />
@@ -322,21 +327,16 @@
                         <div class="modal-body" style="float:left; width:100%; padding:10px;">
                             <div class="col-sm-2 padding">
 
-                                <div class="col-sm-12 filterBox" style="margin-bottom:10px">
+                                <div class="col-sm-12 filterBox" style="margin-bottom:10px;">
                                     <h3>Sales</h3>
                                     <div class="form-group">
                                         <h4 class="tabheading font_11">Rate</h4>
-                                        <input type="text" ng-model="itemRate"class="form-control" />
-                                    </div>
-                                   
-                                    <div class="form-group" style="margin-top:5px">
-                                        <label><input type="checkbox" /> All Qty</label>
+                                        <input type="number" step="0.01" ng-model="itemRate" class="form-control" />
                                     </div>
                                     <hr style="margin:0px 0px 10px 0px" />
                                     <span class="pull-right">
-                                        <button class="btn btn-sm btn-default" ng-click="applyRate('0')" type="button">Clear</button>
-                                        <button class="btn btn-sm btn-primary" ng-click="applyRate(itemRate)"
-                                                type="button">Add</button>
+                                        <button class="btn btn-sm btn-default" ng-click="clearRate()" type="button">Clear</button>
+                                        <button class="btn btn-sm btn-primary" ng-click="applyRate(itemRate)" type="button">Apply</button>
                                     </span>
                                 </div>
 
@@ -349,10 +349,10 @@
                                                    ui-select-focuser
                                                    theme="selectize" on-select="applyFilter()">
                                             <ui-select-match allow-clear="true" 
-                                                             placeholder="Select Subcategory">{{ $select.selected.SUBCATEGORY }}</ui-select-match>
-                                            <ui-select-choices repeat="invoice in ItemList  | unique:'SUBCATEGORY'|filter: $select.search">
+                                                             placeholder="Select Subcategory">{{ $select.selected._id.SUBCATEGORY }}</ui-select-match>
+                                            <ui-select-choices repeat="invoice in ItemList  | unique:'_id.SUBCATEGORY'|filter: $select.search">
                                                 <div>
-                                                    <span style="color:forestgreen">{{invoice.SUBCATEGORY}}</span>
+                                                    <span style="color:forestgreen">{{invoice._id.SUBCATEGORY}}</span>
                                                 </div>
 
 
@@ -365,10 +365,10 @@
                                         <ui-select ng-model="coilsheetno.selected"
                                                    ui-select-focuser
                                                    theme="selectize" on-select="applyFilter()">
-                                            <ui-select-match allow-clear="true" placeholder="Select Coil/Sheet">{{ $select.selected.COILSHEETNO }}</ui-select-match>
-                                            <ui-select-choices repeat="invoice in ItemList  | unique:'COILSHEETNO'|filter: $select.search">
+                                            <ui-select-match allow-clear="true" placeholder="Select Coil/Sheet">{{ $select.selected._id.COILSHEETNO }}</ui-select-match>
+                                            <ui-select-choices repeat="invoice in ItemList  | unique:'_id.COILSHEETNO'|filter: $select.search">
                                                 <div>
-                                                    <span style="color:forestgreen">{{invoice.COILSHEETNO}}</span>
+                                                    <span style="color:forestgreen">{{invoice._id.COILSHEETNO}}</span>
                                                 </div>
 
 
@@ -381,10 +381,10 @@
                                         <ui-select ng-model="incomingdate.selected"
                                                    ui-select-focuser
                                                    theme="selectize" on-select="applyFilter()">
-                                            <ui-select-match allow-clear="true" placeholder="Select Incoming Date">{{ $select.selected.INCOMINGDATE }}</ui-select-match>
-                                            <ui-select-choices repeat="invoice in ItemList  | unique:'INCOMINGDATE'|filter: $select.search">
+                                            <ui-select-match allow-clear="true" placeholder="Select Incoming Date">{{ $select.selected._id.INCOMINGDATE }}</ui-select-match>
+                                            <ui-select-choices repeat="invoice in ItemList  | unique:'_id.INCOMINGDATE'|filter: $select.search">
                                                 <div>
-                                                    <span style="color:forestgreen">{{invoice.INCOMINGDATE}}</span>
+                                                    <span style="color:forestgreen">{{invoice._id.INCOMINGDATE}}</span>
                                                 </div>
 
 
@@ -397,10 +397,10 @@
                                         <ui-select ng-model="lotweight.selected"
                                                    ui-select-focuser
                                                    theme="selectize" on-select="applyFilter()">
-                                            <ui-select-match allow-clear="true" placeholder="Select Lot Weight">{{ $select.selected.LotWeight }}</ui-select-match>
-                                            <ui-select-choices repeat="invoice in ItemList  | unique:'LotWeight'|filter: $select.search">
+                                            <ui-select-match allow-clear="true" placeholder="Select Lot Weight">{{ $select.selected._id.LotWeight }}</ui-select-match>
+                                            <ui-select-choices repeat="invoice in ItemList  | unique:'_id.LotWeight'|filter: $select.search">
                                                 <div>
-                                                    <span style="color:forestgreen">{{invoice.LotWeight}}</span>
+                                                    <span style="color:forestgreen">{{invoice._id.LotWeight}}</span>
                                                 </div>
                                             </ui-select-choices>
                                         </ui-select>
@@ -411,10 +411,10 @@
                                         <ui-select ng-model="location.selected"
                                                    ui-select-focuser
                                                    theme="selectize" on-select="applyFilter()">
-                                            <ui-select-match allow-clear="true" placeholder="Select Location">{{ $select.selected.LOCATION }}</ui-select-match>
-                                            <ui-select-choices repeat="invoice in ItemList  | unique:'LOCATION'|filter: $select.search">
+                                            <ui-select-match allow-clear="true" placeholder="Select Location">{{ $select.selected._id.LOCATION }}</ui-select-match>
+                                            <ui-select-choices repeat="invoice in ItemList  | unique:'_id.LOCATION'|filter: $select.search">
                                                 <div>
-                                                    <span style="color:forestgreen">{{invoice.LOCATION}}</span>
+                                                    <span style="color:forestgreen">{{invoice._id.LOCATION}}</span>
                                                 </div>
                                             </ui-select-choices>
                                         </ui-select>
@@ -425,10 +425,10 @@
                                         <ui-select ng-model="grade.selected"
                                                    ui-select-focuser
                                                    theme="selectize">
-                                            <ui-select-match allow-clear="true" placeholder="Select Grade">{{ $select.selected.GRADE }}</ui-select-match>
-                                            <ui-select-choices repeat="invoice in ItemList  | unique:'GRADE'|filter: $select.search">
+                                            <ui-select-match allow-clear="true" placeholder="Select Grade">{{ $select.selected._id.GRADE }}</ui-select-match>
+                                            <ui-select-choices repeat="invoice in ItemList  | unique:'_id.GRADE'|filter: $select.search">
                                                 <div>
-                                                    <span style="color:forestgreen">{{invoice.GRADE}}</span>
+                                                    <span style="color:forestgreen">{{invoice._id.GRADE}}</span>
                                                 </div>
                                             </ui-select-choices>
                                         </ui-select>
@@ -439,10 +439,10 @@
                                         <ui-select ng-model="finish.selected"
                                                    ui-select-focuser
                                                    theme="selectize">
-                                            <ui-select-match allow-clear="true" placeholder="Select Finish">{{ $select.selected.FINISH }}</ui-select-match>
-                                            <ui-select-choices repeat="invoice in ItemList  | unique:'FINISH'|filter: $select.search">
+                                            <ui-select-match allow-clear="true" placeholder="Select Finish">{{ $select.selected._id.FINISH }}</ui-select-match>
+                                            <ui-select-choices repeat="invoice in ItemList  | unique:'_id.FINISH'|filter: $select.search">
                                                 <div>
-                                                    <span style="color:forestgreen">{{invoice.FINISH}}</span>
+                                                    <span style="color:forestgreen">{{invoice._id.FINISH}}</span>
                                                 </div>
                                             </ui-select-choices>
                                         </ui-select>
@@ -453,10 +453,10 @@
                                         <ui-select ng-model="thickness.selected"
                                                    ui-select-focuser
                                                    theme="selectize">
-                                            <ui-select-match allow-clear="true" placeholder="Select Thickness">{{ $select.selected.THICKNESS }}</ui-select-match>
-                                            <ui-select-choices repeat="invoice in ItemList  | unique:'THICKNESS'|filter: $select.search">
+                                            <ui-select-match allow-clear="true" placeholder="Select Thickness">{{ $select.selected._id.THICKNESS }}</ui-select-match>
+                                            <ui-select-choices repeat="invoice in ItemList  | unique:'_id.THICKNESS'|filter: $select.search">
                                                 <div>
-                                                    <span style="color:forestgreen">{{invoice.THICKNESS}}</span>
+                                                    <span style="color:forestgreen">{{invoice._id.THICKNESS}}</span>
                                                 </div>
                                             </ui-select-choices>
                                         </ui-select>
@@ -467,10 +467,10 @@
                                         <ui-select ng-model="width.selected"
                                                    ui-select-focuser
                                                    theme="selectize">
-                                            <ui-select-match allow-clear="true" placeholder="Select Width">{{ $select.selected.WIDTH }}</ui-select-match>
-                                            <ui-select-choices repeat="invoice in ItemList  | unique:'WIDTH'|filter: $select.search">
+                                            <ui-select-match allow-clear="true" placeholder="Select Width">{{ $select.selected._id.WIDTH }}</ui-select-match>
+                                            <ui-select-choices repeat="invoice in ItemList  | unique:'_id.WIDTH'|filter: $select.search">
                                                 <div>
-                                                    <span style="color:forestgreen">{{invoice.WIDTH}}</span>
+                                                    <span style="color:forestgreen">{{invoice._id.WIDTH}}</span>
                                                 </div>
                                             </ui-select-choices>
                                         </ui-select>
@@ -481,10 +481,10 @@
                                         <ui-select ng-model="length.selected"
                                                    ui-select-focuser
                                                    theme="selectize">
-                                            <ui-select-match allow-clear="true" placeholder="Select Length">{{ $select.selected.LENGTH }}</ui-select-match>
-                                            <ui-select-choices repeat="invoice in ItemList  | unique:'LENGTH'|filter: $select.search">
+                                            <ui-select-match allow-clear="true" placeholder="Select Length">{{ $select.selected._id.LENGTH }}</ui-select-match>
+                                            <ui-select-choices repeat="invoice in ItemList  | unique:'_id.LENGTH'|filter: $select.search">
                                                 <div>
-                                                    <span style="color:forestgreen">{{invoice.LENGTH}}</span>
+                                                    <span style="color:forestgreen">{{invoice._id.LENGTH}}</span>
                                                 </div>
                                             </ui-select-choices>
                                         </ui-select>
@@ -495,10 +495,10 @@
                                         <ui-select ng-model="netweight.selected"
                                                    ui-select-focuser
                                                    theme="selectize">
-                                            <ui-select-match allow-clear="true" placeholder="Select Net Weight">{{ $select.selected.NETWEIGHT }}</ui-select-match>
-                                            <ui-select-choices repeat="invoice in ItemList  | unique:'NETWEIGHT'|filter: $select.search">
+                                            <ui-select-match allow-clear="true" placeholder="Select Net Weight">{{ $select.selected._id.NETWEIGHT }}</ui-select-match>
+                                            <ui-select-choices repeat="invoice in ItemList  | unique:'_id.NETWEIGHT'|filter: $select.search">
                                                 <div>
-                                                    <span style="color:forestgreen">{{invoice.NETWEIGHT}}</span>
+                                                    <span style="color:forestgreen">{{invoice._id.NETWEIGHT}}</span>
                                                 </div>
                                             </ui-select-choices>
                                         </ui-select>
@@ -509,10 +509,10 @@
                                         <ui-select ng-model="grossweight.selected"
                                                    ui-select-focuser
                                                    theme="selectize">
-                                            <ui-select-match allow-clear="true" placeholder="Select Gross Weight">{{ $select.selected.GROSSWT }}</ui-select-match>
-                                            <ui-select-choices repeat="invoice in ItemList  | unique:'GROSSWT'|filter: $select.search">
+                                            <ui-select-match allow-clear="true" placeholder="Select Gross Weight">{{ $select.selected._id.GROSSWT }}</ui-select-match>
+                                            <ui-select-choices repeat="invoice in ItemList  | unique:'_id.GROSSWT'|filter: $select.search">
                                                 <div>
-                                                    <span style="color:forestgreen">{{invoice.GROSSWT}}</span>
+                                                    <span style="color:forestgreen">{{invoice._id.GROSSWT}}</span>
                                                 </div>
                                             </ui-select-choices>
                                         </ui-select>
@@ -523,10 +523,10 @@
                                         <ui-select ng-model="pcslengthmtr.selected"
                                                    ui-select-focuser
                                                    theme="selectize">
-                                            <ui-select-match allow-clear="true" placeholder="Select Gross Weight">{{ $select.selected.PCS/LENGTHINMTRS }}</ui-select-match>
-                                            <ui-select-choices repeat="invoice in ItemList  | unique:'PCS/LENGTHINMTRS'|filter: $select.search">
+                                            <ui-select-match allow-clear="true" placeholder="Select Gross Weight">{{ $select.selected._id.PCS/LENGTHINMTRS }}</ui-select-match>
+                                            <ui-select-choices repeat="invoice in ItemList  | unique:'_id.PCS/LENGTHINMTRS'|filter: $select.search">
                                                 <div>
-                                                    <span style="color:forestgreen">{{invoice.PCS/LENGTHINMTRS}}</span>
+                                                    <span style="color:forestgreen">{{invoice._id.PCS/LENGTHINMTRS}}</span>
                                                 </div>
                                             </ui-select-choices>
                                         </ui-select>
@@ -543,23 +543,30 @@
                             <div class="col-sm-10">
                                 <table style="width:100%; margin:10px 0px; border:1px solid #e3e3e3; background:rgba(158, 158, 158, 0.03)">
                                     <tr>
-                                        <th class="tablepadding lightblue">Stock</th>
+                                        <th class="tablepadding lightblue" width="126">
+                                            <div class="btn-group btnhover">
+                                                <button type="button" ng-click="showItemInventory()" class="btn btn-xs btn-default active">Inventory</button>
+                                                <button type="button" ng-click="showItemCart()" class="btn btn-xs  btn-default">Cart</button>
+
+                                            </div>
+
+                                        </th>
                                         <td class="tablepadding">
                                             <strong>Total Item :</strong>
-                                            <span class="text-primary">{{totalItem}}</span>
+                                            <span class="text-primary">{{cartTotalItem}}</span>
                                         </td>
                                         <td class="tablepadding">
                                             <strong>Total Qty :</strong>
-                                            <span class="text-primary">{{totalQty}}</span>
+                                            <span class="text-primary">{{cartTotalQty}}</span>
                                         </td>
                                         <td class="tablepadding">
                                             <strong>Total Amount :</strong>
-                                            <span class="text-primary">{{totalAmount}}</span>
+                                            <span class="text-primary">{{cartTotalAmount}}</span>
                                         </td>
                                         <td style="text-align:right" class="tablepadding">
-                                            <button class="btn btn-xs btn-warning"  ng-click="showItemCart()"style="margin-right:5px">View</button>
-                                            <button class="btn btn-xs btn-danger" style="margin-right:5px">Remove</button>
-                                            <button class="btn btn-xs btn-primary" ng-click="addItemToInvoice()" >Add</button>
+                                            @*<button class="btn btn-xs btn-warning" ng-click="showItemCart()" style="margin-right:5px">View</button>*@
+                                            <button class="btn btn-xs btn-danger" ng-show="isCart" ng-click="removeFormCart(selectAllItem)" style="margin-right:5px">Remove</button>
+                                            <button class="btn btn-xs btn-primary" ng-click="addItemToInvoice()">Check Out</button>
                                         </td>
                                     </tr>
 
@@ -568,12 +575,12 @@
                                     <thead>
 
                                         <tr style="background:#F0EEEE" >
-                                            <th style="text-align:center" ><input type="checkbox" ng-click="selectAllLineItem(selectAllItem,filterList)" ng-model="selectAllItem"/></th>
+                                            <th style="text-align:center" ><input type="checkbox" ng-click="selectAllLineItem(filterList)" ng-model="selectAllItem"/></th>
                                             <th style="text-align:center">Inv.No</th>
                                             <th style="text-align:center">Category</th>
                                             <th style="text-align:center">Sheet No.</th>
                                            
-                                            <th style="text-align:center">Date</th>
+                                            @*<th style="text-align:center">Date</th>*@
                                             <th style="text-align:center">Lot Wt</th>
                                             <th style="text-align:center">Locat.</th>
                                             <th style="text-align:center">Grade</th>
@@ -584,19 +591,19 @@
                                             <th style="text-align:center">Net Wt</th>
                                             <th style="text-align:center">Gross Wt</th>
                                             <th style="text-align:center">PCS</th>
-                                            <th style="text-align:center">Remarks  </th>
+                                            @*<th style="text-align:center">Remarks  </th>*@
                                             <th style="text-align:center">Sale Qty</th>
                                             <th style="text-align:right">Rate</th>
                                             <th style="text-align:right">Amount(&#8377;)</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-repeat="item in filterList | filter:search">
-                                            <td style="text-align:center"><input  ng-model="selectItem" ng-click="selectLineItem(selectItem,item.id,item)"type="checkbox" /></td>
+                                        <tr ng-repeat="item in filterList track by $index| filter:search">
+                                            <td style="text-align:center"><input  ng-model="item.select" ng-click="selectLineItem(item)"type="checkbox" /></td>
                                             <td> {{item.no}}</td>
                                             <td> {{item.SUBCATEGORY}}</td>
                                             <td> {{item.COILSHEETNO}}</td>
-                                            <td> {{item.INCOMINGDATE}}</td>
+                                            @*<td> {{item.INCOMINGDATE}}</td>*@
                                             <td> {{item.LotWeight}}</td>
                                             <td> {{item.LOCATION}}</td>
                                             <td> {{item.GRADE}}</td>
@@ -607,36 +614,47 @@
                                             <td> {{item.NETWEIGHT}}</td>
                                             <td> {{item.GROSSWT}}</td>
                                             <td> {{item.PCS/LENGTHINMTRS}}</td>
-                                            <td> {{item.REMARK}}</td>
-                                            <td style="text-align:right"><input  type="text" ng-model="item.itemQty "  ng-init="item.itemQty = item.NETWEIGHT"
-                                                                                class="form-control text-right" /></td>
-                                            <td style="text-align:right"><input type="text" ng-model="item.itemRate"class="form-control text-right"  /></td>
-                                            <td style="text-align:right"><input type="text" ng-model="item.itemAmount = item.itemRate*item.itemQty"class="form-control text-right"  /></td>
+                                            @*<td> {{item.REMARK}}</td>*@
+                                            <td >
+                                                <input type="text" ng-change="qtyChange(item,item.itemQty,'{{item.itemQty}}');" ng-model="item.itemQty " ng-init="item.itemQty = item.itemQty || item.NETWEIGHT"
+                                                       class="form-control text-right" />
+                                            </td>
+                                            <td >
+                                                <input type="number" step="0.01" ng-change="rateChange(item,item.itemRate);" ng-model="item.itemRate" class="form-control text-right" />
+                                            </td>
+                                            <td style="text-align:right">
+                                                {{item.itemAmount}} @*item.itemRate*item.itemQty*@
+                                                @*<input type="text" ng-model="item.itemRate*item.itemQty" class="form-control text-right" />*@
+                                            </td>
                                         </tr>
                                        
 
                                     </tbody>
-                                    @*<tfoot>
+                                    <tfoot ng-hide="isCart">
                                         <tr style="background:#F0EEEE">
-                                            <th style="text-align:center">&nbsp;</th>
-                                            <th style="text-align:center">Total<br /> (5 Items)</th>
-                                            <th>&nbsp;</th>
-                                            <th>&nbsp;</th>
-                                            <th>&nbsp;</th>
-                                            <th>&nbsp;</th>
-                                            <th>&nbsp;</th>
-                                            <th>&nbsp;</th>
-                                            <th>&nbsp;</th>
-                                            <th>&nbsp;</th>
-                                            <th>&nbsp;</th>
-                                            <th>&nbsp;</th>
-                                            <th>&nbsp;</th>
-                                            <th>&nbsp;</th>
-                                            <th style="text-align:center">34</th>
-                                            <th>&nbsp;</th>
-                                            <th style="text-align:right">&#8377; 30,000</th>
+                                            <th style="text-align:center"></th>
+                                            <th style="text-align:center"></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th style="text-align:center"></th>
+                                            <th style="text-align:center"><button ng-hide="isCart" class="btn btn-xs btn-warning" ng-click="addToItemCart()" style="margin-right:5px">Add to Cart</button></th>
+                                            <th style="text-align:center"></th>
+                                            <th style="text-align:center"></th>
+                                            <th style="text-align:center"></th>
+                                          
+                                            <th style="text-align:center"></th>
+                                            <th style="text-align:center"></th>
+                                         
+                                            <th style="text-align:center">Total</th>
+                                            <th style="text-align:center">{{totalQty}}</th>
+                                            <th style="text-align:right"></th>
+                                            <th style="text-align:right">{{totalAmount}}(&#8377;)</th>
                                         </tr>
-                                    </tfoot>*@
+                                    </tfoot>
                                 </table>
 
                                 <button type="button" class="btn btn-primary pull-right">Add</button>

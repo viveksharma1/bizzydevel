@@ -105,19 +105,19 @@
     $scope.applyFilter = function () {
         var qry = "Inventories?filter[where][visible]=true";
         if ($scope.godown.selected)
-            qry = qry + "&filter[where][GODOWN]=" + $scope.godown.selected.GODOWN;
+            qry = qry + "&filter[where][GODOWN]=" + $scope.godown.selected._id.GODOWN;
         if ($scope.description.selected)
-            qry = qry + "&filter[where][DESCRIPTION]=" + $scope.description.selected.DESCRIPTION;
+            qry = qry + "&filter[where][DESCRIPTION]=" + $scope.description.selected._id.DESCRIPTION;
         if ($scope.remarks.selected)
-            qry = qry + "&filter[where][RRMARKS]=" + $scope.remarks.selected.RRMARKS;
+            qry = qry + "&filter[where][RRMARKS]=" + $scope.remarks.selected._id.RRMARKS;
         if ($scope.rgno.selected)
-            qry = qry + "&filter[where][rgNo]=" + $scope.rgno.selected.rgNo;
+            qry = qry + "&filter[where][rgNo]=" + $scope.rgno.selected._id.rgNo;
         if ($scope.exciseDuty.selected)
-            qry = qry + "&filter[where][exciseDuty]=" + $scope.exciseDuty.selected.exciseDuty;
+            qry = qry + "&filter[where][exciseDuty]=" + $scope.exciseDuty.selected._id.exciseDuty;
         if ($scope.SAD.selected)
-            qry = qry + "&filter[where][SAD]=" + $scope.SAD.selected.SAD;
+            qry = qry + "&filter[where][SAD]=" + $scope.SAD.selected._id.SAD;
         if ($scope.NETWEIGHT.selected)
-            qry = qry + "&filter[where][NETWEIGHT]=" + $scope.NETWEIGHT.selected.NETWEIGHT;
+            qry = qry + "&filter[where][NETWEIGHT]=" + $scope.NETWEIGHT.selected._id.NETWEIGHT;
 
         $http.get(config.api + qry).then(function (response) {
             $scope.filterList = response.data;
@@ -673,8 +673,8 @@
             invoiceData: {
                 invoiceSubType: $scope.invoiceType,
                 customerType:$scope.customerType,
-                issueDate: dateFormat($scope.issueDate),
-                removalDate:dateFormat($scope.removalDate),
+                issueDate: dateFormat($scope.billIssueDate),
+                removalDate: dateFormat($scope.billRemovalDate),
                 customerAccount: $scope.supplier.selected.company,
                 ledgerAccount: $scope.salesAccount.selected.accountName,
                 saleAmount:$scope.salesAmount,

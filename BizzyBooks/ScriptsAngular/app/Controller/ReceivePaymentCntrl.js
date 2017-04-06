@@ -1,6 +1,6 @@
-﻿myApp.controller('ReceivePaymentCntrl', ['$scope', '$http', '$timeout', '$rootScope', '$state', '$stateParams','config', function ($scope, $http, $timeout, $rootScope, $state, $stateParams, config) {
+﻿myApp.controller('ReceivePaymentCntrl', ['$scope', '$http', '$timeout', '$rootScope', '$state', '$stateParams', 'config', '$filter', function ($scope, $http, $timeout, $rootScope, $state, $stateParams, config, $filter) {
 
-
+    $.fn.datepicker.defaults.format = "dd/mm/yyyy";
     localStorage["type1"] = "PAYMENT"
     $(".my a").click(function (e) {
         e.preventDefault();
@@ -91,225 +91,187 @@
     });
 
     $scope.no = $stateParams.poNo;
+    $scope.bankAccount = {}
+    $scope.partyAccount = {}
+    $('#paymentdate').datepicker();
+    $scope.dateFormat = function (date) {
+        var res = date.split("/");
+        console.log(res);
+        var month = res[1];
+        var days = res[0]
+        var year = res[2]
+        var date = month + '/' + days + '/' + year;
+        return date;
+    }
+    $scope.getVoucherCount = function () {
+        $http.get(config.api + "voucherTransactions/count" + "?[whrer][type]= Receive Payment").then(function (response) {
+            $scope.paymentNo = response.data.count + 1;
+            console.log(response);
+        });
+    }
+    $scope.getSupplier = function () {
+        $http.get(config.api + "suppliers").then(function (response) {
+            $scope.partyAccounts = response.data
+            console.log($scope.partyAccounts);
+        });
+    }
+    $scope.getAccount = function () {
+        $http.get(config.login + "getPaymentAccount").then(function (response) {
+            $scope.bankAccounts = response.data
+            console.log($scope.bankAccounts);
+        });
+    }
+    $scope.paymentData = [];
+    $scope.transaction = []
+    
+    $scope.getAllBill = function (name) {
+        $http.get(config.login + "getVoucherData" + "?customerName=" + name).then(function (response) {
+            $scope.paymentData = response.data
+            $scope.paidData = $scope.paymentData;
+            console.log($scope.transaction);
 
-
-
-
-
-
-    //get suppliers 
-
-
-    $scope.accounts = {};
-    //$scope.accountName1 = $scope.accounts.selected.accountName;
-
-
-    $scope.$watch('accounts.selected', function () {
-        if ($scope.accounts.selected.accountName != undefined) {
-
-            $http.get(config.api + 'accounts' + '?filter[where][accountName]=' + $scope.accounts.selected.accountName).then(function (response) {
-                $scope.accountBalance = response.data;
-                $scope.accountbBalance = $scope.accountBalance[0].credit - $scope.accountBalance[0].debit;
-
-
-            });
-
-
-        }
-
-    });
-
-    $http.get(config.api + "suppliers").then(function (response) {
-        $scope.supliers = response.data;
-    });
-    console.log($stateParams.suppliers)
-    if ($stateParams.poNo != null) {
-        $scope.supplier = { selected: { company: $stateParams.suppliers } };
+           
+        });
     }
 
-
-
-
-
-    $http.get(config.api + 'customerTransaction' + '?filter[where][no]=' + $scope.no)
-    .success(function (data) {
-
-        if (data.length > 0) {
-            $scope.bill = data;
-            $scope.amount = data[0].amount;
-
-
-            $scope.email = data[0].email;
-
-            if (data[0].balance == null) {
-
-
-                $scope.bill[0].balance = data[0].amount;
-                $scope.balance = data[0].amount;
-
-                console.log($scope.balance)
-            }
-            else {
-                $scope.balance = data[0].balance;
-            }
-
-            if ($scope.balance == 0) {
-                $scope.status = "PAID";
-            }
-
-
-        }
-
-
-
-
-
-
-    });
-
-
-
-
-    // Make payement 
-
-    $scope.makePayment = function () {
-
-
-        var paymentAmount = $("#abc").val();
-
-        if (!paymentAmount) {
-
-            $('#ammountAlert').modal('show');
+    var savepaymentamount;
+    $scope.payBill = function (amount, balance, index, paymentamount, id) {
+        if (savepaymentamount == paymentamount) {
+            return;
         }
         else {
-
-
-            if ($scope.accounts.selected == undefined) {
-
-                $('#accountAlert').modal('show');
-            }
-            else {
-
-                $("#addInventryModal1").modal("show");
-
-                $scope.paidAmount = Number(paymentAmount);
-                $scope.newAmount = Number($scope.balance - paymentAmount);
-
-
-                if ($scope.newAmount != '0') {
-                    var data = {
-                        amount: $scope.amount,
-                        status: ['OPEN'],
-                        balance: $scope.newAmount
-                    }
-                    $http.post(config.api + 'transactions' + '/update' + '?[where][no]=' + $scope.no, data).success(function (data) {
-
-                    });
+            if (balance >= paymentamount && paymentamount > 0) {
+                if (amount == balance) {
+                    var paidAmount = Number(amount - paymentamount);
                 }
                 else {
-
-                    var data = {
-                        amount: $scope.amount,
-                        status: ['CLOSED'],
-                        balance: $scope.newAmount
-                    }
-                    $http.post(config.api + 'transactions' + '/update' + '?[where][no]=' + $scope.no, data).success(function (data) {
-
-                    });
-
+                    var paidAmount = Number(balance - paymentamount);
                 }
-
-
-                var date = $("#PaymentdateCheque").val()
-
-                $scope.No = "REF " + $scope.no
-                var data1 = {
-                    compCode: localStorage.CompanyId,
-                    supliersName: $scope.supplier.selected.company,
-                    email: $scope.email,
-                    ordertype: "PAYMENT",
-                    date: date,
-                    no: $scope.No,
-                    balance: $scope.newAmount,
-
-                    amount: $scope.paidAmount
-
-
-
-                }
-
-                var data2 = {
-                    compCode: localStorage.CompanyId,
-                    supliersName: $scope.supplier.selected.company,
-                    accountName: $scope.accounts.selected.accountName,
-                    email: $scope.email,
-                    date: date,
-                    no: $scope.no,
-                    particular: $scope.supplier.selected.company,
-                    credit: 0,
-                    type: 'Payment',
-                    debit: $scope.paidAmount.toFixed(2),
-                    value: $scope.paidAmount.toFixed(2),
-                    Inventory: {
-                        compCode: localStorage.CompanyId,
-                        supliersName: $scope.supplier.selected.company,
-                        accountName: $scope.supplier.selected.company,
-                        email: $scope.email,
-                        date: date,
-                        no: $scope.no,
-                        particular: $scope.accounts.selected.accountName,
-                        credit: 0,
-                        type: 'Bill Payment',
-                        debit: $scope.paidAmount.toFixed(2),
-                        value: $scope.paidAmount.toFixed(2),
-                    }
-                }
-
-
-
-                $http.post(config.login + "transaction", data2).then(function (response) {
-
-                });
-
-
-
-
-
-
-                $http.post(config.api + 'transactions', data1)
-                      .success(function (data) {
-                          $("#addInventryModal1").modal("hide");
-                      });
+                $scope.paidData[index].balance = paidAmount;
+                $scope.paidData[index].amountPaid = paymentamount;
             }
         }
+        console.log($scope.paidData)
+        var savepaymentamount = paymentamount;
+        
     }
 
+    $scope.getAccount();
+    $scope.getSupplier();
+    $scope.getVoucherCount();
 
+    $scope.openTransaction = function (id, voType) {
 
-    $http.get(config.api + "accounts" + "?[filter][where][type]=" + "Bank").then(function (response) {
-        $scope.account = response.data;
-    })
+        if (voType == 'BILL') {
 
-    //create Account
+            $state.go('Customer.Bill', { billNo: id });
+        }
+        if (voType == 'Expense') {
 
-    $scope.createAccount = function () {
+            $state.go('Customer.Expense', { expenceId: id });
+        }
+        if (voType == 'Sales Invoice') {
 
-        var accountData = {
-            compCode: localStorage.CompanyId,
-            accountName: $scope.accountName,
-            category: '',
-            group: $scope.accountgroup,
-            type: $scope.accountType,
-            balance: $scope.balance,
-            credit: 0,
-            debit: 0
+            $state.go('Customer.SalesInvoice', { voId: id });
+        }
+        if (voType == 'General Invoice') {
+
+            $state.go('Customer.GeneralInvoice', { voId: id });
         }
 
 
-        $http.post(config.api + "accounts", accountData).then(function (response) {
-        });
 
     }
+
+    $scope.receivePayment = function () {
+
+        var data = {
+            compCode: localStorage.CompanyId,
+            type: "Receive Payment",
+            role: localStorage['usertype'],
+            date: $scope.dateFormat($scope.paymentdate),
+            amount: $scope.totalPaidAmount,
+            vochNo: $scope.paymentNo,
+            state: "PAID",
+            remark: $scope.paymentRemarks,
+            vo_payment: {
+                bankAccount: $scope.bankAccount.selected.accountName,
+                partyAccount: $scope.partyAccount.selected.company,
+                paymentAmount: $scope.totalPaidAmount,
+                currency: $scope.currency,
+                exchangeRate: $scope.exchangeRate,
+                remarks: $scope.customReamarks,
+               
+                billDetail: $scope.paidData
+            },
+        }
+        $http.post(config.login + 'receivePayment?id='+ $stateParams.voId, data)
+                 .then(function (response) {
+
+
+
+                 });
+
+    }
+    $('#paymentdate').datepicker("setDate", new Date());
+
+    $('#paymentdate').datepicker().on('changeDate', function (ev) {
+        $('.datepicker').hide();
+    });
+
+    $scope.paidData = [];
+    $scope.getPaymentdata = function (id) {
+        $http.get(config.api + 'voucherTransactions/' + id)
+                    .then(function (response) {
+                        console.log(response);
+
+
+                        $scope.state = response.data.state;
+                        $scope.transaction = response.data.vo_payment.billDetail;
+                        $scope.paymentData = $scope.transaction;
+                      
+
+                        angular.copy($scope.transaction, $scope.paidData);
+                        console.log($scope.paidData)
+                        $scope.totalPaidAmount = response.data.amount
+                        $scope.paymentNo = response.data.vochNo
+                        $scope.bankAccount = { selected: { accountName: response.data.vo_payment.bankAccount } };
+                        console.log(response.data.vo_payment.bankAccount);
+                        $scope.partyAccount = { selected: { company: response.data.vo_payment.partyAccount } };
+                        $scope.paymentdate = $filter('date')(response.data.date, 'dd/MM/yyyy');
+
+                    });
+    }
+
+    if ($stateParams.voId) {
+        $scope.getPaymentdata($stateParams.voId);
+
+        if (!$scope.billDetail) {
+
+            // $('#Outstandingdiv').hide();
+
+        }
+    }
+    else {
+        $scope.$watch('partyAccount.selected', function () {
+            if ($scope.partyAccount.selected.company) {
+                if (localStorage['usertype'] == '2') {
+                   
+                    $scope.getAllBill($scope.partyAccount.selected.company);
+                }
+                else {
+                 
+                    $scope.getAllBill($scope.partyAccount.selected.company);
+
+                }
+            }
+
+        });
+    }
+
+
+
+
 
 
 

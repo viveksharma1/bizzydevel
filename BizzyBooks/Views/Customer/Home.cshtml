@@ -18,11 +18,20 @@
     $('#flyoutChange').hide();
 
     $(".addrotate").click(function (e) {
-    $(this).toggleClass("down");
-    $('#flyout').fadeToggle("slow", "linear");
-    $('#flyoutCompany').hide();
-    $('#flyoutChange').hide();
+        $(this).addClass("down");
+        $(this).removeClass("up");
+        $('#flyout').fadeToggle("slow", "linear");
+        $('#flyoutCompany').hide();
+        $('#flyoutChange').hide();
     });
+
+
+    $('.flyoutdiv ul li').click(function (e) {
+        $('.addrotate').removeClass("down");
+        $('.addrotate').addClass("up");
+        $('#flyout').hide();
+    });
+
 
     $('.sub-menu').click(function () {
         $('.leftsubmenu').slideDown();
@@ -60,6 +69,8 @@
         $('#flyoutCompany').hide();
         $('#flyoutChange').hide();
         $('#flyoutDate').hide();
+        $('.addrotate').removeClass("down");
+        $('.addrotate').addClass("up");
     });
 
 
@@ -405,7 +416,7 @@
 
 
 
-                <div ui-view></div>
+                <div ui-view style="margin-top:37px"></div>
 
 
             </div>

@@ -38,11 +38,22 @@
 
     $(":file").filestyle({ buttonName: "btn-sm btn-info" });
 
-    $scope.AddLineItem = function () {
-        $('#AddLineItemModal').modal('show');
+    
+
+    $scope.AddLineItem = function (val) {
+        $('#AddInventoryModal').modal('show');
+        if (val) {
+            $scope.clearFilter();
+            $scope.itemChecked = [];
+            $scope.itemCartChecked = [];
+            $scope.itemCart = [];
+            sumItemTable($scope.itemChecked);
+            calculateCartTotal($scope.itemCart);
+            $scope.showItemInventory();
+        } else {
+            $scope.showItemCart();
+        }
     }
-
-
     $('.btnhover button').click(function () {
         $(this).siblings().removeClass('active')
         $(this).addClass('active');
@@ -242,14 +253,20 @@
 
 
     $scope.getSupplier();
-
+    var qryAgg = 'visible=true&group={"INCOMINGDATE":"$INCOMINGDATE","SUBCATEGORY": "$SUBCATEGORY","COILSHEETNO":"$COILSHEETNO","LotWeight":"$LotWeight","LOCATION":"$LOCATION","GRADE":"$GRADE","FINISH":"$FINISH","GRADE":"$GRADE","THICKNESS":"$THICKNESS","WIDTH":"$WIDTH","LENGTH":"$LENGTH","NETWEIGHT":"$NETWEIGHT","GROSSWT":"$GROSSWT","GROSSWT":"$GROSSWT","GROSSWT":"$GROSSWT"}';
+    $http.get(config.login + "getAggregateInventoriesUO?" + qryAgg).then(function (response) {
+        $scope.ItemList = response.data;
+        //$scope.filterList2 = $scope.ItemList2;
+        //console.log($scope.ItemList);
+        //$scope.ItemCount = response.data.length;
+    });
 
     // get invoice data
 
     $scope.getInvoiceData = function (id) {
         $http.get(config.api + 'voucherTransactions/' + id)
                   .then(function (response) {
-                  
+                      $scope.paymentLog = response.data.paymentLog;
                       $scope.salesAccount = { selected: { accountName: response.data.invoiceData.ledgerAccount } };
                       $scope.supplier = { selected: { company: response.data.invoiceData.customerAccount } };
                       $scope.email = { selected: { company: response.data.email } };
@@ -276,10 +293,38 @@
       
     }
 
-    $http.get(config.api + "Inventories?filter[where][visible]=false").then(function (response) {
-        $scope.ItemList = response.data;
-        $scope.filterList = $scope.ItemList;
+    $http.get(config.api + "Inventories?filter[where][visible]=false&filter[limit]=20").then(function (response) {
+        $scope.ItemList2 = response.data;
+        $scope.filterList = $scope.ItemList2;
     });
+
+    $scope.copyItemQty = function (val) {
+        return parseFloat(val);
+    }
+    $scope.rateChange = function (item, rate) {
+        item.itemAmount = rate * Number(item.itemQty);
+        if (!$scope.isCart)
+            $scope.applyRate(rate, item);
+        //sumItemTable($scope.itemChecked);
+    };
+
+    $scope.qtyChange = function (item, qty, oldQty) {
+        if (isNaN(qty)) {
+            item.itemQty = oldQty;
+        }
+        if (parseFloat(item.NETWEIGHT) - parseFloat(qty) >= 0) {
+            item.itemAmount = qty * Number(item.itemRate);
+            if (!$scope.isCart)
+                $scope.applyRate(item.itemRate, item);
+            //sumItemTable($scope.itemChecked);
+        } else {
+            //showErrorToast("Qty can not applied changing to old qty " + oldQty);
+            if (qty.length > 0)
+                item.itemQty = oldQty;
+            else
+                item.itemAmount = 0;
+        }
+    };
     //model for change remarks
     //$scope.spnStatus = {};
     //$scope.txtRemarks = {};
@@ -313,36 +358,36 @@
         $scope.incomingdate = {};
         $scope.coilsheetno = {};
         $scope.subcategory = {};
-        $scope.filterList = $scope.ItemList;
+        $scope.filterList = $scope.ItemList2;
     }
     $scope.applyFilter = function () {
         var qry = "Inventories?filter[where][visible]=false";
         if ($scope.subcategory.selected)
-            qry = qry + "&filter[where][SUBCATEGORY]=" + $scope.subcategory.selected.SUBCATEGORY;
+            qry = qry + "&filter[where][SUBCATEGORY]=" + $scope.subcategory.selected._id.SUBCATEGORY;
         if ($scope.coilsheetno.selected)
-            qry = qry + "&filter[where][COILSHEETNO]=" + $scope.coilsheetno.selected.COILSHEETNO;
+            qry = qry + "&filter[where][COILSHEETNO]=" + $scope.coilsheetno.selected._id.COILSHEETNO;
         if ($scope.incomingdate.selected)
-            qry = qry + "&filter[where][INCOMINGDATE]=" + $scope.incomingdate.selected.INCOMINGDATE;
+            qry = qry + "&filter[where][INCOMINGDATE]=" + $scope.incomingdate.selected._id.INCOMINGDATE;
         if ($scope.lotweight.selected)
-            qry = qry + "&filter[where][LotWeight]=" + $scope.lotweight.selected.LotWeight;
+            qry = qry + "&filter[where][LotWeight]=" + $scope.lotweight.selected._id.LotWeight;
         if ($scope.location.selected)
-            qry = qry + "&filter[where][LOCATION]=" + $scope.location.selected.LOCATION;
+            qry = qry + "&filter[where][LOCATION]=" + $scope.location.selected._id.LOCATION;
         if ($scope.grade.selected)
-            qry = qry + "&filter[where][GRADE]=" + $scope.grade.selected.GRADE;
+            qry = qry + "&filter[where][GRADE]=" + $scope.grade.selected._id.GRADE;
         if ($scope.finish.selected)
-            qry = qry + "&filter[where][FINISH]=" + $scope.finish.selected.FINISH;
+            qry = qry + "&filter[where][FINISH]=" + $scope.finish.selected._id.FINISH;
         if ($scope.thickness.selected)
-            qry = qry + "&filter[where][THICKNESS]=" + $scope.thickness.selected.THICKNESS;
+            qry = qry + "&filter[where][THICKNESS]=" + $scope.thickness.selected._id.THICKNESS;
         if ($scope.width.selected)
-            qry = qry + "&filter[where][WIDTH]=" + $scope.width.selected.WIDTH;
+            qry = qry + "&filter[where][WIDTH]=" + $scope.width.selected._id.WIDTH;
         if ($scope.length.selected)
-            qry = qry + "&filter[where][LENGTH]=" + $scope.length.selected.LENGTH;
+            qry = qry + "&filter[where][LENGTH]=" + $scope.length.selected._id.LENGTH;
         if ($scope.netweight.selected)
-            qry = qry + "&filter[where][NETWEIGHT]=" + $scope.netweight.selected.NETWEIGHT;
+            qry = qry + "&filter[where][NETWEIGHT]=" + $scope.netweight.selected._id.NETWEIGHT;
         if ($scope.grossweight.selected)
-            qry = qry + "&filter[where][GROSSWT]=" + $scope.grossweight.selected.GROSSWT;
+            qry = qry + "&filter[where][GROSSWT]=" + $scope.grossweight.selected._id.GROSSWT;
         if ($scope.pcslengthmtr.selected)
-            qry = qry + "&filter[where][PCS/LENGTHINMTRS]=" + $scope.pcslengthmtr.selected.PCS / LENGTHINMTRS;
+            qry = qry + "&filter[where][PCS/LENGTHINMTRS]=" + $scope.pcslengthmtr.selected._id.PCS/LENGTHINMTRS;
 
         $http.get(config.api + qry).then(function (response) {
             $scope.filterList = response.data;
@@ -352,98 +397,283 @@
     }
    
     //select line item
+    function dateFormat(date) {
+        try {
+            var res = date.split("/");
+            console.log(res);
+            var month = res[1];
+            var days = res[0]
+            var year = res[2]
+            var date = month + '/' + days + '/' + year;
+            return date;
+        } catch (e) {
+            return;
+        }
+    }
+
+
+    $scope.salesAmount = 0;
+    function gTotal() {
+        if ($scope.totalAmount)
+            $scope.salesAmount = parseFloat($scope.listTotalAmount);
+        if ($scope.totalAccountAmount)
+            $scope.salesAmount += parseFloat($scope.totalAccountAmount);
+    }
 
     function sumItemTable(data) {
-       
         var totalQty = 0;
         var totalAmount = 0;
-        var totalItem = data.length;
-        var totalweight = 0;
-        for (var i = 0; i < data.length; i++) {
-            if (data[i].itemQty && data[i].itemAmount) {
-                totalQty += Number(data[i].itemQty);
-                totalAmount += Number(data[i].itemAmount);
-                totalweight += Number(data[i].itemQty);
+        if (data) {
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].itemQty)
+                    totalQty += Number(data[i].itemQty);
+
+                if (data[i].itemAmount)
+                    totalAmount += Number(data[i].itemAmount);
+                //else if (!isNaN(data[i].itemQty * data[i].itemRate)) {
+                //    totalAmount += data[i].itemQty * data[i].itemRate;
+                //}
+
             }
         }
         $scope.totalQty = totalQty.toFixed(2);
         $scope.totalAmount = totalAmount.toFixed(2);
-        $scope.totalItem = totalAmount.totalItem;
-        $scope.totalweight = totalweight.toFixed(2);
-
+        $scope.totalItem = data == undefined ? 0 : data.length;
+        //$scope.totalweight = totalweight.toFixed(2);
+        //gTotal();
     }
+    $scope.clearRate = function () {
+        $scope.itemRate = null;
+        $scope.applyRate('');
+    }
+    var item = {};
+    $scope.newItem = [];
+    var newItem;
+    var newItem = $scope.newItem;
+   
+    $scope.applyRate = function (rate, item) {
+        if (!$scope.isCart) {
+            if ($scope.itemChecked.length > 0) {
 
-    $scope.applyRate = function (rate) {
-        if (rate == 0) {
-            $scope.itemRate = '';
-        }
-        if ($scope.itemCart.length > 0) {
-          
-            for (var i = 0; i < $scope.itemCart.length; i++) {
-                $scope.itemCart[i].itemRate = rate
-                $scope.itemCart[i].itemAmount = rate * Number($scope.itemCart[i].NETWEIGHT)
+                for (var i = 0; i < $scope.itemChecked.length; i++) {
+                    if (item) {
+                        if ($scope.itemChecked[i].id == item.id) {
+                            $scope.itemChecked[i].itemRate = rate
+                            $scope.itemChecked[i].itemAmount = item.itemAmount;
+                            if (item.itemQty)
+                                $scope.itemChecked[i].itemQty = item.itemQty;
+                            //$scope.itemChecked[i].select = true;
+                            break;
+                        }
+                    } else {
+                        $scope.itemChecked[i].itemRate = rate
+                        $scope.itemChecked[i].itemAmount = rate * Number($scope.itemChecked[i].itemQty);
+                        $scope.itemChecked[i].select = true;
+                    }
 
+                }
+                if ($scope.selectAllItem && !item)
+                    angular.copy($scope.itemChecked, $scope.filterList);
+                sumItemTable($scope.itemChecked);
             }
-            $scope.filterList = $scope.itemCart;
-            sumItemTable($scope.filterList);
         }
         else {
             showSuccessToast("Please Select Item");
         }
-       
+
 
     }
 
-   
+
+
+    $scope.itemChecked = [];
+    $scope.itemCartChecked = [];
     $scope.itemCart = [];
     $scope.itemTable = [];
-    $scope.selectAllLineItem = function (selectAllItem,allItemData) {
-        if (selectAllItem == true) {
-            $scope.itemCart = allItemData;
-            $scope.selectItem = true;
-            sumItemTable($scope.itemCart);
-           
-        }
-        if (selectAllItem == false) {
-            $scope.selectItem = false;
-            $scope.itemCart = '';
-            sumItemTable($scope.itemCart);
-           
-        }
-
-    }
-    $scope.selectLineItem = function (selectItem,id,itemData) {
-        if (selectItem == true) {
-            $scope.itemCart.push(itemData);
-            sumItemTable($scope.itemCart);
-            console.log($scope.itemCart);
-        }
-        if (selectItem == false) {
-            for (var i = 0; i < $scope.itemCart.length; i++) {
-                if($scope.itemCart[i].id == id )
-                    $scope.itemCart.splice(i, 1)
+    $scope.selectAllLineItem = function (allItemData) {
+        if (!$scope.isCart) {
+            if ($scope.selectAllItem) {
+                //$scope.itemChecked = [];
+                //$scope.itemChecked=allItemData;//.push(allItemData);
+                angular.copy(allItemData, $scope.itemChecked);
+                sumItemTable($scope.itemChecked);
+            } else {
+                $scope.itemChecked = [];
+                sumItemTable($scope.itemChecked);
 
             }
-            sumItemTable($scope.itemCart);
-           
+            angular.forEach($scope.itemChecked, function (item) {
+                item.select = $scope.selectAllItem;
+            });
+            angular.forEach($scope.filterList, function (item) {
+                item.select = $scope.selectAllItem;
+            });
+            //if ($scope.selectAllItem)
+            //    angular.copy($scope.itemChecked, $scope.filterList);
+            //else
+
+        } else {
+            if ($scope.selectAllItem) {
+                //$scope.itemChecked = [];
+                //$scope.itemChecked.push(allItemData);
+                //$scope.itemChecked = allItemData;
+                angular.copy(allItemData, $scope.itemCartChecked);
+            } else {
+                $scope.itemCartChecked = [];
+            }
+            angular.forEach($scope.itemCartChecked, function (item) {
+                item.select = $scope.selectAllItem;
+            });
+            angular.forEach($scope.filterList, function (item) {
+                item.select = $scope.selectAllItem;
+            });
+            //if ($scope.selectAllItem)
+            //    angular.copy($scope.itemCartChecked, $scope.filterList);
+
         }
-        console.log($scope.itemCart);
+
+
 
     }
-    $scope.showItemCart = function () {
-        $scope.filterList = $scope.itemCart;
-        sumItemTable($scope.itemCart);
-    }
+   
+    $scope.selectLineItem = function (itemData) {
+      
+        angular.copy(itemData, item);
+        //angular.copy(itemData, $scope.newItem);
 
-    $scope.addItemToInvoice = function () {
-        $scope.itemTable = $scope.itemCart
-        sumItemTable($scope.itemTable);
-        $('#AddInventoryModal').modal('hide');
-        console.log($scope.itemTable);
+        console.log("item",item)
+        if (!$scope.isCart) {
+            if (itemData.select) {
+
+                $scope.itemChecked.push(item);
+                $scope.newItem.push(item);
+                sumItemTable($scope.itemChecked);
+                console.log($scope.itemChecked);
+            } else {
+                $scope.selectAllItem = false;
+                for (var i = 0; i < $scope.itemChecked.length; i++) {
+                    if ($scope.itemChecked[i].id == item.id)
+                        $scope.itemChecked.splice(i, 1)
+
+                }
+                sumItemTable($scope.itemChecked);
+            }
+        } else {
+            if (itemData.select) {
+                $scope.itemCartChecked.push(item);
+                console.log($scope.itemCartChecked);
+            } else {
+                $scope.selectAllItem = false;
+                for (var i = 0; i < $scope.itemCartChecked.length; i++) {
+                    if ($scope.itemCartChecked[i].id == item.id)
+                        $scope.itemCartChecked.splice(i, 1)
+                }
+            }
+        }
     }
     $scope.removeItemTable = function (index) {
         $scope.itemTable.splice(index, 1);
-        sumItemTable($scope.itemTable);
+        sumItemListTable($scope.itemTable);
+        gTotal();
+    }
+
+    $scope.showItemCart = function () {
+        setIsCart(true);
+        $scope.filterList = $scope.itemCart;
+        setCheckValue(false, $scope.filterList);
+        //sumItemTable($scope.filterList);
+    }
+    $scope.showItemInventory = function () {
+        setIsCart(false);
+        $scope.filterList = $scope.ItemList2;
+        setCheckValue(false, $scope.filterList);
+        sumItemTable($scope.itemChecked);
+    }
+    function setCheckValue(val, list) {
+        $scope.selectAllItem = val;
+        angular.forEach(list, function (item) {
+            item.select = val;
+        });
+    }
+    $scope.addToItemCart = function () {
+        if (parseFloat($scope.totalAmount) > 0) {
+            var itemChecked = $scope.itemChecked;
+            var itemCart = $scope.itemCart;
+            var found = false;
+            for (var i = 0; i < itemChecked.length; i++) {
+                for (var j = 0; j < itemCart.length; j++) {
+                    if (itemCart[j].id === itemChecked[i].id) {
+                        //check item qty can be added 
+                        var availQty = parseFloat(itemCart[j].NETWEIGHT) - parseFloat(itemCart[j].itemQty);
+                        if (availQty - parseFloat(itemChecked[i].itemQty) < 0)
+                            showErrorToast("Only " + availQty + " can be added for Item " + itemChecked[i].DESCRIPTION);
+                        itemCart[j].itemQty = parseFloat(itemCart[j].itemQty) + Math.min(availQty, parseFloat(itemChecked[i].itemQty));
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                    itemCart.push(itemChecked[i]);
+            }
+            $scope.itemCart = itemCart;
+            calculateCartTotal($scope.itemCart);
+            $scope.itemChecked = [];
+            setCheckValue(false, $scope.filterList);
+            sumItemTable($scope.itemChecked);
+        } else {
+            showErrorToast("Amount can not be 0");
+        }
+        //$scope.selectItem = false;
+    }
+    $scope.removeFormCart = function (isAll) {
+        if (isAll) {
+            $scope.itemCart = [];
+            angular.copy($scope.itemCart, $scope.filterList);
+        }
+        else {
+            for (var i = 0; i < $scope.itemCartChecked.length; i++) {
+                $scope.itemCart.splice($scope.itemCart.indexOf($scope.itemCartChecked[i]), 1);
+            }
+        }
+        setCheckValue(false, $scope.filterList);
+        calculateCartTotal($scope.filterList);
+    }
+
+    function calculateCartTotal(data) {
+        var totalQty = 0;
+        var totalAmount = 0;
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].itemQty)
+                totalQty += Number(data[i].itemQty);
+
+            if (data[i].itemAmount)
+                totalAmount += Number(data[i].itemAmount);
+        }
+        $scope.cartTotalQty = totalQty.toFixed(2);
+        $scope.cartTotalAmount = totalAmount.toFixed(2);
+        $scope.cartTotalItem = data.length;
+
+    }
+    $scope.addItemToInvoice = function () {
+        angular.copy($scope.itemCart, $scope.itemTable);// = ;
+        sumItemListTable($scope.itemTable);
+        $('#AddInventoryModal').modal('hide');
+        console.log($scope.itemTable);
+        setCheckValue(false, $scope.filterList);
+        gTotal();
+    }
+
+    function sumItemListTable(data) {
+        var totalQty = 0;
+        var totalAmount = 0;
+        if (data) {
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].itemAmount)
+                    totalAmount += Number(data[i].itemAmount);
+            }
+        }
+        //$scope.totalQty = totalQty.toFixed(2);
+        $scope.listTotalAmount = totalAmount.toFixed(2);
     }
 
     // save bill 
@@ -509,5 +739,9 @@
         });
 
     };
+    $scope.isCart = false;
+    function setIsCart(val) {
+        $scope.isCart = val;
+    }
 
 }]);

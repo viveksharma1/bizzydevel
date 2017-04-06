@@ -59,14 +59,14 @@
             <div class="col-lg-5 padding">
                 <div class="col-sm-4 padding">
                     <h4 class="tabheading">Payment no.</h4>
-                    <input type="text" ng-model="no" class="form-control" value="3" disabled />
+                    <input type="text" ng-model="paymentNo" class="form-control" value="3" disabled />
                 </div>
 
                 <div class="col-sm-4 padding">
                     <h4 class="tabheading">Payment Date</h4>
 
-                    <div class='input-group'>
-                        <input type='text' class="form-control" id='paymentdate' />
+                    <div class='input-group date' id='paymentdate'>
+                        <input type='text' class="form-control" ng-model="paymentdate" id='paymentdate' />
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
@@ -74,14 +74,14 @@
                 </div>
                 <div class="col-sm-6 padding">
                     <h4 class="tabheading">Bank/Cash</h4>
-                    <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
+                    <ui-select ui-tree-select ng-model="bankAccount.selected" id="countryCode"
                                ui-select-focuser
                                theme="selectize">
-                        <ui-select-match placeholder="Select Suppliers">{{ $select.selected.company }}</ui-select-match>
+                        <ui-select-match placeholder="Select Account">{{ $select.selected.accountName }}</ui-select-match>
 
-                        <ui-select-choices repeat="person in supliers  | filter: $select.search">
+                        <ui-select-choices repeat="person in bankAccounts  | filter: $select.search">
                             <div>
-                                <span ng-model="supplier1" ng-bind-html="person.company | highlight: $select.search"></span>
+                                <span ng-model="supplier1" ng-bind-html="person.accountName | highlight: $select.search"></span>
                             </div>
 
 
@@ -91,12 +91,12 @@
 
                 <div class="col-sm-7 padding">
                     <h4 class="tabheading">Party Name</h4>
-                    <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
+                    <ui-select ui-tree-select ng-model="partyAccount.selected" id="countryCode"
                                ui-select-focuser
                                theme="selectize">
                         <ui-select-match placeholder="Select Suppliers">{{ $select.selected.company }}</ui-select-match>
 
-                        <ui-select-choices repeat="person in supliers  | filter: $select.search">
+                        <ui-select-choices repeat="person in partyAccounts  | filter: $select.search">
                             <div>
                                 <span ng-model="supplier1" ng-bind-html="person.company | highlight: $select.search"></span>
                             </div>
@@ -108,7 +108,7 @@
 
                 <div class="col-sm-3 padding">
                     <h4 class="tabheading">Rs.</h4>
-                    <input type="text" class="form-control" />
+                    <input type="text"  ng-model="totalPaidAmount"class="form-control" />
                 </div>
 
 
@@ -118,12 +118,12 @@
                 <h4 style="margin:0px 0px 10px 0px; font-size:14px; font-weight:bold" class="text-primary"><input type="checkbox" /> Badla Payment</h4>
                 <div class="col-sm-7 padding5">
                     <label>Badla Person</label>
-                    <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
+                    <ui-select ui-tree-select ng-model="partyAccount.selected" id="countryCode"
                                ui-select-focuser
                                theme="selectize">
                         <ui-select-match placeholder="Select Suppliers">{{ $select.selected.company }}</ui-select-match>
 
-                        <ui-select-choices repeat="person in supliers  | filter: $select.search">
+                        <ui-select-choices repeat="person in partyAccounts  | filter: $select.search">
                             <div>
                                 <span ng-model="supplier1" ng-bind-html="person.company | highlight: $select.search"></span>
                             </div>
@@ -390,7 +390,7 @@
             <h4 data-toggle="collapse" data-target="#AccountDetail" class="cursor"><i class="fa fa-caret-right"></i> Outstanding Transactions details</h4>
 
             <div class="collapse in" id="AccountDetail">
-                <table class="table-bordered table-condensed table-hover borderless" fixed-header style="width:100%; height:200px;">
+                <table class="table-bordered table-condensed table-hover borderless" fixed-header style="width:100%">
                     <thead>
                         <tr>
                             <th class="text-right" style="width:50px"><input type="checkbox" /></th>
@@ -399,56 +399,27 @@
                             <th>Ref No.</th>
                             <th>Type</th>
                             <th class="text-right">Total Amount</th>
-                            <th class="text-right">Balance Balance</th>
-                            <th class="text-right" style="width:100px">Receipt</th>
+                            <th class="text-right">Balance</th>
+                            <th class="text-right" style="width:100px"> Receive</th>
                         </tr>
                     </thead>
                     <tbody>
 
-                        @*<tr ng-repeat="data in bill">
-                                <td class="text-right" style="width:50px"><input type="checkbox" /></td>
-                                <td ng-bind="data.date | date:'dd MMM yyyy'"></td>
-                                <td ng-bind="data.billDueDate | date:'dd MMM yyyy'"></td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td class="text-right">{{data.amount |number : fractionSize}}</td>
-                                <td class="text-right">{{data.balance |number : fractionSize}}</td>
-                                <td class="text-right"><input type="text" id="abc" class="form-control" /></td>
-                            </tr>*@
 
 
-                        <tr>
+
+                        <tr ng-repeat="data in paymentData" class="cursor">
                             <td class="text-right" style="width:50px"><input type="checkbox" /></td>
-                            <td ng-bind="data.date | date:'dd MMM yyyy'">12/03/2017</td>
-                            <td ng-bind="data.billDueDate | date:'dd MMM yyyy'">22/03/2017</td>
-                            <td>2322</td>
-                            <td>&nbsp;</td>
-                            <td class="text-right">2000</td>
-                            <td class="text-right">2000</td>
-                            <td class="text-right"><input type="text" id="abc" class="form-control" /></td>
+                            <td ng-click="openTransaction(data.id,data.type)">{{data.date | date }}</td>
+                            <td>{{data.duedate }}</td>
+                            <td>{{data.vochNo}}</td>
+                            <td>{{data.type}}</td>
+
+                            <td class="text-right">{{data.amount}}</td>
+                            <td class="text-right">{{data.balance}}</td>
+                            <td class="text-right"><input type="text" ng-blur="payBill(data.amount,data.balance,$index,data.amountPaid,data.id)" ng-model="data.amountPaid" class="form-control" /></td>
                         </tr>
 
-                        <tr>
-                            <td class="text-right" style="width:50px"><input type="checkbox" /></td>
-                            <td>12/03/2017</td>
-                            <td>22/03/2017</td>
-                            <td>2322</td>
-                            <td>&nbsp;</td>
-                            <td class="text-right">2000</td>
-                            <td class="text-right">2000</td>
-                            <td class="text-right"><input type="text" id="abc" class="form-control" /></td>
-                        </tr>
-
-                        <tr>
-                            <td class="text-right" style="width:50px"><input type="checkbox" /></td>
-                            <td>12/03/2017</td>
-                            <td ng-bind="data.billDueDate | date:'dd MMM yyyy'">22/03/2017</td>
-                            <td>2322</td>
-                            <td>&nbsp;</td>
-                            <td class="text-right">2000</td>
-                            <td class="text-right">2000</td>
-                            <td class="text-right"><input type="text" id="abc" class="form-control" /></td>
-                        </tr>
 
 
                     </tbody>
@@ -581,7 +552,7 @@
         </span>
 
         <div class="pull-right">
-            <button type="button" class="btn btn-sm btn-primary" ng-click="makePayment(paymentAmount-amount)">Save</button>
+            <button type="button" class="btn btn-sm btn-primary" ng-click="receivePayment()">Save</button>
             <div class="btn-group dropup">
                 @*
                     <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:25px">

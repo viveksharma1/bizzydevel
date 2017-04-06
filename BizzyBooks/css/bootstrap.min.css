@@ -7436,6 +7436,10 @@ button.close {
     padding: 0px 0px 0px 10px;
     font-size: 20px;
     height: 37px;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+
 }
 
 .submenu {
@@ -9034,3 +9038,10 @@ tr:hover, tr.selected {
 #MonthlyChart svg{width:100% !important}
 .Ledgercheck{display:none !important; width:0px !important }
 .LedgercheckShow{display:block !important; width:50px !important}
+
+
+.addrotate.up{
+    -moz-transform:rotate(0deg);
+    -webkit-transform:rotate(0deg);
+    transform:rotate(0deg);
+}
