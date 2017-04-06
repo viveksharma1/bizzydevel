@@ -145,7 +145,7 @@
                                                     <table style="width:100%">
                                                         <tr>
                                                             <td style="padding:2px 5px; vertical-align:top">: {{}}</td>
-                                                            <td style="padding:2px 5px; vertical-align:top">Comiisionerate :</td>
+                                                            <td style="padding:2px 5px; vertical-align:top">Comisionerate :</td>
                                                             <td style="padding:2px 5px; vertical-align:top">MUMBAI-1</td>
                                                         </tr>
                                                     </table>
@@ -242,19 +242,19 @@
                                             <tr style="vertical-align:top">
                                                 <td style="padding:3px; text-align:right;width:67px">
                                                     <p style="margin-bottom:2px">{{item.exciseDuty}}</p>
-                                                    <p style="margin-bottom:2px">0.00</p>
+                                                    @*<p style="margin-bottom:2px">0.00</p>*@
                                                 </td>
                                                 <td style="padding:3px; text-align:right;width:81px">
                                                     <p style="margin-bottom:2px">0.00</p>
-                                                    <p style="margin-bottom:2px">0.00</p>
+                                                    @*<p style="margin-bottom:2px">0.00</p>*@
                                                 </td>
                                                 <td style="padding:3px; text-align:right;width:93px">
-                                                    <p style="margin-bottom:2px">0.0000</p>
                                                     <p style="margin-bottom:2px">0.00</p>
+                                                    @*<p style="margin-bottom:2px">0.00</p>*@
                                                 </td>
                                                 <td style="padding:3px; text-align:right;width:100px">
                                                     <p style="margin-bottom:2px">{{item.SAD}}</p>
-                                                    <p style="margin-bottom:2px">0.00</p>
+                                                    @*<p style="margin-bottom:2px">0.00</p>*@
                                                 </td>
                                             </tr>
                                         </table>
@@ -263,70 +263,93 @@
                                 </tr>
 
                                 <tr style="text-align:center; vertical-align:top">
-                                    <td style="padding:3px; text-align:left" colspan="4">Total</td>
-                                    <td style="padding:3px; text-align:right">{{totalQty}}</td>
+                                    <td style="padding:3px; text-align:left" colspan="4"><strong>Total</strong></td>
+                                    <td style="padding:3px; text-align:right"><strong>{{totalQty}}</strong></td>
                                     <td style="padding:3px; text-align:right" colspan="3">&nbsp;</td>
                                     <td style="padding:0px; font-size:11px; width:250px">
                                         <table style="vertical-align:top; width:100%; font-size:12px; border-left:none; border-right:none; border-color:rgba(227, 227, 227, 0.44); border-top:none; border-bottom:none; margin-bottom:0px" border="1">
                                             <tr style="vertical-align:top">
                                                 <td style="padding:3px; text-align:right;width:67px">
-                                                    <p style="margin-bottom:2px">{{totalExciseAmount}}</p>
+                                                    <p ><strong>{{totalExciseAmount}}</strong></p>
 
                                                 </td>
                                                 <td style="padding:3px; text-align:right;width:81px">
-                                                    <p style="margin-bottom:2px">{{totalCessAmount}}</p>
+                                                    <p style="margin-bottom:2px"><strong>{{totalCessAmount}}</strong></p>
                                                 </td>
                                                 <td style="padding:3px; text-align:right;width:93px">
-                                                    <p style="margin-bottom:2px">{{totalHcessAmount}}</p>
+                                                    <p style="margin-bottom:2px"><strong>{{totalHcessAmount}}</strong></p>
                                                 </td>
                                                 <td style="padding:3px; text-align:right;width:100px">
-                                                    <p style="margin-bottom:2px">{{totalSADAmount}}</p>
+                                                    <p style="margin-bottom:2px"><strong>{{totalSADAmount}}</strong></p>
                                                 </td>
                                             </tr>
                                         </table>
                                     </td>
-                                    <td style="padding:3px; text-align:right">{{totalAmount}}</td>
+                                    <td style="padding:3px; text-align:right"><strong>{{totalAmount}}</strong> </td>
                                 </tr>
                             </table>
                         </td>
                     </tr>
                     <tr style="vertical-align:top">
                         <td style="vertical-align:top; padding:5px; font-size:12px">
+
+
+                            @*<table style="width:100%">
+                                <tr style="vertical-align:top" ng-repeat="acc in invoiceData.invoiceData.accountlineItem">
+                                    <td style="text-align:right">{{acc.account.accountName}} {{acc.account.rate}}%</td>
+                                    <td style="text-align:right; width:100px">{{acc.amount}}</td>
+                                    </tr>
+                                </table>*@
+
+
+                                    <table style="width:100%">
+                                        <tr style="vertical-align:top" ng-repeat="acc in invoiceData.invoiceData.accountlineItem">
+                                            <td><strong style="width:130px;"></strong></td>
+                                            <td style="text-transform:uppercase"></td>
+                                            <td width="100">{{acc.account.accountName}} @@ {{acc.account.rate}}%</td>
+                                            <td style="text-align:right">{{acc.amount}}</td>
+                                        </tr>
+                                            
+                                        <tr style="vertical-align:top">
+                                            <td><strong style="width:130px;">Excise Amount:</strong></td>
+                                            <td style="text-transform:uppercase">{{totalExciseAmount|words}}</td>
+                                            <td width="100"></td>
+                                            <td style="text-align:right"></td>
+                                        </tr>
+                                        <tr style="vertical-align:top">
+                                            <td><strong style="width:130px;">Aed Amount:</strong></td>
+                                            <td style="text-transform:uppercase">{{totalSADAmount|words}}</td>
+                                            <td width="100">Freight</td>
+                                            <td style="text-align:right">{{}}</td>
+                                        </tr>
+                                        <tr style="vertical-align:top">
+                                            <td><strong style="width:130px;">Cess Amount:</strong></td>
+                                            <td style="text-transform:uppercase">{{totalCessAmount|words}}</td>
+                                            <td width="100">Round Off</td>
+                                            <td style="text-align:right">{{roundOff|number:2}}</td>
+                                            
+                                        </tr>
+                                        <tr style="vertical-align:top">
+                                            <td><strong style="width:130px;">H Cess Amount:</strong></td>
+                                            <td style="text-transform:uppercase">{{totalHcessAmount|words}}</td>
+                                            <td width="100" style="border-top:1px solid #e3e3e3; border-bottom:1px solid #e3e3e3"><strong>Invoice Total</strong></td>
+                                            <td style="text-align:right; border-top:1px solid #e3e3e3; border-bottom:1px solid #e3e3e3"><strong>{{gTotal}}</strong></td>
+                                        </tr>
+                                        @*<tr style="vertical-align:top">
+                                            <td><strong style="width:130px;">Invoice Total:</strong></td>
+                                            <td style="text-transform:uppercase">{{gTotal|words}}
+                                            
+                                        </tr>*@
+
+                                    </table>
                             <table style="width:100%">
                                 <tr style="vertical-align:top">
-                                    <td><strong style="width:130px;">Excise Amount:</strong></td>
-                                    <td style="text-transform:uppercase">{{totalExciseAmount|words}}</td>
-                                    <td width="100">Freight</td>
-                                    <td style="text-align:right">{{}}</td>
-                                </tr>
-                                <tr style="vertical-align:top">
-                                    <td><strong style="width:130px;">Aed Amount:</strong></td>
-                                    <td style="text-transform:uppercase">{{totalSADAmount|words}}</td>
-                                    <td width="100">VAT@5%</td>
-                                    <td style="text-align:right">{{}}</td>
-                                </tr>
-                                <tr style="vertical-align:top">
-                                    <td><strong style="width:130px;">Cess Amount:</strong></td>
-                                    <td style="text-transform:uppercase">{{totalCessAmount|words}}</td>
-                                    <td width="100">&nbsp;</td>
-                                    <td style="text-align:right">&nbsp;</td>
-                                </tr>
-                                <tr style="vertical-align:top">
-                                    <td><strong style="width:130px;">H Cess Amount:</strong></td>
-                                    <td style="text-transform:uppercase">{{totalHcessAmount|words}}</td>
-                                    <td width="100">Round Off</td>
-                                    <td style="text-align:right">{{roundOff|number:2}}</td>
-                                </tr>
-                                <tr style="vertical-align:top">
-                                    <td><strong style="width:130px;">Invoice Total:</strong></td>
-                                    <td style="text-transform:uppercase">{{gTotal|words}}
-                                    <td width="100" style="border-top:1px solid #e3e3e3; border-bottom:1px solid #e3e3e3"><strong>Invoice Total</strong></td>
-                                    <td style="text-align:right; border-top:1px solid #e3e3e3; border-bottom:1px solid #e3e3e3"><strong>{{gTotal}}</strong></td>
-                                </tr>
+                                    <td style="padding-top:4px"><strong style="width:130px;">Invoice Total:</strong></td>
+                                    <td style="padding-top:4px; text-transform:capitalize">{{gTotal|words}}
 
-                            </table>
-
-                        </td>
+                                </tr>
+                                </table>
+</td>
                     </tr>
                 </table>
             </div>

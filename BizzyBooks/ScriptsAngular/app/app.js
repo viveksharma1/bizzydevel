@@ -759,52 +759,62 @@ myApp.factory('groupFactory', ['$http',
 ]);
 
 myApp.filter('words', function () {
-    function isInteger(x) {
-        return x % 1 === 0;
+    function isInt(n) {
+        return Number(n) === n && n % 1 === 0;
+    }
+
+    function isFloat(n) {
+        return Number(n) === n && n % 1 !== 0;
     }
     return function (value) {
-        if (value && isInteger(value))
+        if (value && (isInt(value) || isFloat(value)))
             return convertNumberToWords(value);
 
         return value;
     };
 
 });
-
+var words = new Array();
+words[0] = '';
+words[1] = 'One';
+words[2] = 'Two';
+words[3] = 'Three';
+words[4] = 'Four';
+words[5] = 'Five';
+words[6] = 'Six';
+words[7] = 'Seven';
+words[8] = 'Eight';
+words[9] = 'Nine';
+words[10] = 'Ten';
+words[11] = 'Eleven';
+words[12] = 'Twelve';
+words[13] = 'Thirteen';
+words[14] = 'Fourteen';
+words[15] = 'Fifteen';
+words[16] = 'Sixteen';
+words[17] = 'Seventeen';
+words[18] = 'Eighteen';
+words[19] = 'Nineteen';
+words[20] = 'Twenty';
+words[30] = 'Thirty';
+words[40] = 'Forty';
+words[50] = 'Fifty';
+words[60] = 'Sixty';
+words[70] = 'Seventy';
+words[80] = 'Eighty';
+words[90] = 'Ninety';
 
 function convertNumberToWords(amount) {
-    var words = new Array();
-    words[0] = '';
-    words[1] = 'One';
-    words[2] = 'Two';
-    words[3] = 'Three';
-    words[4] = 'Four';
-    words[5] = 'Five';
-    words[6] = 'Six';
-    words[7] = 'Seven';
-    words[8] = 'Eight';
-    words[9] = 'Nine';
-    words[10] = 'Ten';
-    words[11] = 'Eleven';
-    words[12] = 'Twelve';
-    words[13] = 'Thirteen';
-    words[14] = 'Fourteen';
-    words[15] = 'Fifteen';
-    words[16] = 'Sixteen';
-    words[17] = 'Seventeen';
-    words[18] = 'Eighteen';
-    words[19] = 'Nineteen';
-    words[20] = 'Twenty';
-    words[30] = 'Thirty';
-    words[40] = 'Forty';
-    words[50] = 'Fifty';
-    words[60] = 'Sixty';
-    words[70] = 'Seventy';
-    words[80] = 'Eighty';
-    words[90] = 'Ninety';
+
     amount = amount.toString();
     var atemp = amount.split(".");
     var number = atemp[0].split(",").join("");
+    //var pointnumber = atemp.length == 2 ? atemp[1].split(",").join("") : "";
+
+    return getString(number);//.join(pointnumber.length > 0 ? " and "+getString(pointnumber) : "");
+    //return words_string;
+}
+function getString(number) {
     var n_length = number.length;
     var words_string = "";
     if (n_length <= 9) {

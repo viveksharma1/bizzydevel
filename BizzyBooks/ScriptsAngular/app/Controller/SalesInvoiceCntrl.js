@@ -92,6 +92,7 @@
     $scope.exciseDuty = {};
     $scope.SAD = {};
     $scope.NETWEIGHT = {};
+    $scope.billNoValid = false;
     $scope.clearFilter = function () {
         
         $scope.godown = {};
@@ -144,8 +145,11 @@
         $http.get(config.api + 'voucherTransactions/' + id)
                   .then(function (response) {
 
+                      $scope.invoiceType = response.data.invoiceData.invoiceSubType;
+                      //$scope.customerType=customerType:,
                       $scope.salesAccount = { selected: { accountName: response.data.invoiceData.ledgerAccount } };
                       $scope.supplier = { selected: { company: response.data.invoiceData.customerAccount } };
+                      $scope.supplier2 = { selected: { company: response.data.invoiceData.consigneeAccount } };
                       //$scope.email = { selected: { company: response.data.email } };
                       $scope.totalAmount = response.data.amount;
                       //$scope.billDate = response.data.date;
@@ -162,7 +166,8 @@
                       $scope.billDueDate = $filter('date')(response.data.duedate, 'dd/MM/yyyy');
                       $scope.billRemovalDate = $filter('date')(response.data.invoiceData.removalDate, 'dd/MM/yyyy');
                       $scope.paymentDays = response.data.invoiceData.paymentDays;
-                      $scope.getSupplierDetail($scope.supplier.selected.company);
+                      getSupplierDetail($scope.supplier.selected.company);
+                      getSupplierDetail($scope.supplier2.selected.company,true);
                       sumItemListTable($scope.itemTable);
                       accountTableSum();
 
@@ -175,6 +180,7 @@
     if ($stateParams.voId) {
         $scope.hasVoId = true;
         $scope.getInvoiceData($stateParams.voId);
+        $scope.billNoValid = true;
     }
     $scope.$watch('supplier.selected', function () {
         if ($scope.supplier.selected) {
@@ -257,12 +263,12 @@
     //        $scope.accountAmount = Number($scope.totalAmountINR) * Number($scope.account.selected.rate) / 100;
     //    }
     //});
-    $scope.billNoValid = false;
+    
     $("#billNo").focusout(function () {
 
         var billNo = $scope.billNo;
 
-        if (billNo != undefined) {
+        if (billNo != undefined && !$scope.hasVoId) {
             $http.get(config.api + "transactions" + "/count" + "?where[no]=" + $scope.billNo).then(function (response) {
                 $timeout(function () {
                     var data = response.data;
@@ -291,13 +297,20 @@
             angular.copy($scope.supliers, $scope.supliers2);
         });
     }
-    $scope.getSupplierDetail = function (supplierName) {
-        $scope.supliersDetail = []
+    function getSupplierDetail(supplierName,isConsignee) {
+        //$scope.supliersDetail = []
         $http.get(config.api + "suppliers" + "?filter[where][compCode]=" + localStorage.CompanyId + "&filter[where][company]=" + supplierName).then(function (response) {
-            $scope.supliersDetail = response.data;
-            console.log(response.data)
-            $scope.shippingAddress = $scope.supliersDetail[0].billingAddress[0].street;
-            $scope.email = $scope.supliersDetail[0].email;
+            if (isConsignee) {
+                $scope.supliersDetail2 = response.data;
+                console.log(response.data)
+                $scope.shippingAddress2 = $scope.supliersDetail2[0].billingAddress[0].street;
+                $scope.email2 = $scope.supliersDetail2[0].email;
+            }else{
+                $scope.supliersDetail = response.data;
+                console.log(response.data)
+                $scope.shippingAddress = $scope.supliersDetail[0].billingAddress[0].street;
+                $scope.email = $scope.supliersDetail[0].email;
+            }
         });
     }
     $scope.accounts = [];
@@ -416,6 +429,9 @@
             $scope.salesAmount =parseFloat($scope.listTotalAmount);
         if ($scope.totalAccountAmount)
             $scope.salesAmount += parseFloat($scope.totalAccountAmount);
+
+        $scope.gTotal = Math.round($scope.salesAmount);
+        $scope.roundOff = ($scope.gTotal - Number($scope.salesAmount)).toFixed(2);
     }
 
     function sumItemTable(data) {
@@ -704,7 +720,8 @@
             role: localStorage['usertype'],
             date: dateFormat($scope.billDate),
             duedate: dateFormat($scope.billDueDate),
-            amount: $scope.salesAmount,
+            amount: $scope.gTotal,
+            roundOff:$scope.roundOff,
             vochNo: $scope.billNo,
             state: "PAID",
             customerName: $scope.supplier.selected.company,
