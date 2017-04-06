@@ -76,13 +76,14 @@
     })
 
     $scope.salesAccount = {};
-
+    $scope.rdi = false;
     //Initialization
     $scope.supplier = {};
+    $scope.supplier2 = {};
     $scope.account = {}
     //$scope.totalAmountINR = 0;
     $scope.invoiceType = "Tax";
-    $scope.customerType = "Consignee";
+    $scope.customerType = "Buyer";
 
     $scope.remarks = {};
     $scope.godown = {};
@@ -147,16 +148,20 @@
                       $scope.supplier = { selected: { company: response.data.invoiceData.customerAccount } };
                       //$scope.email = { selected: { company: response.data.email } };
                       $scope.totalAmount = response.data.amount;
-                      $scope.billDate = response.data.date;
+                      //$scope.billDate = response.data.date;
                       $scope.billNo = response.data.vochNo;
                       $scope.narration = response.data.remark;
                       $scope.totalAmount = response.data.amount;
-
-                      $scope.removalDate = response.data.invoiceData.removalDate;
+                      $scope.intRate = response.data.invoiceData.roi;
+                      $scope.modeTransport = response.data.invoiceData.modeTransport;
+                      $scope.rdi = response.data.invoiceData.rdi;
                       $scope.itemTable = response.data.invoiceData.billData;
                       $scope.accountTable = response.data.invoiceData.accountlineItem;
-                      $scope.issueDate = $filter('date')(response.data.invoiceData.issueDate, 'dd/MM/yyyy');
+                      $scope.billIssueDate = $filter('date')(response.data.invoiceData.issueDate, 'dd/MM/yyyy');
                       $scope.billDate = $filter('date')(response.data.date, 'dd/MM/yyyy');
+                      $scope.billDueDate = $filter('date')(response.data.duedate, 'dd/MM/yyyy');
+                      $scope.billRemovalDate = $filter('date')(response.data.invoiceData.removalDate, 'dd/MM/yyyy');
+                      $scope.paymentDays = response.data.invoiceData.paymentDays;
                       $scope.getSupplierDetail($scope.supplier.selected.company);
                       sumItemListTable($scope.itemTable);
                       accountTableSum();
@@ -166,10 +171,10 @@
                   });
 
     }
+    $scope.hasVoId = false;
     if ($stateParams.voId) {
-
+        $scope.hasVoId = true;
         $scope.getInvoiceData($stateParams.voId);
-
     }
     $scope.$watch('supplier.selected', function () {
         if ($scope.supplier.selected) {
@@ -178,6 +183,18 @@
             }
             if ($scope.supplier.selected.email) {
                 $scope.email = $scope.supplier.selected.email
+
+            }
+
+        }
+    });
+    $scope.$watch('supplier2.selected', function () {
+        if ($scope.supplier2.selected) {
+            if ($scope.supplier2.selected.billingAddress && $scope.supplier2.selected.billingAddress.length > 0) {
+                $scope.shippingAddress2 = $scope.supplier2.selected.billingAddress[0].street
+            }
+            if ($scope.supplier2.selected.email) {
+                $scope.email2 = $scope.supplier2.selected.email
 
             }
 
@@ -264,11 +281,14 @@
         $scope.billDueDate = moment($scope.billDate, "DD/MM/YYYY").add($scope.paymentDays, 'days').format('DD/MM/YYYY');
     }
 
+    $scope.supliers = [];
+    $scope.supliers2 = [];
 
     function getSupplier() {
-        $scope.supliers = []
+        
         $http.get(config.api + "suppliers" + "?filter[where][compCode]=" + localStorage.CompanyId).then(function (response) {
             $scope.supliers = response.data;
+            angular.copy($scope.supliers, $scope.supliers2);
         });
     }
     $scope.getSupplierDetail = function (supplierName) {
@@ -280,7 +300,7 @@
             $scope.email = $scope.supliersDetail[0].email;
         });
     }
-
+    $scope.accounts = [];
     $http.get(config.api + "accounts").then(function (response) {
         $scope.salesAccounts = response.data;
         angular.copy($scope.salesAccounts, $scope.accounts);
@@ -310,7 +330,8 @@
             return;
         }
         var accountData = {
-            accountName: $scope.account.selected.accountName,
+            //accountName: $scope.account.selected.accountName,
+            account:$scope.account.selected,
             description: $scope.accountDescription,
             amount: $scope.accountAmount
         }
@@ -321,16 +342,21 @@
             $scope.accountTable.push(accountData);
         }
         $scope.edit1 = false;
-
+        clearAccountbox();
        accountTableSum();
+    }
+    function clearAccountbox() {
+        $scope.account = {};
+        $scope.accountDescription = null;
+        $scope.accountAmount = null;
     }
     $scope.editAccountTable = function (data, index) {
         $scope.idSelected = index;
         $scope.index = index;
         $scope.edit1 = true;
-        $scope.account = { selected: { accountName: data.accountName } };
-        $scope.accountDescription = data.description
-        $scope.amount = data.amount
+        $scope.account = { selected: data.account};
+        $scope.accountDescription = data.description;
+        $scope.accountAmount = data.amount;
 
     }
     $scope.removeAccountTable = function (index) {
@@ -687,13 +713,17 @@
             invoiceData: {
                 invoiceSubType: $scope.invoiceType,
                 customerType:$scope.customerType,
-                issueDate: dateFormat($scope.issueDate),
-                removalDate:dateFormat($scope.removalDate),
+                issueDate: dateFormat($scope.billIssueDate),
+                removalDate: dateFormat($scope.billRemovalDate),
                 customerAccount: $scope.supplier.selected.company,
+                consigneeAccount: $scope.supplier2.selected.company,
+                rdi:$scope.rdi,
                 ledgerAccount: $scope.salesAccount.selected.accountName,
                 saleAmount:$scope.salesAmount,
                 remarks: $scope.narration,
-                billData: $scope.paidData,
+                paymentDays: $scope.paymentDays,
+                modeTransport: $scope.modeTransport,
+                roi:$scope.intRate,
                 accountlineItem: $scope.accountTable,
                 billData: $scope.itemTable
             },
@@ -709,6 +739,22 @@
     function setIsCart(val){
         $scope.isCart=val;
     }
+
+    $scope.openTransaction = function (type) {
+
+        if (type == 'Tax Invoice') {
+
+            $state.go('Customer.TaxInvoicePDF', { voId: $stateParams.voId });
+        }
+        else if (type == 'Excise Invoice') {
+
+            $state.go('Customer.ExciseInvoicePDF', { voId: $stateParams.voId });
+        }
+        else if (type == 'Delivery Challan') {
+
+            $state.go('Customer.SalesInvoicePDF', { voId: $stateParams.voId });
+        }
+    };
     
     
 }]);

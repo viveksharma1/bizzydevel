@@ -6,8 +6,8 @@
 
 <div class="FlexPopup" style="display:block" ng-init="model = {}">
     <div class="flexheader">
-        <ul class="list-unstyled submenu InvoiceMenu" style="float:left">
-            <li><a href="#/Customer/Suppliers"><i class="fa fa-arrow-left" aria-hidden="true"></i></a></li>
+        <ul class="list-unstyled submenu InvoiceMenu" ng-click="goBack()" style="float:left">
+            <li><a href=""><i class="fa fa-arrow-left" aria-hidden="true"></i></a></li>
 
 
         </ul>
@@ -16,7 +16,7 @@
             <li ng-hide="type =='1'"><a ui-sref="Customer.PurchaseOrder({enqNo:no,edit:1})" style="font-size:18px"><i class="fa fa-edit"></i> Edit</a></li>
             <li ng-hide="type =='2'"><a ui-sref="Customer.Enquiry({email:data.no,edit:1})" style="font-size:18px"><i class="fa fa-edit"></i> Edit</a></li>
             <li><a href="#" style="font-size:18px"><i class="fa fa-print" ng-click="generatePDF()"></i> Print</a></li>
-            <li><a href="#/Customer/Suppliers" ng-click="goBack()"><i class="fa fa-times"></i></a></li>
+            <li><a href="" ng-click="goBack()"><i class="fa fa-times"></i></a></li>
         </ul>
     </div>
 
@@ -37,19 +37,19 @@
                             <table>
                                 <tr>
                                     <td style="padding:5px; vertical-align:top;text-transform:uppercase; padding-right:100px;border-bottom:1px solid #e3e3e3;">
-                                        <h4 style="font-weight:bold; margin:0px 0px 2px 0px">Shashwat Stainless Works</h4>
-                                        <p style="font-size:16px; margin-bottom:0px">Office No. 1515, 15th floor prasad chamber, tata road no. 2 opera house, girgaon, mumbai - 400004</p>
+                                        <h4 style="font-weight:bold; margin:0px 0px 2px 0px">{{ company.CompanyName}}</h4>
+                                        <p style="font-size:16px; margin-bottom:0px">{{company.CompanyAddress}}</p>
                                     </td>
                                     <td style="vertical-align:top">
                                         <table>
                                             <tr style="border-bottom:1px solid #e3e3e3; border-left:1px solid #e3e3e3;">
                                                 <td width="300" style="vertical-align:top;  padding:5px">
                                                     <p style="margin-bottom:0px">Deliver Note No.</p>
-                                                    <strong>0282/16-17</strong>
+                                                    <strong>{{invoiceData.vochNo}}</strong>
                                                 </td>
                                                 <td width="300" style="border-left:1px solid #e3e3e3; padding:5px">
                                                     <p style="margin-bottom:0px">Dated</p>
-                                                    <strong>10-Mar-2017</strong>
+                                                    <strong>{{invoiceData.date|date:'dd-MMM-yyyy'}}</strong>
                                                 </td>
                                             </tr>
                                             <tr style="border-bottom:1px solid #e3e3e3; border-left:1px solid #e3e3e3;">
@@ -57,18 +57,18 @@
                                                     &nbsp;
                                                 </td>
                                                 <td width="400" style="border-left:1px solid #e3e3e3; padding:5px">
-                                                    <p style="margin-bottom:0px">Model/Terms of Payment</p>
-                                                    <strong>60 DAYS</strong>
+                                                    <p style="margin-bottom:0px">Mode/Terms of Payment</p>
+                                                    <strong>{{invoiceData.invoiceData.paymentDays}} DAYS</strong>
                                                 </td>
                                             </tr>
                                             <tr style="border-bottom:1px solid #e3e3e3; border-left:1px solid #e3e3e3;">
                                                 <td width="400" style="vertical-align:top">
                                                     <p style="margin-bottom:0px">Buyer's Order No.</p>
-                                                    <strong>&nbsp;</strong>
+                                                    <strong>{{invoiceData.vochNo}}&nbsp;</strong>
                                                 </td>
                                                 <td width="400" style="border-left:1px solid #e3e3e3; padding:5px">
                                                     <p style="margin-bottom:0px">Dated</p>
-                                                    <strong>&nbsp;</strong>
+                                                    <strong>{{invoiceData.date|date:'dd-MMM-yyyy'}}&nbsp;</strong>
                                                 </td>
                                             </tr>
                                         </table>
@@ -80,19 +80,19 @@
                                 <tr>
                                     <td style="padding:5px; vertical-align:top;text-transform:uppercase; padding-right:100px;">
                                         <p style="margin-bottom:2px">Buyer</p>
-                                        <h4 style="font-weight:bold; margin:0px 0px 2px 0px">Aacharang Metals</h4>
-                                        <p style="font-size:16px; margin-bottom:0px">A/1002, bhoomi valley chs. ltd. near n.g. suncity, thakur village, kandivali (east), mumbai - 400101</p>
+                                        <h4 style="font-weight:bold; margin:0px 0px 2px 0px">{{invoiceData.invoiceData.customerAccount}}</h4>
+                                        <p style="font-size:16px; margin-bottom:0px">{{supliersDetail.billingAddress[0].street}}</p>
                                     </td>
                                     <td style="vertical-align:top">
                                         <table>
                                             <tr style="border-bottom:1px solid #e3e3e3; border-left:1px solid #e3e3e3;">
                                                 <td width="300" style="vertical-align:top;  padding:5px">
                                                     <p style="margin-bottom:0px">Despatch Document No.</p>
-                                                    <strong>&nbsp;</strong>
+                                                    <strong>{{invoiceData.vochNo}}&nbsp;</strong>
                                                 </td>
                                                 <td width="300" style="border-left:1px solid #e3e3e3; padding:5px">
                                                     <p style="margin-bottom:0px">Dated</p>
-                                                    <strong>10-Mar-2017</strong>
+                                                    <strong>{{invoiceData.date|date:'dd-MMM-yyyy'}}</strong>
                                                 </td>
                                             </tr>
                                             <tr style="border-bottom:1px solid #e3e3e3; border-left:1px solid #e3e3e3;">
@@ -134,49 +134,49 @@
                     <tr>
                         <td style="vertical-align:top; width:100%">
                             <table style="vertical-align:top; width:100%; border-left:none; border-right:none; border-color:rgba(227, 227, 227, 0.2)" border="1">
+
                                 <tr>
-                                    <td style="padding:5px; text-align:center">SI No.</td>
+                                    <td style="padding:5px; text-align:center; width:50px">SI No.</td>
                                     <td style="padding:5px">Description of Goods</td>
-                                    <td style="padding:5px">Quantity</td>
-                                    <td style="text-align:right; padding:5px">Rate</td>
-                                    <td style="text-align:right; padding:5px">Per</td>
+                                    <td style="padding:5px; text-align:right; width:100px">Quantity</td>
+                                    @*<td style="text-align:right; padding:5px">Rate</td>
+                                    <td style="text-align:right; padding:5px">Per</td>*@
                                 </tr>
-                                <tr style="height:200px">
-                                    <td style="padding:5px; text-align:center; vertical-align:top"><strong>1</strong></td>
+                                <tr ng-repeat="item in invoiceData.invoiceData.billData">
+                                    <td style="padding:5px; text-align:center; vertical-align:top"><strong>{{$index+1}}</strong></td>
                                     <td style="text-transform:uppercase; padding:5px; vertical-align:top">
-                                        <strong>C.R.S.S. Sheet/Plates/Coil Cut</strong>
-                                        <p style="font-weight:bold; text-align:right; padding:10px 0px">VAT %</p>
+                                        <strong>{{item.DESCRIPTION}}</strong>
                                     </td>
-                                    <td style="padding:5px; vertical-align:top">
-                                        <strong>6,874 Kgs</strong>
+                                    <td style="padding:5px; vertical-align:top; text-align:right">
+                                        <strong>{{item.itemQty}} Kgs</strong>
                                         <p style="font-weight:bold; padding:5px 0px">&nbsp;</p>
                                     </td>
-                                    <td style="text-align:right; padding:5px; vertical-align:top">
+                                    @*<td style="text-align:right; padding:5px; vertical-align:top">
                                         500.00
                                         <p style="padding:10px 0px">5</p>
                                     </td>
                                     <td style="text-align:right; padding:5px; vertical-align:top">
                                         Kgs
                                         <p style="padding:10px 0px">%</p>
-                                    </td>
+                                    </td>*@
                                 </tr>
                                 <tr>
                                     <td style="padding:5px; text-align:center; vertical-align:top">&nbsp;</td>
                                     <td style="padding:5px; vertical-align:top; text-align:right">
                                         Total
                                     </td>
-                                    <td style="padding:5px; vertical-align:top">
-                                        <strong>6,874 Kgs</strong>
+                                    <td style="padding:5px; vertical-align:top;text-align:right">
+                                        <strong>{{totalQty}} Kgs</strong>
 
                                     </td>
-                                    <td style="text-align:right; padding:5px; vertical-align:top">
+                                    @*<td style="text-align:right; padding:5px; vertical-align:top">
                                         500.00
 
                                     </td>
                                     <td style="text-align:right; padding:5px; vertical-align:top">
                                         Kgs
 
-                                    </td>
+                                    </td>*@
                                 </tr>
                             </table>
                         </td>
@@ -189,26 +189,26 @@
                             <table>
                                 <tr>
                                     <td width="200">Company's VAT TIN</td>
-                                    <td><strong>: 27160870532V W.E.F. 14.9.2011</strong></td>
+                                    <td><strong>: {{company.VAT_TIN_NO}}</strong></td>
                                 </tr>
                                 <tr>
                                     <td>Company's CST TIN</td>
-                                    <td><strong>: 27160870532C W.E.F. 14.9.2011</strong></td>
+                                    <td><strong>: {{company.CST_TIN_NO}}</strong></td>
                                 </tr>
                                 <tr>
                                     <td>BUYER'S VAT TIN</td>
-                                    <td><strong>: 27331239378V</strong></td>
+                                    <td><strong>: {{supliersDetail.taxInfo.taxRegNo}}</strong></td>
                                 </tr>
                                 <tr>
                                     <td>BUYER'S CST TIN</td>
-                                    <td><strong>: 27331239378C</strong></td>
+                                    <td><strong>: {{supliersDetail.taxInfo.cstRegNo}}</strong></td>
                                 </tr>
                             </table>
                         </td>
                     </tr>
                     <tr>
                         <td style="padding:5px; vertical-align:top; border-bottom:1px solid #e3e3e3; text-align:right">
-                            <strong>for SHASHWAT STAINLESS WORKS</strong>
+                            <strong>for {{company.CompanyName}}</strong>
                             <br /><br /><br /><br />
                             <p>Authorised Signatory</p>
                         </td>
