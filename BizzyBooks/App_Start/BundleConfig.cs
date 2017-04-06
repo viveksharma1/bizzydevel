@@ -128,6 +128,7 @@ namespace Restaurant
                  "~/ScriptsAngular/app/Controller/PdfViewCntrl.js",
                  "~/ScriptsAngular/app/Controller/CustomerPdfViewCntrl.js",
                  "~/ScriptsAngular/app/Controller/ChartofAccountsCntrl.js",
+                 "~/ScriptsAngular/app/AccountCreateDirective.js",
                  "~/ScriptsAngular/app/Controller/accountHistoryCntrl.js",
                  "~/ScriptsAngular/app/Controller/inventorystockCntrl.js",
                  "~/ScriptsAngular/app/Controller/ForexGainLossCntrl.js",

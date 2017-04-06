@@ -172,6 +172,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Site.css" />
+    <Content Include="CreateAccount.html" />
     <Content Include="css\accordion.min.css" />
     <Content Include="css\angular-datatables.min.css" />
     <Content Include="css\bootstrap-datepicker.css" />
@@ -380,6 +381,7 @@
     <Content Include="ScriptsAngular\Angular\src\plugins\tabletools\angular-datatables.tabletools.js" />
     <Content Include="ScriptsAngular\Angular\src\select.min.js" />
     <Content Include="ScriptsAngular\Angular\src\ui-bootstrap-tpls-0.13.4.js" />
+    <Content Include="ScriptsAngular\app\AccountCreateDirective.js" />
     <Content Include="ScriptsAngular\app\Controller\accountHistoryCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\ActivityLogCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\AdvancePaymentCntrl.js" />

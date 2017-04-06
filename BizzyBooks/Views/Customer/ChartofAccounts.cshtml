@@ -18,6 +18,7 @@
 
                 </ul>
             </div>
+            <create-account value="myValue" > </create-account>
         </div>
         </div>
     </div>
@@ -68,7 +69,7 @@
 
 </div>
 @*Account*@
-<div class="modal fade" id="formaccount">
+@*<div class="modal fade" id="formaccount">
     <div class="modal-dialog">
         <div class="modal-content content">
             <div class="modal-header popupheader content" style="padding:10px 20px">
@@ -85,23 +86,7 @@
                     <div class="col-sm-6 paddinright">
 
 
-                        @*
-                    <div class="col-sm-12 form-group padding5">
-                        <label>Account Type</label>
-                        <select class="form-control" ng-model="accountType">
-                            <option>Current assets</option>
-                            <option>Current liabilities</option>
-                            <option>Equity</option>
-                            <option>Bank</option>
-                            <option>Fixed assets</option>
-                            <option>Equity</option>
-                            <option>Income</option>
-                            <option>Direct Expense</option>
-                            <option>Tax And Duties</option>
-
-                        </select>
-                    </div>
-                        *@
+                        
                         <div class="col-sm-12 form-group padding5">
                             <label><span class="red">*</span>Name</label>
                             <input ng-model="accountName" type="text" class="form-control" />
@@ -182,27 +167,7 @@
                             <label>Description</label>
                             <input ng-model="description" type="text" class="form-control" ng-disabled="isDisabled" />
                         </div>
-                        @*<div class="col-sm-12 form-group padding5" style="margin:20px 0px;">
-                        <label><input type="checkbox" ng-disabled="isDisabled" ng-model="checkboxModel.value1"ng-true-value="'true'" ng-false-value="'false'"/> Is sub-account </label>
-                        <div >
-
-                            <ui-select ng-model="accounts.selected" id="countryCode" ng-disabled="isDisabled"
-                                       ui-select-focuser
-                                       theme="bootstrap">
-                                <ui-select-match placeholder="Choose an account">{{$select.selected.accountName}}</ui-select-match>
-
-                                <ui-select-choices repeat="person in parentAccount  | filter: $select.search">
-                                    <div>
-                                        <span ng-model="supplier1" ng-bind-html="person.accountName | highlight: $select.search"></span>
-                                    </div>
-
-
-                                </ui-select-choices>
-                            </ui-select>
-
-                        </div>
-                    </div>*@
-
+                        
 
                         <div class="col-sm-6 form-group padding5">
                             <label>Rate (%)</label>
@@ -347,13 +312,7 @@
                             <div class="col-sm-12" style="margin:20px 0px">
 
 
-                                @*<ul ng-repeat="data in datapath">
-                                <li>
-                                    <span> <a href="" style="font-size:medium" class="pointer fa fa-file-pdf-o" aria-hidden="true"> <b ng-click="getfile(data)">{{data.replace("server/boot/uploads/"+ billNo,'')}}</b></a></span>
-                                    <i class="fa fa-times" aria-hidden="true" ng-click="deletefile(data,$index)"></i>
-                                </li>
-                            </ul>*@
-
+                                
                                 <div class="col-sm-12" style="padding:0px">
 
 
@@ -361,7 +320,7 @@
                                         <input type="text" class="form-control" id="NameInput" placeholder="Title" />
                                     </div>
                                     <div class="col-sm-5 padding5">
-                                        @*<input type="file" class="form-control" id="id=" uploadBtn" />*@
+                                       
                                         <input type="file" class="filestyle" id="uploadBtn" data-buttonName="btn-info">
                                     </div>
 
@@ -407,7 +366,7 @@
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
-</div>
+</div>*@
 
 
 <!-- moreEmployeeModal -->
