@@ -680,6 +680,8 @@
 
 
     $scope.saveInvoice = function () {
+
+        sumItemTable($scope.itemTable);
         if ($scope.supplier.selected == undefined || $scope.supplier.selected == null) {
             showErrorToast("Please select customer");
             return;

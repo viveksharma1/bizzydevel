@@ -127,7 +127,9 @@
     $scope.getAllBill = function (name) {
         $http.get(config.login + "getVoucherData" + "?customerName=" + name).then(function (response) {
             $scope.paymentData = response.data
-            $scope.paidData = $scope.paymentData;
+           
+
+            angular.copy($scope.paymentData, $scope.paidData)
             console.log($scope.transaction);
 
            
