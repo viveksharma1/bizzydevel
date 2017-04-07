@@ -36,8 +36,28 @@
             }
             $scope.isAccount = true;
             $scope.$watch('value', function () {
+                console.log($scope.value);
                 if ($scope.value) {
-                    $scope.accountName = $scope.value;
+
+                    
+
+                    $scope.accountId = $scope.value.id
+                    console.log($scope.value);
+                  
+                    $scope.accountName = $scope.value.accountName
+
+                    $scope.groupMasters = { selected: { name: $scope.value.Under } };
+                    $scope.groupMasters.selected.type = $scope.value.type;
+                    $scope.balanceType = $scope.value.balanceType
+                    if ($scope.value.rate) {
+                        $scope.rate = $scope.value.rate
+                    }
+                    $scope.credit = $scope.value.credit
+                    $scope.debit = $scope.value.debit
+                    $scope.openingBalance = $scope.value.openingBalance
+                }
+                else {
+                    $scope.accountId = null
                 }
             });
             $scope.$watch('groupMasters.selected', function () {
@@ -78,7 +98,7 @@
 
                     }
 
-                    $http.post(config.login + "createAccount", accountData).then(function (response) {
+                    $http.post(config.login + "createAccount?id=" + $scope.accountId, accountData).then(function (response) {
 
                         $http.get(config.login + "chartOfAccount").then(function (response) {
                             $scope.account = response.data;

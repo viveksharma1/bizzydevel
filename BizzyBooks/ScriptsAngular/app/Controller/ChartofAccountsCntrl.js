@@ -3,13 +3,22 @@
     $(".my a").click(function (e) {
         e.preventDefault();
     });
-    $scope.Accountbtn = function () {
-        $('#formaccount').modal('show');
-        $scope.myValue = "abc";
-        $scope.isAccount = false
-      
+    $scope.Accountbtn = function (id) {
 
-        
+        console.log(id);
+
+        $('#formaccount').modal('show');
+        if (id != undefined) {
+            $http.get(config.api + "accounts/" + id).then(function (response) {
+                console.log(response);
+                $scope.myValue = response.data;
+                $scope.isAccount = false
+            });
+        }
+        else {
+            $scope.myValue = null;
+        }
+       
     };
     $('.filenameDiv').hide();
     $('.attechmentDescription').hide();
