@@ -12,8 +12,8 @@
                   .then(function (response) {
                       $scope.invoiceData = response.data;
                       getSupplierDetail(response.data.invoiceData.customerAccount);
-                      $scope.gTotal=Math.round($scope.invoiceData.amount);
-                      $scope.roundOff = $scope.gTotal - Number($scope.invoiceData.amount);
+                      $scope.gTotal=$scope.invoiceData.amount;
+                      $scope.roundOff = $scope.invoiceData.roundOff;
                   });
     }
     if ($stateParams.voId) {

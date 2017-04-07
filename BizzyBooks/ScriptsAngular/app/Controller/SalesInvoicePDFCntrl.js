@@ -11,8 +11,8 @@
                   .then(function (response) {
                       $scope.invoiceData = response.data;
                       getSupplierDetail(response.data.invoiceData.customerAccount);
-                      $scope.gTotal=Math.round($scope.invoiceData.amount);
-                      $scope.roundOff = $scope.gTotal - Number($scope.invoiceData.amount);
+                      //$scope.gTotal = $scope.invoiceData.amount;
+                      //$scope.roundOff = $scope.invoiceData.roundOff;
                   });
     }
     if ($stateParams.voId) {
@@ -31,15 +31,15 @@
     }
     $scope.$watch('invoiceData.invoiceData.billData', function () {
         var totalQty = 0;
-        var totalAmount = 0;
+        //var totalAmount = 0;
         if ($scope.invoiceData && $scope.invoiceData.invoiceData && $scope.invoiceData.invoiceData.billData) {
             $scope.invoiceData.invoiceData.billData.forEach(function (item) {
                 totalQty += Number(item.itemQty);
-                totalAmount += Number(item.itemAmount);
+                //totalAmount += Number(item.itemAmount);
             });
         }
         $scope.totalQty = totalQty;
-        $scope.totalAmount = totalAmount;
+        //$scope.totalAmount = totalAmount;
     }, true);
 
 }]);
