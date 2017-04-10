@@ -6,6 +6,15 @@
     $scope.goBack = function () {
         window.history.back();
     }
+    $scope.printInvoice = function (printSectionId) {
+        var innerContents = document.getElementById(printSectionId).innerHTML;
+        var popupWinindow = window.open('', '_blank', 'scrollbars=no,menubar=no,toolbar=no,location=no,status=no,titlebar=no');
+        popupWinindow.document.open();
+        var strScript = '<script type="text/javascript">window.onload=function() {document.getElementById("table").style.whiteSpace = "nowrap"; window.print(); window.close(); };</script>'
+        popupWinindow.document.write('<html><head></head><body">' + innerContents + '</body></html>');
+        popupWinindow.document.write(strScript);
+        popupWinindow.document.close(); // necessary for IE >= 10
+    }
     function getInvoiceData(id) {
         $http.get(config.api + 'voucherTransactions/' + id)
                   .then(function (response) {
