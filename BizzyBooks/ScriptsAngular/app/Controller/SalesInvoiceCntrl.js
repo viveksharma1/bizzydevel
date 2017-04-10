@@ -82,10 +82,10 @@
     //    console.info('onWhenAddingFileFailed', item, filter, options);
     //};
     uploader.onAfterAddingFile = function (fileItem) {
-        if ($scope.oldAttachment) {
+        if (fileItem.isOld && $scope.oldAttachment) {
             fileItem.title = $scope.oldAttachment.title;
             fileItem.cdnPath = $scope.oldAttachment.cdnPath;
-            fileItem_onSuccess();
+            //fileItem_onSuccess();
         } else {
             console.info('onAfterAddingFile', fileItem);
             if ($scope.filename) {
@@ -226,6 +226,7 @@
                 //var filters = uploader.getFilters();
                 //file.file.isOld = true;
                 //if (!this.uploader.isHTML5) this.destroy();
+                item.file.isOld = true;
                 uploader.addToQueue(item.file);
                 //uploader.addToQueue(item);
             });
