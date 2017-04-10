@@ -117,7 +117,7 @@
 
     $scope.getSupplier = function () {
         $scope.supliers = []
-        $http.get(config.api + "suppliers" + "?filter[where][compCode]=" + localStorage.CompanyId).then(function (response) {
+        $http.get(config.login + "getPartytAccount/" + localStorage.CompanyId).then(function (response) {
             $scope.supliers = response.data;
             console.log(response.data)
         });
@@ -267,8 +267,10 @@
         $http.get(config.api + 'voucherTransactions/' + id)
                   .then(function (response) {
                       $scope.paymentLog = response.data.paymentLog;
-                      $scope.salesAccount = { selected: { accountName: response.data.invoiceData.ledgerAccount } };
-                      $scope.supplier = { selected: { company: response.data.invoiceData.customerAccount } };
+                      $scope.salesAccount = { selected: { accountName: localStorage[response.data.invoiceData.ledgerAccountId], id: response.data.invoiceData.ledgerAccountId } };
+                      $scope.supplier = { selected: { accountName: localStorage[response.data.invoiceData.customerAccountId], id: response.data.invoiceData.customerAccountId } };
+                     
+                     
                       $scope.email = { selected: { company: response.data.email } };
                       $scope.totalAmount = response.data.amount
                       $scope.billDate = response.data.date
@@ -719,7 +721,7 @@
             amount: $scope.totalAmount,
             vochNo: $scope.billNo,
             state: "OPEN",
-            customerName: $scope.supplier.selected.company,
+            customerId: $scope.supplier.selected.id,
             email: $scope.supplier.selected.email,
             remark: $scope.narration,
             invoiceData: {
@@ -727,8 +729,8 @@
                 customerType: $scope.customerType,
                 issueDate: dateFormat($scope.issueDate),
                 removalDate: dateFormat($scope.removalDate),
-                customerAccount: $scope.supplier.selected.company,
-                ledgerAccount: $scope.salesAccount.selected.accountName,
+                customerAccountId: $scope.supplier.selected.id,
+                ledgerAccountId: $scope.salesAccount.selected.id,
                 saleAmount: $scope.totalAmount,
                 remarks: $scope.narration,
                 billData: $scope.itemTable             

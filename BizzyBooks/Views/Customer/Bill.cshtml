@@ -216,11 +216,11 @@
                 <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
                            ui-select-focuser
                            theme="selectize">
-                    <ui-select-match placeholder="Select Suppliers">{{ $select.selected.company }}</ui-select-match>
+                    <ui-select-match placeholder="Select Suppliers">{{ $select.selected.accountName }}</ui-select-match>
 
                     <ui-select-choices repeat="person in supliers  | filter: $select.search">
                         <div>
-                            <span ng-model="supplier1" ng-bind-html="person.company | highlight: $select.search"></span>
+                            <span ng-model="supplier1" ng-bind-html="person.accountName | highlight: $select.search"></span>
                         </div>
 
 
@@ -976,7 +976,7 @@
                                     <label>TOTAL AMT(INR)</label>
                                     <ui-select ui-tree-select ng-model="godown.selected.name" id="countryCode"
                                                ui-select-focuser
-                                               theme="selectize" Sstyle="text-overflow: ellipsis">
+                                               theme="selectize" style="text-overflow: ellipsis">
 
                                         <ui-select-match>
                                             <span class="selectuiTable">
@@ -1660,7 +1660,7 @@
             <table class="table-bordered table-condensed tab" fixed-header id="ItemTable" style="width:98%; margin-left:10px;margin-right:10px; height:180px">
                 <thead>
                     <tr style="background:rgb(243, 245, 248)">
-                        <th>
+                        <th><create-account value="myValue"> </create-account>
                             <ui-select ui-tree-select  on-select="getNewData('GODOWN', godown.selected.name)"ng-model="godown.selected.name" id="countryCode"
                                        ui-select-focuser
                                        theme="selectize" Sstyle="text-overflow: ellipsis">
@@ -1696,7 +1696,7 @@
                                     <div>
                                         <span ng-bind-html="person.name | highlight: $select.search"></span>
                                     </div>
-                                </ui-select-choices>a
+                                </ui-select-choices>
                             </ui-select>
                         </th>
                         <th>

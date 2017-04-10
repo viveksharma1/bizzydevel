@@ -102,6 +102,7 @@
 
                         $http.get(config.login + "chartOfAccount").then(function (response) {
                             $scope.account = response.data;
+                           
                         });
                     });
 

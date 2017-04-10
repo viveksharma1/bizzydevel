@@ -65,6 +65,12 @@ myApp.controller('LoginCntrl', ['$state', '$http', '$rootScope', '$scope', 'conf
 
                 }
                 else {
+                    $http.get(config.login + "getAccountNameById").then(function (response) {
+                        $scope.accountData = response.data
+                        for (var i = 0; i < $scope.accountData.length; i++) {
+                            localStorage[$scope.accountData[i]._id] = $scope.accountData[i].accountName
+                        }
+                    });
                     if (RoleCheck == "3")
                     {
 

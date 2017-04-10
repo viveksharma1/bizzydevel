@@ -1,5 +1,5 @@
-﻿myApp.controller('ExpenseCntrl', ['$scope', '$http', '$stateParams', '$timeout', '$rootScope', '$state', 'myService', 'config',
-    function ($scope, $http, $stateParams, $timeout, $rootScope, $state, myService, config) {
+﻿myApp.controller('ExpenseCntrl', ['$scope', '$http', '$stateParams', '$timeout', '$rootScope', '$state', 'myService', 'config','$filter',
+    function ($scope, $http, $stateParams, $timeout, $rootScope, $state, myService, config, $filter) {
         $.fn.datepicker.defaults.format = "dd/mm/yyyy";
         $(".my a").click(function (e) {
             e.preventDefault();
@@ -39,7 +39,8 @@
         $(document).on("click", "#upload_prev span", function () {
             res.splice($(this).index(), 1);
             $(this).remove();
-            console.log(res);
+           
+
 
         })
 
@@ -93,14 +94,18 @@
 
     
    
- 
+        $scope.idSelectedVote = null;
 
         //get supplier data
-        $scope.supliers = []
-        $http.get(config.api + "suppliers").then(function (response) {
-            $scope.supliers = response.data;
-        })
-    
+
+        $scope.getSupplier = function () {
+            $http.get(config.login + "getSupplierAccount/" + localStorage.CompanyId).then(function (response) {
+                $scope.supliers = response.data
+
+            });
+        }
+       
+        $scope.getSupplier();
 
 
         //calculate total tax and total amount
@@ -118,25 +123,14 @@
 
         //calculate TDS
         $scope.tdsRate = {};
-        $scope.$watch('tdsRate.selected', function () {
-           
-           
-                if ($scope.totaltax == undefined) {
-                    $scope.totaltax = 0;
-                }
-          
-                $scope.totalAmountTds = Number($scope.totalcharges) + Number($scope.totaltax)
-                $scope.tdsamount = Number($scope.totalAmountTds) * Number($scope.tdsRate.selected.rate) / 100
-                $scope.netTds = Number($scope.totalAmountTds) - Number($scope.tdsamount) 
-
-           
-        });
+       
 
         //get account data
 
     $http.get(config.api + "accounts" ).then(function (response) {
         $scope.account = response.data
-        console.log($scope.account);
+       
+
     })
    
     //create account 
@@ -162,22 +156,37 @@
 
     }
 
+
+        // bind accountId in account and item table 
+
+
+    
+    $scope.bindAccountId = function (data) {
+        var accountData = data;
+        for (var i = 0; i < data.length; i++) {
+            accountData[i].accountName = localStorage[data[i].accountId]
+        }
+        return accountData;
+    }
     
     //get Expense data
     $scope.supplier = {};
 
-    console.log($scope.supplier);
+   
+
     $scope.getExpenseData = function (expenseId) {  
         $http.get(config.api + 'transactions/'+ expenseId)
-                    .then(function (response) {
-                        console.log(response);                       
-                        $scope.accountTable = response.data.accountTable;
-                        $scope.itemTable = response.data.itemTable;                     
-                        $scope.supplier = { selected: { company: response.data.supliersName } };                       
-                        //$scope.invoiceDate = response.data[0].date.format('MM/DD/YYYY');
+                    .then(function (response) {                        
+                        $scope.accountTable = $scope.bindAccountId(response.data.accountTable);                      
+                        $scope.itemTable = $scope.bindAccountId(response.data.itemTable);
+                        $scope.supplier = { selected: { accountName: localStorage[response.data.supliersId], id: response.data.supliersId } };
+                        $scope.tdsRate = { selected: { accountName: localStorage[response.data.tdsAccountId], id: response.data.tdsAccountId } };                     
+                        $scope.applyTdsRate(response.data.tdsRate);
+                        $scope.expenseDueDate = $filter('date')(response.data.billDueDate, 'dd/MM/yyyy');
+                        $scope.expenseDate = $filter('date')(response.data.date, 'dd/MM/yyyy');                       
                         $scope.expenseId = response.data.expenseId
-                        $scope.id = response.data.id
-                        console.log($scope.id);
+                        $scope.paymentDays = response.data.paymentDays                       
+                        $scope.id = response.data.id                     
                         $scope.accountTableSum();
                         $scope.itemTableSum();
                     });
@@ -185,7 +194,7 @@
 
     if ($stateParams.expenceId) {
 
-        console.log($stateParams.expenceId);
+       
         $scope.supplier = { selected: { company: $stateParams.suppliers } };
         $scope.getExpenseData($stateParams.expenceId)
         
@@ -205,6 +214,7 @@
         }
         $scope.totaltax1 = total.toFixed(2);
         $scope.totaltax = Number($scope.totaltax1)
+        return $scope.totaltax;
     }
     $scope.itemTableSum = function () {
         var total = 0;
@@ -214,6 +224,8 @@
         }
         $scope.totalcharges1 = total.toFixed(2);
         $scope.totalcharges = Number($scope.totalcharges1)
+
+        return $scope.totalcharges;
     }
     //add acount 
 
@@ -223,11 +235,14 @@
     }
 
     $scope.editAccountTable = function (data, index) {
+        $scope.idSelectedVote = index;
         $scope.index = index;
         $scope.edit1 = true;
         $scope.accounts = { selected: { accountName: data.accountName } };
-        $scope.accountDescription = data.description
-        $scope.amount = data.amount
+       
+        $scope.accountAmount = data.amount
+
+       
 
     }
 
@@ -237,6 +252,7 @@
     $scope.addAccount = function () {
         var accountData = {
             accountName: $scope.accounts.selected.accountName,
+            accountId: $scope.accounts.selected.id,
             description: $scope.accountDescription,
             amount: $scope.accountAmount
         }
@@ -283,10 +299,11 @@
     }
 
     $scope.editItemDetail = function (data, index) {
+        $scope.idSelectedVote = index;
         $scope.index = index;
         $scope.edit1 = true;
         $scope.itemAccount = { selected: { accountName: data.accountName } };
-        $scope.itemDescription = data.description
+      
         $scope.itemAmount = data.amount
 
     }
@@ -295,6 +312,7 @@
     $scope.addItemDetail = function () {
         var accountData = {
             accountName: $scope.itemAccount.selected.accountName,
+            accountId: $scope.itemAccount.selected.id,
             description: $scope.itemDescription,
             amount: $scope.itemAmount
         }
@@ -336,14 +354,7 @@
         $scope.saveExpense();
         $scope.goBack();
     }
-    $scope.$watch('supplier.selected', function () {
-        $scope.shippingAddress = $scope.supplier.selected.billingAddress[0].street
-        if ($scope.supplier.selected.email) {
-            $scope.email = $scope.supplier.selected.email
-
-        }
-
-    });
+   
     $scope.paymentTerm = function () {
         $scope.expenseDueDate = moment($scope.expenseDate, "DD/MM/YYYY").add($scope.paymentDays, 'days').format('DD/MM/YYYY');
     }
@@ -351,7 +362,7 @@
 
          $scope.dateFormat = function (date) {
           var res = date.split("/");
-          console.log(res);
+         
           var month = res[1];
           var days = res[0]
           var year = res[2]
@@ -359,55 +370,98 @@
           return date;
       }
     // save Expense new 
-    $scope.saveExpenceNew = function () {
-        if ($scope.totalcharges && $scope.TDS && $scope.totaltax) {
-            $scope.netamount = Number($scope.netTds) + Number($scope.totaltax);
-        }
-        else {
-            if ($scope.totalcharges && $scope.totaltax) {
-                $scope.netamount = Number($scope.totalcharges) + Number($scope.totaltax);
-            }
-            else {
-                if ($scope.totalcharges && $scope.TDS) {
-                    $scope.netamount = $scope.netTds
-                }
-                else {
-                    if ($scope.totalcharges) {
-                        $scope.netamount = Number($scope.totalcharges);
-                    } else {
-                        $scope.netamount = Number($scope.totaltax);
-                    }
-                }
-            }
-        }
+         $scope.saveExpenceNew = function () {
+
+             if (!$scope.tdsamount) {
+                 $scope.netAmount = Number($scope.itemTableSum()) + Number($scope.accountTableSum())
+             } else {
+                 $scope.netAmount = Number($scope.itemTableSum()) + Number($scope.accountTableSum())- Number($scope.tdsamount)
+             }
+
+        //     if ($scope.tdsRate == undefined) {
+        //         $scope.tdsAccountId = null;
+        //         $scope.tdsrate = null;
+        //     }
+        //     else {
+        //         $scope.tdsAccountId = $scope.tdsRate.selected.id;
+        //         $scope.tdsrate = $scope.tdsRate.selected.rate;
+        //     }
+        //if ($scope.totalcharges && $scope.TDS && $scope.totaltax) {
+        //    $scope.netamount = Number($scope.netTds) + Number($scope.totaltax);
+        //}
+        //else {
+        //    if ($scope.totalcharges && $scope.totaltax) {
+               
+        //        $scope.netamount = Number($scope.totalcharges) + Number($scope.totaltax);
+        //    }
+        //    else {
+        //        if ($scope.totalcharges && $scope.TDS) {
+        //            $scope.netamount = $scope.netTds
+        //        }
+        //        else {
+                    
+        //            if ($scope.totalcharges) {
+                       
+        //                $scope.netamount = Number($scope.totalcharges);
+        //            } else {
+        //                $scope.netamount = Number($scope.totaltax);
+        //            }
+        //        }
+        //    }
+        //}
         var data = {
             compCode: localStorage.CompanyId,
             no: $scope.expenseId,
             expenseId: $scope.expenseId,
             refNo: $stateParams.no,
             ordertype: "EXPENSE",
-            supliersName: $scope.supplier.selected.company,
+            supliersId: $scope.supplier.selected.id,
             id:$scope.id,
             role: localStorage['adminrole'],
             currency: $scope.currency, 
             date: $scope.dateFormat($scope.expenseDate),
             billDueDate: $scope.dateFormat($scope.expenseDueDate),
+            paymentDays:$scope.paymentDays,
             balance:$scope.netamount,
             adminBalance: $scope.netamount,
             adminAmount:$scope.netamount,
-
             accountTable: $scope.accountTable,
             itemTable: $scope.itemTable,
-            amount: $scope.netamount,
+            amount: $scope.netAmount,
             tdsamount: $scope.tdsamount,
-            tdsAccountName:$scope.tdsRate.selected.accountName
+            tdsRate : $scope.tdsrate,
+            tdsAccountId: $scope.tdsAccountId
         }
         $http.post(config.login + "saveExpense", data).then(function (response) {
             showSuccessToast("Expense Save Succesfully");
         });
     }
+        // apply rate to account
+         $scope.applyRate = function (rate) {
+             if (rate) {
+                 var totalTaxableAmount = Number($scope.itemTableSum()) + Number($scope.accountTableSum());
+                 var taxOnAmount = (totalTaxableAmount * rate) / 100;
+                 $scope.accountAmount = taxOnAmount;
+             }
+             else
+                 $scope.accountAmount = '';
+         }
 
-    
+        //calculate tds amount
+         $scope.applyTdsRate = function (rate) {
+             if (rate) {
+                 var totalTaxableAmount = Number($scope.itemTableSum());
+                 var tdsOnAmount = (totalTaxableAmount * rate) / 100;
+                 $scope.tdsamount = tdsOnAmount
+                 $scope.totalAmountTds = Number($scope.itemTableSum()) + Number($scope.accountTableSum())
+                 $scope.netTds = Number($scope.totalAmountTds) - Number($scope.tdsamount)
+                 $scope.netAmount = $scope.netTds
+                 $scope.tdsrate = rate;
+                 $scope.tdsAccountId = $scope.tdsRate.selected.id;
+             }
+             else
+                 $scope.tdsamount = '';
+         }
 
 
     

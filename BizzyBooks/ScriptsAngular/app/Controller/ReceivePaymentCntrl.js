@@ -103,6 +103,8 @@
         var date = month + '/' + days + '/' + year;
         return date;
     }
+
+   
     $scope.getVoucherCount = function () {
         $http.get(config.api + "voucherTransactions/count" + "?[whrer][type]= Receive Payment").then(function (response) {
             $scope.paymentNo = response.data.count + 1;
@@ -110,13 +112,13 @@
         });
     }
     $scope.getSupplier = function () {
-        $http.get(config.api + "suppliers").then(function (response) {
+        $http.get(config.login + "getPartytAccount/" + localStorage.CompanyId).then(function (response) {
             $scope.partyAccounts = response.data
             console.log($scope.partyAccounts);
         });
     }
     $scope.getAccount = function () {
-        $http.get(config.login + "getPaymentAccount").then(function (response) {
+        $http.get(config.login + "getPaymentAccount/" + localStorage.CompanyId).then(function (response) {
             $scope.bankAccounts = response.data
             console.log($scope.bankAccounts);
         });
@@ -197,8 +199,9 @@
             state: "PAID",
             remark: $scope.paymentRemarks,
             vo_payment: {
-                bankAccount: $scope.bankAccount.selected.accountName,
-                partyAccount: $scope.partyAccount.selected.company,
+                
+                bankAccountId: $scope.bankAccount.selected.id,               
+                partyAccountId: $scope.partyAccount.selected.id,
                 paymentAmount: $scope.totalPaidAmount,
                 currency: $scope.currency,
                 exchangeRate: $scope.exchangeRate,
@@ -235,11 +238,13 @@
 
                         angular.copy($scope.transaction, $scope.paidData);
                         console.log($scope.paidData)
-                        $scope.totalPaidAmount = response.data.amount
+                        $scope.totalPaidAmount = response.data.amount 
                         $scope.paymentNo = response.data.vochNo
-                        $scope.bankAccount = { selected: { accountName: response.data.vo_payment.bankAccount } };
+                        $scope.bankAccount = { selected: { accountName: localStorage[response.data.vo_payment.bankAccountId], id:response.data.vo_payment.bankAccountId } };
+
                         console.log(response.data.vo_payment.bankAccount);
-                        $scope.partyAccount = { selected: { company: response.data.vo_payment.partyAccount } };
+                        $scope.partyAccount = { selected: { accountName: localStorage[response.data.vo_payment.partyAccountId],id: response.data.vo_payment.partyAccountId } };
+                      
                         $scope.paymentdate = $filter('date')(response.data.date, 'dd/MM/yyyy');
 
                     });
@@ -256,24 +261,71 @@
     }
     else {
         $scope.$watch('partyAccount.selected', function () {
-            if ($scope.partyAccount.selected.company) {
+            if ($scope.partyAccount.selected.accountName) {
                 if (localStorage['usertype'] == '2') {
                    
-                    $scope.getAllBill($scope.partyAccount.selected.company);
+                    $scope.getAllBill($scope.partyAccount.selected.accountName);
                 }
                 else {
                  
-                    $scope.getAllBill($scope.partyAccount.selected.company);
+                    $scope.getAllBill($scope.partyAccount.selected.accountName);
 
                 }
             }
 
         });
     }
+    $scope.addNew = function () {
+
+        $('#formaccount').modal('show');
+
+        $scope.myValue = null;
+
+    }
+
+    $scope.refreshResults = function ($select) {
+        var search = $select.search,
+          list = angular.copy($select.items),
+          FLAG = -1;
+        list = list.filter(function (item) {
+            return item.id !== FLAG;
+        });
+        if (!search) {
+            //use the predefined list
+          
+            $select.items = list;
+        }
+        else {
+            //manually add user input and set selection
+            var userInputItem = {
+                id: FLAG,
+                name: search
+            };
+           
+            $select.items = [userInputItem].concat(list)
+            $select.selected =  $select.items
+
+            if (type == "GODOWN") {
+                $scope.newitem = $select.selected;
+
+            }
+            if (type == "DESCRIPTION") {
+                $scope.DESCRIPTION.push({ name: $scope.description.selected.name });
 
 
+            }
+            if (type == "RRMARKS") {
+                $scope.RRMARKS.push({ name: $scope.remarks.selected.name });
+            }
+            console.log(userInputItem.name)
 
 
+            console.log($scope.GODOWN)
+        }
+
+    }
+
+   
 
 
 

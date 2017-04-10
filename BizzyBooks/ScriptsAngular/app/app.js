@@ -308,11 +308,11 @@ var myApp = angular
           });
 
           $stateProvider.state("Customer.accountHistory", {
-              url: "/accountHistory/:accountName",
+              url: "/accountHistory/:accountId",
               templateUrl: "Customer/accountHistory",
               controller: "accountHistoryCntrl",
               params: {
-                  accountName: null,
+                  accountId: null,
                   
 
               }
@@ -341,6 +341,13 @@ var myApp = angular
                   voId: null,
               }
           });
+          $stateProvider.state("Customer.RosemateVoucher", {
+              url: "/RosemateVoucher",
+              templateUrl: "Customer/RosemateVoucher",
+              controller: "RosemateVoucherCntrl"
+
+          });
+
 
           $stateProvider.state("Customer.JournalEntry", {
               url: "/JournalEntry",

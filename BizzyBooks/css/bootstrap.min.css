@@ -8980,7 +8980,7 @@ main {
     text-shadow: none;
 } 
 #AddLineItemModal .modal-dialog{width:90%}
-tr:hover, tr.selected {
+ tr.selected {
     background-color: #ddd
 }
 #AddLineItemModal .modal-dialog{width:90%}
@@ -9045,3 +9045,5 @@ tr:hover, tr.selected {
     -webkit-transform:rotate(0deg);
     transform:rotate(0deg);
 }
+
+.Rosemate-table{padding:5px !important;}

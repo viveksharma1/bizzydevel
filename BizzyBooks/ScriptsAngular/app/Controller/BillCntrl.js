@@ -366,24 +366,26 @@
         $scope.index = index;
         $scope.edit1 = true;
         $scope.accounts = { selected: { accountName: data.accountName } };
-        $scope.accountDescription = data.description
-        $scope.amount = data.amount
+       
+        $scope.accountAmount = data.amount
 
     }
 
     $scope.accounts = {}
-    $scope.$watch('accounts.selected', function () {
-        $scope.accountAmount = null;
-        if ($scope.accounts.selected.rate) {
-            $scope.accountAmount = Number($scope.totalAmountINR) * Number($scope.accounts.selected.rate) / 100;
+    $scope.$watch('accounts.selected', function () {     
+        if ($scope.accounts.selected.rate) {         
+                $scope.accountAmount = null;
+                $scope.accountAmount = (Number($scope.totalAmountINR) * Number($scope.accounts.selected.rate) / 100).toFixed(2);          
         }
     });
 
  
     $scope.accountTable = [];
     $scope.addAccount = function () {
+       
         var accountData = {
             accountName: $scope.accounts.selected.accountName,
+            accountId: $scope.accounts.selected.id,
             description: $scope.accountDescription,
             amount: $scope.accountAmount
         }
@@ -394,7 +396,7 @@
             $scope.accountTable.push(accountData);
         }
         $scope.edit1 = false;
-
+        $scope.accountAmount = null;
         $scope.accountTableSum();
     }
 
@@ -543,12 +545,19 @@
     */
     $('#paymentStatus').hide();
     //get suppliers 
+
     $scope.getSupplier = function () {
-        $scope.supliers = []
-        $http.get(config.api + "suppliers" + "?filter[where][compCode]=" + localStorage.CompanyId).then(function (response) {
-            $scope.supliers = response.data;
+        $http.get(config.login + "getSupplierAccount/" + localStorage.CompanyId).then(function (response) {
+            $scope.supliers = response.data
+            
         });
     }
+    //$scope.getSupplier = function () {
+    //    $scope.supliers = []
+    //    $http.get(config.api + "suppliers" + "?filter[where][compCode]=" + localStorage.CompanyId).then(function (response) {
+    //        $scope.supliers = response.data;
+    //    });
+    //}
     $scope.getSupplierDetail = function (supplierName) {
         $scope.supliersDetail = []
         $http.get(config.api + "suppliers" + "?filter[where][compCode]=" + localStorage.CompanyId + "&filter[where][company]=" + supplierName).then(function (response) {
@@ -564,53 +573,60 @@
     $scope.getSupplier();
     $scope.getBilldata = function (billNo, fields) {       
         $scope.field = fields       
-        $http.get(config.api + 'transactions' + '?filter[where][id]=' + billNo + $scope.field)
+        $http.get(config.api + 'transactions/' + billNo + $scope.field)
                     .then(function (response) {
                         console.log(response);                        
-                        $scope.customPaymentInfo = response.data[0].customPaymentInfo;
-                        if (response.data[0].itemDetail) {
-                            $scope.billtable1 = response.data[0].itemDetail;
+                        $scope.customPaymentInfo = response.datacustomPaymentInfo;
+                        if (response.data.itemDetail) {
+                            $scope.billtable1 = response.data.itemDetail;
                             $scope.excelTableItemSum();                         
-                            $scope.id = response.data[0].id   
-                            $scope.totalAmountINR = response.data[0].adminAmount
+                            $scope.id = response.data.id   
+                            $scope.totalAmountINR = response.data.adminAmount
                         }
-                        if (response.data[0].manualLineItem) {
-                            $scope.billtable = response.data[0].manualLineItem;
+                        if (response.data.manualLineItem) {
+                            $scope.billtable = response.data.manualLineItem;
                             $scope.manualTableSum();                         
-                            $scope.id = response.data[0].id
+                            $scope.id = response.data.id
                             console.log($scope.id);
-                            $scope.billData = response.data[0]
+                            $scope.billData = response.data
                         }
-                        if (!response.data[0].balance) {
+                        if (!response.data.balance) {
                             $('#paymentStatus').show();
                         }
-                        $scope.paymentDays = response.data[0].paymentDays
-                        $scope.paymentLog = response.data[0].paymentLog;
+
+                        if (response.data.accountlineItem) {
+                            $scope.accountTableSum();
+                        }
+                        $scope.paymentDays = response.data.paymentDays
+                        $scope.paymentLog = response.data.paymentLog;
                         console.log($scope.paymentLog)
-                        $scope.billNo = response.data[0].no
-                        $scope.accountTable = response.data[0].accountlineItem;
-                        $scope.ExchangeRateINR = response.data[0].ExchangeRate
-                        $scope.email = response.data[0].email
-                        $scope.supplier = { selected: { company: response.data[0].supliersName } };
-                        $scope.purchaseAccounts = { selected: { accountName: response.data[0].purchaseAccount } };
-                        $scope.getSupplierDetail(response.data[0].supliersName);
-                        $scope.invoiceType1(response.data[0].invoiceType);                      
-                        $scope.billDate1 = response.data[0].date
+                        $scope.billNo = response.data.no
+                        $scope.accountTable = response.data.accountlineItem;
+                        $scope.ExchangeRateINR = response.data.ExchangeRate
+                        $scope.email = response.data.email
+                       
+
+                        $scope.supplier = { selected: { accountName: localStorage[response.data.supliersId], id: response.data.supliersId} };
+                        $scope.purchaseAccounts = { selected: { accountName: localStorage[response.data.purchaseAccountId], id: response.data.purchaseAccountId } };
+                      
+                        $scope.getSupplierDetail(localStorage[response.data.supliersId]);
+                        $scope.invoiceType1(response.data.invoiceType);                      
+                        $scope.billDate1 = response.data.date
                         $scope.billDate = $filter('date')($scope.billDate1, 'dd/MM/yyyy');
-                        $scope.billDueDate1 = response.data[0].billDueDate
+                        $scope.billDueDate1 = response.data.billDueDate
                         $scope.billDueDate = $filter('date')($scope.billDueDate1, 'dd/MM/yyyy');
-                        $scope.actualDate = $filter('date')(response.data[0].actualDate, 'dd/MM/yyyy');
-                        $scope.email = response.data[0].email
+                        $scope.actualDate = $filter('date')(response.data.actualDate, 'dd/MM/yyyy');
+                        $scope.email = response.data.email
                        
                     });
     }
 
     if ($stateParams.billNo) {
         if (localStorage['usertype'] == '2') {
-            $scope.getBilldata($stateParams.billNo, '&filter[fields][itemDetail]=false&filter[fields][adminAmount]=false&filter[fields][adminBalance]=false');
+            $scope.getBilldata($stateParams.billNo, '?filter[fields][itemDetail]=false&filter[fields][adminAmount]=false&filter[fields][adminBalance]=false');
         }
         else
-            $scope.getBilldata($stateParams.billNo, '&filter[fields][manualLineItem]=false');
+            $scope.getBilldata($stateParams.billNo, '?filter[fields][manualLineItem]=false');
     }
 
     $scope.$watch('supplier.selected', function () {
@@ -697,7 +713,7 @@
         }
         var data = {
             compCode: localStorage.CompanyId,
-            supliersName: $scope.supplier.selected.company,
+            supliersId: $scope.supplier.selected.id,
             email: $scope.supplier.selected.email,
             role: localStorage['adminrole'],
             currency: $scope.currency,
@@ -711,7 +727,7 @@
             itemDetail: $scope.billtable1,
             manualLineItem: $scope.billtable,
             accountlineItem: $scope.accountTable,
-            purchaseAccount: $scope.purchaseAccounts.selected.accountName,
+            purchaseAccountId: $scope.purchaseAccounts.selected.id,
             adminAmount: $scope.totalAmountINR.toFixed(2),
             adminBalance: $scope.totalAmountINR.toFixed(2),
             purchaseAmount: $scope.purchaseAmount,
@@ -1363,8 +1379,8 @@
                 name: search
             };
             $scope.newElement = true;
-            $select.items = [userInputItem].concat(list);
-            $select.selected = userInputItem.name
+            $select.items =  [userInputItem].concat(list)
+            $select.selected =  userInputItem.name
 
             if (type == "GODOWN") {
                 $scope.newitem = $select.selected;

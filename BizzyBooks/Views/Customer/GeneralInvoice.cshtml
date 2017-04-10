@@ -78,11 +78,11 @@
                     <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
                                ui-select-focuser
                                theme="selectize">
-                        <ui-select-match placeholder="Select Customer">{{ $select.selected.company }}</ui-select-match>
+                        <ui-select-match placeholder="Select Customer">{{ $select.selected.accountName }}</ui-select-match>
 
                         <ui-select-choices repeat="person in supliers  | filter: $select.search">
                             <div>
-                                <span ng-bind-html="person.company | highlight: $select.search"></span>
+                                <span ng-bind-html="person.accountName | highlight: $select.search"></span>
                             </div>
 
 

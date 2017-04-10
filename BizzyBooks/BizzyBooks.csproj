@@ -416,6 +416,7 @@
     <Content Include="ScriptsAngular\app\Controller\PurchaseInvoiceSattlementCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\PurchaseOrderCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\ReceivePaymentCntrl.js" />
+    <Content Include="ScriptsAngular\app\Controller\RosemateVoucherCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\SalesCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\SalesInvoiceCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\SalesInvoicePDFCntrl.js" />
@@ -525,6 +526,7 @@
     <Content Include="Views\Customer\SalesInvoicePDF.cshtml" />
     <Content Include="Views\Customer\TaxInvoicePDF.cshtml" />
     <Content Include="Views\Customer\StockBalanceInventory.cshtml" />
+    <Content Include="Views\Customer\RosemateVoucher.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
