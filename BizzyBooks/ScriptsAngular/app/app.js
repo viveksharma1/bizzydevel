@@ -1,7 +1,7 @@
 var myApp = angular
     .module('myApp', ['ui.router', 'datatables','angular-loading-bar', 'anguFixedHeaderTable','ngAnimate',
         //'ngtimeago',
-        'oitozero.ngSweetAlert', 'fsm', 'ui.select', 'ngSanitize', 'angular.filter'])
+        'oitozero.ngSweetAlert', 'fsm', 'ui.select', 'ngSanitize', 'angular.filter', 'angularFileUpload'])
     .config(['$stateProvider','$urlRouterProvider',function ($stateProvider,   $urlRouterProvider) {
 
        $urlRouterProvider.otherwise('/');
@@ -471,130 +471,130 @@ myApp.service('selectsuppliers', ['$rootScope',
 }
 ])
 
-myApp.directive('uiTreeSelect', [
-  'selectsuppliers',
-  '$timeout',
-   '$http',
-  function (selectsuppliers, $timeout, $http, $rootScope) {
-      return {
+//myApp.directive('uiTreeSelect', [
+//  'selectsuppliers',
+//  '$timeout',
+//   '$http',
+//  function (selectsuppliers, $timeout, $http, $rootScope) {
+//      return {
           
-              restrict: 'E',
-              scope: { model: '=' },
-              link: function (scope, el) {
+//              restrict: 'E',
+//              scope: { model: '=' },
+//              link: function (scope, el) {
 
                   
 
-                  scope.groups = selectsuppliers;
+//                  scope.groups = selectsuppliers;
 
-                  console.log(selectsuppliers);
+//                  console.log(selectsuppliers);
                  
-                // scope.groups = selectsuppliers.getSuppliers();
+//                // scope.groups = selectsuppliers.getSuppliers();
 
-                // scope.groups = data;
+//                // scope.groups = data;
 
-                  scope.loadChildGroupsOf = function (group, $select) {
-                      $select.search = '';
+//                  scope.loadChildGroupsOf = function (group, $select) {
+//                      $select.search = '';
 
                      
-                      scope.$broadcast('uiSelectFocus');
-                  };
+//                      scope.$broadcast('uiSelectFocus');
+//                  };
 
-                  scope.navigateBackTo = function (crumb, $select) {
+//                  scope.navigateBackTo = function (crumb, $select) {
 
-                      //    
-                      $('#form-popoverPopup').show();
+//                      //    
+//                      $('#form-popoverPopup').show();
 
-                      /*$select.search = '';
-                      var index = _.findIndex(scope.breadcrumbs, {id: crumb.id});
+//                      /*$select.search = '';
+//                      var index = _.findIndex(scope.breadcrumbs, {id: crumb.id});
             
-                      scope.breadcrumbs.splice(index + 1, scope.breadcrumbs.length);
-                      scope.groups = groupFactory.load(_.last(scope.breadcrumbs).id);
-                      $select.open = false;
-                      scope.$broadcast('uiSelectFocus');*/
-                  };
-              },
-          templateUrl: '/ui-tree-select.html'
-      };
-  }
-]);
+//                      scope.breadcrumbs.splice(index + 1, scope.breadcrumbs.length);
+//                      scope.groups = groupFactory.load(_.last(scope.breadcrumbs).id);
+//                      $select.open = false;
+//                      scope.$broadcast('uiSelectFocus');*/
+//                  };
+//              },
+//          templateUrl: '/ui-tree-select.html'
+//      };
+//  }
+//]);
 
-myApp.directive('uiTreeAccount', [
-  'groupFactory',
-  '$timeout',
-  function (groupFactory, $timeout) {
-      return {
-          restrict: 'E',
-          scope: { model: '=' },
-          link: function (scope, el) {
-              scope.breadcrumbs = [{ "id": 0, "title": "All" }];
-              scope.groups = groupFactory.load(2);
+//myApp.directive('uiTreeAccount', [
+//  'groupFactory',
+//  '$timeout',
+//  function (groupFactory, $timeout) {
+//      return {
+//          restrict: 'E',
+//          scope: { model: '=' },
+//          link: function (scope, el) {
+//              scope.breadcrumbs = [{ "id": 0, "title": "All" }];
+//              scope.groups = groupFactory.load(2);
 
-              scope.loadChildGroupsOf = function (group, $select) {
-                  $select.search = '';
+//              scope.loadChildGroupsOf = function (group, $select) {
+//                  $select.search = '';
 
-                  scope.breadcrumbs.push(group);
-                  scope.groups = groupFactory.load(group.id);
-                  scope.$broadcast('uiSelectFocus');
-              };
+//                  scope.breadcrumbs.push(group);
+//                  scope.groups = groupFactory.load(group.id);
+//                  scope.$broadcast('uiSelectFocus');
+//              };
 
-              scope.navigateBackTo = function (crumb, $select) {
+//              scope.navigateBackTo = function (crumb, $select) {
 
-             //     $('#form-popoverPopup').show();
+//             //     $('#form-popoverPopup').show();
 
-                  /*$select.search = '';
-                  var index = _.findIndex(scope.breadcrumbs, {id: crumb.id});
+//                  /*$select.search = '';
+//                  var index = _.findIndex(scope.breadcrumbs, {id: crumb.id});
         
-                  scope.breadcrumbs.splice(index + 1, scope.breadcrumbs.length);
-                  scope.groups = groupFactory.load(_.last(scope.breadcrumbs).id);
-                  $select.open = false;
-                  scope.$broadcast('uiSelectFocus');*/
-              };
-          },
-          templateUrl: '/ui-tree-Account.html'
-      };
-  }
-]);
+//                  scope.breadcrumbs.splice(index + 1, scope.breadcrumbs.length);
+//                  scope.groups = groupFactory.load(_.last(scope.breadcrumbs).id);
+//                  $select.open = false;
+//                  scope.$broadcast('uiSelectFocus');*/
+//              };
+//          },
+//          templateUrl: '/ui-tree-Account.html'
+//      };
+//  }
+//]);
 
-myApp.directive('uiTreeItem', [
-  'groupFactory',
-  '$timeout',
-  function (groupFactory, $timeout) {
-      return {
-          restrict: 'E',
-          scope: { model: '=' },
-          link: function (scope, el) {
-              scope.breadcrumbs = [{ "id": 0, "title": "All" }];
-
-
+//myApp.directive('uiTreeItem', [
+//  'groupFactory',
+//  '$timeout',
+//  function (groupFactory, $timeout) {
+//      return {
+//          restrict: 'E',
+//          scope: { model: '=' },
+//          link: function (scope, el) {
+//              scope.breadcrumbs = [{ "id": 0, "title": "All" }];
 
 
-              scope.groups = groupFactory.load(2);
 
-              scope.loadChildGroupsOf = function (group, $select) {
-                  $select.search = '';
 
-                  scope.breadcrumbs.push(group);
-                  scope.groups = groupFactory.load(group.id);
-                  scope.$broadcast('uiSelectFocus');
-              };
+//              scope.groups = groupFactory.load(2);
 
-              scope.navigateBackTo = function (crumb, $select) {
+//              scope.loadChildGroupsOf = function (group, $select) {
+//                  $select.search = '';
 
-                  //     $('#form-popoverPopup').show();
+//                  scope.breadcrumbs.push(group);
+//                  scope.groups = groupFactory.load(group.id);
+//                  scope.$broadcast('uiSelectFocus');
+//              };
 
-                  /*$select.search = '';
-                  var index = _.findIndex(scope.breadcrumbs, {id: crumb.id});
+//              scope.navigateBackTo = function (crumb, $select) {
+
+//                  //     $('#form-popoverPopup').show();
+
+//                  /*$select.search = '';
+//                  var index = _.findIndex(scope.breadcrumbs, {id: crumb.id});
         
-                  scope.breadcrumbs.splice(index + 1, scope.breadcrumbs.length);
-                  scope.groups = groupFactory.load(_.last(scope.breadcrumbs).id);
-                  $select.open = false;
-                  scope.$broadcast('uiSelectFocus');*/
-              };
-          },
-          templateUrl: '/ui-tree-Item.html'
-      };
-  }
-]);
+//                  scope.breadcrumbs.splice(index + 1, scope.breadcrumbs.length);
+//                  scope.groups = groupFactory.load(_.last(scope.breadcrumbs).id);
+//                  $select.open = false;
+//                  scope.$broadcast('uiSelectFocus');*/
+//              };
+//          },
+//          templateUrl: '/ui-tree-Item.html'
+//      };
+//  }
+//]);
 
 
   myApp.factory('myService', function ($http) {
@@ -619,144 +619,144 @@ myApp.directive('uiTreeItem', [
 
  
 
-myApp.directive('uiTreeInvoice', [
-  'groupFactory',
-  '$timeout',
-  function (groupFactory, $timeout) {
-      return {
-          restrict: 'E',
-          scope: { model: '=' },
-          link: function (scope, el) {
-              scope.breadcrumbs = [{ "id": 0, "title": "All" }];
-              scope.groups = groupFactory.load(3);
+//myApp.directive('uiTreeInvoice', [
+//  'groupFactory',
+//  '$timeout',
+//  function (groupFactory, $timeout) {
+//      return {
+//          restrict: 'E',
+//          scope: { model: '=' },
+//          link: function (scope, el) {
+//              scope.breadcrumbs = [{ "id": 0, "title": "All" }];
+//              scope.groups = groupFactory.load(3);
 
-              scope.loadChildGroupsOf = function (group, $select) {
-                  $select.search = '';
+//              scope.loadChildGroupsOf = function (group, $select) {
+//                  $select.search = '';
 
-                  scope.breadcrumbs.push(group);
-                  scope.groups = groupFactory.load(group.id);
-                  scope.$broadcast('uiSelectFocus');
-              };
+//                  scope.breadcrumbs.push(group);
+//                  scope.groups = groupFactory.load(group.id);
+//                  scope.$broadcast('uiSelectFocus');
+//              };
 
-              scope.navigateBackTo = function (crumb, $select) {
+//              scope.navigateBackTo = function (crumb, $select) {
 
-                  //     $('#form-popoverPopup').show();
+//                  //     $('#form-popoverPopup').show();
 
-                  /*$select.search = '';
-                  var index = _.findIndex(scope.breadcrumbs, {id: crumb.id});
+//                  /*$select.search = '';
+//                  var index = _.findIndex(scope.breadcrumbs, {id: crumb.id});
         
-                  scope.breadcrumbs.splice(index + 1, scope.breadcrumbs.length);
-                  scope.groups = groupFactory.load(_.last(scope.breadcrumbs).id);
-                  $select.open = false;
-                  scope.$broadcast('uiSelectFocus');*/
-              };
-          },
-          templateUrl: '/ui-tree-Invoice.html'
-      };
-  }
-]);
+//                  scope.breadcrumbs.splice(index + 1, scope.breadcrumbs.length);
+//                  scope.groups = groupFactory.load(_.last(scope.breadcrumbs).id);
+//                  $select.open = false;
+//                  scope.$broadcast('uiSelectFocus');*/
+//              };
+//          },
+//          templateUrl: '/ui-tree-Invoice.html'
+//      };
+//  }
+//]);
 
-myApp.directive('uiTreeCustomer', [
-  'groupFactory',
-  '$timeout',
-  function (groupFactory, $timeout) {
-      return {
-          restrict: 'E',
-          scope: { model: '=' },
-          link: function (scope, el) {
-              scope.breadcrumbs = [{ "id": 0, "title": "All" }];
-              scope.groups = groupFactory.load(4);
+//myApp.directive('uiTreeCustomer', [
+//  'groupFactory',
+//  '$timeout',
+//  function (groupFactory, $timeout) {
+//      return {
+//          restrict: 'E',
+//          scope: { model: '=' },
+//          link: function (scope, el) {
+//              scope.breadcrumbs = [{ "id": 0, "title": "All" }];
+//              scope.groups = groupFactory.load(4);
 
-              scope.loadChildGroupsOf = function (group, $select) {
-                  $select.search = '';
+//              scope.loadChildGroupsOf = function (group, $select) {
+//                  $select.search = '';
 
-                  scope.breadcrumbs.push(group);
-                  scope.groups = groupFactory.load(group.id);
-                  scope.$broadcast('uiSelectFocus');
-              };
+//                  scope.breadcrumbs.push(group);
+//                  scope.groups = groupFactory.load(group.id);
+//                  scope.$broadcast('uiSelectFocus');
+//              };
 
-              scope.navigateBackTo = function (crumb, $select) {
+//              scope.navigateBackTo = function (crumb, $select) {
 
-                      $('#form-popoverPopupCustomer').show();
+//                      $('#form-popoverPopupCustomer').show();
 
-                  /*$select.search = '';
-                  var index = _.findIndex(scope.breadcrumbs, {id: crumb.id});
+//                  /*$select.search = '';
+//                  var index = _.findIndex(scope.breadcrumbs, {id: crumb.id});
         
-                  scope.breadcrumbs.splice(index + 1, scope.breadcrumbs.length);
-                  scope.groups = groupFactory.load(_.last(scope.breadcrumbs).id);
-                  $select.open = false;
-                  scope.$broadcast('uiSelectFocus');*/
-              };
-          },
-          templateUrl: '/ui-tree-Customer.html'
-      };
-  }
-]);
+//                  scope.breadcrumbs.splice(index + 1, scope.breadcrumbs.length);
+//                  scope.groups = groupFactory.load(_.last(scope.breadcrumbs).id);
+//                  $select.open = false;
+//                  scope.$broadcast('uiSelectFocus');*/
+//              };
+//          },
+//          templateUrl: '/ui-tree-Customer.html'
+//      };
+//  }
+//]);
 
 
 
 // Couldn't get on-focus to work, so wrote my own
-myApp.directive('uiSelectFocuser', function ($timeout) {
-    return {
-        restrict: 'A',
-        require: '^uiSelect',
-        link: function (scope, elem, attrs, uiSelect) {
-            scope.$on('uiSelectFocus', function () {
-                $timeout(uiSelect.activate);
-            });
-        }
-    };
-});
-myApp.directive('selectWatcher', function ($timeout) {
-    return {
-        link: function (scope, element, attr) {
-            var last = attr.last;
-            if (last === "true") {
-                $timeout(function () {
-                    $(element).parent().selectpicker('val', 'any');
-                    $(element).parent().selectpicker('refresh');
-                });
-            }
-        }
-    };
-});
+//myApp.directive('uiSelectFocuser', function ($timeout) {
+//    return {
+//        restrict: 'A',
+//        require: '^uiSelect',
+//        link: function (scope, elem, attrs, uiSelect) {
+//            scope.$on('uiSelectFocus', function () {
+//                $timeout(uiSelect.activate);
+//            });
+//        }
+//    };
+//});
+//myApp.directive('selectWatcher', function ($timeout) {
+//    return {
+//        link: function (scope, element, attr) {
+//            var last = attr.last;
+//            if (last === "true") {
+//                $timeout(function () {
+//                    $(element).parent().selectpicker('val', 'any');
+//                    $(element).parent().selectpicker('refresh');
+//                });
+//            }
+//        }
+//    };
+//});
 
 
-myApp.factory('groupFactory', ['$http',
-  function ($http) {
+//myApp.factory('groupFactory', ['$http',
+//  function ($http) {
     
-      var data;
+//      var data;
 
-      var data2 = {
+//      var data2 = {
 
 
 
-          0: [{ "id": 1, "title": "Due on receipt", "size": "57", "parent": true },
-              { "id": 2, "title": "Net 15", "size": "67", "parent": true },
-              { "id": 3, "title": "Net 30", "size": "32539", "parent": true },
-              { "id": 4, "title": "Net 60", "size": "898", "parent": false }],
-          1: [{ "id": 1, "title": "Custom Duty", "size": "57", "parent": true },
-              { "id": 2, "title": "VAT", "size": "67", "parent": true },
-              { "id": 3, "title": "O Tax", "size": "32539", "parent": true },
-              { "id": 4, "title": "Tax", "size": "898", "parent": false }],
-          2: [{ "id": 1, "title": "Cold rolled stainless steel sheets/plates/coils cut - exstock", "size": "57", "parent": true },
-              { "id": 2, "title": "Cold rolled stainless steel defective sheets/plates/coils cut", "size": "67", "parent": true },
-              { "id": 3, "title": "Cold rolled stainless steel defective baby coil less than 1 MT coils/sheets.plates cut", "size": "67", "parent": true }],
-          3: [{ "id": 1, "title": "Home", "size": "57", "parent": true },
-              { "id": 2, "title": "Hours", "size": "57", "parent": true },
-              { "id": 3, "title": "Services", "size": "67", "parent": true }],
-          4: [{ "id": 1, "title": "Akash", "size": "57", "parent": true },
-              { "id": 2, "title": "Pankaj", "size": "57", "parent": true },
-              { "id": 3, "title": "Vikas", "size": "67", "parent": true }]
-      };
+//          0: [{ "id": 1, "title": "Due on receipt", "size": "57", "parent": true },
+//              { "id": 2, "title": "Net 15", "size": "67", "parent": true },
+//              { "id": 3, "title": "Net 30", "size": "32539", "parent": true },
+//              { "id": 4, "title": "Net 60", "size": "898", "parent": false }],
+//          1: [{ "id": 1, "title": "Custom Duty", "size": "57", "parent": true },
+//              { "id": 2, "title": "VAT", "size": "67", "parent": true },
+//              { "id": 3, "title": "O Tax", "size": "32539", "parent": true },
+//              { "id": 4, "title": "Tax", "size": "898", "parent": false }],
+//          2: [{ "id": 1, "title": "Cold rolled stainless steel sheets/plates/coils cut - exstock", "size": "57", "parent": true },
+//              { "id": 2, "title": "Cold rolled stainless steel defective sheets/plates/coils cut", "size": "67", "parent": true },
+//              { "id": 3, "title": "Cold rolled stainless steel defective baby coil less than 1 MT coils/sheets.plates cut", "size": "67", "parent": true }],
+//          3: [{ "id": 1, "title": "Home", "size": "57", "parent": true },
+//              { "id": 2, "title": "Hours", "size": "57", "parent": true },
+//              { "id": 3, "title": "Services", "size": "67", "parent": true }],
+//          4: [{ "id": 1, "title": "Akash", "size": "57", "parent": true },
+//              { "id": 2, "title": "Pankaj", "size": "57", "parent": true },
+//              { "id": 3, "title": "Vikas", "size": "67", "parent": true }]
+//      };
 
-      return {
-          load: function () {
-              return data;
-          }
-      }
-  }
-]);
+//      return {
+//          load: function () {
+//              return data;
+//          }
+//      }
+//  }
+//]);
 
 myApp.filter('words', function () {
     function isInt(n) {
@@ -804,14 +804,36 @@ words[70] = 'Seventy';
 words[80] = 'Eighty';
 words[90] = 'Ninety';
 
+function number2text(value) {
+    var fraction = Math.round(frac(value) * 100);
+    var f_text = "";
+
+    if (fraction > 0) {
+        f_text = "and " + convert_number(fraction) + " Paise";
+    }
+
+    return convert_number(value) + " RUPEE " + f_text + " ONLY";
+}
+
+function frac(f) {
+    return f % 1;
+}
 function convertNumberToWords(amount) {
 
     amount = amount.toString();
     var atemp = amount.split(".");
     var number = atemp[0].split(",").join("");
+    var fraction = Math.round(frac(amount) * 100);
+    var f_text = "";
+
+    if (fraction > 0) {
+        f_text = "and paise " + getString(fraction.toString()) ;
+    }
+
+    return getString(number) + " " + f_text + " only";
     //var pointnumber = atemp.length == 2 ? atemp[1].split(",").join("") : "";
 
-    return getString(number);//.join(pointnumber.length > 0 ? " and "+getString(pointnumber) : "");
+    //return getString(number);//.join(pointnumber.length > 0 ? " and "+getString(pointnumber) : "");
     //return words_string;
 }
 function getString(number) {
@@ -864,15 +886,15 @@ function getString(number) {
     return words_string;
 }
 
-/*
+
 myApp.run(['$templateCache', function ($templateCache) {
     // Overrides selectize template for group select tree.
     $templateCache.put('selectize/choices.tpl.html', [
       '<div ng-show="$select.open"',
       '  class="ui-select-choices group-tree selectize-dropdown single">',
-      '  <div ng-show="true" class="ui-select-breadcrumbs">',
-      '    <span class="ui-breadcrumb"',
-      '       ng-click="add()">',
+      '  <div ng-show="$select.addnew==1" class="ui-select-breadcrumbs">',
+      '    <span  class="ui-breadcrumb"',
+      '       ng-click="add($select.type);">',
       '       + Add New  {{$select.search}}',
       '    </span>',
       '  </div>',
@@ -897,7 +919,7 @@ myApp.run(['$templateCache', function ($templateCache) {
 
 
 }]);
-*/
+
 
 
 

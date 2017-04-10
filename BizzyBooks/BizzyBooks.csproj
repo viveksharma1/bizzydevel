@@ -356,6 +356,9 @@
     <Content Include="ScriptsAngular\Angular\._ion.sound.min.js" />
     <Content Include="ScriptsAngular\Angular\angluar.ieCors.js" />
     <Content Include="ScriptsAngular\Angular\angular-datatables.js" />
+    <Content Include="ScriptsAngular\Angular\angular-file-upload.js" />
+    <Content Include="ScriptsAngular\Angular\angular-file-upload.min.js" />
+    <Content Include="ScriptsAngular\Angular\angular-filter.min.js" />
     <Content Include="ScriptsAngular\Angular\angular-route.js" />
     <Content Include="ScriptsAngular\Angular\angular-ui-router.js" />
     <Content Include="ScriptsAngular\Angular\angular.js" />

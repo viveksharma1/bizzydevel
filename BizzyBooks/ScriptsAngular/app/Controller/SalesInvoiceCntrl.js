@@ -1,4 +1,4 @@
-﻿myApp.controller('SalesInvoiceCntrl', ['$scope', '$http', '$timeout', '$rootScope', '$state', 'config', '$stateParams', '$filter', function ($scope, $http, $timeout, $rootScope, $state, config, $stateParams,$filter) {
+﻿myApp.controller('SalesInvoiceCntrl', ['$scope', '$http', '$timeout', '$rootScope', '$state', 'config', '$stateParams', '$filter', 'FileUploader', function ($scope, $http, $timeout, $rootScope, $state, config, $stateParams, $filter, FileUploader) {
 
     $(".my a").click(function (e) {
         e.preventDefault();
@@ -31,7 +31,16 @@
     $scope.goBack = function () {
         window.history.back();
     }
-
+    //$scope.setAddNewValue = function (select,fun) {
+    //    select.adnew = 1;l
+    //    select.addNewfn = fun;
+    //}
+    $scope.add = function (type) {
+        showSuccessToast(type);
+    }
+    //$scope.buyerAdd = function () {
+    //    showSuccessToast("Buyer Add");
+    //}
     $("#myPopover").popover({
         //  title: '<h3 class="custom-title"><span class="glyphicon glyphicon-info-sign"></span> Popover Info</h3>',
         content: "<table style='width:100%'><tr><th>Date</th><th>Amount Applied</th><th>Payment No.</th></tr><tr><td><a href=''>17/03/2017</a></td><td>Rs500.00</td><td>58</td></tr><tr><td><a href=''>17/03/2017</a></td><td>Rs500.00</td><td>58</td></tr></table>",
@@ -54,6 +63,71 @@
 
     $(":file").filestyle({ buttonName: "btn-sm btn-info" });
 
+    var uploader = $scope.uploader = new FileUploader({
+        url: config.login + "upload"
+    });
+
+    // FILTERS
+
+    uploader.filters.push({
+        name: 'customFilter',
+        fn: function (item /*{File|FileLikeObject}*/, options) {
+            return this.queue.length < 10;
+        }
+    });
+
+    // CALLBACKS
+
+    //uploader.onWhenAddingFileFailed = function (item /*{File|FileLikeObject}*/, filter, options) {
+    //    console.info('onWhenAddingFileFailed', item, filter, options);
+    //};
+    uploader.onAfterAddingFile = function (fileItem) {
+        if ($scope.oldAttachment) {
+            fileItem.title = $scope.oldAttachment.title;
+            fileItem.cdnPath = $scope.oldAttachment.cdnPath;
+            fileItem_onSuccess();
+        } else {
+            console.info('onAfterAddingFile', fileItem);
+            if ($scope.filename) {
+                fileItem.title = $scope.filename;
+                $scope.filename = null;
+            } else {
+                uploader.removeFromQueue(fileItem);// = null;
+                fileItem = {};
+            }
+        }
+        
+    };
+    //uploader.onAfterAddingAll = function (addedFileItems) {
+    //    console.info('onAfterAddingAll', addedFileItems);
+    //};
+    //uploader.onBeforeUploadItem = function (item) {
+    //    console.info('onBeforeUploadItem', item);
+    //};
+    //uploader.onProgressItem = function (fileItem, progress) {
+    //    console.info('onProgressItem', fileItem, progress);
+    //};
+    //uploader.onProgressAll = function (progress) {
+    //    console.info('onProgressAll', progress);
+    //};
+    uploader.onSuccessItem = function (fileItem, response, status, headers) {
+        console.info('onSuccessItem', fileItem, response, status, headers);
+        fileItem.cdnPath = response.container + "/" + response.name;
+    };
+    //uploader.onErrorItem = function (fileItem, response, status, headers) {
+    //    console.info('onErrorItem', fileItem, response, status, headers);
+    //};
+    //uploader.onCancelItem = function (fileItem, response, status, headers) {
+    //    console.info('onCancelItem', fileItem, response, status, headers);
+    //};
+    //uploader.onCompleteItem = function (fileItem, response, status, headers) {
+    //    console.info('onCompleteItem', fileItem, response, status, headers);
+    //};
+    //uploader.onCompleteAll = function () {
+    //    console.info('onCompleteAll');
+    //};
+
+    //console.info('uploader', uploader);
     $scope.AddLineItem = function (val) {
         $('#AddInventoryModal').modal('show');
         if (val) {
@@ -94,7 +168,6 @@
     $scope.NETWEIGHT = {};
     $scope.billNoValid = false;
     $scope.clearFilter = function () {
-        
         $scope.godown = {};
         $scope.description = {};
         $scope.remarks = {};
@@ -140,7 +213,26 @@
         //console.log($scope.ItemList);
         //$scope.ItemCount = response.data.length;
     });
-    
+    $scope.oldAttachment = null;
+    function bindAttachments(attachments,callback) {
+        
+        if (attachments) {
+            angular.forEach(attachments, function (item) {
+                $scope.oldAttachment =item;
+                //var file = item;
+                //file.file = { name: item.name, type: item.fileType, size: item.fileSize };
+                //var files = uploader.isHTML5 ? this.element[0].files : this.element[0];
+                //var options = uploader.getOptions();
+                //var filters = uploader.getFilters();
+                //file.file.isOld = true;
+                //if (!this.uploader.isHTML5) this.destroy();
+                uploader.addToQueue(item.file);
+                //uploader.addToQueue(item);
+            });
+        }
+        if (callback)
+            callback();
+    }
     $scope.getInvoiceData = function (id) {
         $http.get(config.api + 'voucherTransactions/' + id)
                   .then(function (response) {
@@ -160,6 +252,7 @@
                       $scope.modeTransport = response.data.invoiceData.modeTransport;
                       $scope.rdi = response.data.invoiceData.rdi;
                       $scope.itemTable = response.data.invoiceData.billData;
+                      angular.copy($scope.itemTable, $scope.itemTableTemp);
                       $scope.accountTable = response.data.invoiceData.accountlineItem;
                       $scope.billIssueDate = $filter('date')(response.data.invoiceData.issueDate, 'dd/MM/yyyy');
                       $scope.billDate = $filter('date')(response.data.date, 'dd/MM/yyyy');
@@ -167,10 +260,13 @@
                       $scope.billRemovalDate = $filter('date')(response.data.invoiceData.removalDate, 'dd/MM/yyyy');
                       $scope.paymentDays = response.data.invoiceData.paymentDays;
                       getSupplierDetail($scope.supplier.selected.company);
-                      getSupplierDetail($scope.supplier2.selected.company,true);
+                      getSupplierDetail($scope.supplier2.selected.company, true);
+                      
                       sumItemListTable($scope.itemTable);
                       accountTableSum();
-
+                      bindAttachments(response.data.invoiceData.attachements, function () {
+                          $scope.oldAttachment = null;
+                      });
 
 
                   });
@@ -213,7 +309,9 @@
             $scope.accountAmount = Number($scope.listTotalAmount) * Number($scope.account.selected.rate) / 100;
         }
     });
-
+    $scope.$watch('rdi', function () {
+        updateItemTable();
+    });
     $scope.copyItemQty = function (val) {
         return parseFloat(val);
     }
@@ -326,7 +424,8 @@
 
     $scope.setInvoiceType = function (type) {
         $scope.invoiceType = type;
-        console.log($scope.invoiceType)
+        console.log($scope.invoiceType);
+        updateItemTable();
     }
     $scope.setCustomerType = function (type) {
         $scope.customerType = type;
@@ -657,12 +756,32 @@
         $scope.cartTotalItem = data.length;
 
     }
+    $scope.itemTableTemp=[];
     $scope.addItemToInvoice = function () {
-        angular.copy($scope.itemCart, $scope.itemTable);// = ;
+        angular.copy($scope.itemCart, $scope.itemTable);
+        angular.copy($scope.itemTable, $scope.itemTableTemp);
         sumItemListTable($scope.itemTable);
         $('#AddInventoryModal').modal('hide');
         console.log($scope.itemTable);
         setCheckValue(false, $scope.filterList);
+        gTotal();
+    }
+    function updateItemTable() {
+        angular.copy($scope.itemTableTemp, $scope.itemTable);
+        if ($scope.invoiceType == 'Excise') {
+            angular.forEach($scope.itemTable, function (item) {
+                if ($scope.rdi) {
+                    item.itemAmount = item.itemQty * (item.itemRate + Number(item.exciseDuty/item.NETWEIGHT) + Number(item.SAD/item.NETWEIGHT));
+                }
+            });
+        } else if ($scope.invoiceType == 'Non Excise') {
+            angular.forEach($scope.itemTable, function (item) {
+                item.itemAmount = item.itemQty * item.itemRate;
+                item.SAD = 0.0;
+                item.exciseDuty = 0.0;
+            });
+        }
+        sumItemListTable($scope.itemTable);
         gTotal();
     }
 
@@ -680,7 +799,37 @@
     }
     
 
+   function clearInvoice() {
+        $scope.billNo = null;
+        $scope.salesAccount = null;
+        $scope.rdi = false;
+        $scope.supplier = null;
+        $scope.supplier2 = null;
+        $scope.shippingAddress = null;
+        $scope.shippingAddress2 = null;
+        $scope.email = null;
+        $scope.email2 = null;
+        $scope.contactNo = null;
+        $scope.contactNo2 = null;
+        $scope.account = null;
+        $scope.invoiceType = "Tax";
+        $scope.customerType = "Buyer";
+        $scope.billNoValid = false;
+        $scope.uploader.clearQueue();
+        $scope.billDate = null;
+        $scope.paymentDays = null;
+        $scope.billDueDate = null;
+        $scope.billIssueDate = null;
+        $scope.billRemovalDate = null;
+        $scope.intRate=null;
+        $scope.modeTransport = null;
+        $scope.narration = null;
+        $scope.accountTable = [];
+        $scope.itemTable = [];
+        sumItemListTable($scope.itemTable);
+        accountTableSum();
 
+    }
 
     $scope.saveInvoice = function () {
         if ($scope.supplier.selected == undefined || $scope.supplier.selected==null) {
@@ -691,8 +840,6 @@
             showErrorToast("Please select account");
             return;
         }
-        
-
         
         if (!$scope.billDate) {
             showErrorToast("Invoice date is not valid");
@@ -707,6 +854,22 @@
             showErrorToast("Bill no is not valid");
             return;
         }
+
+        var pendingUploads=uploader.getNotUploadedItems();
+        if (pendingUploads.length > 0) {
+            showErrorToast("Please review attachments some of them are not uploaed to server.");
+            return;
+        }
+
+        var queue = uploader.queue;
+        var attachements = [];
+        angular.forEach(queue, function (fileItem) {
+            attachements.push({ title: fileItem.title, cdnPath:fileItem.cdnPath,file:fileItem.file})
+        });
+        //validate attachments..
+        //if not uploaded upload all and if not succeded then alert save without attachments.
+        //
+
         //if ($scope.totalAccountAmount) {
         //    $scope.salesAmount = parseFloat($scope.totalAmountINR.toFixed(2)) + parseFloat($scope.totalAccountAmount);
         //}
@@ -733,7 +896,7 @@
                 issueDate: dateFormat($scope.billIssueDate),
                 removalDate: dateFormat($scope.billRemovalDate),
                 customerAccount: $scope.supplier.selected.company,
-                consigneeAccount: $scope.supplier2.selected.company,
+                consigneeAccount: $scope.supplier2.selected ? $scope.supplier2.selected.company : $scope.supplier.selected.company,
                 rdi:$scope.rdi,
                 ledgerAccount: $scope.salesAccount.selected.accountName,
                 saleAmount:$scope.salesAmount,
@@ -742,13 +905,16 @@
                 modeTransport: $scope.modeTransport,
                 roi:$scope.intRate,
                 accountlineItem: $scope.accountTable,
-                billData: $scope.itemTable
+                billData: $scope.itemTable,
+                attachements:attachements
             },
         }
 
 
         $http.post(config.login + "saveVoucher" + "?id=" + $stateParams.voId, data).then(function (response) {
             showSuccessToast("Bill Save Succesfully");
+            if (!$scope.hasVoId) clearInvoice();
+            else $scope.goBack();
         });
 
     };

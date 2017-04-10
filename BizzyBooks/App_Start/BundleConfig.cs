@@ -28,6 +28,7 @@ namespace Restaurant
                        "~/css/bootstrap-datepicker.css",
                         "~/css/daterangepicker.css",
                         "~/css/jquery.toastmessage-min.css"
+
                 ));
 
 
@@ -51,6 +52,17 @@ namespace Restaurant
                    "~/ScriptsAngular/Angular/src/ui-bootstrap-tpls-0.13.4.js",
                    "~/ScriptsAngular/Angular/src/angular-sanitize.min.js",
                    "~/ScriptsAngular/Angular/angular-datatables.js",
+                    "~/ScriptsAngular/Angular/src/lodash.min.js",
+                     "~/ScriptsAngular/Angular/src/select.min.js",
+                   "~/ScriptsAngular/Angular/angular-file-upload.js",
+                   //"~/ScriptsAngular/Angular/jspdf.min.js",
+                   //"~/ScriptsAngular/Angular/pixastic-standalone.js",
+                   //"~/ScriptsAngular/Angular/pixastic-crop.js",
+                   //"~/ScriptsAngular/Angular/ngPrint-module.js",
+                   //"~/ScriptsAngular/Angular/pdfPrinter-service.js",
+                   //"~/ScriptsAngular/Angular/components/directives/ngPrintable/ngPrintable-directive.js",
+                   //"~/ScriptsAngular/Angular/components/directives/ngPrintButton/ngPrintButton-directive.js",
+
                    "~/js/pace/pace.min.js",
                    "~/js/datatables/dataTables.fixedHeader.min.js",
                     "~/js/datatables/dataTables.keyTable.min.js",
@@ -93,12 +105,11 @@ namespace Restaurant
                 "~/js/SweetAlert.js",
                 "~/js/modernizr.custom.js",
                 "~/js/jquery.scrollTo.js",
-                "~/ScriptsAngular/Angular/angular.js",
-                "~/ScriptsAngular/Angular/angular-route.js",
+                //"~/ScriptsAngular/Angular/angular.js",
+                //"~/ScriptsAngular/Angular/angular-route.js",
                  //For test of Ui-Select
-                 "~/ScriptsAngular/Angular/src/angular-sanitize.min.js",
-                 "~/ScriptsAngular/Angular/src/lodash.min.js",
-                 "~/ScriptsAngular/Angular/src/select.min.js",
+                 //"~/ScriptsAngular/Angular/src/angular-sanitize.min.js",
+                
                  "~/js/Common.js",
                  "~/ScriptsAngular/app/App.js",
                  "~/ScriptsAngular/app/Controller/LoginCntrl.js",

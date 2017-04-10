@@ -16,7 +16,7 @@
             <li><a ui-sref="Customer.PurchaseOrder({enqNo:no,edit:1})" style="font-size:18px"><i class="fa fa-envelope"></i> Send Email</a></li>
             <li ng-hide="type =='1'"><a ui-sref="Customer.PurchaseOrder({enqNo:no,edit:1})" style="font-size:18px"><i class="fa fa-edit"></i> Edit</a></li>
             <li ng-hide="type =='2'"><a ui-sref="Customer.Enquiry({email:data.no,edit:1})" style="font-size:18px"><i class="fa fa-edit"></i> Edit</a></li>
-            <li><a href="" style="font-size:18px"><i class="fa fa-print" ng-click="generatePDF()"></i> Print</a></li>
+            <li ng-click="printInvoice('printable');"><a href="" style="font-size:18px"><i class="fa fa-print" ></i> Print</a></li>
             <li><a href="" ng-click="goBack()"><i class="fa fa-times"></i></a></li>
         </ul>
     </div>
@@ -25,9 +25,9 @@
 
     <div class="flexcontainer">
 
-        <div id="upperdivId">
+        <div id="printable">
             <div class="page" ng-hide="type =='1'">
-                <table style="border:1px solid #e3e3e3; vertical-align:top" class="subpage" cellpadding="0" cellspacing="0">
+                <table id="table" style="border:1px solid #e3e3e3; vertical-align:top; white-space:nowrap"  class="subpage" cellpadding="0" cellspacing="0">
                     <tr>
                         <td style="padding:5px; vertical-align:top; height:100px">
                             <table>
