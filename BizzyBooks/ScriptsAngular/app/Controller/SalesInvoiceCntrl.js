@@ -112,7 +112,8 @@
     //};
     uploader.onSuccessItem = function (fileItem, response, status, headers) {
         console.info('onSuccessItem', fileItem, response, status, headers);
-        fileItem.cdnPath = response.container + "/" + response.name;
+        fileItem.cdnPath = //response.container + "/" +
+            response.name;
     };
     //uploader.onErrorItem = function (fileItem, response, status, headers) {
     //    console.info('onErrorItem', fileItem, response, status, headers);
@@ -265,6 +266,7 @@
                       
                       sumItemListTable($scope.itemTable);
                       accountTableSum();
+                      $scope.attachements=response.data.invoiceData.attachements;
                       bindAttachments(response.data.invoiceData.attachements, function () {
                           $scope.oldAttachment = null;
                       });
@@ -938,6 +940,62 @@
 
             $state.go('Customer.SalesInvoicePDF', { voId: $stateParams.voId });
         }
+    };
+
+
+    var Promise = window.Promise;
+    if (!Promise) {
+        Promise = JSZip.external.Promise;
+    }
+    /**
+     * Fetch the content and return the associated promise.
+     * @param {String} url the url of the content to fetch.
+     * @return {Promise} the promise containing the data.
+     */
+    function urlToPromise(url) {
+        return new Promise(function (resolve, reject) {
+            var req = new XMLHttpRequest();
+            req.open('get', url);
+            req.responseType = "arraybuffer";
+            req.onreadystatechange = function () {
+                if (req.readyState == 4 && req.status ==200) {
+                    try {
+                        resolve(req.response);// JSZipUtils._getBinaryFromXHR(xhr);
+                    } catch (e) {
+                        reject(new Error(e));
+                    }
+                }
+            };
+            req.send();
+        });
+    }
+
+    //if (!JSZip.support.blob) {
+    //    showError("This demo works only with a recent browser !");
+    //    return;
+    //}
+    $scope.downloadAttachments=function(){
+        var zip = new JSZip();
+        angular.forEach($scope.attachements, function (item) {
+            var path = item.cdnPath.substring(item.cdnPath.lastIndexOf('/') + 1);
+            var url = "http://localhost:4000/getfile?path=" + path;
+            var filename = item.file.name.replace(/.*\//g, "");
+            zip.file(filename, urlToPromise(url), { binary: true });
+        });
+        zip.generateAsync({ type: "blob" }, function updateCallback(metadata) {
+            var msg = "progression : " + metadata.percent.toFixed(2) + " %";
+            if (metadata.currentFile) {
+                msg += ", current file = " + metadata.currentFile;
+            }
+            console.log(msg);
+        })
+        .then(function callback(blob) {
+            // see FileSaver.js
+            saveAs(blob, $stateParams.voId+".zip");
+        }, function (e) {
+        });
+
+        return false;
     };
     
     

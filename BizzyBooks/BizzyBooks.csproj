@@ -284,6 +284,7 @@
     <Content Include="js\datepicker\daterangepicker-min.js" />
     <Content Include="js\daterangepicker.js" />
     <Content Include="js\editable-table.js" />
+    <Content Include="js\FileSaver.js" />
     <Content Include="js\fixedHeader.js" />
     <Content Include="js\fsm-sticky-header.js" />
     <Content Include="js\fusioncharts-jquery-plugin.js" />
@@ -296,7 +297,9 @@
     <Content Include="js\jquery.scrollTo.js" />
     <Content Include="js\jquery.toastmessage-min.js" />
     <Content Include="js\jspdf.min.js" />
+    <Content Include="js\jszip-utils.js" />
     <Content Include="js\jszip.js" />
+    <Content Include="js\jszip.min.js" />
     <Content Include="js\kendo.all.min.js" />
     <Content Include="js\loading-bar.js" />
     <Content Include="js\modernizr.custom.js" />

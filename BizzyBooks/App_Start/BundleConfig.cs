@@ -98,6 +98,8 @@ namespace Restaurant
                 .Include(
 
                   "~/js/jszip.js",
+                  "~/js/jszip-utils.js",
+                  "~/js/FileSaver.js",
                   "~/js/xlsx.js",
                 "~/js/kendo.all.min.js",
                 "~/js/custom.js",
