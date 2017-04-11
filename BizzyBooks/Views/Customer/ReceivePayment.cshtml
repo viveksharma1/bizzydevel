@@ -72,10 +72,11 @@
                         </span>
                     </div>
                 </div>
+                <create-account value="myValue"> </create-account>
                 <div class="col-sm-6 padding">
                     <h4 class="tabheading">Bank/Cash</h4>
                     <ui-select  ng-model="bankAccount.selected" id="countryCode"
-                               ui-select-focuser
+                               ui-select-focuser  ng-init="$select.addnew=1;$select.type='buyer';"
                                theme="selectize" >
                        
 
@@ -97,7 +98,7 @@
                     <create-account value="myValue"> </create-account>
                     <h4 class="tabheading" >Party Name</h4>
                     <ui-select ui-tree-select ng-model="partyAccount.selected" id="countryCode"
-                               ui-select-focuser
+                               ui-select-focuser  ng-init="$select.addnew=1;$select.type='buyer';"
                                theme="selectize">
                         <ui-select-match placeholder="Select Customers">
                             

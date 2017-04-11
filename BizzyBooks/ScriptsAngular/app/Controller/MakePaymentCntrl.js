@@ -116,7 +116,7 @@
         });
     }
     $scope.getAccount = function () {
-        $http.get(config.login + "getPaymentAccount").then(function (response) {
+        $http.get(config.login + "getPaymentAccount/" + localStorage.CompanyId).then(function (response) {
             $scope.bankAccounts = response.data
             console.log($scope.bankAccounts);
         });

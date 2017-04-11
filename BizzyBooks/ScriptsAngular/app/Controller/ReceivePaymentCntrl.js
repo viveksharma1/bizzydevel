@@ -275,58 +275,18 @@
 
         });
     }
-    $scope.addNew = function () {
-
-        $('#formaccount').modal('show');
-
-        $scope.myValue = null;
-
-    }
-
-    $scope.refreshResults = function ($select) {
-        var search = $select.search,
-          list = angular.copy($select.items),
-          FLAG = -1;
-        list = list.filter(function (item) {
-            return item.id !== FLAG;
-        });
-        if (!search) {
-            //use the predefined list
-          
-            $select.items = list;
-        }
-        else {
-            //manually add user input and set selection
-            var userInputItem = {
-                id: FLAG,
-                name: search
-            };
-           
-            $select.items = [userInputItem].concat(list)
-            $select.selected =  $select.items
-
-            if (type == "GODOWN") {
-                $scope.newitem = $select.selected;
-
-            }
-            if (type == "DESCRIPTION") {
-                $scope.DESCRIPTION.push({ name: $scope.description.selected.name });
-
-
-            }
-            if (type == "RRMARKS") {
-                $scope.RRMARKS.push({ name: $scope.remarks.selected.name });
-            }
-            console.log(userInputItem.name)
-
-
-            console.log($scope.GODOWN)
-        }
-
-    }
-
    
 
+    
+
+   
+    $scope.add = function (type, value) {
+        $('#formaccount').modal('show');
+        $scope.myValue = { accountName: value };
+        $scope.getSupplier();
+
+
+    }
 
 
 }]);

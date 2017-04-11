@@ -76,7 +76,7 @@
 
                     <h4 class="tabheading font_11">Customer<span class="pull-right text-primary"><i class="fa fa-rupee"></i> 2,30,000</span></h4>
                     <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
-                               ui-select-focuser
+                               ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';"
                                theme="selectize">
                         <ui-select-match placeholder="Select Customer">{{ $select.selected.accountName }}</ui-select-match>
 
@@ -130,26 +130,14 @@
                     </div>
                 </div>
                 <h4 class="tabheading font_11 pull-left" style="width:100%; ">Sales Ledger <span class="pull-right text-primary"><i class="fa fa-rupee"></i> 2,30,000</span></h4>
-                @*<ui-select ng-model="groupMasters.selected.name" id="countryCode" ui-select-focuser
-                           theme="selectize">
-
-                    <ui-select-match placeholder="Choose an account">{{$select.selected.name}}</ui-select-match>
-                    <ui-select-header>Top of the list!</ui-select-header>
-                    <ui-select-choices repeat="person in groupMaster  | filter: $select.search">
-                        <div>
-                            <span style="color:black" ng-model="supplier1" ng-bind-html="person.name | highlight: $select.search">{{person.type}}</span>
-                            <span style="color:forestgreen">({{person.type}})</span>
-                        </div>
-
-
-                    </ui-select-choices>
-                </ui-select>*@
+                <create-account value="myValue"> </create-account>
 
                 <ui-select ng-model="salesAccount.selected" id="countryCode" ui-select-focuser
+                           ng-init="$select.addnew=1;$select.type='buyer';"
                            theme="selectize">
 
                     <ui-select-match placeholder="Choose an account">{{$select.selected.accountName}}</ui-select-match>
-                    <ui-select-header>Top of the list!</ui-select-header>
+                
                     <ui-select-choices repeat="account in salesAccounts  | filter: $select.search">
                         <div>
                             <span style="color:black" ng-bind-html="account.name | highlight: $select.search">{{account.type}}</span>

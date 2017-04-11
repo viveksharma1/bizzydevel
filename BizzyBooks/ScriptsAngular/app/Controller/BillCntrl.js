@@ -114,10 +114,7 @@
         $('#addInventryModal').modal('show');
     },
 
-    $scope.add = function () {
-        $('#form-popoverPopup').show();
-    };
-
+   
     $('#asofdate').datepicker({
         autoclose: true,
         format: 'dd/mm/yyyy'
@@ -372,13 +369,17 @@
     }
 
     $scope.accounts = {}
-    $scope.$watch('accounts.selected', function () {     
-        if ($scope.accounts.selected.rate) {         
-                $scope.accountAmount = null;
-                $scope.accountAmount = (Number($scope.totalAmountINR) * Number($scope.accounts.selected.rate) / 100).toFixed(2);          
-        }
-    });
+    
 
+    $scope.applyRate = function (rate) {
+        if (rate) {
+            $scope.accountAmount = null;
+            $scope.accountAmount = (Number($scope.totalAmountINR) * Number(rate) / 100).toFixed(2);
+           
+        }
+        else
+            $scope.accountAmount = '';
+    }
  
     $scope.accountTable = [];
     $scope.addAccount = function () {
@@ -629,14 +630,7 @@
             $scope.getBilldata($stateParams.billNo, '?filter[fields][manualLineItem]=false');
     }
 
-    $scope.$watch('supplier.selected', function () {
-        $scope.shippingAddress = $scope.supplier.selected.billingAddress[0].street
-        if ($scope.supplier.selected.email) {
-            $scope.email = $scope.supplier.selected.email
-            
-        }
-       
-    });
+   
     $scope.getNewData = function (type, data) {
 
         console.log(data);
@@ -1443,7 +1437,13 @@
 
 
 
+    $scope.add = function (type, value) {
+        $('#formaccount').modal('show');
+        $scope.myValue = { accountName: value };
+        $scope.getSupplier();
+        
 
+    }
     
     $scope.bindMasterData = function (type) {
         $http.get(config.api + "masters" + "?filter[where][type]=" + type).then(function (response) {

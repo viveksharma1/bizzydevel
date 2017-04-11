@@ -22,15 +22,9 @@
                             <label><span class="red">*</span>Under</label>
                             <div>
 
-                                <ui-select ng-model="groupMasters.selected" id="countryCode">
+                                <ui-select ng-model="groupMasters.selected"  ui-select-focuser id="countryCode" theme="selectize" >
 
                                     <ui-select-match placeholder="Choose Group">{{$select.selected.name}}</ui-select-match>
-
-
-
-                                    <ui-select-header>Top of the list!</ui-select-header>
-
-
                                     <ui-select-choices repeat="person in groupMaster  | filter: $select.search">
                                         <div ng-init="balanceType = $select.selected.balanceType">
                                             <span style="color:black" ng-model="supplier1" ng-bind-html="person.name | highlight: $select.search">{{person.type}}</span>
@@ -45,7 +39,7 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-6 form-group padding5">
+                        <!--<div class="col-sm-6 form-group padding5">
                             <label>Balance Type </label>
 
                             <span style="padding-top:12px;margin-top:12px;">
@@ -57,7 +51,7 @@
                             </span>
 
 
-                        </div>
+                        </div>-->
 
 
                     </div>
@@ -72,17 +66,7 @@
                                 <label><span class="red">*</span>Group Name</label>
                                 <input type="text" ng-model="groupName" class="form-control" />
                             </div>
-                            <div class="form-group">
-                                <label><span class="red">*</span>Under<br /></label>
-                                <span>
-                                    <select style="width:200px;height:300px"
-                                            class="js-example-basic-single">
-                                        <option value="AL">Alabama</option>
-
-                                        <option value="WY">Wyoming</option>
-                                    </select>
-                                </span>
-                            </div>
+                            
                         </div>
                     </div>
 
@@ -95,10 +79,13 @@
                         </div>
                         <div class="col-sm-6 form-group padding5">
                             <label>Rate (%)</label>
-                            <input ng-model="rate" ng-disabled="isDisabled" type="text" class="form-control" />
+                            <input ng-model="rate" only-digits ng-disabled="isDisabled" type="text" class="form-control" />
 
-                            <label>Opening Balance</label>
-                            <input ng-model="openingBalance" ng-disabled="isDisabled" type="text" class="form-control" />
+                           
+                            <span>
+                                <label>Opening Balance</label>
+                                <input ng-model="openingBalance" only-digits ng-disabled="isDisabled" type="text" class="form-control" />
+                            </span>
 
                         </div>
                     </div>

@@ -35,8 +35,12 @@
     //    select.adnew = 1;l
     //    select.addNewfn = fun;
     //}
-    $scope.add = function (type) {
-        showSuccessToast(type);
+    $scope.add = function (type, value) {
+        $('#formaccount').modal('show');
+        $scope.myValue = { accountName: value };
+        $scope.getSupplier();
+
+
     }
     //$scope.buyerAdd = function () {
     //    showSuccessToast("Buyer Add");

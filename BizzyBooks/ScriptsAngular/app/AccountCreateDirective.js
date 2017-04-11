@@ -35,26 +35,29 @@
                 return false;
             }
             $scope.isAccount = true;
+           
             $scope.$watch('value', function () {
                 console.log($scope.value);
                 if ($scope.value) {
-
-                    
-
-                    $scope.accountId = $scope.value.id
-                    console.log($scope.value);
-                  
-                    $scope.accountName = $scope.value.accountName
-
-                    $scope.groupMasters = { selected: { name: $scope.value.Under } };
-                    $scope.groupMasters.selected.type = $scope.value.type;
-                    $scope.balanceType = $scope.value.balanceType
-                    if ($scope.value.rate) {
-                        $scope.rate = $scope.value.rate
+                    if ($scope.value.accountName) {
+                        $scope.accountName = $scope.value.accountName;
                     }
-                    $scope.credit = $scope.value.credit
-                    $scope.debit = $scope.value.debit
-                    $scope.openingBalance = $scope.value.openingBalance
+                    if ($scope.value.id) {
+                        $scope.accountId = $scope.value.id
+                        console.log($scope.value);
+
+                        $scope.accountName = $scope.value.accountName
+
+                        $scope.groupMasters = { selected: { name: $scope.value.Under } };
+                        $scope.groupMasters.selected.type = $scope.value.type;
+                        $scope.balanceType = $scope.value.balanceType
+                        if ($scope.value.rate) {
+                            $scope.rate = $scope.value.rate
+                        }
+                        $scope.credit = $scope.value.credit
+                        $scope.debit = $scope.value.debit
+                        $scope.openingBalance = $scope.value.openingBalance
+                    }
                 }
                 else {
                     $scope.accountId = null
@@ -99,6 +102,13 @@
                     }
 
                     $http.post(config.login + "createAccount?id=" + $scope.accountId, accountData).then(function (response) {
+                        showSuccessToast("Account Created Succesfully");
+                        $http.get(config.login + "getAccountNameById").then(function (response) {
+                            $scope.accountData = response.data
+                            for (var i = 0; i < $scope.accountData.length; i++) {
+                                localStorage[$scope.accountData[i]._id] = $scope.accountData[i].accountName
+                            }
+                        });
 
                         $http.get(config.login + "chartOfAccount").then(function (response) {
                             $scope.account = response.data;

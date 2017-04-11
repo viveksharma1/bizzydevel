@@ -748,4 +748,12 @@
         $scope.isCart = val;
     }
 
+    $scope.add = function (type, value) {
+        $('#formaccount').modal('show');
+        $scope.myValue = { accountName: value };
+        $scope.getSupplier();
+
+
+    }
+
 }]);
