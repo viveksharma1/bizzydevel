@@ -801,7 +801,7 @@
                     <div class="form-group">
                         <h4 style="margin-top: 15px; margin-bottom:10px;">
                             <i class="fa fa-caret-right"></i> Attachments
-                            <small class="text-primary cursor dwn">(<i class="fa fa-download"></i> Download all files)</small>
+                            <small ng-show="hasVoId" ng-click="downloadAttachments();" class="text-primary cursor dwn">(<i class="fa fa-download"></i> Download all files)</small>
                         </h4>
 
                         <div class="col-sm-5 padding5">

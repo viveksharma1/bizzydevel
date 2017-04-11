@@ -259,7 +259,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    next();
 	                };
 	                var onSuccessful = function onSuccessful(fileLikeObject, options) {
-	                    var fileItem = new FileItem(_this, fileLikeObject, options);
+	                    var fileItem = new FileItem(_this, fileLikeObject, options, files.isOld);
 	                    addedFileItems.push(fileItem);
 	                    _this.queue.push(fileItem);
 	                    _this._onAfterAddingFile(fileItem);
@@ -1170,7 +1170,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @constructor
 	         */
 	
-	        function FileItem(uploader, some, options) {
+	        function FileItem(uploader, some, options,isOld) {
 	            _classCallCheck(this, FileItem);
 	
 	            var isInput = isElement(some);
@@ -1191,14 +1191,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	                file: new FileLikeObject(some),
 	                isReady: false,
 	                isUploading: false,
-	                isUploaded: false,
-	                isSuccess: false,
+	                isUploaded: isOld ? true : false,
+	                isSuccess: isOld?true:false,
 	                isCancel: false,
 	                isError: false,
-	                progress: 0,
+	                progress: isOld ? 100 : 0,
 	                index: null,
 	                _file: file,
-	                _input: input
+	                _input: input,
+                    isOld:isOld
 	            });
 	
 	            if (input) this._replaceNode(input);
