@@ -1,0 +1,404 @@
+﻿
+@{
+    ViewBag.Title = "RosemateVoucher";
+    Layout = null;
+}
+
+
+
+<div class="FlexPopup" style="display:block" ng-init="model = {}">
+    <div class="flexheader lightblue">
+        <label style="float:left;padding:15px ">
+
+            <strong><span style="font-size:20px;  color:#585655">Rosemate Voucher </span></strong>
+        </label>
+        <label style="float:right;padding:15px ">
+
+            <strong style="font-size:20px"><a href="" ng-click="goBack()"><i class="fa fa-times"></i></a></strong>
+
+
+        </label>
+    </div>
+    <!-- addInventryModal -->
+    <div id="addInventryModal7" class="modal fade" role="dialog">
+        <div class="modal-admin">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+
+                <div class="modal-body" style="background-color:#525DB0">
+                    <label style="color:#FFFFFF">Do you want to leave without saving</label>
+                </div>
+
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm btn bg-purple" data-dismiss="modal" style="float:left">No</button>
+                    <button type="button" class="btn btn-secondary btn-sm btn-success" ng-click="goBack()" data-close="modal">Yes</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div id="addInventryModal1" class="modal fade" role="dialog">
+        <div class="modal-alert">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+
+                <div class="modal-body fa fa-check-circle fa-1x co-ok" style="background-color:#FFFFFF">
+                    <label style="color:#0A0503">Bill Saved</label>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="billNoAlert" class="modal fade" role="dialog">
+        <div class="modal-alert">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+
+                <div class="modal-body fa fa-warning" style="background-color:#FFFFFF">
+                    <label style="color:#ff0000">Bill No All Ready Exist</label>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+    <div class="flexcontainer">
+        <div class="lightblue bluebrdr content" style="padding:10px 0px">
+
+            <div class="col-sm-6" style="padding:0px">
+                <div class="col-sm-4 padding">
+                    <h4 class="tabheading font_11">No.</h4>
+                    <input type='text' class="form-control" />
+                </div>
+                <div class="col-sm-4 padding">
+                    <h4 class="tabheading font_11">Date</h4>
+
+                    <div class='input-group date' id='Date'>
+                        <input type='text' class="form-control" placeholder="dd/mm/yyyy" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-sm-6" style="padding:0px;">
+
+                <div class="col-sm-4 padding pull-right">
+                    <h4 class="tabheading font_11">Opening Balance</h4>
+                    <input type='text' class="form-control" />
+                </div>
+                <div class="col-sm-6 padding pull-right">
+                    <h4 class="tabheading font_11">Cash</h4>
+
+                    <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
+                               ui-select-focuser
+                               theme="selectize">
+                        <ui-select-match placeholder="Select Cash">{{ $select.selected.company }}</ui-select-match>
+
+                        <ui-select-choices repeat="person in supliers  | filter: $select.search">
+                            <div>
+                                <span ng-model="supplier1" ng-bind-html="person.company | highlight: $select.search"></span>
+                            </div>
+
+
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+
+
+
+
+        </div>
+
+
+        <table style="width:100%; border-top:1px solid #e3e3e3;">
+            <tr>
+                <td width="50%" style="border-right:1px solid #e3e3e3; vertical-align:top">
+                    <table class="table-hover" fixed-header style="height:300px; width:100%">
+                        <thead>
+                            <tr>
+                                <th class="Rosemate-table" width="100">
+                                    <select class="form-control">
+                                        <option>Company Code</option>
+                                        <option>ABC</option>
+                                        <option>EXY</option>
+                                    </select>
+                                </th>
+                                <th class="Rosemate-table">
+                                    <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode" style="height:30px"
+                                               ui-select-focuser
+                                               theme="selectize">
+                                        <ui-select-match placeholder="Select Account">{{ $select.selected.company }}</ui-select-match>
+
+                                        <ui-select-choices repeat="person in supliers  | filter: $select.search">
+                                            <div>
+                                                <span ng-model="supplier1" ng-bind-html="person.company | highlight: $select.search"></span>
+                                            </div>
+
+
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </th>
+                                <th class="Rosemate-table" width="100"><input type="text" class="form-control text-right" placeholder="Amount" /></th>
+                                <th class="Rosemate-table text-right" width="155">
+                                    <button type="button" class="btn-sm btn-warning btn" style="width:68px">Reciept</button>
+                                    <button type="button" class="btn-sm btn-primary btn" style="width:68px">Add</button>
+                                </th>
+                            </tr>
+                            <tr style="border-bottom:1px solid #e3e3e3; background:#F0EEEE; padding:5px 0px">
+                                <th class="Rosemate-table">&nbsp;</th>
+                                <th class="Rosemate-table">&nbsp;</th>
+                                <th class="Rosemate-table" style="text-align:right;">Payment</th>
+                                <th class="Rosemate-table">&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="Rosemate-table">ABC</td>
+                                <td class="Rosemate-table">Industries</td>
+                                <td class="Rosemate-table text-right"><strong>5,00,000</strong></td>
+                                <td class="Rosemate-table text-center"><a class="edit" title="Edit"> <i class="fa fa-times-circle cursor RemoveTR" style="font-size:16px" ng-click="remove($index)"></i></a></td>
+                            </tr>
+                            <tr>
+                                <td class="Rosemate-table">XYZ</td>
+                                <td class="Rosemate-table">Industries</td>
+                                <td class="Rosemate-table text-right"><strong>10,00,000</strong></td>
+                                <td class="Rosemate-table text-center"><a class="edit" title="Edit"> <i class="fa fa-times-circle cursor RemoveTR" style="font-size:16px" ng-click="remove($index)"></i></a></td>
+                            </tr>
+
+
+                        </tbody>
+                        <tfoot style="border-bottom:1px solid #e3e3e3;">
+                            <tr style="border-top:1px solid #e3e3e3; ">
+                                <th class="Rosemate-table">&nbsp;</th>
+                                <th class="Rosemate-table">Total</th>
+                                <th class="Rosemate-table text-right">15,00,000</th>
+                                <th class="Rosemate-table">&nbsp;</th>
+                            </tr>
+                            <tr style="border-top:1px solid #e3e3e3; background:#F0EEEE;">
+                                <th class="Rosemate-table">&nbsp;</th>
+                                <th class="Rosemate-table">Closing Amount</th>
+                                <th class="Rosemate-table text-right">15,00,000</th>
+                                <th class="Rosemate-table">&nbsp;</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                    <div class="col-sm-12">
+                        <div class="col-sm-8 padding">
+
+                            <div class="form-group">
+                                <h4 style="margin-top: 15px; margin-bottom:10px;">
+                                    <i class="fa fa-caret-right"></i> Narration
+                                </h4>
+                                <textarea class="form-control" style="height:80px"></textarea>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </td>
+                <td width="50%" style="vertical-align:top">
+                    <table class="table-hover" fixed-header style="height:300px; width:100%">
+                        <thead>
+                            <tr>
+                                <th class="Rosemate-table" width="100">
+                                    <select class="form-control">
+                                        <option>Company Code</option>
+                                        <option>ABC</option>
+                                        <option>EXY</option>
+                                    </select>
+                                </th>
+                                <th class="Rosemate-table">
+                                    <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode" style="height:30px"
+                                               ui-select-focuser
+                                               theme="selectize">
+                                        <ui-select-match placeholder="Select Account">{{ $select.selected.company }}</ui-select-match>
+
+                                        <ui-select-choices repeat="person in supliers  | filter: $select.search">
+                                            <div>
+                                                <span ng-model="supplier1" ng-bind-html="person.company | highlight: $select.search"></span>
+                                            </div>
+
+
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </th>
+                                <th class="Rosemate-table" width="100"><input type="text" class="form-control text-right" placeholder="Amount" /></th>
+                                <th class="Rosemate-table text-right" width="155">
+                                    <button type="button" class="btn-sm btn-warning btn" style="width:68px">Payment</button>
+                                    <button type="button" class="btn-sm btn-primary btn" style="width:68px">Add</button>
+                                </th>
+                            </tr>
+                            <tr style="border-bottom:1px solid #e3e3e3; background:#F0EEEE; padding:5px 0px">
+                                <th class="Rosemate-table">&nbsp;</th>
+                                <th class="Rosemate-table">&nbsp;</th>
+                                <th class="Rosemate-table" style="text-align:right;">Payment</th>
+                                <th class="Rosemate-table">&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="Rosemate-table">JML</td>
+                                <td class="Rosemate-table">Industries</td>
+                                <td class="Rosemate-table text-right"><strong>5,00,000</strong></td>
+                                <td class="Rosemate-table text-center"><a class="edit" title="Edit"> <i class="fa fa-times-circle cursor RemoveTR" style="font-size:16px" ng-click="remove($index)"></i></a></td>
+                            </tr>
+                            <tr>
+                                <td class="Rosemate-table">XYZ</td>
+                                <td class="Rosemate-table">Industries</td>
+                                <td class="Rosemate-table text-right"><strong>10,00,000</strong></td>
+                                <td class="Rosemate-table text-center"><a class="edit" title="Edit"> <i class="fa fa-times-circle cursor RemoveTR" style="font-size:16px" ng-click="remove($index)"></i></a></td>
+                            </tr>
+
+
+                        </tbody>
+                        <tfoot style="border-bottom:1px solid #e3e3e3">
+                            <tr style="border-top:1px solid #e3e3e3; ">
+                                <th class="Rosemate-table">&nbsp;</th>
+                                <th class="Rosemate-table">Total</th>
+                                <th class="Rosemate-table text-right">15,00,000</th>
+                                <th class="Rosemate-table">&nbsp;</th>
+                            </tr>
+                            <tr style="border-top:1px solid #e3e3e3; background:#F0EEEE;">
+                                <th class="Rosemate-table">&nbsp;</th>
+                                <th class="Rosemate-table">&nbsp;</th>
+                                <th class="Rosemate-table text-right">&nbsp;</th>
+                                <th class="Rosemate-table">&nbsp;</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                    <div class="col-sm-12" style="margin-bottom:20px">
+                        @*<div class="col-sm-4 padding">
+
+                                <div class="form-group">
+                                    <h4 class="tabheading">Attachments</h4>
+                                    <div class="attachmets">
+                                        <input type="file" id="uploadBtn" multiple="multiple" name="browsefile">
+                                        <div>
+                                            <i class="fa fa-plus"></i>
+                                            <p>Add file</p>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <div id="upload_prev" class="upload_prev"></div>*@
+
+
+
+                        <ul ng-repeat="data in datapath">
+                            <li>
+                                <span> <a href="" style="font-size:medium" class="pointer fa fa-file-pdf-o" aria-hidden="true"> <b ng-click="getfile(data)">{{data.replace("server/boot/uploads/"+ billNo,'')}}</b></a></span>
+                                <i class="fa fa-times" aria-hidden="true" ng-click="deletefile(data,$index)"></i>
+                            </li>
+                        </ul>
+
+                        <div class="col-sm-12" style="padding:0px">
+
+
+                            <div class="form-group">
+                                <h4 style="margin-top: 15px; margin-bottom:10px;">
+                                    <i class="fa fa-caret-right"></i> Attachments
+                                    <small class="text-primary cursor dwn">(<i class="fa fa-download"></i> Download all files)</small>
+                                </h4>
+
+                                @*<div class="attachmets">*@
+                                @*<input type="file" id="uploadBtn" multiple="multiple" name="browsefile">*@
+                                @*<div id="uploadAttchments">
+                                            <i class="fa fa-plus"></i>
+                                            <p>Add file</p>
+                                        </div>
+                                    </div>*@
+                                <div class="col-sm-5 padding5">
+                                    <input type="text" class="form-control" id="NameInput" placeholder="Title" />
+                                </div>
+                                <div class="col-sm-5 padding5">
+                                    @*<input type="file" class="form-control" id="id=" uploadBtn" />*@
+                                    <input type="file" class="filestyle" id="uploadBtn" data-buttonName="btn-info">
+                                </div>
+
+                                <div class="col-sm-2 padding5">
+                                    <button type="button" class="btn btn-sm btn-primary Attechmentdetail" style="width:100%">Add</button>
+                                </div>
+
+
+                                <div style="float:left; width:100%; padding:10px 10px; border-bottom:1px dotted #ccc;" class="filenameDiv">
+
+
+                                    <div class="col-sm-5 padding5" style="word-break:break-all">
+                                        <strong id="name"></strong>
+                                    </div>
+
+                                    <div class="col-sm-5 padding5 cursor" style="word-break:break-all">
+                                        <a id="type" class="cursor"></a>
+                                    </div>
+
+                                    <div class="col-sm-2">
+                                        <i class="fa fa-times pull-right text-danger" id="removeattachment"></i>
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+
+
+        <hr style="float:left; width:100%; margin:0px" />
+
+
+    </div>
+
+
+    <div class="flexfooter">
+        <span class="pull-left">
+
+            <button type="button" class="btn btn-sm btn-primary">Clear</button>
+        </span>
+
+        <div class="pull-right">
+            <button type="button" class="btn btn-sm btn-primary" ng-click="saveBill()">Save</button>
+            <div class="btn-group dropup">
+                @*
+                    <button type="button" class="btn btn-info btn-sm" ng-click ="saveBill()">Save and send</button>
+                    <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:25px">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" style="right:-2px !important">
+                        <li><a href="#">Save and close</a></li>
+                        <li><a href="#">Save and send</a></li>
+                        <li><a href="#">Save and new</a></li>
+                        <li><a href="#">Save and share link</a></li>
+                    </ul>
+
+                *@
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+

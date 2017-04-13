@@ -72,33 +72,43 @@
                         </span>
                     </div>
                 </div>
+                <create-account value="myValue"> </create-account>
                 <div class="col-sm-6 padding">
                     <h4 class="tabheading">Bank/Cash</h4>
-                    <ui-select ui-tree-select ng-model="bankAccount.selected" id="countryCode"
-                               ui-select-focuser
-                               theme="selectize">
-                        <ui-select-match placeholder="Select Account">{{ $select.selected.accountName }}</ui-select-match>
+                    <ui-select  ng-model="bankAccount.selected" id="countryCode"
+                               ui-select-focuser  ng-init="$select.addnew=1;$select.type='buyer';"
+                               theme="selectize" >
+                       
 
-                        <ui-select-choices repeat="person in bankAccounts  | filter: $select.search">
-                            <div>
-                                <span ng-model="supplier1" ng-bind-html="person.accountName | highlight: $select.search"></span>
-                            </div>
-
-
-                        </ui-select-choices>
+                    <ui-select-match placeholder="Select Account" >
+                        <span class="selectuiTable">
+                            <span>{{ $select.selected.accountName || $select.search }}</span>
+                            <a class="btn btn-xs btn-link pull-right"><i class="glyphicon glyphicon-remove"></i></a>
+                        </span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="person in bankAccounts  | filter: $select.search" refresh="refreshResults($select)" refresh-delay="2">
+                        <div>
+                            <span ng-bind-html="person.accountName | highlight: $select.search"></span>
+                        </div>
+                    </ui-select-choices>
                     </ui-select>
                 </div>
 
-                <div class="col-sm-7 padding">
-                    <h4 class="tabheading">Party Name</h4>
+                <div class="col-sm-7 padding" >
+                    <create-account value="myValue"> </create-account>
+                    <h4 class="tabheading" >Party Name</h4>
                     <ui-select ui-tree-select ng-model="partyAccount.selected" id="countryCode"
-                               ui-select-focuser
+                               ui-select-focuser  ng-init="$select.addnew=1;$select.type='buyer';"
                                theme="selectize">
-                        <ui-select-match placeholder="Select Suppliers">{{ $select.selected.company }}</ui-select-match>
+                        <ui-select-match placeholder="Select Customers">
+                            
+                            <span >{{ $select.selected.accountName || $select.search }}</span>
+                           
+                        </ui-select-match>
 
-                        <ui-select-choices repeat="person in partyAccounts  | filter: $select.search">
+                        <ui-select-choices repeat="person in partyAccounts  | filter: $select.search"  >
                             <div>
-                                <span ng-model="supplier1" ng-bind-html="person.company | highlight: $select.search"></span>
+                                <span ng-model="supplier1" ng-bind-html="person.accountName | highlight: $select.search"></span>
                             </div>
 
 
@@ -121,11 +131,11 @@
                     <ui-select ui-tree-select ng-model="partyAccount.selected" id="countryCode"
                                ui-select-focuser
                                theme="selectize">
-                        <ui-select-match placeholder="Select Suppliers">{{ $select.selected.company }}</ui-select-match>
+                        <ui-select-match placeholder="Select Suppliers">{{ $select.selected.accountName }}</ui-select-match>
 
                         <ui-select-choices repeat="person in partyAccounts  | filter: $select.search">
                             <div>
-                                <span ng-model="supplier1" ng-bind-html="person.company | highlight: $select.search"></span>
+                                <span ng-model="supplier1" ng-bind-html="person.accountName | highlight: $select.search"></span>
                             </div>
 
 

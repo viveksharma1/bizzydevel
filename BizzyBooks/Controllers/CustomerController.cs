@@ -266,5 +266,9 @@ namespace Restaurant.Controllers
         {
             return View();
         }
+        public ActionResult RosemateVoucher()
+        {
+            return View();
+        }
     }
 }

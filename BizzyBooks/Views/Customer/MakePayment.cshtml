@@ -121,14 +121,14 @@
             <div class="col-lg-12 padding">
                 <div class="col-sm-4 padding">
                     <h4 class="tabheading">Party Name</h4>
-                    <ui-select ui-tree-select ng-model="partyAccount.selected" id="countryCode"
-                               ui-select-focuser
+                    <ui-select ui-tree-select ng-model="partyAccount.selected" on-select = "getOpenInvoice()" id="countryCode"
+                               ui-select-focuser 
                                theme="selectize">
-                        <ui-select-match placeholder="Select Suppliers">{{ $select.selected.company }}</ui-select-match>
+                        <ui-select-match placeholder="Select Suppliers">{{ $select.selected.accountName }}</ui-select-match>
 
                         <ui-select-choices repeat="person in partyAccounts  | filter: $select.search">
                             <div>
-                                <span ng-model="supplier1" ng-bind-html="person.company | highlight: $select.search"></span>
+                                <span ng-model="supplier1" ng-bind-html="person.accountName | highlight: $select.search"></span>
                             </div>
 
 
@@ -140,7 +140,7 @@
 
                 <div class="pull-right" style="margin-top:31px">
                     <h4 class="tabheading pull-left" style="padding-left:70px">Amount</h4>
-                    <input type="text" ng-model ="totalPaidAmount" class="form-control" style="width: 110px;  margin-left: 10px; float: right;" />
+                    <input type="text" ng-model ="totalPaidAmount"  only-digits class="form-control" style="width: 110px;  margin-left: 10px; float: right;" />
                 </div>
 
             </div>

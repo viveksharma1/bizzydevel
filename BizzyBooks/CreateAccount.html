@@ -6,8 +6,8 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <div class="btn-group btn-toggle" style="top: 0px !important;margin-right: 5px;">
-                    <button class="btn btn-sm btn-default" ng-class="{active:isAccount==true}" ng-click="createAccountBtn()">Account</button>
-                    <button class="btn btn-sm btn-default" ng-class="{active:isAccount==false}" ng-click="createGroupBtn()">Group</button>
+                    <button class="btn  btn-sm" ng-class="{active:isAccount==true}" ng-click="createAccountBtn()">Account</button>
+                    <button class="btn  btn-sm" ng-class="{active:isAccount==false}" ng-click="createGroupBtn()">Group</button>
                 </div>
             </div>
             <div class="modal-body content" style="padding:10px 20px;">
@@ -22,15 +22,9 @@
                             <label><span class="red">*</span>Under</label>
                             <div>
 
-                                <ui-select ng-model="groupMasters.selected" id="countryCode">
+                                <ui-select ng-model="groupMasters.selected"  ui-select-focuser id="countryCode" theme="selectize" >
 
                                     <ui-select-match placeholder="Choose Group">{{$select.selected.name}}</ui-select-match>
-
-
-
-                                    <ui-select-header>Top of the list!</ui-select-header>
-
-
                                     <ui-select-choices repeat="person in groupMaster  | filter: $select.search">
                                         <div ng-init="balanceType = $select.selected.balanceType">
                                             <span style="color:black" ng-model="supplier1" ng-bind-html="person.name | highlight: $select.search">{{person.type}}</span>
@@ -45,7 +39,7 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-6 form-group padding5">
+                        <!--<div class="col-sm-6 form-group padding5">
                             <label>Balance Type </label>
 
                             <span style="padding-top:12px;margin-top:12px;">
@@ -57,7 +51,7 @@
                             </span>
 
 
-                        </div>
+                        </div>-->
 
 
                     </div>
@@ -72,17 +66,7 @@
                                 <label><span class="red">*</span>Group Name</label>
                                 <input type="text" ng-model="groupName" class="form-control" />
                             </div>
-                            <div class="form-group">
-                                <label><span class="red">*</span>Under<br /></label>
-                                <span>
-                                    <select style="width:200px;height:300px"
-                                            class="js-example-basic-single">
-                                        <option value="AL">Alabama</option>
-
-                                        <option value="WY">Wyoming</option>
-                                    </select>
-                                </span>
-                            </div>
+                            
                         </div>
                     </div>
 
@@ -95,10 +79,13 @@
                         </div>
                         <div class="col-sm-6 form-group padding5">
                             <label>Rate (%)</label>
-                            <input ng-model="rate" ng-disabled="isDisabled" type="text" class="form-control" />
+                            <input ng-model="rate" only-digits ng-disabled="isDisabled" type="text" class="form-control" />
 
-                            <label>Opening Balance</label>
-                            <input ng-model="openingBalance" ng-disabled="isDisabled" type="text" class="form-control" />
+                           
+                            <span>
+                                <label>Opening Balance</label>
+                                <input ng-model="openingBalance" only-digits ng-disabled="isDisabled" type="text" class="form-control" />
+                            </span>
 
                         </div>
                     </div>
@@ -270,9 +257,31 @@
                 </div>
             </div>
             <div class="modal-footer content">
-                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary btn-sm" ng-click="createAccount()">Save changes</button>
+                <button type="button" class="btn  btn-sm" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn  btn-sm" ng-click="createAccount()">Save changes</button>
             </div>
         </div>
     </div>
+    <!-- addInventryModal -->
+    <div id="accountAlert" class="modal fade" role="dialog">
+        <div class="modal-admin">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+
+                <div class="modal-body" style="background-color:#525DB0">
+                    <label style="color:#FFFFFF">Account all ready exists in your other company do you want to create new Or use existing</label>
+                </div>
+
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm btn bg-purple" data-dismiss="modal" ng-click="accountCreations()"style="float:left">No</button>
+                    <button type="button" class="btn btn-secondary btn-sm btn-success" data-dismiss="modal"ng-click="updateExistingAccount()" >Yes</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
+ 

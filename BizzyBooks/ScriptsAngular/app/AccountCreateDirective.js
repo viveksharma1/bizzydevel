@@ -35,26 +35,29 @@
                 return false;
             }
             $scope.isAccount = true;
+           
             $scope.$watch('value', function () {
                 console.log($scope.value);
                 if ($scope.value) {
-
-                    
-
-                    $scope.accountId = $scope.value.id
-                    console.log($scope.value);
-                  
-                    $scope.accountName = $scope.value.accountName
-
-                    $scope.groupMasters = { selected: { name: $scope.value.Under } };
-                    $scope.groupMasters.selected.type = $scope.value.type;
-                    $scope.balanceType = $scope.value.balanceType
-                    if ($scope.value.rate) {
-                        $scope.rate = $scope.value.rate
+                    if ($scope.value.accountName) {
+                        $scope.accountName = $scope.value.accountName;
                     }
-                    $scope.credit = $scope.value.credit
-                    $scope.debit = $scope.value.debit
-                    $scope.openingBalance = $scope.value.openingBalance
+                    if ($scope.value.id) {
+                        $scope.accountId = $scope.value.id
+                        console.log($scope.value);
+
+                        $scope.accountName = $scope.value.accountName
+
+                        $scope.groupMasters = { selected: { name: $scope.value.Under } };
+                        $scope.groupMasters.selected.type = $scope.value.type;
+                        $scope.balanceType = $scope.value.balanceType
+                        if ($scope.value.rate) {
+                            $scope.rate = $scope.value.rate
+                        }
+                        $scope.credit = $scope.value.credit
+                        $scope.debit = $scope.value.debit
+                        $scope.openingBalance = $scope.value.openingBalance
+                    }
                 }
                 else {
                     $scope.accountId = null
@@ -83,7 +86,7 @@
                 console.log($scope.checkboxModel.value1);
                 if ($scope.isAccount) {
                     var accountData = {
-                        compCode: localStorage.CompanyId,
+                        compCode: [localStorage.CompanyId],
                         accountName: $scope.accountName.toUpperCase(),
                         Under: $scope.groupMasters.selected.name,
                         type: $scope.groupMasters.selected.type,
@@ -97,13 +100,43 @@
                         balanceType: $scope.balanceType
 
                     }
-
-                    $http.post(config.login + "createAccount?id=" + $scope.accountId, accountData).then(function (response) {
-
-                        $http.get(config.login + "chartOfAccount").then(function (response) {
-                            $scope.account = response.data;
-                        });
+                    $http.get(config.api + "accounts?filter[where][accountName]=" + $scope.accountName.toUpperCase()).then(function (response) {
+                        console.log(response)
+                        if (response.data) {
+                            $scope.accId = response.data[0].id;
+                           
+                            $('#accountAlert').modal('show');
+                        }
+                        else {
+                            $scope.accountCreations();
+                        }
                     });
+                    $scope.updateExistingAccount = function () {
+                        var accountData = {
+                            compCode: localStorage.CompanyId,
+                        }
+                        $http.post(config.login + "updateAccount/" + $scope.accId, accountData).then(function (response) {
+                        });
+
+                    }
+                    $scope.accountCreations = function () {
+
+                        $http.post(config.login + "createAccount?id=" + $scope.accountId, accountData).then(function (response) {
+                            showSuccessToast("Account Created Succesfully");
+                            $http.get(config.login + "getAccountNameById").then(function (response) {
+                                $scope.accountData = response.data
+                                for (var i = 0; i < $scope.accountData.length; i++) {
+                                    localStorage[$scope.accountData[i]._id] = $scope.accountData[i].accountName
+                                }
+                            });
+
+                            $http.get(config.login + "chartOfAccount/" + localStorage.CompanyId).then(function (response) {
+                                $scope.account = response.data;
+
+                            });
+                        });
+                    }
+                   
 
                 }
                 if ($scope.isGroup) {

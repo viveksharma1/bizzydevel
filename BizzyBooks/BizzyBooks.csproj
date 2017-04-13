@@ -370,7 +370,6 @@
     <Content Include="ScriptsAngular\Angular\angular-local-storage.min.js" />
     <Content Include="ScriptsAngular\Angular\angular-route.js" />
     <Content Include="ScriptsAngular\Angular\angular-ui-router.js" />
-    <Content Include="ScriptsAngular\Angular\angular-ui-router.min.js" />
     <Content Include="ScriptsAngular\Angular\angular.js" />
     <Content Include="ScriptsAngular\Angular\dirPagination.js" />
     <Content Include="ScriptsAngular\Angular\ng-google-chart.js" />
@@ -450,7 +449,6 @@
     <Content Include="ScriptsAngular\app\_app.js" />
     <Content Include="ScriptsAngular\app\app.js" />
     <Content Include="ScriptsAngular\app\Controller\LoginCntrl.js" />
-    <Content Include="Views\Customer\stock.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -543,6 +541,7 @@
     <Content Include="Views\Customer\TaxInvoicePDF.cshtml" />
     <Content Include="Views\Customer\StockBalanceInventory.cshtml" />
     <Content Include="Views\Customer\UserList.cshtml" />
+    <Content Include="Views\Customer\RosemateVoucher.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

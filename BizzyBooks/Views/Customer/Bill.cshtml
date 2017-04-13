@@ -214,13 +214,13 @@
 
                 <h4 class="tabheading font_11">Supplier @*<span class="pull-right text-primary"><i class="fa fa-rupee"></i> 2,30,000</span></h4>*@
                 <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
-                           ui-select-focuser
+                           ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';"
                            theme="selectize">
-                    <ui-select-match placeholder="Select Suppliers">{{ $select.selected.company }}</ui-select-match>
+                    <ui-select-match placeholder="Select Suppliers">{{ $select.selected.accountName }}</ui-select-match>
 
                     <ui-select-choices repeat="person in supliers  | filter: $select.search">
                         <div>
-                            <span ng-model="supplier1" ng-bind-html="person.company | highlight: $select.search"></span>
+                            <span ng-model="supplier1" ng-bind-html="person.accountName | highlight: $select.search"></span>
                         </div>
 
 
@@ -244,7 +244,7 @@
 
             <div class="col-sm-4 padding" style="margin-left:10px">
                 <h4 class="tabheading font_11">Purchase Ledger @*<span class="pull-right text-primary"><i class="fa fa-rupee"></i> 2,30,000</span></h4>*@
-                <ui-select ng-model="purchaseAccounts.selected" id="countryCode" ui-select-focuser
+                <ui-select ng-model="purchaseAccounts.selected" id="countryCode" ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';"
                            theme="selectize">
 
                     <ui-select-match placeholder="Choose an account">{{$select.selected.accountName}}</ui-select-match>
@@ -310,32 +310,7 @@
 
 
 
-            <div id="form-popoverPopup" class="popupbox">
-                <div class="dijitDialogTitle">
-                    New Suppliers
-                    <i class="fa fa-times-circle cursor pull-right" title="close" ng-click="popuclose()"></i>
-                </div>
-                <div class="form-content">
-                    <div class="form-group">
-                        <label><span class="red">*</span>Suppliers Name</label>
-                        <input type="text" ng-model="suppliersName" class="form-control" />
-                    </div>
-                    <div class="form-group">
-                        <label><span class="red">*</span>Email</label>
-                        <input type="text" ng-model="email1" class="form-control" />
-                    </div>
-                    <div class="form-group">
-                        <label><span class="red">*</span>Mobile No.</label>
-                        <input type="text" ng-model="mobile" class="form-control" />
-                    </div>
-
-
-
-                    <div class="form-footer">
-                        <button type="button" class="btn btn-sm btn-default" ng-click="saveSuppliers()">Save</button>
-                    </div>
-                </div>
-            </div>
+          
 
             <div class="col-sm-3 padding pull-right">
                 <div class="pull-right" style="margin-right:10px; margin-top:25px; height:96px; width:100%; text-align:right">
@@ -453,11 +428,11 @@
             </h4>
             <div class="pull-right" style="margin-top:10px;">
                 @*Custom btn added by khushboo 04-03*@
-                <button ng-click="MannualEntrybtn()" class="btn btn-default btn-sm" style="font-size:12px;"> Mannual Entry</button>
-                <button ng-click="currencyRate()" id ="curr"  class="btn btn-primary btn-sm  " style="font-size:12px;"> Currency Rate</button>
-                <button ng-click="Custombtn()" id ="custom" class="btn btn-primary btn-sm  ">Custom</button>
-                <button class="btn btn-primary btn-sm" ng-click="ExciseDutyModalbtn()"> Excise Duty</button>
-                <button ng-click="totalExpense()" class="btn btn-primary btn-sm"> Expense Detail</button>
+                <button ng-click="MannualEntrybtn()" class="btn  btn-sm"style="font-size:12px;"> Mannual Entry</button>
+                <button ng-click="currencyRate()" id ="curr"  class="btn  btn-sm" style="font-size:12px;"> Currency Rate</button>
+                <button ng-click="Custombtn()" id ="custom"  class="btn  btn-sm">Custom</button>
+                <button  class="btn  btn-sm" ng-click="ExciseDutyModalbtn()"> Excise Duty</button>
+                <button ng-click="totalExpense()"  class="btn  btn-sm"> Expense Detail</button>
 
 
                 @*end*@
@@ -976,7 +951,7 @@
                                     <label>TOTAL AMT(INR)</label>
                                     <ui-select ui-tree-select ng-model="godown.selected.name" id="countryCode"
                                                ui-select-focuser
-                                               theme="selectize" Sstyle="text-overflow: ellipsis">
+                                               theme="selectize" style="text-overflow: ellipsis">
 
                                         <ui-select-match>
                                             <span class="selectuiTable">
@@ -1417,7 +1392,7 @@
                             </div>
                             <div class="col-sm-3">
                                
-                                <input input type="text" ng-model="dutyAmount" class="form-control pull-left" style="width:100px; margin:0px 10px" />
+                                <input input type="text" ng-model="dutyAmount"  only-digits class="form-control pull-left" style="width:100px; margin:0px 10px" />
                             </div>
                         </div>
 
@@ -1533,7 +1508,7 @@
                         </div>
                         <div class="form-group">
                             <label>Amount</label>
-                            <input type="text" ng-model="customAmount" class="form-control" />
+                            <input type="text" ng-model="customAmount"  only-digits class="form-control" />
                         </div>
                         <div class="form-group">
                             <label>Remarks</label>
@@ -1660,7 +1635,7 @@
             <table class="table-bordered table-condensed tab" fixed-header id="ItemTable" style="width:98%; margin-left:10px;margin-right:10px; height:180px">
                 <thead>
                     <tr style="background:rgb(243, 245, 248)">
-                        <th>
+                        <th><create-account value="myValue"> </create-account>
                             <ui-select ui-tree-select  on-select="getNewData('GODOWN', godown.selected.name)"ng-model="godown.selected.name" id="countryCode"
                                        ui-select-focuser
                                        theme="selectize" Sstyle="text-overflow: ellipsis">
@@ -1696,7 +1671,7 @@
                                     <div>
                                         <span ng-bind-html="person.name | highlight: $select.search"></span>
                                     </div>
-                                </ui-select-choices>a
+                                </ui-select-choices>
                             </ui-select>
                         </th>
                         <th>
@@ -1716,11 +1691,11 @@
                                 </ui-select-choices>
                             </ui-select>
                         </th>
-                        <th><input type="text" id="arshiyaCharge" ng-model="lineItemnetweight" placeholder="NET WEIGHT" class="form-control text-right" style="margin-top:-5px" /></th>
+                        <th><input type="number" id="arshiyaCharge"  step="0.01" ng-model="lineItemnetweight" placeholder="NET WEIGHT" class="form-control text-right" style="margin-top:-5px" /></th>
 
                         <th>
-                            <input type="text" id="arshiyaCharge"
-                                   ng-model="lineItemBaseRate" placeholder="BASE RATE" class="form-control text-right" style="margin-top:-5px" />
+                            <input type="number" id="arshiyaCharge"
+                                   ng-model="lineItemBaseRate"    step="0.01" placeholder="BASE RATE" class="form-control text-right" style="margin-top:-5px" />
                         </th>
                         <th>&nbsp;</th>
                         <th>&nbsp;</th>
@@ -1788,7 +1763,7 @@
                         <tr style="background:rgb(243, 245, 248)">
                             <th>
                                 <ui-select ui-tree-select ng-model="accounts.selected" id="countryCode"
-                                           ui-select-focuser
+                                           ui-select-focuser  on-select="applyRate($select.selected.rate)" ng-init="$select.addnew=1;$select.type='buyer';"
                                            theme="selectize">
 
                                     <ui-select-match placeholder="ACCOUNT">
@@ -1814,7 +1789,7 @@
 
                             <th>
                                 <input type="text" id="arshiyaCharge"
-                                       ng-model="accountAmount" placeholder="AMOUNT" class="form-control text-right" style="margin-top:-5px" />
+                                       ng-model="accountAmount" placeholder="AMOUNT" only-digits class="form-control text-right" style="margin-top:-5px" />
                             </th>
                             <th style="text-align:center"><button ng-click="addAccount()" class="btn btn-primary btn-sm">Add</button></th>
                         </tr>
@@ -1989,7 +1964,8 @@
         </span>
 
         <div class="pull-right">
-            <button type="button" class="btn btn-sm btn-primary" ng-disabled="isDisabled" ng-click="saveBill()">Save</button>
+            <button type="button" ng-hide="saving" class="btn btn-sm btn-primary " ng-disabled="isDisabled" ng-click="saveBill()"> Save</button>
+            <button class="btn btn-sm btn-success"   ng-show="saving" id="loaderbtn" ng-disabled="isDisabled"><i class="fa fa-spin fa-spinner"></i> </button>
             <div class="btn-group dropup">
                 @*
                     <button type="button" class="btn btn-info btn-sm" ng-click ="saveBill()">Save and send</button>

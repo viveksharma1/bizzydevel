@@ -326,13 +326,14 @@ var myApp = angular
         });
 
         $stateProvider.state("Customer.accountHistory", {
-            url: "/accountHistory/:accountName",
+            url: "/accountHistory/:accountId/:fromDate/:toDate/:closingBalance",
             templateUrl: "Customer/accountHistory",
             controller: "accountHistoryCntrl",
             params: {
-                accountName: null,
-
-
+                accountId: null,
+                fromDate: null,
+                toDate: null,
+                closingBalance:null
             }
         });
         // new controller
@@ -355,6 +356,7 @@ var myApp = angular
             permissions: 'Float.add.Customers.Badla Voucher.active',
         });
 
+
         $stateProvider.state("Customer.GeneralInvoice", {
             url: "/GeneralInvoice/:voId",
             templateUrl: "Customer/GeneralInvoice",
@@ -365,6 +367,12 @@ var myApp = angular
                 voId: null,
             }
         });
+          $stateProvider.state("Customer.RosemateVoucher", {
+              url: "/RosemateVoucher",
+              templateUrl: "Customer/RosemateVoucher",
+              controller: "RosemateVoucherCntrl"
+
+          });
 
         $stateProvider.state("Customer.JournalEntry", {
             url: "/JournalEntry",
@@ -497,13 +505,13 @@ var myApp = angular
 
 myApp.value('config', {
 
-login: 'http://localhost:4000/',
+//login: 'http://localhost:4000/',
 
-api: 'http://localhost:4000/api/'
+//api: 'http://localhost:4000/api/'
 
 
-//login: 'http://bizzy-book-api.azurewebsites.net/',
- //api: 'http://bizzy-book-api.azurewebsites.net/api/'
+    login: 'http://bizzy-book-api.azurewebsites.net/',
+    api: 'http://bizzy-book-api.azurewebsites.net/api',
 });
 
 
@@ -723,7 +731,27 @@ myApp.run(['authService', '$location', '$rootScope', 'localStorageService','$sta
       return http;
   });
 
+  myApp.directive('onlyDigits', function () {
+      return {
+          require: 'ngModel',
+          restrict: 'A',
+          link: function (scope, element, attr, ctrl) {
+              function inputValue(val) {
+                  if (val) {
+                      var digits = val.replace(/[^0-9]/g, '');
 
+                      if (digits !== val) {
+                          ctrl.$setViewValue(digits);
+                          ctrl.$render();
+                      }
+                      return parseInt(digits,10);
+                  }
+                  return undefined;
+              }            
+              ctrl.$parsers.push(inputValue);
+          }
+      };
+  });
  
 
 //myApp.directive('uiTreeInvoice', [
@@ -999,10 +1027,10 @@ myApp.run(['$templateCache', function ($templateCache) {
     $templateCache.put('selectize/choices.tpl.html', [
       '<div ng-show="$select.open"',
       '  class="ui-select-choices group-tree selectize-dropdown single">',
-      '  <div ng-show="$select.addnew==1" class="ui-select-breadcrumbs">',
-      '    <span  class="ui-breadcrumb"',
-      '       ng-click="add($select.type);">',
-      '       + Add New  {{$select.search}}',
+      '  <div  class="ui-select-breadcrumbs cursor" tabindex="2" ng-click="add($select.type,$select.search);"ng-show="$select.addnew==1" >',
+      '    <span   class="ui-breadcrumb"',
+     
+      '       <span  ><i class="fa fa-plus fa-2x" style="color:green" aria-hidden="false"></i> {{$select.search }}</span>',
       '    </span>',
       '  </div>',
       '  <div class="ui-select-choices-content selectize-dropdown-content">',

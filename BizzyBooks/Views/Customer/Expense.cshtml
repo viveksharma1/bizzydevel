@@ -102,13 +102,13 @@
 
                 <h4 class="tabheading font_11">Supplier</h4>
                 <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
-                           ui-select-focuser
+                           ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';"
                            theme="selectize">
-                    <ui-select-match placeholder="Select Suppliers">{{ $select.selected.company}}</ui-select-match>
+                    <ui-select-match placeholder="Select Suppliers">{{ $select.selected.accountName}}</ui-select-match>
 
                     <ui-select-choices repeat="person in supliers  | filter: $select.search">
                         <div>
-                            <span ng-bind-html="person.company | highlight: $select.search"></span>
+                            <span ng-bind-html="person.accountName | highlight: $select.search"></span>
                         </div>
 
                     </ui-select-choices>
@@ -125,7 +125,7 @@
                 </div>
             </div>
 
-
+            <create-account value="myValue"> </create-account>
             <div class="col-sm-4 padding" style="padding-left:10px">
               
                 <div class="col-sm-6" style="padding-left:0px">
@@ -288,8 +288,8 @@
                         <thead>
                             <tr style="background:rgb(243, 245, 248)">
                                 <th style="padding-top:5px">
-                                    <ui-select ui-tree-select ng-model="itemAccount.selected.accountName" id="countryCode"
-                                               ui-select-focuser
+                                    <ui-select ui-tree-select ng-model="itemAccount.selected" id="countryCode"
+                                               ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';"
                                                theme="selectize">
 
                                         <ui-select-match placeholder="ACCOUNT">
@@ -300,7 +300,7 @@
                                             </span>
                                         </ui-select-match>
 
-                                        <ui-select-choices repeat="person.accountName as person in account  | filter: $select.search" refresh="refreshAccountTable($select)" refresh-delay="2">
+                                        <ui-select-choices repeat="person in account  | filter: $select.search" refresh="refreshAccountTable($select)" refresh-delay="2">
 
                                             <div>
                                                 <span ng-bind-html="person.accountName | highlight: $select.search"></span>
@@ -328,8 +328,8 @@
                         </thead>
 
                         <tbody>
-                            <tr ng-repeat="item in itemTable">
-                                <td class="Count" ng-click="editAccountTable(item,$index)">{{item.accountName}}</td>
+                            <tr ng-repeat="item in itemTable track by $index" class="cursor"  ng-click="editItemDetail(item,$index)" ng-class="{selected: $index === idSelectedVote}">
+                                <td class="Count" >{{item.accountName}}</td>
                                 <td class="Count">{{item.description}}</td>
                                 <td class="Count" style="text-align:right">{{item.amount}}</td>
                                 <td class="text-right Count" value="0.00"><a class="edit" title="Edit"> <i class="fa fa-times-circle cursor RemoveTR" style="font-size:16px" ng-click="removeItemDetail($index)"></i></a></td>
@@ -367,8 +367,8 @@
                             <thead>
                                 <tr style="background:rgb(243, 245, 248)">
                                     <th>
-                                        <ui-select ui-tree-select ng-model="accounts.selected.accountName" style="margin-top:5px;" id="countryCode"
-                                                   ui-select-focuser
+                                        <ui-select ui-tree-select ng-model="accounts.selected" on-select="applyRate($select.selected.rate)"style="margin-top:5px;" id="countryCode"
+                                                   ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';"
                                                    theme="selectize">
 
                                             <ui-select-match placeholder="ACCOUNT">
@@ -379,7 +379,7 @@
 
                                             </ui-select-match>
 
-                                            <ui-select-choices repeat="person.accountName as person in account  | filter: $select.search" refresh="refreshAccountTable($select)" refresh-delay="2">
+                                            <ui-select-choices repeat="person in account  | filter: $select.search" refresh="refreshAccountTable($select)" refresh-delay="2">
 
                                                 <div>
                                                     <span ng-bind-html="person.accountName | highlight: $select.search"></span>
@@ -399,16 +399,16 @@
                                 </tr>
                                 <tr>
                                     <th>ACCOUNT</th>
-                                    @*<th>DESCRIPTION</th>*@
+                                 
                                     <th style="width:200px; text-align:right">AMOUNT (&#8377;)</th>
                                     <th style="width:50px">&nbsp;</th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                <tr ng-repeat="item in accountTable">
-                                    <td class="Count" ng-click="editAccountTable(item,$index)">{{item.accountName}}</td>
-                                    @*<td class="Count">{{item.description}}</td>*@
+                                <tr ng-repeat="item in accountTable track by $index"  class="cursor" ng-click="editAccountTable(item,$index)" ng-class="{selected: $index === idSelectedVote}">
+                                    <td class="Count " >{{item.accountName}}</td>
+                                  
                                     <td class="Count" style="text-align:right">{{item.amount}}</td>
                                     <td class="text-right Count" value="0.00"><a class="edit" title="Edit"> <i class="fa fa-times-circle cursor RemoveTR" style="font-size:16px" ng-click="removeAccountLine($index)"></i></a></td>
                                 </tr>
@@ -440,36 +440,38 @@
                     </div>
 
 
-                    <span class="pull-right" style="width:350px">
-                        @*<label class="subtotal" style="font-size:1.5rem;">Total Tax</label>
-                    <span class="subtotalvalue" style="font-size:1.5rem; font-weight:bold"> {{taxTotal+ taxTotal |number : fractionSize}} &#8377;</span>*@
+                    <div class="pull-right" style="width:350px">
+                     
                         <label class="subtotal" style="font-size:1.5rem;">Total Amount</label>
                         <span class="subtotalvalue" style="font-size:1.5rem; font-weight:bold"> {{totaltax + totalcharges   |number : fractionSize}} &#8377;</span>
-                        <label class="subtotal padding5" style="font-size:1.5rem;">TDS Amount</label>
-                        <span class="subtotalvalue " style="font-size:1.5rem; font-weight:bold"> {{tdsamount  |number : fractionSize}} &#8377;</span>
+                      
+                    
+                      
+                            <ui-select ui-tree-select ng-model="tdsRate.selected" on-select="applyTdsRate($select.selected.rate)" id="countryCode"
+                                       ui-select-focuser
+                                       theme="selectize" style="width:220px">
 
-                        <ui-select ui-tree-select ng-model="tdsRate.selected" id="countryCode"
-                                   ui-select-focuser
-                                   theme="selectize">
+                                <ui-select-match placeholder="ACCOUNT">
+                                    <div>
+                                        <span>{{ $select.selected.accountName || $select.search }}</span>
+                                    </div>
 
-                            <ui-select-match placeholder="ACCOUNT">
-                               
-                                    <span>{{ $select.selected.accountName || $select.search }}</span>
-                                    <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
+                                </ui-select-match>
 
-                               
-                            </ui-select-match>
+                                <ui-select-choices repeat="person in account  | filter: $select.search" refresh="refreshAccountTable($select)" refresh-delay="2">
+                                    <div style="color:steelblue">
+                                        <span ng-bind-html="person.accountName | highlight: $select.search"></span>
+                                    </div>
 
-                            <ui-select-choices repeat="person in account  | filter: $select.search" refresh="refreshAccountTable($select)" refresh-delay="2">
-                                <div>
-                                    <span ng-bind-html="person.accountName | highlight: $select.search"></span>
-                                </div>
-                            </ui-select-choices>
-                        </ui-select>
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="subtotalvalue " style="font-size:1.5rem; font-weight:bold"> {{tdsamount  |number : fractionSize}} &#8377;</span>
+
+                        
 
                         <label class="subtotal  padding5" style="font-size:1.5rem;">Balance due	</label>
                         <span class="subtotalvalue" style="font-size:1.5rem; font-weight:bold"> {{netTds  |number : fractionSize}} &#8377;</span>
-                    </span>
+                    </div>
 
                 </div>
 
@@ -554,118 +556,7 @@
                     </div>
                 </div>
             </div>
-        @*Account*@
-        <div class="modal fade" id="formaccount">
-            <div class="modal-dialog">
-                <div class="modal-content content">
-                    <div class="modal-header popupheader content" style="padding:10px 20px">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h4 class="modal-title">Account</h4>
-                    </div>
-                    <div class="modal-body content" style="padding:10px 20px">
-                        <div class="col-sm-6 paddinright">
-
-                            <div class="col-sm-12 form-group padding5">
-                                <label>Account Type</label>
-                                <select class="form-control" ng-model="accountType">
-                                    <option>Tax And Duties</option>
-                                    <option>Direct Expense</option>
-                                    <option>Other Tax</option>
-
-
-                                </select>
-                            </div>
-                            <div class="col-sm-12 form-group padding5">
-                                <label><span class="red">*</span>Group</label>
-                                <select class="form-control" multiple style="height:120px; width:75%" ng-model="accountgroup">
-                                    <option>Sundry Creditor</option>
-                                    <option>Sundry Debitor</option>
-                                </select>
-                            </div>
-
-                            <div class="col-sm-12 form-group padding5" style="margin-top:10px">
-                                <div class="form-control" style="height:200px; overflow-y:scroll; background:#f4f4f4; font-size:14px">
-                                    <p><strong>Credit card</strong> accounts track the balance due on your business credit cards.</p>
-
-                                    <p>Create one <strong>Credit card</strong> account for each credit card account your business uses.</p>
-                                </div>
-                            </div>
-                        </div>
-
-
-
-                        <div class="col-sm-6">
-
-                            <div class="col-sm-12 form-group padding5">
-                                <label><span class="red">*</span>Name</label>
-                                <input ng-model="accountName" type="text" class="form-control" />
-                            </div>
-                            <div class="col-sm-12 form-group padding5">
-                                <label>Description</label>
-                                <input ng-model="description" type="text" class="form-control" />
-                            </div>
-                            <div class="col-sm-12 form-group padding5" style="margin:20px 0px;">
-                                <label><input type="checkbox" /> Is sub-account </label>
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" style="width:280px; color:#000 !important; text-align:left;">
-                                        Enter parent account
-                                        <i class="fa fa-sort pull-right" style="margin-top:3px"></i>
-                                    </button>
-
-                                    <ul class="dropdown-menu my parentaccount" style="width:310px; height:300px; overflow-y:auto">
-                                        <li class="panelSearch">
-                                            <input type="text" class="form-control" placeholder="Enter parent account" id="SearchFilter" />
-                                        </li>
-                                        <li style="margin-top:50px;"><a href="#">Cash on hold <em>Bank</em></a></li>
-                                        <li><a href="#">Inventory Asset <em>Current Assets</em></a></li>
-                                        <li><a href="#">TDS Receivable <em>Current Assets</em></a></li>
-                                        <li><a href="#">Undeposited Funds <em>Current Assets</em></a></li>
-                                        <li><a href="#">Uncategorised Asset <em>Current Assets</em></a></li>
-                                        <li><a href="#">TDS Payable <em>Current Liabilities</em></a></li>
-                                        <li><a href="#">Accounts Payable (Creditors) <em>Creditors</em></a></li>
-                                        <li><a href="#">Opening Balance Equity <em>Equity</em></a></li>
-                                        <li><a href="#">Retained Earnings <em>Equity</em></a></li>
-                                        <li><a href="#">Billable Expense Income <em>Income</em></a></li>
-                                        <li><a href="#">Discounts given <em>Income</em></a></li>
-                                        <li><a href="#">Sales of Product Income <em>Income</em></a></li>
-                                        <li><a href="#">Services <em>Income</em></a></li>
-                                        <li><a href="#">Uncategorised Income <em>Income</em></a></li>
-                                        <li><a href="#">Cost of sales <em>Cost of Goods Sold</em></a></li>
-                                        <li><a href="#">Inventory Shrinkage <em>Cost of Goods Sold</em></a></li>
-                                        <li><a href="#">Purchases <em>Expenses</em></a></li>
-                                        <li><a href="#">Unapplied Cash Bill Payment Expense <em>Expenses</em></a></li>
-                                        <li><a href="#">Uncategorised Expense <em>Expenses</em></a></li>
-                                        <li><a href="#">Other Expense <em>Other Expenses</em></a></li>
-                                    </ul>
-
-                                </div>
-                            </div>
-
-                            <div class="col-sm-4 form-group padding5">
-                                <label>Balance</label>
-                                <input ng-model="balance" type="text" class="form-control" />
-                            </div>
-
-                            <div class="col-sm-4 form-group padding5">
-                                <label>as of</label>
-                                <input type="text" class="form-control" id="asofdate" placeholder="dd/mm/yyy" />
-                            </div>
-
-                        </div>
-
-
-
-                    </div>
-                    <div class="modal-footer content">
-                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" ng-click="createAccount()">Save changes</button>
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div>
-
+    
 
 
         <div class="flexfooter">

@@ -41,7 +41,7 @@
     <div class="content">
 
         
-        <div class="panel lightblue bluebrdr marginbottom">
+        <div class="panel lightblue  marginbottom">
             <div class="panel-heading">
                 <strong class="heading"> </strong>
 
@@ -57,15 +57,16 @@
                 </div>
 
             </div>
-
+            <create-account value="myValue"> </create-account>
             <div class="pulltab" id="menuUp" ng-click="menuUp();"><i class="fa fa-chevron-up"></i> </div>
 
             <div class="panel-body statusBody"  style="margin-top:10px">
-                <div class="col-sm-3 cursor padding">
+                <div class="col-sm-3 cursor padding  ">
 
-                    <div class="col-sm-12 estimate" ng-click="SuppliersTablebtn()" style="background:#e91e63">
+                    <div class="col-sm-12  card " ng-click="SuppliersTablebtn()" style="background:white">
+                        <i style="color:blue"class="fa fa-cog pull-right " aria-hidden="true"></i>
                        
-                        <p class="text-uppercase marginbottom status fa-address-book"><span style="font-size: 200%; color: #1E294B; "> <b>{{suppliersCount.count}}</b></span> suppliers</p>
+                        <p class="text-uppercase marginbottom status "><span style="font-size: 200%; color: #486C8F; "> <b>{{suppliersCount}}</b></span> <b>  Suppliers </b></p>
                     </div>
                    
                 </div>
@@ -73,29 +74,29 @@
 
                 <div class="col-sm-3 cursor padding">
 
-                    <div class="col-sm-12 estimate"  ng-click="EnquiryTablebtn('OPEN')"style="background:#486C8F" >
+                    <div class="col-sm-12 card"  ng-click="EnquiryTablebtn('OPEN')"style="background:white" >
                        
-                        <p class="text-uppercase marginbottom status"><span style="font-size: 200%; color: white; "><b>{{enquiryCount.count}} </b> </span> Enquiry</p>
+                        <p class="text-uppercase marginbottom status"><span style="font-size: 200%; color: white; "><b>{{enquiryCount.count}} </b> </span> <b> Enquiry </b> Enquiry </p>
                     </div>
 
                 </div>
                 <div class="col-sm-3 cursor padding">
 
-                    <div class="col-sm-12 estimate blue padding" ng-click="PurchaseOrderTable('OPEN')">
-                        <div class="col-sm-12" style="padding:10px">
-                            <p class="text-uppercase marginbottom status"><span  style="font-size: 200%; color: yellowgreen; "> <b>{{purchaseCount.count}}</b></span> Purchase Order</p>
+                  
+                        <div class="col-sm-12 card "  ng-click="PurchaseOrderTable('OPEN')">
+                            <p class="text-uppercase marginbottom status"><span  style="font-size: 200%; color: white; "> <b>{{purchaseCount.count}}</b></span> <b> Purchase Order </b></p>
                         </div>
-                    </div>
+                    
                 </div>
                 <div class="col-sm-3 cursor padding">
 
-                    <div class="col-sm-12 estimate bg-yellow padding" ng-click="OpenBillTable('OPEN')">
-                        <div class="col-sm-12" style="padding:10px">
+                   
+                        <div class="col-sm-12 card" ng-click="OpenBillTable('OPEN')">
                             
-                            <p class="text-uppercase marginbottom status"><span  style="font-size: 200%; color: #2D2D65; "><b>{{billCount.count}}</b></span> OPEN BILL</p>
+                            <p class="text-uppercase marginbottom status"><span  style="font-size: 200%; color: #18596A; "><b>{{billCount.count}}</b></span> <b> Purchase Invoice </b> </p>
                         </div>
                       
-                    </div>
+                   
                 </div>
 
                
@@ -142,8 +143,8 @@
                 <div>
                     <input class="pull-right reportSearch" type="search" placeholder="search" name="lastname" ng-model="search" style="width:200px;height:30px;color:rebeccapurple; margin:10px 0px">
                 </div>
-                <table  class="table table-striped table-bordered  table-hover" cellspacing="0" width="100%" >
-                    <thead style="background:#75757A; color:white; text-transform:uppercase">
+                <table  class="table table-striped table-bordered  fixed-header table-hover" cellspacing="0" width="100%" >
+                    <thead style="background:#e3e3e3; color:black; text-transform:uppercase">
                         <tr>
                             <th style="padding-left:30px; width:15px"></th>
                             <th class="fontnormal">Company Name </th>
@@ -159,10 +160,10 @@
                     <tbody>
                         <tr ng-repeat="data in InventoryList |filter:search">
                             <td style="padding-left:15px; width:15px"><input type="checkbox" class="checkboxcss" /></td>
-                            <td><a href="#/Customer/Supplierdetail{{data.supCode}}" style="color:#000">{{data.company}}<br /></a></td>
+                            <td><a href="#/Customer/Supplierdetail{{data.supCode}}" style="color:#000">{{data.accountName}}<br /></a></td>
                             <td>{{data.email}}</td>
                             <td>{{data.mobile}}</td>
-                            <td>{{data.paymentInfo[0].openingBalance}}</td>
+                            <td>{{data.openingBalance}}</td>
 
 
                             <td style="text-align:right; width:150px">

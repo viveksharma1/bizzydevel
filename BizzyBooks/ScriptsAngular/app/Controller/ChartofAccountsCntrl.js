@@ -3,6 +3,9 @@
     $(".my a").click(function (e) {
         e.preventDefault();
     });
+    $.fn.datepicker.defaults.format = "dd/mm/yyyy";
+    $('#fromDate').datepicker();
+    $('#toDate').datepicker();
     $scope.Accountbtn = function (id) {
 
         console.log(id);
@@ -58,7 +61,7 @@
         $(this).find('.btn').toggleClass('btn-default');
 
     });
-    $http.get(config.login + "chartOfAccount").then(function (response) {
+    $http.get(config.login + "chartOfAccount/" + localStorage.CompanyId).then(function (response) {
         $scope.account = response.data;
         console.log($scope.account);
     });
@@ -243,7 +246,26 @@
     //        });
     //    }
     //}
+    $scope.dateFormat = function (date) {
+        var res = date.split("/");
+        console.log(res);
+        var month = res[1];
+        var days = res[0]
+        var year = res[2]
+        var date = month + '/' + days + '/' + year;
+        return date;
+    }
 
+    $scope.searchAccount = function () {
+        var toDate = $scope.dateFormat($scope.toDate)
+        var fromDate = $scope.dateFormat($scope.fromDate)
+        $http.get(config.login + "dateWiseAccountDetail/" + localStorage.CompanyId + "?date=" + toDate).then(function (response) {
+            $scope.account = response.data;
+            console.log($scope.account);
+        });
+
+
+    }
         
 
 

@@ -106,19 +106,19 @@
     $scope.getVoucherCount = function () {
         $http.get(config.api + "voucherTransactions/count" + "?[whrer][type]=Payment").then(function (response) {
             $scope.paymentNo = response.data.count
-            console.log(response);
+           
         });
     }
     $scope.getSupplier = function () {
-        $http.get(config.api + "suppliers").then(function (response) {
+        $http.get(config.login + "getSupplierAccount/" + localStorage.CompanyId).then(function (response) {
             $scope.partyAccounts = response.data
-            console.log($scope.partyAccounts);
+            
         });
     }
     $scope.getAccount = function () {
-        $http.get(config.login + "getPaymentAccount").then(function (response) {
+        $http.get(config.login + "getPaymentAccount/" + localStorage.CompanyId).then(function (response) {
             $scope.bankAccounts = response.data
-            console.log($scope.bankAccounts);
+            
         });
     }
     $scope.paymentData = [];
@@ -147,12 +147,19 @@
        
     }
    
-    $scope.getAllBill = function (name,fields) {
-        $http.get(config.api + "transactions" + "?[filter][where][supliersName]=" + name + fields).then(function (response) {
-            $scope.transaction = response.data         
-            console.log($scope.transaction);
-          
-            $scope.createPaymentData(localStorage['usertype']);
+    $scope.getAllBill = function (supliersId, fields) {
+       
+        $http.get(config.api + "transactions" + "?[filter][where][supliersId]=" + supliersId + fields).then(function (response) {
+            if (response.data[0]) {
+                $scope.paymentData = [];
+                console.log(response);
+                angular.copy(response.data, $scope.transaction);              
+                $scope.createPaymentData(localStorage['usertype']);
+            }
+            else {
+                $scope.paymentData = [];
+                showSuccessToast("No Open Invoice");
+            }
         });
     }
     
@@ -211,8 +218,8 @@
             state: "PAID",
             remark: $scope.paymentRemarks,
             vo_payment: {
-                bankAccount: $scope.bankAccount.selected.accountName,
-                partyAccount: $scope.partyAccount.selected.company,
+                bankAccountId: $scope.bankAccount.selected.id,
+                partyAccountId: $scope.partyAccount.selected.id,
                 paymentAmount: $scope.totalPaidAmount,
                 currency: $scope.currency,
                 exchangeRate: $scope.exchangeRate,
@@ -245,40 +252,38 @@
                         $scope.transaction = response.data.vo_payment.billDetail;
                         $scope.paymentData = $scope.transaction;
                         $scope.totalPaidAmount = response.data.amount
-                        $scope.paymentNo = response.data.vochNo                    
-                        $scope.bankAccount = { selected: { accountName: response.data.vo_payment.bankAccount } };
-                        console.log(response.data.vo_payment.bankAccount);
-                        $scope.partyAccount = { selected: { company: response.data.vo_payment.partyAccount } };
+                        $scope.paymentNo = response.data.vochNo
+                        $scope.bankAccount = { selected: { accountName: localStorage[response.data.vo_payment.bankAccountId], id: response.data.vo_payment.bankAccountId } };
+                        $scope.partyAccount = { selected: { accountName: localStorage[response.data.vo_payment.partyAccount], id: response.data.vo_payment.partyAccount } };
+                       
+                       
+                       
                         $scope.paymentdate = $filter('date')(response.data.date, 'dd/MM/yyyy');
                        
                     });
     }
 
     if ($stateParams.voId) {        
-            $scope.getPaymentdata($stateParams.voId);
-        
+            $scope.getPaymentdata($stateParams.voId);   
         if (!$scope.billDetail) {
-
             // $('#Outstandingdiv').hide();
-
         }
     }
-    else {
-        $scope.$watch('partyAccount.selected', function () {
-            if ($scope.partyAccount.selected.company) {
-                if (localStorage['usertype'] == '2') {
-                    var fields = '&filter[fields][adminAmount]=false&filter[fields][adminBalance]=false&[filter][where][balance][gt]=0'
-                    $scope.getAllBill($scope.partyAccount.selected.company, fields);
-                }
-                else {
-                    var fields = '&filter[fields][amount]=false&filter[fields][balance]=false&[filter][where][adminBalance][gt]=0'
-                    $scope.getAllBill($scope.partyAccount.selected.company,fields);
 
-                }
+    "get open invoice"
+    $scope.getOpenInvoice = function() {      
+            if (localStorage['usertype'] == '2') {
+                var fields = '&filter[fields][adminAmount]=false&filter[fields][adminBalance]=false&[filter][where][balance][gt]=0'
+                $scope.getAllBill($scope.partyAccount.selected.id, fields);
             }
+            else {
+                var fields = '&filter[fields][amount]=false&filter[fields][balance]=false&[filter][where][adminBalance][gt]=0'
+                $scope.getAllBill($scope.partyAccount.selected.id, fields);
+            }
+       
 
-        });
     }
+   
     
 
    
