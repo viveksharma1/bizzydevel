@@ -308,11 +308,14 @@ var myApp = angular
           });
 
           $stateProvider.state("Customer.accountHistory", {
-              url: "/accountHistory/:accountId",
+              url: "/accountHistory/:accountId/:fromDate/:toDate/:closingBalance",
               templateUrl: "Customer/accountHistory",
               controller: "accountHistoryCntrl",
               params: {
                   accountId: null,
+                  fromDate: null,
+                  toDate: null,
+                  closingBalance:null
                   
 
               }
@@ -460,7 +463,6 @@ api: 'http://localhost:4000/api/'
 
 
 //login: 'http://bizzy-book-api.azurewebsites.net/',
- //api: 'http://bizzy-book-api.azurewebsites.net/api/'
 });
 
 

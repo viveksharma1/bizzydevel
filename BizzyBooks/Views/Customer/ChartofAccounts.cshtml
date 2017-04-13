@@ -4,32 +4,50 @@
     Layout = null;
 }
 <div class="panel lightblue bluebrdr marginbottom">
-    <div class="panel-heading">
-        <strong class="heading">Chart of Accounts</strong>
-        <div class="pull-right">
-            <button class="btn btn-sm btn-default" type="button">Run Report</button>
-            <div class="btn-group">
-                <button type="button" class="btn btn-primary btn-sm" ng-click="Accountbtn()"id="NewCustomerCreate"> New</button>
-                <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a href="#/Customer/Import">Import Customers</a></li>
-
-                </ul>
+    <div class="panel-heading" style="height:84px">
+        <strong class="heading" style="margin-top: 15px; float: left;">Chart of Accounts</strong>
+ 
+           
+        @*<div class="pull-right col-sm-4" style="padding:0px">
+            <div class="col-sm-6 padding">
+                <h4 class="tabheading">From</h4>
+                <div class='input-group date' id="fromDate">
+                    <input type='text' class="form-control " ng-model="fromDate" id="fromDate" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
             </div>
-            <create-account value="myValue" > </create-account>
-        </div>
+
+            <div class="col-sm-6 padding ">
+                <h4 class="tabheading">To</h4>
+                <div class='input-group date' id="toDate">
+                    <input type='text' class="form-control " ng-model="toDate" id="toDate" />
+                    <span class="input-group-addon">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                    </span>
+                    
+                </div>
+                
+            </div>
+            <div class="col-sm-2 padding pull-left ">
+                <button ng-click="searchAccount()"><i class="fa fa-search" aria-hidden="true"></i></button>
+
+                </div>
+
+            </div>*@
+         
+           
+   
         </div>
     </div>
 <div class="col-sm-12" style="padding:10px">
     <input type="text" class="form-control" placeholder="Filter by name" ng-model="search"  style="width:250px; float:left"/>
     <div class="pull-right" style="margin-top:5px">
-        <i class="fa fa-pencil tableicon" title="Batch Edit"></i>
-        <i class="fa fa-print tableicon" title="Print List"></i>
-        <i class="fa fa-gear tableicon" title="Settings"></i>
+        <i class="fa fa-plus fa-2x cursor"ng-click="Accountbtn()"id="NewCustomerCreate" title="Create Account"></i>
+       
     </div>
-
+    <create-account value="myValue"> </create-account>
     <table class="table-bordered table-condensed table-hover " style="margin-top:10px; width:100%; float:left;table-layout:fixed">
         <thead>
             <tr>
@@ -48,7 +66,7 @@
                 <td style="text-align:right">{{data.credit- data.debit |number : fractionSize}}</td>
              
                 <td style="text-align:right; width:150px">
-                    <button type="button" class="editbtn"><a ui-sref="Customer.accountHistory({accountId:data.id})" style="font-weight:bold">Account History</a></button>
+                    <button type="button" class="editbtn"><a ui-sref="Customer.accountHistory({accountId:data.id,fromDate:fromDate,toDate:toDate,closingBalance:data.openingBalance})" style="font-weight:bold">Account History</a></button>
                     <class class="linkseparator" style="margin-top:4px; margin-right:0px"></class>
                     <div class="btn-group editcaret">
                         <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>

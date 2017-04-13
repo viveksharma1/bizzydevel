@@ -8340,7 +8340,7 @@ main {
 .topmenu{margin:0 auto; width:110px; background:#337ab7; position:fixed; top:0px; left:49.5%}
 .topmenu li{display:block; float:left; width:55px; text-align:center;  color:#fff; height:37px; padding-top:4px; border-right:1px solid #116fa0; margin:0px; font-weight:normal; font-size:20px}
 .topmenu li:last-child{border-right:none;}
-#flyout{position:absolute; width:70%; left:15%; padding-top:7px; z-index:10;}
+#flyout{position:absolute; width:70%; left:9.6%; padding-top:7px; z-index:10;}
 .arrow-up {
   width: 0; 
   height: 0; 
@@ -8375,9 +8375,9 @@ main {
 .flyoutdiv ul {float:left; width:90%;}
 .flyoutdiv ul li a{color:#000; text-decoration:none; float:left; width:100%; font-family:din; padding:5px; font-size:14px;}
 .flyoutdiv ul li a:hover{background:#337ab7; color:#fff;}
-#flyoutCompany{width: 42%; right: 10px; position: absolute; z-index: 20; padding-top:7px;}
+#flyoutCompany{width: 33%;right: 154px; position: absolute; z-index: 20; padding-top:7px;}
 #flyoutChange{width: 20%; right: 10px; position: absolute; z-index: 20; padding-top:7px;}
-#flyoutDate{width: 30%; right: 10px; position: absolute; z-index: 20; padding-top:7px;}
+#flyoutDate{width: 25%; right: 157px; position: absolute; z-index: 20; padding-top:7px;}
 .logout {
     border-bottom: 0 none;
     padding-top: 20px; float:left
@@ -8984,6 +8984,7 @@ main {
  tr.selected {
     background-color: #ddd
 }
+
 #AddLineItemModal .modal-dialog{width:90%}
 .tablepadding2{padding:0px 5px !important;}
 .tableborderNone{border:none !important; padding:1px !important}

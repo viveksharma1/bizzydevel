@@ -209,8 +209,10 @@ myApp.controller('LoginCntrl', ['$state', '$http', '$rootScope', '$scope', 'conf
 
         }
     }
+    $scope.idSelectedVote = null;
+    $scope.BindCompanyName = function (CompanyName, CompanyId, VAT_TIN_NO, CST_TIN_NO,index) {
 
-    $scope.BindCompanyName = function (CompanyName, CompanyId,VAT_TIN_NO, CST_TIN_NO) {
+        $scope.idSelectedVote = index;
         $scope.DefaultCompanyName = CompanyName;
         localStorage.DefaultCompanyName = CompanyName;
         localStorage.CompanyId = CompanyId;
@@ -237,6 +239,13 @@ myApp.controller('LoginCntrl', ['$state', '$http', '$rootScope', '$scope', 'conf
 
     }
     $scope.usertype = localStorage['usertype'];
+    $scope.namechange = function () {
+        $('#namechangeModal').modal('show');
+    }
+
+    $scope.AddCompnay = function () {
+        $('#AddCompnayModal').modal('show');
+    }
 }]);
 
 

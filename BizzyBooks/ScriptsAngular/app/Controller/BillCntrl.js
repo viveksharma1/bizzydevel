@@ -276,7 +276,8 @@
         for (var i = 0; i < $scope.accountTable.length; i++) {
             amount += Number($scope.accountTable[i].amount);          
         }
-        $scope.totalAccountAmount = Number(amount);      
+        $scope.totalAccountAmount = Number(amount);
+       return  $scope.totalAccountAmount
     }
 
     $scope.excelTableItemSum = function () {
@@ -308,6 +309,7 @@
         $scope.totalAmountINR = Number(totalAmountINR);
         $scope.manualTotal = Number(manualTotal);
         $scope.netweight = Number(netweight);
+        return $scope.totalAmountINR;
     }
     //total sum
 
@@ -373,9 +375,8 @@
 
     $scope.applyRate = function (rate) {
         if (rate) {
-            $scope.accountAmount = null;
-            $scope.accountAmount = (Number($scope.totalAmountINR) * Number(rate) / 100).toFixed(2);
-           
+            $scope.accountAmount = null;                     
+           $scope.accountAmount = ($scope.accountTableSum() + $scope.manualTableSum() * Number(rate) / 100).toFixed(2);       
         }
         else
             $scope.accountAmount = '';
@@ -672,8 +673,10 @@
           var date = month + '/' + days + '/' + year;
           return date;
       }
+      $scope.saving = false;
       $scope.saveBill = function (index) {   
-        
+          
+          $scope.saving = true;
           var date = $scope.dateFormat($scope.billDate);
           var billDueDate = $scope.dateFormat($scope.billDueDate);
           var actualDate = $scope.dateFormat($scope.actualDate);
@@ -745,6 +748,7 @@
 
         $http.post(config.login + "saveBill", data).then(function (response) {
             showSuccessToast("Bill Save Succesfully");
+            $scope.saving = false;
         });
         /*
                         var data = {
@@ -1381,13 +1385,13 @@
 
             }
             if (type == "DESCRIPTION") {       
-                    $scope.DESCRIPTION.push({ name: $scope.description.selected.name});
+                   
                  
                
             }
             if (type == "RRMARKS") {
-                $scope.RRMARKS.push({ name: $scope.remarks.selected.name });
-            }
+                
+            } Period
             console.log(userInputItem.name)
 
 

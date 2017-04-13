@@ -6,35 +6,18 @@
     $scope.Accountbtn = function () {
         $('#formaccount').modal('show');
     };
-    $scope.currentDate = moment().format();
-    $scope.accountId = $stateParams.accountId;
-    $scope.accountName = localStorage[$stateParams.accountId]
-    console.log($scope.accountName);
-    $http.get(config.api + "accounts/" + $stateParams.accountId + "?[filter][where][compCode]=" + localStorage.CompanyId).then(function (response) {
 
+    $http.get(config.api + "accounts/" + $stateParams.accountId + "?[filter][where][compCode]=" + localStorage.CompanyId).then(function (response) {
         $scope.accountData = response.data;
         console.log($scope.accountData);
-
-
     })
-    if (localStorage["userrole"] == '3') {
-        var query = "&filter[where][isUo]=" + true + "&filter[where][visible]=" + true
-    }
-    if (localStorage["userrole"] == '2') {
-        var query = "&filter[where][isUo]=" + false
-    }
-    $http.get(config.api + "ledgers/" + "?filter[where][accountName]="+$stateParams.accountId + query).then(function (response) {
-
-
-        $scope.ledgerData = response.data;
+    function bindAccountName(data) {
+        $scope.ledgerData = data;
         var credit = 0;
         var debit = 0;
         for (var i = 0; i < $scope.ledgerData.length; i++) {
-
             $scope.ledgerData[i].accountName = localStorage[$scope.ledgerData[i].accountName]
             $scope.ledgerData[i].particulars = localStorage[$scope.ledgerData[i].particular]
-
-
             if ($scope.ledgerData[i].credit) {
                 credit += Number($scope.ledgerData[i].credit);
             }
@@ -48,25 +31,102 @@
         if (!debit) {
             $scope.debit = '';
         }
-        $scope.credit = credit
-        $scope.debit = debit
+        $scope.credit = Math.abs(credit.toFixed(2))
+        $scope.debit = Math.abs(debit.toFixed(2))
         console.log($scope.credit);
         console.log($scope.debit);
-        if ($scope.accountData.openingBalance > 0) {
-            $scope.creditOpening = $scope.accountData.openingBalance
+       
+    }
+    function getAllCompcode() {
+        var companydata = JSON.parse(localStorage.comobj)
+        var compcode = [] 
+        for (var i = 0; i < companydata.length; i++) {
+            compcode.push(companydata[i].CompanyId)
         }
-        if ($scope.accountData.openingBalance < 0) {
-            $scope.debitOpening = $scope.accountData.openingBalance
+        $scope.compcode = compcode
+    }
+    function getLedgerData() {
+        if (localStorage["userrole"] == '3') {
+            var query = "&filter[where][isUo]=" + true + "&filter[where][visible]=" + true
         }
-        if ($scope.accountData.balanceType == 'credit') {
-            $scope.ledgerBalance = $scope.credit - $scope.debit
+        if (localStorage["userrole"] == '2') {
+            var query = "&filter[where][isUo]=" + false
         }
-        if ($scope.accountData.balanceType == 'debit') {
-            $scope.ledgerBalance = $scope.debit - $scope.credit
-        }
-    });
+        $http.get(config.api + "ledgers/" + "?filter[where][accountName]=" + $stateParams.accountId + query + "&filter[where][compCode]=" + localStorage.CompanyId).then(function (response) {
 
-    //pdf
+
+            $scope.ledgerData = response.data;
+            var credit = 0;
+            var debit = 0;
+            for (var i = 0; i < $scope.ledgerData.length; i++) {
+
+                $scope.ledgerData[i].accountName = localStorage[$scope.ledgerData[i].accountName]
+                $scope.ledgerData[i].particulars = localStorage[$scope.ledgerData[i].particular]
+
+
+                if ($scope.ledgerData[i].credit) {
+                    credit += Number($scope.ledgerData[i].credit);
+                }
+                if ($scope.ledgerData[i].debit) {
+                    debit += Number($scope.ledgerData[i].debit);
+                }
+            }
+            if (!credit) {
+                $scope.credit = '';
+            }
+            if (!debit) {
+                $scope.debit = '';
+            }
+            $scope.credit = credit.toFixed(2)
+            $scope.debit = debit.toFixed(2)
+            
+        });
+    }
+    getAllCompcode();
+    $scope.dateFormat = function (date) {
+        var res = date.split("/");
+        console.log(res);
+        var month = res[1];
+        var days = res[0]
+        var year = res[2]
+        var date = month + '/' + days + '/' + year;
+        return date;
+    }
+    if ($stateParams.fromDate) {
+
+        $scope.closingBalance = Math.abs($stateParams.closingBalance)
+        console.log($scope.closingBalance);
+        var toDate = $scope.dateFormat($stateParams.toDate)
+        var fromDate = $scope.dateFormat($stateParams.fromDate)
+        $http.get(config.login + "getOpeningBalnce/" + $stateParams.accountId + "?compCode=" + localStorage.CompanyId + "&date=" + fromDate + "&todate=" + toDate).then(function (response) {
+            console.log(response)
+            $scope.openingBalance = Math.abs(response.data.openingBalance)
+            console.log($scope.openingBalance)
+                bindAccountName(response.data.ledgerData)
+                
+           
+        });
+    }
+    else {
+        getLedgerData();
+       
+    }
+    $scope.getAllCompanyLedger = function () {
+        $http.get(config.api + "ledgers/" + "?filter[where][accountName]=" + $stateParams.accountId).then(function (response) {
+            bindAccountName(response.data)
+
+            console.log($scope.compName)
+        });
+
+    }
+    $scope.currentDate = moment().format();
+    $scope.accountId = $stateParams.accountId;
+    $scope.accountName = localStorage[$stateParams.accountId]
+    console.log($scope.accountName);
+   
+
+ 
+    
 
     $scope.generatePDF = function () {
 
@@ -146,5 +206,7 @@
         return localStorage[id];
     }
 
+
+   
 
 }]);

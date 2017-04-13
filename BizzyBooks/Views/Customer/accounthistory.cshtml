@@ -13,7 +13,7 @@
         <label>Edit :</label>
         <div class="btn-group btnhover">
             <button type="button" class="btn btn-xs btn-default active" ng-click="LedgercheckOff()">Off</button>
-            <button type="button" class="btn btn-xs  btn-default" ng-click="LedgercheckOn()">On</button>
+            <button type="button" class="btn btn-xs  btn-default" ng-click="getAllCompanyLedger()">On</button>
 
         </div>
         <button type="button" class="btn btn-xs  btn-success" id="HideLedger">Hide</button>
@@ -93,7 +93,7 @@
                     <tfoot style="background:#f4f4f4">
                         <tr style="border-top:1px solid #ccc;">
                             <th style="padding:5px; text-align:right; font-weight:normal" colspan="4">Opening Balance</th>
-                            <th style="text-align:right;  padding:5px">{{debitOpening}}</th>
+                            <th style="text-align:right;  padding:5px">{{openingBalance}}</th>
                             <th style="text-align:right;  padding:5px">{{creditOpening}}</th>
 
                         </tr>
@@ -106,7 +106,7 @@
                         <tr style="border-top:1px solid #ccc">
                             <th style="padding:5px; text-align:right" colspan="4">Closing Balance</th>
                             <th style="text-align:right;  padding:5px">&nbsp;</th>
-                            <th style="text-align:right;  padding:5px">{{ledgerBalance + accountData.openingBalance |number : fractionSize}}</th>
+                            <th style="text-align:right;  padding:5px">{{closingBalance |number : fractionSize}}</th>
 
                         </tr>
                     </tfoot>

@@ -86,7 +86,7 @@
                 console.log($scope.checkboxModel.value1);
                 if ($scope.isAccount) {
                     var accountData = {
-                        compCode: localStorage.CompanyId,
+                        compCode: [localStorage.CompanyId],
                         accountName: $scope.accountName.toUpperCase(),
                         Under: $scope.groupMasters.selected.name,
                         type: $scope.groupMasters.selected.type,
@@ -100,21 +100,43 @@
                         balanceType: $scope.balanceType
 
                     }
-
-                    $http.post(config.login + "createAccount?id=" + $scope.accountId, accountData).then(function (response) {
-                        showSuccessToast("Account Created Succesfully");
-                        $http.get(config.login + "getAccountNameById").then(function (response) {
-                            $scope.accountData = response.data
-                            for (var i = 0; i < $scope.accountData.length; i++) {
-                                localStorage[$scope.accountData[i]._id] = $scope.accountData[i].accountName
-                            }
-                        });
-
-                        $http.get(config.login + "chartOfAccount").then(function (response) {
-                            $scope.account = response.data;
+                    $http.get(config.api + "accounts?filter[where][accountName]=" + $scope.accountName.toUpperCase()).then(function (response) {
+                        console.log(response)
+                        if (response.data) {
+                            $scope.accId = response.data[0].id;
                            
-                        });
+                            $('#accountAlert').modal('show');
+                        }
+                        else {
+                            $scope.accountCreations();
+                        }
                     });
+                    $scope.updateExistingAccount = function () {
+                        var accountData = {
+                            compCode: localStorage.CompanyId,
+                        }
+                        $http.post(config.login + "updateAccount/" + $scope.accId, accountData).then(function (response) {
+                        });
+
+                    }
+                    $scope.accountCreations = function () {
+
+                        $http.post(config.login + "createAccount?id=" + $scope.accountId, accountData).then(function (response) {
+                            showSuccessToast("Account Created Succesfully");
+                            $http.get(config.login + "getAccountNameById").then(function (response) {
+                                $scope.accountData = response.data
+                                for (var i = 0; i < $scope.accountData.length; i++) {
+                                    localStorage[$scope.accountData[i]._id] = $scope.accountData[i].accountName
+                                }
+                            });
+
+                            $http.get(config.login + "chartOfAccount/" + localStorage.CompanyId).then(function (response) {
+                                $scope.account = response.data;
+
+                            });
+                        });
+                    }
+                   
 
                 }
                 if ($scope.isGroup) {
