@@ -16,11 +16,13 @@
         popupWinindow.document.write(strScript);
         popupWinindow.document.close(); // necessary for IE >= 10
     }
+    
     function getInvoiceData(id) {
         $http.get(config.api + 'voucherTransactions/' + id)
                   .then(function (response) {
                       $scope.invoiceData = response.data;
-                      getSupplierDetail(response.data.invoiceData.customerAccount);
+                      fillCompanyInfo(response.data.compCode);
+                      getSupplierDetail(response.data.invoiceData.customerAccount, response.data.compCode);
                       $scope.gTotal=$scope.invoiceData.amount;
                       $scope.roundOff = $scope.invoiceData.roundOff;
                   });
@@ -28,13 +30,15 @@
     if ($stateParams.voId) {
         getInvoiceData($stateParams.voId);
     }
-    $http.get(config.api + "CompanyMasters/?filter[where][CompanyId]=" + localStorage.CompanyId).then(function (response) {
-        $scope.company = response.data[0];
+    function fillCompanyInfo(companyId) {
+        $http.get(config.api + "CompanyMasters/?filter[where][CompanyId]=" + companyId).then(function (response) {
+            $scope.company = response.data[0];
 
-    });
+        });
+    }
 
-    function getSupplierDetail(supplierName) {
-        $http.get(config.api + "suppliers" + "?filter[where][compCode]=" + localStorage.CompanyId + "&filter[where][company]=" + supplierName).then(function (response) {
+    function getSupplierDetail(supplierName,companyId) {
+        $http.get(config.api + "suppliers" + "?filter[where][compCode]=" + companyId + "&filter[where][company]=" + supplierName).then(function (response) {
             $scope.supliersDetail = response.data[0];
             console.log(response.data)
         });
