@@ -1,0 +1,103 @@
+{
+  "permission":{
+    "default":"Home",
+    "State":"false",
+    "User":{
+      "active":"false"
+    },
+    "Home":{
+      "active":"true"
+    },
+    "Customers":{
+      "active":"true",
+      "new":true,
+      "import":true
+    },
+    "Suppliers":{
+      "active":"true",
+      "new":true,
+      "import":true
+    },
+    "Transaction":{
+      "active":"true",
+      "Banking":{
+        "active":"true"
+      },
+      "Forex Gain/Loss":{
+        "active":"false"
+      },
+      "Chart Of Accounts":{
+        "active":"true"
+      },
+      "Voucher":{
+        "active":"true"
+      },
+      "Settlement":{
+        "active":"true"
+      },
+      "ActivityLog":{
+        "active":"true"
+      }
+    },
+    "Inventory":{
+      "active":"true",
+      "Balance Stock":{
+        "active":"true"
+      },
+      "Balance Stock Line":{
+        "active":"true"
+      }
+    },
+    "Float":{
+      "active":"true",
+      "search":{
+        "active":true
+      },
+      "add":{
+        "active":true,
+        "Customers":{
+          "active":true,
+          "Invoice":{
+            "active":true
+          },
+          "Receive Payment":{
+            "active":true
+          },
+          "Journal Entry":{
+            "active":true
+          },
+          "Tax Invoice":{
+            "active":true
+          },
+          "Sales Invoice":{
+            "active":true
+          },
+          "General Invoice":{
+            "active":true
+          },
+          "Badla Voucher":{
+            "active":true
+          }
+        },
+        "Suppliers":{
+          "active":true,
+          "Enquiry":{
+            "active":true
+          },
+          "Purchase Order":{
+            "active":true
+          },
+          "Purchase Invoice":{
+            "active":true
+          },
+          "Payment":{
+            "active":true
+          },
+          "Add Expense":{
+            "active":true
+          }
+        }
+      }
+    }
+  }
+}

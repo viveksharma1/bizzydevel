@@ -883,7 +883,7 @@
         var data = {
             compCode: localStorage.CompanyId,
             type: "Sales Invoice",
-            role: localStorage['usertype'],
+            role: localStorage.usertype,
             date: dateFormat($scope.billDate),
             duedate: dateFormat($scope.billDueDate),
             amount: $scope.gTotal,

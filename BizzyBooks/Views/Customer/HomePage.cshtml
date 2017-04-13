@@ -18,7 +18,7 @@
                 <h3 style="font-size:20px">Company List  </h3>
                 <hr />
                 <ul class="list-unstyled my changeUi fa-change " ng-repeat="list in CompanyList" >
-                    <li><a ng-click="BindCompanyName(list.CompanyName,list.CompanyId,list.VAT_TIN_NO,list.CST_TIN_NO)">{{list.CompanyName}}</a></li>
+                    <li><a ng-click="changeCompany(list)">{{list.CompanyName}}</a></li>
                    
                 </ul>
                 

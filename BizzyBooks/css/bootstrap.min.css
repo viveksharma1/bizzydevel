@@ -8891,7 +8891,9 @@ main {
     white-space: nowrap;
     height:19px;
     overflow: hidden !important;
-    width: 96% !important;}
+    /*width: 96% !important;*/
+
+}
 
 .highlighted{
     background:aliceblue !important;

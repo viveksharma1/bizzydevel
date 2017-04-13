@@ -1,135 +1,76 @@
 ﻿
 var RoleCheck = "";
-myApp.controller('LoginCntrl', ['$state', '$http', '$rootScope', '$scope', 'config', 'UserService', function ($state, $http, $scope, $rootScope, config, UserService) {
-    // showoverlay();
-
-    
-    if ($scope.CompanyList == undefined)
-    {
-        if (localStorage.comobj != undefined)
-        {
-            $scope.CompanyList = JSON.parse(localStorage.comobj)
-
-            console.log($scope.CompanyList)
-            $scope.DefaultCompanyName = localStorage.DefaultCompanyName;
-        }
-       
+myApp.controller('LoginCntrl', ['$state', '$http', '$rootScope', '$scope', 'config', 'UserService','authService', 'localStorageService', function ($state, $http, $scope, $rootScope, config, UserService,authService, localStorageService) {
+    if (localStorage.reload == "true") {
+        localStorage.reload = false;
+        window.location.reload();
     }
 
-    //if (localStorage.accessToken != undefined)
-      //  $http.defaults.headers.common['Authorization'] = localStorage.accessToken;
-
-
-    $(function () {
-        //     showoverlay();
-        $('#Move').on('click', function () {
-            //   showoverlay();
-            var usernamedetail = $('#usernamedetail').val();
-            var userpassword = $('#userpassword').val();
-            //  showoverlay();
-            //fiewjfilewjfewjlfewrdjewi powkoew ropewkp
+    $scope.showCaptcha = false;
+    var authData = {};
+    $scope.username = null;
+    $scope.password = null;
+    $scope.login = function () {
+        if ($scope.showCaptcha) {
+            var res=ValidCaptcha();
+            if (res == 1) { authData.usertype = "O"; $scope.loggedin(authData); }
+            else if (res == -1) { $scope.usertype = "UO";$scope.loggedin(authData); }
+            else { showErrorToast("Login Failed"); resetLogin(); }
+        } else {
+            $scope.username = $('#usernamedetail').val();
+            $scope.password = $('#userpassword').val();
             var data = {
-                "email": usernamedetail,
-                "password": userpassword
+                "email": $scope.username,
+                "password": $scope.password
             };
-            //comment by vivek
-            //comment by vivek
-            //comment by vivek
-            RoleCheck = "";
-            // $scope.loading = true;
             $http.post(config.login + "login", data).success(function (data, status) {
                 console.log(data.message);
-                var userData = data;
-                localStorage["tokenNo"] = data.res1.id;
-                localStorage["userrole"] = data.res1.user.role;
-                console.log(localStorage["userrole"]);
-                localStorage["username"] = data.res1.user.username;
-
-                $scope.username = localStorage["username"]
-
-               // $http.defaults.headers.common['Authorization'] = data.res1.id;
-                localStorage.accessToken = data.res1.id;
-                RoleCheck = data.res1.user.role;
-                GetCompanyData(RoleCheck)
-                localStorage.userType_Role = data.res1.user.role;
-                $rootScope.tok = data.token;
-                localStorage['usertype'] = data.res1.user.role;
-                $scope.usertype = localStorage['usertype'];
-                localStorage['adminrole'] = data.res1.user.role;
-                localStorage['token'] = data.token;
-                // console.log($rootScope.tok);
-
-                if (userData.message == "User Not Found") {
-                   $('#InvalidModal').modal('show');
-                   window.alert("invalid user and password"); 
-
+                if (data.message == "User Not Found") {
+                    $('#InvalidModal').modal('show');
                 }
                 else {
-                    if (RoleCheck == "3")
-                    {
-
-                        var mainCaptcha_Value = document.getElementById('mainCaptcha').value;
-                        var txtInput_Value = document.getElementById('txtInput').value;
-                        if (mainCaptcha_Value != undefined)
-                            var WithoutSpace = mainCaptcha_Value.split(' ').join('');
-                        if (txtInput_Value == "") {
-                            $('#InvalidModal').modal('show');
-                        }
-
-                        if (WithoutSpace == txtInput_Value) {
-                            //.loading = false;
-                            var type = "user";
-                            $scope.usertype = type;
-                            $rootScope.loggedin(usernamedetail);
-                        }
-                        else {
-                            if (mainCaptcha_Value != undefined) {
-                                //$scope.loading = false;
-                                var type = RoleCheck;
-                                $scope.usertype = type;
-                                $rootScope.loggedin(usernamedetail);
-                            }
-
-                        }
-
+                    authData={
+                                token_inner: data.id,
+                                token: data.token,
+                                username: data.user.username,
+                                role: data.user.role,
+                                usertype: "O",
+                                companies: data.user.companies
+                            };
+                    $scope.role = data.user.role;
+                    if ($scope.role === "2") { //O
+                        $scope.loggedin(authData);
+                    } else { //UO
+                        $('#InvalidModal').modal('show');
                     }
-                    else {
-                        //$scope.loading = false;
-                        $rootScope.loggedin(usernamedetail);
-                    }
-
-
+                    
                 }
-
             });
-
-            /*
-            if (usernamedetail == "") {
-                return;
-
-            }
-            else if (userpassword == "") {
-                return;
-
-            }
-            else {
-                $rootScope.loggedin(usernamedetail);
-            } */
-            // hideoverlay();
-        });
-        //   hideoverlay();
-    });
-
-    //$('#Invalidbtn').click(function () {
-    //    $('#InvalidModal').modal('show');
-    //});
-
-    $('#okbtn').click(function () {
-        if (RoleCheck == "3")
+        }
+    };
+    $scope.errorpopup = function () {
+        if ($scope.role != "2") {
+            $scope.showCaptcha = true;
             $('#CaptchaDiv').show();
-        Captcha();
-    })
+            Captcha();
+        }
+    }
+    function resetLogin() {
+        $scope.username = null;
+        $scope.password = null;
+        localStorageService.remove('authorizationData');
+        authData = {},
+        $scope.showCaptcha = false;
+        $('#CaptchaDiv').hide();
+    }
+    $scope.loggedin = function (authData) {
+        localStorageService.set('authorizationData', authData);
+        localStorage.usertype = authData.usertype;
+        authService.fillAuthData();
+        $state.go('Customer.HomePage');
+        
 
+    }
     function Captcha() {
         var alpha = new Array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
@@ -145,92 +86,21 @@ myApp.controller('LoginCntrl', ['$state', '$http', '$rootScope', '$scope', 'conf
             var g = alpha[Math.floor(Math.random() * alpha.length)];
         }
         var code = a + ' ' + b + ' ' + ' ' + c + ' ' + d + ' ' + e + ' ' + f + ' ' + g;
-        document.getElementById("mainCaptcha").innerHTML = code
-        document.getElementById("mainCaptcha").value = code
+        $scope.mainCaptcha = code;
     }
 
-    $scope.ValidCaptcha = function () {
-        var mainCaptcha_Value = removeSpaces(document.getElementById('mainCaptcha').value);
-        var txtInput_Value = removeSpaces(document.getElementById('txtInput').value);
-        if (mainCaptcha_Value == txtInput_Value) {
-            return true;
-        }
-        else {
-            return false;
-        }
+    function ValidCaptcha() {
+        var mainCaptcha_Value = removeSpaces($scope.mainCaptcha);
+        var inputCaptcha_Value = removeSpaces(document.getElementById('txtInput').value);
+        return mainCaptcha_Value == inputCaptcha_Value?1:reverseString(mainCaptcha_Value) == inputCaptcha_Value?-1:0;
     }
-    $scope.removeSpaces = function (string) {
+    function reverseString(str) {
+        return str.split("").reverse().join("");
+    }
+    function removeSpaces (string) {
         return string.split(' ').join('');
     }
-
-
-
-    function GetCompanyData(Role) {
-        if (Role == "3") {
-            var url = config.api + "CompanyMasters";
-            $http.get(url).success(function (response) {
-                $scope.CompanyList = response;
-
-                console.log($scope.CompanyList)
-                localStorage.comobj = JSON.stringify(response);
-                $scope.DefaultCompanyName = response[0].CompanyName;
-                localStorage.DefaultCompanyName = response[0].CompanyName;
-                localStorage.CompanyId = response[0].CompanyId;
-                $scope.DefualtVATTIN_NO = response[0].VAT_TIN_NO;
-                localStorage.VAT_TIN_NO = response[0].VAT_TIN_NO;
-                $scope.CST_TIN_NO = response[0].CST_TIN_NO;
-                localStorage.CST_TIN_NO = response[0].CST_TIN_NO;
-                localStorage.ChangeCompanyName = undefined;
-                //localStorage.VAT_TIN_NO = undefined;
-            })
-
-        }
-        else {
-            var url = config.api + "CompanyMasters"; //+ Role;
-            $http.get(url).success(function (response) {
-                $scope.CompanyList = response;
-                localStorage.comobj = JSON.stringify(response);
-                $scope.DefaultCompanyName = response[0].CompanyName;
-                localStorage.DefaultCompanyName = response[0].CompanyName;
-                localStorage.CompanyId = response[0].CompanyId;
-                $scope.DefualtVATTIN_NO = response[0].VAT_TIN_NO;
-                localStorage.VAT_TIN_NO = response[0].VAT_TIN_NO;
-                $scope.CST_TIN_NO = response[0].CST_TIN_NO;
-                localStorage.CST_TIN_NO = response[0].CST_TIN_NO;
-                localStorage.ChangeCompanyName = undefined;
-                //localStorage.VAT_TIN_NO = undefined;
-            })
-
-        }
-    }
-
-    $scope.BindCompanyName = function (CompanyName, CompanyId,VAT_TIN_NO, CST_TIN_NO) {
-        $scope.DefaultCompanyName = CompanyName;
-        localStorage.DefaultCompanyName = CompanyName;
-        localStorage.CompanyId = CompanyId;
-        localStorage.ChangeCompanyName = CompanyName;
-        localStorage.VAT_TIN_NO = VAT_TIN_NO;
-        localStorage.CST_TIN_NO = CST_TIN_NO;
-
-        $state.reload();
-
-    }
-
-
-    $scope.logout = function () {
-
-        $http.get(config.login + 'logout' + "?token1=" + localStorage["tokenNo"])
-                      .success(function (data) {
-                          console.log(data)
-                          if (data == "logout") {
-                              $state.go('login');
-                          }
-                      });
-
-
-
-    }
-    $scope.usertype = localStorage['usertype'];
+    
 }]);
 
 

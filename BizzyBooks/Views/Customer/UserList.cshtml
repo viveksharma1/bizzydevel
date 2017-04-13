@@ -1,0 +1,177 @@
+﻿
+@{
+    ViewBag.Title = "UserList";
+    Layout = null;
+}
+
+
+
+
+<div class="panel lightblue bluebrdr marginbottom content">
+    <div class="panel-heading">
+        <strong class="heading">Users</strong>
+
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-primary btn-sm" ng-click="newUser()">New</button>
+
+        </div>
+    </div>
+
+
+</div>
+
+<div class="col-sm-12" style="padding:20px 10px">
+
+    <div class="pull-left" style="margin-left:15px;">
+
+        <input type="text" ng-model="search" class="form-control pull-left" style="width:150px;" placeholder="Find User" />
+
+
+    </div>
+
+
+
+
+
+
+
+    <div class="pull-right" style="margin-top:10px; margin-right:10px">
+        <i class="fa fa-print tableicon" title="Print list"></i>
+        <i class="fa fa-clipboard tableicon" title="Export to excel"></i>
+        <i class="fa fa-gear tableicon" title="Settingd"></i>
+    </div>
+    <div class="col-sm-12">
+        <table class="table-bordered table-condensed table-hover" fixed-header id="ItemTable" style="margin-top:10px;width:100%; height:400px; font-size:12px;">
+            <thead>
+                <tr>
+                    <th>Name </th>
+                    <th width="200">Email </th>
+                    <th width="150">Role</th>
+                    <th width="150">Type</th>
+                    <th style="text-align:center; width:100px">Action</th>
+
+                </tr>
+            </thead>
+            <tbody>
+
+
+                <tr ng-repeat="user in userList">
+                    <td>{{user.username}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.role}}</td>
+                    <td>{{user.role==2?"O":"UO"}}</td>
+                    <td style="text-align:center">
+                        <button type="button" class="editbtn" ng-click="editUser(user)">Edit</button>
+                    </td>
+                </tr>
+            </tbody>
+
+        </table>
+
+        <!-- UserEditModal -->
+        <div id="UserEditModal" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-lg" style="margin-top:15px">
+
+                <!-- Modal content-->
+                <div class="modal-content content">
+                    <div class="modal-header content">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">User</h4>
+                    </div>
+                    <div class="modal-body content lightblue" style="padding:0px">
+                        <div class="col-sm-4" style="padding:20px;">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input ng-model="user.username" type="text" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input ng-model="user.email" type="text" class="form-control" />
+                            </div>
+                            <div ng-hide="editMode=='edit'" class="form-group">
+                                <label>Password</label>
+                                <input ng-model="user.password" type="password" class="form-control" />
+                            </div>
+
+                            <div ng-hide="editMode=='edit'" class="form-group">
+                                <label>Confirm Password</label>
+                                <input ng-model="rePassword" type="password" class="form-control" />
+                            </div>
+
+                            <div class="form-group">
+                                <label>Company</label>
+                                <ui-select multiple ng-model="company.selected" ui-select-focuser theme="bootstrap"  close-on-select="true" title="Choose a color">
+                                    <ui-select-match >{{$item.CompanyName}}</ui-select-match>
+                                    <ui-select-choices repeat="company in companyList | filter:$select.search">
+                                        {{company.CompanyName}}
+                                    </ui-select-choices>
+                                </ui-select>
+                                @*<ui-select multiple ng-model="company.selected"
+                                           ui-select-focuser
+                                           theme="bootstrap">
+
+                                    <ui-select-match placeholder="">
+                                        <span class="selectuiTable" style="width:100%">
+                                            {{ $select.selected.CompanyName }}
+                                        </span>
+
+                                    </ui-select-match>
+
+                                    <ui-select-choices repeat="company in companyList  | filter: $select.search">
+                                        <div>
+                                            <span  ng-bind-html="company.CompanyName | highlight: $select.search"></span>
+                                        </div>
+
+
+                                    </ui-select-choices>
+                                </ui-select>*@
+                            </div>
+
+                            <div class="form-group">
+                                <label>Role</label>
+                                <ui-select  ng-model="role.selected"
+                                           ui-select-focuser
+                                           theme="selectize">
+
+                                    <ui-select-match placeholder="">
+                                        <span class="selectuiTable" style="width:100%">
+                                            {{ $select.selected.roleName }}
+                                        </span>
+
+                                    </ui-select-match>
+
+                                    <ui-select-choices repeat="role in roles  | filter: $select.search">
+                                        <div>
+                                            <span ng-bind-html="role.roleName | highlight: $select.search"></span>
+                                        </div>
+
+
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="col-sm-8" style="background:#fff; padding:0px">
+                            <div class="codebox">
+                                <div ng-jsoneditor="onLoad" ng-model="obj.data" options="obj.options" style="width: 100%; height: 500px;"></div>
+
+                            </div>
+                 
+
+                            </div>
+                        </div>
+                    <div class="modal-footer content">
+                        <button style="margin-top:2px" type="button" class="btn btn-info btn-sm" ng-click="changeOptions()"><i class="fa fa-eye"></i> Edit options</button>
+                        <button style="margin-top:2px" type="button" class="btn btn-success btn-sm" ng-click="updateUser()"><i class="fa fa-check"></i> Save</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
