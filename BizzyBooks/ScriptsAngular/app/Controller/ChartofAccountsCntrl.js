@@ -85,6 +85,26 @@
     }
 
 
+    $scope.dateFormat = function (date) {
+        var res = date.split("/");
+        console.log(res);
+        var month = res[1];
+        var days = res[0]
+        var year = res[2]
+        var date = month + '/' + days + '/' + year;
+        return date;
+    }
+    if (localStorage["period"]) {
+        $scope.searchAccount = function () {
+            var toDate = $scope.dateFormat(localStorage["fromDate"])
+            var fromDate = $scope.dateFormat(localStorage["fromDate"])
+            $http.get(config.login + "dateWiseAccountDetail/" + localStorage.CompanyId + "?date=" + toDate).then(function (response) {
+                $scope.account = response.data;
+                console.log($scope.account);
+            });
+        }
+    }
+
     //$http.get(config.api + "groupMasters").then(function (response) {
     //    $scope.groupMaster = response.data;
 
@@ -246,26 +266,7 @@
     //        });
     //    }
     //}
-    $scope.dateFormat = function (date) {
-        var res = date.split("/");
-        console.log(res);
-        var month = res[1];
-        var days = res[0]
-        var year = res[2]
-        var date = month + '/' + days + '/' + year;
-        return date;
-    }
-
-    $scope.searchAccount = function () {
-        var toDate = $scope.dateFormat($scope.toDate)
-        var fromDate = $scope.dateFormat($scope.fromDate)
-        $http.get(config.login + "dateWiseAccountDetail/" + localStorage.CompanyId + "?date=" + toDate).then(function (response) {
-            $scope.account = response.data;
-            console.log($scope.account);
-        });
-
-
-    }
+    
         
 
 

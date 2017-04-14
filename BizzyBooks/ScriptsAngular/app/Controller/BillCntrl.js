@@ -247,9 +247,12 @@
             $scope.subtotal = $filter('currency')($scope.subtotalnew, '$', 2)
         }
     }
-    $scope.invoiceType1 = function (invoiceType) {
-
-        
+    $scope.invoiceType = 'Import'
+    $("#import").addClass('active')
+    $("#dollar").addClass('active')
+    $("#kg").addClass('active')
+   
+    $scope.invoiceType1 = function (invoiceType) {     
         $scope.invoiceType = invoiceType;
         console.log($scope.invoiceType)
         if (invoiceType == 'Domestic') {
@@ -262,8 +265,7 @@
        else {
             $("#dollar").addClass('active')
             $("#dollar").addClass('active')
-            $("#rupee").removeClass('active')
-            
+            $("#rupee").removeClass('active')           
             $("#import").addClass('active')
             $("#custom").show()
             $("#curr").show()
@@ -562,7 +564,7 @@
     //}
     $scope.getSupplierDetail = function (supplierName) {
         $scope.supliersDetail = []
-        $http.get(config.api + "suppliers" + "?filter[where][compCode]=" + localStorage.CompanyId + "&filter[where][company]=" + supplierName).then(function (response) {
+        $http.get(config.api + "accounts" + "?filter[where][compCode]=" + localStorage.CompanyId + "&filter[where][accountName]=" + supplierName).then(function (response) {
             $scope.supliersDetail = response.data;
             console.log(response.data)
             $scope.shippingAddress = $scope.supliersDetail[0].billingAddress[0].street;
@@ -618,7 +620,7 @@
                         $scope.billDueDate1 = response.data.billDueDate
                         $scope.billDueDate = $filter('date')($scope.billDueDate1, 'dd/MM/yyyy');
                         $scope.actualDate = $filter('date')(response.data.actualDate, 'dd/MM/yyyy');
-                        $scope.email = response.data.email
+                       
                        
                     });
     }
@@ -718,7 +720,7 @@
             billDueDate: billDueDate,
             actualDate:actualDate,
             ordertype: "BILL",
-            no: Number($scope.billNo),
+            no: $scope.billNo,
             status: ["OPEN"],
             paymentDays:$scope.paymentDays,
             itemDetail: $scope.billtable1,
@@ -1071,7 +1073,7 @@
         $scope.idSelectedItem = index;
         $scope.tableIndex = index;
         $scope.count++;
-        $scope.baseRate1 = Number(rate)
+        $scope.baseRate1 = rate
         $scope.exchangeRateBill = Number(68.8);
 
         /* for (var i = 0; i < $scope.count; i++) {
@@ -1297,7 +1299,7 @@
 
     }
 
-
+    $scope.remarks.selected = { name: '' };
     $scope.addBillLineItem = function () {
         $scope.GODOWN.push({ type: "GODOWN", name: $scope.newitem });
         if ($scope.invoiceType == 'Import') {
@@ -1391,7 +1393,7 @@
             }
             if (type == "RRMARKS") {
                 
-            } Period
+            } 
             console.log(userInputItem.name)
 
 
@@ -1475,7 +1477,12 @@
            
     });
 
+    $scope.bindSupplierDetail = function (data) {
 
+        $scope.email = data.email
+        $scope.shippingAddress = data.billingAddress[0].street
+        console.log(data)
+    }
     $(".selectTable tr").click(function () {
         $(this).addClass("highlighted").siblings().removeClass("highlighted");
     });

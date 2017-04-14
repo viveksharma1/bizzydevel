@@ -253,7 +253,7 @@
                         </thead>
 
                         <tbody>
-                            <tr ng-repeat="data in InventoryList | orderBy: orderData|filter:search">
+                            <tr ng-repeat="data in InventoryList  track by $index| orderBy: orderData|filter:search">
                                 <td style="padding-left:30px; width:30px"><input type="checkbox" class="checkboxcss" /></td>
                                 <td ng-click="GRNDetail(data.no)">{{data.no}}</td>
                                 <td ng-bind="data.date | date:'dd MMM yyyy'"></td>
@@ -376,7 +376,7 @@
                 <tbody>
 
                    
-                    <tr ng-repeat="data in InventoryList | filter :search" >
+                    <tr ng-repeat="data in InventoryList  track by $index| filter :search" >
                         <td style="padding-left:15px; width:15px"><input type="checkbox" class="checkboxcss" /></td>
                         <td ng-click="poView(data.no)">{{data.no}}</td>
                         <td ng-bind="data.date | date:'dd MMM yyyy'"></td>
@@ -470,9 +470,9 @@
 
                 <tbody>
                    
-                    <tr ng-repeat="data in InventoryList | filter:search" class="cursor" >
+                    <tr ng-repeat="data in InventoryList track by $index | filter:search" class="cursor" >
                         <td style="padding-left:15px; width:15px"><input type="checkbox" class="checkboxcss" /></td>
-                        <td>{{data.supliersName}}</td>
+                        <td>{{data.supliersId}}</td>
                         <td>{{data.email}}</td>
                         <td>{{data.no}}</td>
                         <td ng-bind="data.date | date:'dd MMM yyyy'"></td>

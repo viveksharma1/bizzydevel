@@ -69,9 +69,13 @@ myApp.controller('SupplierCntrl', ['$scope', '$http', '$timeout', '$stateParams'
         $scope.globalUrl = globalUrl;
 
         $http.get(config.api + $scope.url2 + "&filter[where][compCode]=" + localStorage.CompanyId + "&filter[limit]=10&filter[skip]=0").then(function (response) {
-
-
             $scope.InventoryList = response.data;
+            console.log(response);
+            for (var i = 0; i < $scope.InventoryList.length; i++) {
+                $scope.InventoryList[i].supliersId = localStorage[$scope.InventoryList[i].supliersId];
+
+            }
+           
             console.log($scope.InventoryList)
             $(".loader").hide()
 
@@ -695,6 +699,12 @@ myApp.controller('SupplierCntrl', ['$scope', '$http', '$timeout', '$stateParams'
         var empUrl = config.api + $scope.url2 + "&filter[where][compCode]=" + localStorage.CompanyId +"&filter[limit]=" + DispLength + "&filter[skip]=" + Skip;
         $http.get(empUrl).then(function (response) {
             $scope.InventoryList = response.data;
+            console.log(response);
+            for (var i = 0; i < $scope.InventoryList.length; i++) {
+                $scope.InventoryList[i].supliersId = localStorage[$scope.InventoryList[i].supliersId];
+
+            }
+
             $(".loader").hide()
             if (response.data.length > 0) {
                

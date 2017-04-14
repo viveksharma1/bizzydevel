@@ -347,8 +347,8 @@
                             <div class="col-sm-6 padding">
                                 <div class="form-group">
                                     <small>From</small>
-                                    <div class='input-group date' id='Fromdate'>
-                                        <input type='text' class="form-control" placeholder="dd/mm/yyyy" />
+                                    <div class='input-group date' id='fromDate'>
+                                        <input type='text' class="form-control" ng-model="fromDate" id="fromDate" />
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-calendar"></span>
                                         </span>
@@ -359,8 +359,8 @@
                             <div class="col-sm-6 padding">
                                 <div class="form-group">
                                     <small>To</small>
-                                    <div class='input-group date' id='Todate'>
-                                        <input type='text' class="form-control" placeholder="dd/mm/yyyy" />
+                                    <div class='input-group date' id='toDate'>
+                                        <input type='text' class="form-control"  ng-model="toDate" id="toDate" />
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-calendar"></span>
                                         </span>
@@ -368,7 +368,7 @@
                                 </div>
                             </div>
                             <hr style="float:left; width:100%" />
-                            <button type="button" class="btn btn-sm btn-primary pull-right">Search</button>
+                            <button type="button" class="btn btn-sm btn-primary pull-right" ng-click="setPeriod(fromDate,toDate)">Search</button>
 
 
 

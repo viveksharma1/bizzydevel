@@ -180,8 +180,8 @@
             <div class="col-sm-2" style="padding-left:25px">
                 <label>Unit  :</label>
                 <div class="btn-group btnhover">
-                    <button type="button" class="btn btn-xs btn-default">KG</button>
-                    <button type="button" class="btn btn-xs  btn-default">MT</button>
+                    <button type="button" id="kg"class="btn btn-xs btn-default">KG</button>
+                    <button type="button" id ="mt"class="btn btn-xs  btn-default">MT</button>
 
                 </div>
             </div>
@@ -214,7 +214,7 @@
 
                 <h4 class="tabheading font_11">Supplier @*<span class="pull-right text-primary"><i class="fa fa-rupee"></i> 2,30,000</span></h4>*@
                 <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
-                           ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';"
+                           ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';" on-select="bindSupplierDetail($select.selected)"
                            theme="selectize">
                     <ui-select-match placeholder="Select Suppliers">{{ $select.selected.accountName }}</ui-select-match>
 
@@ -1721,7 +1721,7 @@
                         <td class="Count" >{{item.DESCRIPTION}}</td>
                         <td class="Count">{{item.RRMARKS}}</td>
                         <td class="Count" style="text-align:right">{{item.NETWEIGHT}}</td>
-                        <td class="Count" style="text-align:right">{{item.BASERATE |number : 2}}</td>                       
+                        <td class="Count" style="text-align:right">{{item.BASERATE |number : 3}}</td>                       
                         <td  class="Count" style="text-align:right">{{item.TOTALAMOUNT |number : 2}}</td> 
                                                                   
                         <td class="Count" style="text-align:right">{{item.AMOUNTINR |number : 2}}</td>                     

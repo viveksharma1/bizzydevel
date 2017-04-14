@@ -92,12 +92,12 @@
         var date = month + '/' + days + '/' + year;
         return date;
     }
-    if ($stateParams.fromDate) {
+    if (localStorage["period"]) {
 
         $scope.closingBalance = Math.abs($stateParams.closingBalance)
         console.log($scope.closingBalance);
-        var toDate = $scope.dateFormat($stateParams.toDate)
-        var fromDate = $scope.dateFormat($stateParams.fromDate)
+        var toDate = $scope.dateFormat(localStorage["fromDate"])
+        var fromDate = $scope.dateFormat(localStorage["toDate"])
         $http.get(config.login + "getOpeningBalnce/" + $stateParams.accountId + "?compCode=" + localStorage.CompanyId + "&date=" + fromDate + "&todate=" + toDate).then(function (response) {
             console.log(response)
             $scope.openingBalance = Math.abs(response.data.openingBalance)

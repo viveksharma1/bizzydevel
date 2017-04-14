@@ -51,6 +51,34 @@
                         $scope.groupMasters = { selected: { name: $scope.value.Under } };
                         $scope.groupMasters.selected.type = $scope.value.type;
                         $scope.balanceType = $scope.value.balanceType
+                        $scope.email = $scope.value.email,
+   
+   $scope.phone = $scope.value.phone,
+   $scope.mobile = $scope.value.mobile,
+
+
+         $scope.street = $scope.value.billingAddress[0].street,
+         $scope.city = $scope.value.billingAddress[0].city,
+         $scope.state = $scope.value.billingAddress[0].state,
+         $scope.postalCode = $scope.value.billingAddress[0].postalCode,
+
+
+         $scope.street1 = $scope.value.shippingAddress[0].street,
+         $scope.city1 = $scope.value.shippingAddress[0].city,
+         $scope.state1 = $scope.value.shippingAddress[0].state,
+         $scope.postalCode1 = $scope.value.shippingAddress[0].postalCode,
+
+
+         $scope.taxRegNo = $scope.value.taxInfo[0].taxRegNo,
+         $scope.cstReg = $scope.value.taxInfo[0].cstRegNo,
+         $scope.panNo = $scope.value.taxInfo[0].panNo,
+          $scope.Range = $scope.value.taxInfo[0].range
+                        $scope.division = $scope.value.taxInfo[0].division
+                        $scope.address = $scope.value.taxInfo[0].address
+                        $scope.commisionerate = $scope.value.taxInfo[0].commisionerate
+                        $scope.ceRegionNo = $scope.value.taxInfo[0].ceRegionNo
+                        $scope.eccCodeNo = $scope.value.taxInfo[0].eccCodeNo
+                        $scope.iecNo = $scope.value.taxInfo[0].iecNo
                         if ($scope.value.rate) {
                             $scope.rate = $scope.value.rate
                         }
@@ -97,20 +125,51 @@
                         isUo: isUo,
                         rate: Number($scope.rate),
                         openingBalance: $scope.openingBalance,
-                        balanceType: $scope.balanceType
+                        balanceType: $scope.balanceType,
+                        email: $scope.email,
+                       
+                        phone: $scope.phone,
+                        mobile: $scope.mobile,
+                        billingAddress: [
+                    {
+                        street: $scope.street,
+                        city: $scope.city,
+                        state: $scope.state,
+                        postalCode: $scope.postalCode,
+                        country: $scope.country
+                    }
+            ],
+                shippingAddress: [
+                  {
+
+                      street: $scope.street1,
+                      city: $scope.city1,
+                      state: $scope.state1,
+                      postalCode: $scope.postalCode1,
+                      country: $scope.country1
+                  }
+                ],
+                taxInfo: [
+                  {
+                      taxRegNo: $scope.taxRegNo,
+                      cstRegNo: $scope.cstRegNo,
+                      panNo: $scope.panNo,
+                      range: $scope.Range,
+                      division: $scope.division,
+                      address: $scope.address,
+                      commisionerate: $scope.commisionerate,
+                      ceRegionNo: $scope.ceRegionNo,
+                      eccCodeNo: $scope.eccCodeNo,
+                      iecNo: $scope.iecNo,
+
+
+                  }
+                ],
+            
+                notes: $scope.notes,
 
                     }
-                    $http.get(config.api + "accounts?filter[where][accountName]=" + $scope.accountName.toUpperCase()).then(function (response) {
-                        console.log(response)
-                        if (response.data) {
-                            $scope.accId = response.data[0].id;
-                           
-                            $('#accountAlert').modal('show');
-                        }
-                        else {
-                            $scope.accountCreations();
-                        }
-                    });
+                    console.log(accountData)
                     $scope.updateExistingAccount = function () {
                         var accountData = {
                             compCode: localStorage.CompanyId,
@@ -136,6 +195,7 @@
                             });
                         });
                     }
+                    $scope.accountCreations();
                    
 
                 }

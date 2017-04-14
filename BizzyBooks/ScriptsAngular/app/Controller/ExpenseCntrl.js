@@ -175,7 +175,7 @@
    
 
     $scope.getExpenseData = function (expenseId) {  
-        $http.get(config.api + 'transactions/'+ expenseId)
+        $http.get(config.api + 'voucherTransactions/'+ expenseId)
                     .then(function (response) {                        
                         $scope.accountTable = $scope.bindAccountId(response.data.accountTable);                      
                         $scope.itemTable = $scope.bindAccountId(response.data.itemTable);
@@ -432,7 +432,7 @@
             tdsRate : $scope.tdsrate,
             tdsAccountId: $scope.tdsAccountId
         }
-        $http.post(config.login + "saveExpense", data).then(function (response) {
+        $http.post(config.login + "saveExpensetest/" + $scope.id, data).then(function (response) {
             showSuccessToast("Expense Save Succesfully");
         });
     }

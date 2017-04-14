@@ -2,8 +2,9 @@
 var RoleCheck = "";
 myApp.controller('LoginCntrl', ['$state', '$http', '$rootScope', '$scope', 'config', 'UserService', function ($state, $http, $scope, $rootScope, config, UserService) {
     // showoverlay();
-
-    
+    $.fn.datepicker.defaults.format = "dd/mm/yyyy";
+    $('#fromDate').datepicker();
+    $('#toDate').datepicker();
     if ($scope.CompanyList == undefined)
     {
         if (localStorage.comobj != undefined)
@@ -246,6 +247,17 @@ myApp.controller('LoginCntrl', ['$state', '$http', '$rootScope', '$scope', 'conf
     $scope.AddCompnay = function () {
         $('#AddCompnayModal').modal('show');
     }
+
+    // set period
+
+    $scope.setPeriod = function (fromDate, toDate) {
+        console.log(toDate)
+        localStorage["period"] = true;
+        localStorage["fromDate"] = fromDate;
+        localStorage["toDate"] = toDate;
+        
+    }
+
 }]);
 
 
