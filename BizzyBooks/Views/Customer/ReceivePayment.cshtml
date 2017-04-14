@@ -125,7 +125,13 @@
             </div>
 
             <div class="col-sm-3 pull-right" style="padding:10px; background:rgba(139, 195, 74, 0.09)">
-                <h4 style="margin:0px 0px 10px 0px; font-size:14px; font-weight:bold" class="text-primary"><input type="checkbox" /> Badla Payment</h4>
+                <div class="col-sm-6 padding">
+                    <h4 style="margin:0px 0px 10px 0px; font-size:14px; font-weight:bold" class="text-primary"><input type="checkbox" /> Badla Payment</h4>
+                </div>
+                <div class="col-sm-6 padding">
+                    @*<h4 class="tabheading">Rs.</h4>*@
+                    <input type="text" placeholder="Badla Amount" ng-model="totalPaidAmount" id="badlaamnt" class="form-control" />
+                </div>
                 <div class="col-sm-7 padding5">
                     <label>Badla Person</label>
                     <ui-select ui-tree-select ng-model="partyAccount.selected" id="countryCode"

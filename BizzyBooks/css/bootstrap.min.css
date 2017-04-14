@@ -9052,3 +9052,9 @@ main {
 }
 
 .Rosemate-table{padding:5px !important;}
+#badlaamnt::-webkit-input-placeholder, #badlaamnt {
+ font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans', Gadugi, Verdana, sans-serif;
+    font-size: medium;
+    line-height: 20px;
+    -webkit-font-smoothing: antialiased; font-size:16px; text-align:right
+}
