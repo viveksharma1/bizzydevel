@@ -7586,7 +7586,7 @@ button.close {
     padding: 0px 4px;
 }
 
-#NewCustomerCreateModal label {
+#NewCustomerCreateModal label, #AddCompnayModal label {
     color: #404040 !important;
     font-size: 13px !important;
 }
@@ -8373,14 +8373,15 @@ main {
     transform:rotate(50deg);
 }
 .flyoutdiv ul {float:left; width:90%;}
+.flyoutdiv ul li{width:100%;}
 .flyoutdiv ul li a{color:#000; text-decoration:none; float:left; width:100%; font-family:din; padding:5px; font-size:14px;}
 .flyoutdiv ul li a:hover{background:#337ab7; color:#fff;}
-#flyoutCompany{width: 33%;right: 154px; position: absolute; z-index: 20; padding-top:7px;}
+#flyoutCompany{width: 43%;right: 154px; position: absolute; z-index: 20; padding-top:7px;}
 #flyoutChange{width: 20%; right: 10px; position: absolute; z-index: 20; padding-top:7px;}
 #flyoutDate{width: 25%; right: 157px; position: absolute; z-index: 20; padding-top:7px;}
 .logout {
     border-bottom: 0 none;
-    padding-top: 20px; float:left
+    float:left
 }
 .HomeWrapper{background:#f3f5fa; float:left; width:100%; height:100%; min-height:565px;}
 .card{float:left; width:100%; background:#fff; padding:15px; margin:5px 0px; box-shadow:0 2px 0 #dae3ef}

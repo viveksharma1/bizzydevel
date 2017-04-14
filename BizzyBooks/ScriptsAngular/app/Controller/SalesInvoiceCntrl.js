@@ -18,6 +18,11 @@
         autoclose: true,
     });
 
+    $('#RemovalTime').timepicker();
+ 
+    $('#IssueTime').timepicker();
+
+
     $('#IssueDate').datepicker({
         format: 'dd/mm/yyyy',
         autoclose: true,

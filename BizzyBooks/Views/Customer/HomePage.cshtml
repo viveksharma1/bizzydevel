@@ -4,14 +4,16 @@
     Layout = null;
 }
 <style>
-    .changeUi li {
+      .changeUi li{width:100%}
+    .changeUi li a {
         padding: 5px;
         cursor: pointer;
         padding-right: 10px;
-        margin-bottom:0px
+        width:100%;
+        margin-bottom:0px; float:left
     }
-     .changeUi li.selected{background:#f4f4f4;   border-radius:5px;  }
-     .changeUi li:hover{background:#808080;   border-radius:5px;  }
+     .changeUi li a.selected{background:#f4f4f4;   border-radius:5px;  }
+     .changeUi li a:hover{background:#808080;   border-radius:5px; color:#fff; text-decoration:none  }
     
 
 </style>
@@ -24,54 +26,14 @@
                     <button type="button" class="btn btn-sm btn-warning pull-right btn-xs" ng-click="AddCompnay()" style="margin-top:4px">Add New Company</button>
                  </h3>
                 <hr />
-                <ul class="list-unstyled my changeUi fa-change " ng-repeat="list in CompanyList" >
-                    <li><a ng-click="changeCompany(list)">{{list.CompanyName}}</a></li>
+                <ul class="list-unstyled my changeUi scrollbar scrollbarAngular" style="height:120px"  >
+                    <li ng-repeat="list in CompanyList"><a ng-click="changeCompany(list)">{{list.CompanyName}}</a></li>
                 </ul>
                 
             </div>
         </div>
 
-        <!-- AddCompnayModal -->
-        <div id="AddCompnayModal" class="modal fade" role="dialog">
-            <div class="modal-dialog modal-sm" style="margin-top:70px">
-
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Add New Company</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label>Company Name</label>
-                            <input type="text" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                            <label>Contact</label>
-                            <input type="text" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                            <label>PAN</label>
-                            <input type="text" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                            <label>CST</label>
-                            <input type="text" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                            <label>Address</label>
-                            <textarea class="form-control"></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer" style="text-align:center">
-                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" style="width:80px">Cancel</button>
-                        <button type="button" class="btn btn-primary btn-sm" style="width:80px">Save</button>
-
-                    </div>
-                </div>
-
-            </div>
-        </div>
+   
 
         <!-- namechangeModal -->
         <div id="namechangeModal" class="modal fade" role="dialog">
