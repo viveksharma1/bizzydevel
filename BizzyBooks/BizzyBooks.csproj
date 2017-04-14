@@ -205,9 +205,11 @@
     <Content Include="css\daterangepicker.css" />
     <Content Include="css\editable-table.css" />
     <Content Include="css\floatexamples.css" />
+    <Content Include="css\img\jsoneditor-icons.svg" />
     <Content Include="css\ion.rangeSlider.css" />
     <Content Include="css\ion.rangeSlider.skinFlat.css" />
     <Content Include="css\jquery.toastmessage-min.css" />
+    <Content Include="css\jsoneditor.min.css" />
     <Content Include="css\loader.css" />
     <Content Include="css\loading-bar.css" />
     <Content Include="css\normalize.css" />
@@ -296,6 +298,7 @@
     <Content Include="js\jquery.min.js" />
     <Content Include="js\jquery.scrollTo.js" />
     <Content Include="js\jquery.toastmessage-min.js" />
+    <Content Include="js\jsoneditor.min.js" />
     <Content Include="js\jspdf.min.js" />
     <Content Include="js\jszip-utils.js" />
     <Content Include="js\jszip.js" />
@@ -306,6 +309,7 @@
     <Content Include="js\moment.js" />
     <Content Include="js\moment\moment.js" />
     <Content Include="js\moment\moment.min.js" />
+    <Content Include="js\ng-jsoneditor.js" />
     <Content Include="js\ngtimeago.js" />
     <Content Include="js\nprogress.js" />
     <Content Include="js\prefixfree.min.js" />
@@ -362,6 +366,8 @@
     <Content Include="ScriptsAngular\Angular\angular-file-upload.js" />
     <Content Include="ScriptsAngular\Angular\angular-file-upload.min.js" />
     <Content Include="ScriptsAngular\Angular\angular-filter.min.js" />
+    <Content Include="ScriptsAngular\Angular\angular-jwt.js" />
+    <Content Include="ScriptsAngular\Angular\angular-local-storage.min.js" />
     <Content Include="ScriptsAngular\Angular\angular-route.js" />
     <Content Include="ScriptsAngular\Angular\angular-ui-router.js" />
     <Content Include="ScriptsAngular\Angular\angular.js" />
@@ -416,6 +422,7 @@
     <Content Include="ScriptsAngular\app\Controller\inventorystockCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\InvoiceCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\JournalEntryCntrl.js" />
+    <Content Include="ScriptsAngular\app\Controller\HomeCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\LogisticsCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\MakePaymentCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\PdfViewCntrl.js" />
@@ -434,13 +441,15 @@
     <Content Include="ScriptsAngular\app\Controller\SupplierdetailCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\TaxInvoiceCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\TaxInvoicePDFCntrl.js" />
+    <Content Include="ScriptsAngular\app\Controller\UserListCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\VoucherTransactionsCntrl.js" />
+    <Content Include="ScriptsAngular\app\directives\permissionDirective.js" />
     <Content Include="ScriptsAngular\app\orderApp.js" />
     <Content Include="ScriptsAngular\app\Controller\_LoginCntrl.js" />
+    <Content Include="ScriptsAngular\app\Services\authService.js" />
     <Content Include="ScriptsAngular\app\_app.js" />
     <Content Include="ScriptsAngular\app\app.js" />
     <Content Include="ScriptsAngular\app\Controller\LoginCntrl.js" />
-    <Content Include="Views\Customer\stock.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -532,6 +541,7 @@
     <Content Include="Views\Customer\SalesInvoicePDF.cshtml" />
     <Content Include="Views\Customer\TaxInvoicePDF.cshtml" />
     <Content Include="Views\Customer\StockBalanceInventory.cshtml" />
+    <Content Include="Views\Customer\UserList.cshtml" />
     <Content Include="Views\Customer\RosemateVoucher.cshtml" />
   </ItemGroup>
   <PropertyGroup>

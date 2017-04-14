@@ -36,6 +36,11 @@
             $state.go('Customer.ReceivePayment', { voId: id });
         }
 
+        if (voType == 'EXPENSE') {
+
+            $state.go('Customer.Expense', { expenceId: id });
+        }
+
 
 
     }

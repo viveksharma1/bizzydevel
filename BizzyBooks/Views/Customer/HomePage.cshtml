@@ -24,10 +24,8 @@
                     <button type="button" class="btn btn-sm btn-warning pull-right btn-xs" ng-click="AddCompnay()" style="margin-top:4px">Add New Company</button>
                  </h3>
                 <hr />
-                <ul class="list-unstyled my changeUi fa-change scrollbar scrollbarAngular" style="height:121px" >
-                  
-                    <li  ng-repeat="list in CompanyList" class="fa-hover" ng-class="{selected: $index === idSelectedVote}"><a >{{list.CompanyName}}   <label class="badge pull-right" ng-click="BindCompanyName(list.CompanyName,list.CompanyId,list.VAT_TIN_NO,list.CST_TIN_NO,$index)">Change &nbsp; <i style="display:none" class="fa fa-spin fa-spinner"></i></label></a></li>
-             
+                <ul class="list-unstyled my changeUi fa-change " ng-repeat="list in CompanyList" >
+                    <li><a ng-click="changeCompany(list)">{{list.CompanyName}}</a></li>
                 </ul>
                 
             </div>

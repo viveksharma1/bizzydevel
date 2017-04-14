@@ -27,7 +27,8 @@ namespace Restaurant
                        "~/css/loading-bar.css",
                        "~/css/bootstrap-datepicker.css",
                         "~/css/daterangepicker.css",
-                        "~/css/jquery.toastmessage-min.css"
+                        "~/css/jquery.toastmessage-min.css",
+                        "~/css/jsoneditor.min.css"
 
                 ));
 
@@ -55,6 +56,8 @@ namespace Restaurant
                     "~/ScriptsAngular/Angular/src/lodash.min.js",
                      "~/ScriptsAngular/Angular/src/select.min.js",
                    "~/ScriptsAngular/Angular/angular-file-upload.js",
+                   "~/ScriptsAngular/Angular/angular-jwt.js",
+                   "~/ScriptsAngular/Angular/angular-local-storage.min.js",
                    //"~/ScriptsAngular/Angular/jspdf.min.js",
                    //"~/ScriptsAngular/Angular/pixastic-standalone.js",
                    //"~/ScriptsAngular/Angular/pixastic-crop.js",
@@ -107,14 +110,20 @@ namespace Restaurant
                 "~/js/SweetAlert.js",
                 "~/js/modernizr.custom.js",
                 "~/js/jquery.scrollTo.js",
+                "~/js/jsoneditor.min.js",
+                "~/js/ng-jsoneditor.js",
+  
                 //"~/ScriptsAngular/Angular/angular.js",
                 //"~/ScriptsAngular/Angular/angular-route.js",
-                 //For test of Ui-Select
-                 //"~/ScriptsAngular/Angular/src/angular-sanitize.min.js",
-                
+                //For test of Ui-Select
+                //"~/ScriptsAngular/Angular/src/angular-sanitize.min.js",
+
                  "~/js/Common.js",
                  "~/ScriptsAngular/app/App.js",
+                 "~/ScriptsAngular/app/directives/permissionDirective.js",
+                 "~/ScriptsAngular/app/Services/authService.js",
                  "~/ScriptsAngular/app/Controller/LoginCntrl.js",
+                 "~/ScriptsAngular/app/Controller/HomeCntrl.js",
                  "~/ScriptsAngular/app/Controller/CustomerCntrl.js",
                  "~/ScriptsAngular/app/Controller/SupplierCntrl.js",
                  "~/ScriptsAngular/app/Controller/CustomerdetailCntrl.js",
@@ -171,8 +180,8 @@ namespace Restaurant
                  "~/ScriptsAngular/app/Controller/DirectoryCntrl.js",
                  "~/ScriptsAngular/app/Controller/DirectoryViewCntrl.js",
                   "~/ScriptsAngular/app/Controller/SalesInvoiceCntrl.js",
+                  "~/ScriptsAngular/app/Controller/UserListCntrl.js",
                   "~/ScriptsAngular/app/Controller/RosemateVoucherCntrl.js"
-
 
 
 

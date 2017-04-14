@@ -104,12 +104,12 @@
             }
             $scope.createAccount = function () {
 
-                if (localStorage['adminrole'] = '3') {
-                    var isUo = true
-                } if (localStorage['adminrole'] = '2') {
-                    var isUo = false
-                }
-
+                //if (localStorage.['adminrole'] = '3') {
+                //    var isUo = true
+                //} if (localStorage['adminrole'] = '2') {
+                //    var isUo = false
+                //}
+                var isUO=localStorage.usertype=='UO'?true:false;
                 console.log($scope.groupMasters);
                 console.log($scope.checkboxModel.value1);
                 if ($scope.isAccount) {

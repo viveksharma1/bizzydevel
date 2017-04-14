@@ -176,17 +176,19 @@
 
     $scope.getExpenseData = function (expenseId) {  
         $http.get(config.api + 'voucherTransactions/'+ expenseId)
-                    .then(function (response) {                        
-                        $scope.accountTable = $scope.bindAccountId(response.data.accountTable);                      
-                        $scope.itemTable = $scope.bindAccountId(response.data.itemTable);
-                        $scope.supplier = { selected: { accountName: localStorage[response.data.supliersId], id: response.data.supliersId } };
-                        $scope.tdsRate = { selected: { accountName: localStorage[response.data.tdsAccountId], id: response.data.tdsAccountId } };                     
-                        $scope.applyTdsRate(response.data.tdsRate);
-                        $scope.expenseDueDate = $filter('date')(response.data.billDueDate, 'dd/MM/yyyy');
-                        $scope.expenseDate = $filter('date')(response.data.date, 'dd/MM/yyyy');                       
-                        $scope.expenseId = response.data.expenseId
-                        $scope.paymentDays = response.data.paymentDays                       
-                        $scope.id = response.data.id                     
+                    .then(function (response) {
+                        var expenseData = response.data.expenseData;
+                        console.log(response)
+                        $scope.accountTable = $scope.bindAccountId(expenseData.accountTable);
+                        $scope.itemTable = $scope.bindAccountId(expenseData.itemTable);
+                        $scope.supplier = { selected: { accountName: localStorage[expenseData.supliersId], id: expenseData.supliersId } };
+                        $scope.tdsRate = { selected: { accountName: localStorage[expenseData.tdsAccountId], id: expenseData.tdsAccountId } };
+                        $scope.applyTdsRate(expenseData.tdsRate);
+                        $scope.expenseDueDate = $filter('date')(expenseData.billDueDate, 'dd/MM/yyyy');
+                        $scope.expenseDate = $filter('date')(expenseData.date, 'dd/MM/yyyy');
+                        $scope.expenseId = expenseData.expenseId
+                        $scope.paymentDays = expenseData.paymentDays
+                        $scope.id = response.data.expenseData.id
                         $scope.accountTableSum();
                         $scope.itemTableSum();
                     });
@@ -408,31 +410,43 @@
         //            }
         //        }
         //    }
-        //}
-        var data = {
-            compCode: localStorage.CompanyId,
-            no: $scope.expenseId,
-            expenseId: $scope.expenseId,
-            refNo: $stateParams.no,
-            ordertype: "EXPENSE",
-            supliersId: $scope.supplier.selected.id,
-            id:$scope.id,
-            role: localStorage['adminrole'],
-            currency: $scope.currency, 
-            date: $scope.dateFormat($scope.expenseDate),
-            billDueDate: $scope.dateFormat($scope.expenseDueDate),
-            paymentDays:$scope.paymentDays,
-            balance:$scope.netamount,
-            adminBalance: $scope.netamount,
-            adminAmount:$scope.netamount,
-            accountTable: $scope.accountTable,
-            itemTable: $scope.itemTable,
-            amount: $scope.netAmount,
-            tdsamount: $scope.tdsamount,
-            tdsRate : $scope.tdsrate,
-            tdsAccountId: $scope.tdsAccountId
-        }
-        $http.post(config.login + "saveExpensetest/" + $scope.id, data).then(function (response) {
+             //}
+
+             var data = {
+                 type: "EXPENSE",
+                 state: "OPEN",
+                 date: $scope.dateFormat($scope.expenseDate),
+                 amount: $scope.netAmount,
+                 compCode: localStorage.CompanyId,
+                 role: localStorage['usertype'],
+                 refNo: $stateParams.no,
+                 no: $scope.expenseId,
+                 vochNo:$scope.expenseId,
+                 expenseData: {
+                     compCode: localStorage.CompanyId,
+                     no: $scope.expenseId,
+                     expenseId: $scope.expenseId,
+                     refNo: $stateParams.no,
+                     ordertype: "EXPENSE",
+                     supliersId: $scope.supplier.selected.id,
+                     id: $scope.id,
+                     role: localStorage['usertype'],
+                     currency: $scope.currency,
+                     date: $scope.dateFormat($scope.expenseDate),
+                     billDueDate: $scope.dateFormat($scope.expenseDueDate),
+                     paymentDays: $scope.paymentDays,
+                     balance: $scope.netamount,
+                     adminBalance: $scope.netamount,
+                     adminAmount: $scope.netamount,
+                     accountTable: $scope.accountTable,
+                     itemTable: $scope.itemTable,
+                     amount: $scope.netAmount,
+                     tdsamount: $scope.tdsamount,
+                     tdsRate: $scope.tdsrate,
+                     tdsAccountId: $scope.tdsAccountId
+                 }
+             }
+             $http.post(config.login + "saveExpensetest/" + $stateParams.expenceId, data).then(function (response) {
             showSuccessToast("Expense Save Succesfully");
         });
     }

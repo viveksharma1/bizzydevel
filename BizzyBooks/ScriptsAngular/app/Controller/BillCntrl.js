@@ -2,7 +2,8 @@
 
     $scope.manualTotal = 0;
     $scope.CIFTOTAL1 = 0;
-    $scope.role = localStorage["userrole"];
+    $scope.role = localStorage["usertype"];
+    console.log($scope.role)
     $(document).ready(function () {
 
         /*! Fades in page on load */
@@ -95,7 +96,7 @@
 
 
     };
-    if (localStorage["userrole"] == '3') {
+    if (localStorage.usertype == 'UO') {
 
         $('#fileUpload1').show();
         $('#ItemDetail23').hide();
@@ -103,7 +104,7 @@
         $('#ItemDetail3').hide();
         $('#fileUpload').show();
     }
-    if (localStorage["userrole"] == '2') {
+    if (localStorage.usertype == 'O') {
         $('#ItemDetail3').show();
         $('#fileUpload').hide();
         $('#fileUpload1').hide();
@@ -526,7 +527,7 @@
 
     $scope.no = $stateParams.billNo
     $scope.role;
-    $scope.admin = localStorage['adminrole'];
+    $scope.admin = localStorage['usertype'];
     $scope.supplier = {};
 
     console.log($scope.supplier);
@@ -626,7 +627,7 @@
     }
 
     if ($stateParams.billNo) {
-        if (localStorage['usertype'] == '2') {
+        if (localStorage['usertype'] == 'O') {
             $scope.getBilldata($stateParams.billNo, '?filter[fields][itemDetail]=false&filter[fields][adminAmount]=false&filter[fields][adminBalance]=false');
         }
         else

@@ -2,7 +2,7 @@
 
     $(".my a").click(function (e) {
         e.preventDefault();
-    });
+    })
 
     $('#DueDate').datepicker({
         format: 'dd/mm/yyyy',
@@ -887,7 +887,7 @@
         var data = {
             compCode: localStorage.CompanyId,
             type: "Sales Invoice",
-            role: localStorage['usertype'],
+            role: localStorage.usertype,
             date: dateFormat($scope.billDate),
             duedate: dateFormat($scope.billDueDate),
             amount: $scope.gTotal,
@@ -920,8 +920,15 @@
 
         $http.post(config.login + "saveVoucher" + "?id=" + $stateParams.voId, data).then(function (response) {
             showSuccessToast("Bill Save Succesfully");
-            if (!$scope.hasVoId) clearInvoice();
-            else $scope.goBack();
+            if (!$scope.hasVoId) {
+                $state.go("Customer.SalesInvoice", { voId: response.data.id });
+            } else {
+                $state.reload();
+            }
+            //$state.go("Customer.SalesInvoice/" + response.data.id);
+            
+            //if (!$scope.hasVoId) clearInvoice();
+            //else $scope.goBack();
         });
 
     };

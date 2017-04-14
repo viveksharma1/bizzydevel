@@ -6,9 +6,6 @@
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
 <script>
     $(document).ready(function () {
-
-
-
     $('#menutoggle').click(function () {
     $("#wrapper").toggleClass("toggled");
     });
@@ -30,8 +27,10 @@
         $('.addrotate').removeClass("down");
         $('.addrotate').addClass("up");
         $('#flyout').hide();
+        $('#flyoutCompany').hide();
     });
 
+ 
 
     $('.sub-menu').click(function () {
         $('.leftsubmenu').slideDown();
@@ -76,7 +75,7 @@
     });
 </script>
 
-<div id="wrapper" ng-app="myApp" ng-controller="LoginCntrl" ng-init="model = {}">
+<div id="wrapper">
 
     <!-- Sidebar -->
     @*<div id="sidebar-wrapper">*@
@@ -117,47 +116,48 @@
 
         </ul>*@
 
-    <div id="sidebar-wrapper" ng-switch on="{{usertype}}">
-        <em ng-switch-when="3">
+    <div id="sidebar-wrapper" >
+        @*<em ng-switch-when="3">*@
             <ul class="sidebar-nav">
                 <li class="sidebar-brand">
                     <a href="#" class="logo">
                         <i class="fa fa-compass"></i> Account <span>Books</span>
                     </a>
                 </li>
-                <li>
+                <li permission="Home.active">
                     <a ui-sref=".HomePage"><i class="fa fa-dashboard"></i> Home</a>
                 </li>
-                <li>
+                <li permission="Customers.active">
                     <a ui-sref=".Customer"><i class="fa fa-users"></i> Customers</a>
                 </li>
-                <li>
+                <li permission="Suppliers.active">
                     <a ui-sref=".Suppliers"><i class="fa fa-street-view"></i> Suppliers</a>
                 </li>
 
-                <li>
+                <li permission="Transaction.active" >
                     <a href="" class="sub-menu"><i class="fa fa-money"></i> Transactions</a>
                     <ul class="list-unstyled">
-                        <li><a ui-sref=".Banking" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Banking</a></li>
-                        @*  <li><a ui-sref=".Sales">Sales</a></li>
-                            <li><a ui-sref=".Expenses">Expenses</a></li>*@
-                        <li><a ui-sref=".ChartofAccounts" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Chart of Accounts</a></li>
+                        <li permission="Transaction.Banking.active" ><a ui-sref=".Banking" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Banking</a></li>
+                        <li permission="Transaction.Chart Of Accounts.active"><a ui-sref=".ChartofAccounts" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Chart of Accounts</a></li>
+                        <li permission="Transaction.Voucher.active"><a ui-sref=".VoucherTransactions" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Voucher </a></li>
+                        <li permission="Transaction.Settlement.active"><a ui-sref=".SattlementTransactions" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Settlement </a></li>
+                        <li permission="Transaction.ActivityLog.active"><a ui-sref=".ActivityLog" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Activity Log </a></li>
                     </ul>
                 </li>
                 <li>
                     <a href="" class="sub-menu"><i class="fa fa-money"></i> Inventory</a>
                     <ul class="list-unstyled">
-                        <li><a ui-sref=".Inventory" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Stock Line </a></li>
+                        @*<li><a ui-sref=".Inventory" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Stock Line </a></li>
                         <li><a ui-sref=".inventorystock" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Stock </a></li>
-                        <li><a ui-sref=".BalanceInventory" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Balance  </a></li>
-                        <li><a ui-sref=".StockBalanceInventory" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Stock Balance  </a></li>
-
+                        <li><a ui-sref=".BalanceInventory" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Balance  </a></li>*@
+                        <li permission="Inventory.Balance Stock.active"><a ui-sref=".StockBalanceInventory" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Stock Balance </a></li>
+                        <li permission="Inventory.Balance Stock Line.active"><a ui-sref=".BalanceInventory" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Line Item Balance</a></li>
 
                     </ul>
                 </li>
 
             </ul>
-        </em>
+        @*</em>
         <em ng-switch-default>
             <ul class="sidebar-nav">
                 <li class="sidebar-brand">
@@ -179,9 +179,7 @@
                     <a href="" class="sub-menu"><i class="fa fa-money"></i> Transactions</a>
                     <ul class="list-unstyled">
                         <li><a ui-sref=".Banking" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Banking</a></li>
-                        @*  <li><a ui-sref=".Sales">Sales</a></li>
-                            <li><a ui-sref=".Expenses">Expenses</a></li>*@
-                        <li><a ui-sref=".ChartofAccounts" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Chart of Accounts</a></li>
+                                                <li><a ui-sref=".ChartofAccounts" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Chart of Accounts</a></li>
                         <li><a ui-sref=".VoucherTransactions" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Voucher </a></li>
                         <li><a ui-sref=".SattlementTransactions" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Settlement </a></li>
                         <li><a ui-sref=".ActivityLog" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Activity Log </a></li>
@@ -192,20 +190,16 @@
                     <ul class="list-unstyled">
 
                         <li><a ui-sref=".inventorystock" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Stock </a></li>
-
                         <li><a ui-sref=".BalanceInventory" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Balance </a></li>
                         <li><a ui-sref=".StockBalanceInventory" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Stock Balance  </a></li>
 
-                        @*<li><a ui-sref=".DetailInventory" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Detail </a></li>
 
-                            <li><a ui-sref=".SaleInventory" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Sale </a></li>
-                            <li><a ui-sref=".ProcessInventory" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Process </a></li>*@
 
                     </ul>
                 </li>
 
             </ul>
-        </em>
+        </em>*@
 
 
 
@@ -231,8 +225,8 @@
 
 
                     <ul class="list-unstyled submenu my">
-                        <li id="CompanyInfo" class="flytopbar"><a href=""><i class="fa fa-gear"></i> {{DefaultCompanyName}}</a></li>
-                        <li @*id="Changename"*@ id="Datefilter" class="flytopbar" style="width:422px"><a href=""><i class="fa fa-calendar"></i> 1/March/2017 to 15/March/2017 </a></li>
+                        <li id="CompanyInfo" class="flytopbar"><a href=""><i class="fa fa-gear"></i> {{DefaultCompany.CompanyName}}</a></li>
+                        <li @*id="Changename"*@ id="Datefilter" class="flytopbar"><a href=""><i class="fa fa-calendar"></i> 1/March/2017 to 15/March/2017 </a></li>
                     </ul>
 
 
@@ -241,33 +235,26 @@
                         <div class="flyoutdiv">
                             <h3 class="title">Create</h3>
 
-                            <div class="col-sm-3" style="padding:0px">
+                            <div permission="Float.add.Customers.active" class="col-sm-3" style="padding:0px">
                                 <h3 class="Subtitle">Customers</h3>
                                 <ul class="list-unstyled">
-                                    <li><a ui-sref=".Invoice">Invoice</a></li>
-                                    <li><a ui-sref=".ReceivePayment">Receive Payment</a></li>
-                                    <li><a ui-sref=".JournalEntry">Journal Entry</a></li>
-                                    <li><a ui-sref=".TaxInvoice">Tax Invoice</a></li>
-                                    <li><a ui-sref=".SalesInvoice">Sales Invoice</a></li>
-                                    <li><a ui-sref=".GeneralInvoice">General Invoice</a></li>
-                                    <li><a ui-sref=".BadlaVoucher">Badla Voucher</a></li>
-                                    <li><a ui-sref=".RosemateVoucher">Rosemate Voucher</a></li>
+                                    <li permission="Float.add.Customers.Invoice.active"><a ui-sref=".Invoice">Invoice</a></li>
+                                    <li permission="Float.add.Customers.Receive Payment.active"><a ui-sref=".ReceivePayment">Receive Payment</a></li>
+                                    <li permission="Float.add.Customers.Journal Entry.active"><a ui-sref=".JournalEntry">Journal Entry</a></li>
+                                    <li permission="Float.add.Customers.Tax Invoice.active"><a ui-sref=".TaxInvoice">Tax Invoice</a></li>
+                                    <li permission="Float.add.Customers.Sales Invoice.active"><a ui-sref=".SalesInvoice">Sales Invoice</a></li>
+                                    <li permission="Float.add.Customers.General Invoice.active"><a ui-sref=".GeneralInvoice">General Invoice</a></li>
+                                    <li permission="Float.add.Customers.Badla Voucher.active"><a ui-sref=".BadlaVoucher">Badla Voucher</a></li>
                                 </ul>
                             </div>
-
-
-
-
-
-
-                            <div class="col-sm-3" style="padding:0px">
+                            <div permission="Float.add.Suppliers.active" class="col-sm-3" style="padding:0px">
                                 <h3 class="Subtitle">Suppliers</h3>
                                 <ul class="list-unstyled">
-                                    <li><a ui-sref=".Enquiry">Enquiry</a></li>
-                                    <li><a ui-sref=".PurchaseOrder">Purchase Order</a></li>
-                                    <li><a ui-sref=".Bill">Purchase Invoice</a></li>
-                                    <li><a ui-sref=".MakePayment">Payment</a></li>
-                                    <li><a ui-sref=".Expense">Add Expense</a></li>
+                                    <li permission="Float.add.Suppliers.Enquiry.active"><a ui-sref=".Enquiry">Enquiry</a></li>
+                                    <li permission="Float.add.Suppliers.Purchase Order.active"><a ui-sref=".PurchaseOrder">Purchase Order</a></li>
+                                    <li permission="Float.add.Suppliers.Purchase Invoice.active"><a ui-sref=".Bill">Purchase Invoice</a></li>
+                                    <li permission="Float.add.Suppliers.Payment.active"><a ui-sref=".MakePayment">Payment</a></li>
+                                    <li permission="Float.add.Suppliers.Add Expense.active"><a ui-sref=".Expense">Add Expense</a></li>
 
                                 </ul>
                             </div>
@@ -276,8 +263,8 @@
                             <div class="col-sm-3" style="padding:0px">
                                 <h3 class="Subtitle">Inventory</h3>
                                 <ul class="list-unstyled">
-                                    <li><a ui-sref=".InventoryStock">Stock</a></li>
-                                    <li><a ui-sref=".BalanceInventory">Balance</a></li>
+                                    <li permission="Inventory.Balance Stock.active"><a ui-sref=".StockBalanceInventory">Stock Balance</a></li>
+                                    <li permission="Inventory.Balance Stock Line.active"><a ui-sref=".BalanceInventory">Line Item Balance</a></li>
                                     @*<li><a ui-sref=".DetailInventory">Detail</a></li>
                         <li><a ui-sref=".SaleInventory">Sale</a></li>
                         <li><a ui-sref=".ProcessInventory">Process</a></li>*@
@@ -288,11 +275,11 @@
                             <div class="col-sm-3" style="padding:0px">
                                 <h3 class="Subtitle">Transaction</h3>
                                 <ul class="list-unstyled">
-                                    <li><a ui-sref=".ForexGainLoss">Forex Gain/Loss</a></li>
-                                    <li><a ui-sref=".ChartofAccounts">Chart of Accounts</a></li>
-                                    <li><a ui-sref=".VoucherTransactions">Voucher</a></li>
-                                    <li><a ui-sref=".SattlementTransactions">Settlement </a></li>
-                                    <li><a ui-sref=".ActivityLog">Activity Log </a></li>
+                                    <li permission="Transaction.Forex Gain/Loss.active"><a ui-sref=".ForexGainLoss">Forex Gain/Loss</a></li>
+                                    <li permission="Transaction.Chart Of Accounts.active"><a ui-sref=".ChartofAccounts">Chart of Accounts</a></li>
+                                    <li permission="Transaction.Voucher.active"><a ui-sref=".VoucherTransactions">Voucher</a></li>
+                                    <li permission="Transaction.Settlement.active"><a ui-sref=".SattlementTransactions">Settlement </a></li>
+                                    <li permission="Transaction.ActivityLog.active"><a ui-sref=".ActivityLog">Activity Log </a></li>
                                 </ul>
                             </div>
 
@@ -305,13 +292,13 @@
                     <div id="flyoutCompany" class="flytopbar">
                         <div class="arrow-up" style="margin-right:74%; float:right"></div>
                         <div class="flyoutdiv">
-                            <h3 class="title">{{DefaultCompanyName}}  ({{username}})</h3>
+                            <h3 class="title">{{DefaultCompany.CompanyName}}  ({{userInfo.username}})</h3>
 
                             <div class="col-sm-8" style="padding:0px">
                                 <h3 class="Subtitle">Settings</h3>
                                 <ul class="list-unstyled my">
-                                    <li><a href="#">Company Settings</a></li>
-                                    <li><a href="#">Chart of Accounts</a></li>
+                                    @*<li><a href="#">Company Settings</a></li>*@
+                                    @*<li><a href="#">Chart of Accounts</a></li>*@
                                 </ul>
                             </div>
 
@@ -321,11 +308,14 @@
 
 
                             <div class="col-sm-4" style="padding:0px">
-                                <h3 class="Subtitle">Your Company</h3>
-                                <ul class="list-unstyled my">
-                                    <li><a href="#">Your Account</a></li>
-                                    <li><a href="#">Manage Users</a></li>
-                                    <li class="logout" ng-click="logout()"><a href="#"><i class="fa fa-lock"></i> Sign Out</a></li>
+                                <h3 class="Subtitle">&nbsp;</h3>
+                                <ul class="list-unstyled">
+                                    @*<li><a href="#">Your Account</a></li>
+                                    <li><a href="#">Manage Users</a></li>*@
+                                    <li permission="User.active">
+                                        <a ui-sref=".UserList"><i class="fa fa-list"></i> Manage Users</a>
+                                    </li>
+                                    <li class="logout" ng-click="logout()"><a href=""><i class="fa fa-lock"></i> Sign Out</a></li>
 
                                 </ul>
                             </div>
@@ -384,7 +374,7 @@
 
                             <div class="col-sm-12" style="padding:0px">
                                 <ul class="list-unstyled my" ng-repeat="list in CompanyList">
-                                    <li><a ng-click="BindCompanyName(list.CompanyName,list.CompanyId,list.VAT_TIN_NO,list.CST_TIN_NO)">{{list.CompanyName}}</a></li>
+                                    <li><a ng-click="changeCompany(list)">{{list.CompanyName}}</a></li>
 
                                 </ul>
                             </div>
@@ -392,33 +382,8 @@
 
                         </div>
                     </div>
-
-
-
                 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 <div ui-view style="margin-top:37px"></div>
-
-
             </div>
         </div>
 

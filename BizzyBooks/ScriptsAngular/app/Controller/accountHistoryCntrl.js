@@ -46,11 +46,12 @@
         $scope.compcode = compcode
     }
     function getLedgerData() {
-        if (localStorage["userrole"] == '3') {
-            var query = "&filter[where][isUo]=" + true + "&filter[where][visible]=" + true
+        var query = '';
+        if (localStorage.usertype == 'UO') {
+           query = "&filter[where][isUo]=" + true + "&filter[where][visible]=" + true
         }
-        if (localStorage["userrole"] == '2') {
-            var query = "&filter[where][isUo]=" + false
+        if (localStorage.usertype == 'O') {
+            query = "&filter[where][isUo]=" + false
         }
         $http.get(config.api + "ledgers/" + "?filter[where][accountName]=" + $stateParams.accountId + query + "&filter[where][compCode]=" + localStorage.CompanyId).then(function (response) {
 

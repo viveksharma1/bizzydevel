@@ -14,12 +14,12 @@
                 <strong class="heading">Customers</strong>
                 @*<a href="/Customer/GetExcel_Click" class="brdrnone">Download</a>*@
                 <div class="btn-group pull-right">
-                    <button type="button" class="btn btn-primary btn-sm" @*ng-click="NewCustomerCreate();"*@ id="NewCustomerCreate"> New Cutomer</button>
+                    <button permission="Customers.new.true" type="button" class="btn btn-primary btn-sm" @*ng-click="NewCustomerCreate();"*@ id="NewCustomerCreate"> New Cutomer</button>
                     <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a href="#/Customer/Import">Import Customers</a></li>
+                        <li permission="Customers.import.true"><a href="#/Customer/Import">Import Customers</a></li>
 
                     </ul>
                 </div>

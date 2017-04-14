@@ -38,7 +38,7 @@
 
     $(":file").filestyle({ buttonName: "btn-sm btn-info" });
     $(".js-example-basic-single").select2();
-    console.log(localStorage.DefaultCompanyName);
+    //console.log(localStorage.DefaultCompanyName);
 
 
 

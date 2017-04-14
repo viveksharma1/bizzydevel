@@ -3,7 +3,7 @@
     Layout = null;
 }
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
-<script>
+@*<script>
         $(function () {
             try{
                 window.external.SetCompCode('hello');
@@ -26,7 +26,7 @@
             
         //});
 
-    </script>
+    </script>*@
 <style>
     body{background:#0b4462;}
     body{background:url('../images/bg2.png');}
@@ -47,22 +47,22 @@
                             <p id="Invalidbtn" style="cursor:pointer">Login to your account.</p>
                             <div class="loginwidth">
                                 <label>Email or user ID</label>
-                                <input id="usernamedetail" type="text" class="form-control" placeholder="" required="" />
+                                <input id="usernamedetail" type="text" class="form-control" ng-model="df" placeholder="" required="" />
                             </div>
                            
                             <div  class="loginwidth" style="margin-top:20px">
                                 <label>Password</label>
-                                <input id="userpassword" type="password" class="form-control" placeholder="" required="" />
+                                <input id="userpassword" type="password" class="form-control" ng-model="dfs" placeholder="" required="" />
                             </div>
-                            <div id="CaptchaDiv" class="loginwidth">
+                            <div ng-show="showCaptcha" id="CaptchaDiv" class="loginwidth">
                                 <strong class="text-primary pull-left" style="font-style:italic; color:#000; margin-bottom:10px; width:100%; text-align:left">Enter again with captcha.</strong>
-                                <div class="col-sm-5" style="padding:0px">@*<img src="../images/captcha.png"/>*@ <h2 type="text" id="mainCaptcha" style="font-size: 19px; color: inherit; text-align: center; background: url('../images/captcha-bg.jpg'); height: 38px; margin-top: 2px; padding-top: 9px; border: 2px solid; font-weight: bold; "></h2></div>
+                                <div class="col-sm-5" style="padding:0px">@*<img src="../images/captcha.png"/>*@ <h2 type="text" id="mainCaptcha" style="font-size: 19px; color: inherit; text-align: center; background: url('../images/captcha-bg.jpg'); height: 38px; margin-top: 2px; padding-top: 9px; border: 2px solid; font-weight: bold; ">{{mainCaptcha}}</h2></div>
                                 
-                                <div class="col-sm-7" style="padding:0px 0px 0px 10px; margin-top:2px"><input type="text" id="txtInput" style="height:38px; font-size:16px; font-weight:bold; color:#000" class="form-control" /></div>
+                                <div class="col-sm-7" style="padding:0px 0px 0px 10px; margin-top:2px"><input type="text" id="txtInput" ng-model="captchaInput" style="height:38px; font-size:16px; font-weight:bold; color:#000" class="form-control" /></div>
                             </div>
                             <div style="text-align:center; width:100%; float:left" class="loginwidth">
 
-                                <button id="Move" class="btn btn-primary submit" type="submit" title="Log In">Log In</button>
+                                <button id="Move" class="btn btn-primary submit" ng-click="login()" type="submit" title="Log In">Log In</button>
 
                             </div>
                             <div class="clearfix"></div>
