@@ -122,6 +122,12 @@ myApp.controller('HomeCntrl', ['$state', '$http', '$rootScope', '$scope', 'confi
         }
     });
     //$scope.usertype = localStorage['usertype'];
+
+    $scope.AddCompnay = function () {
+        $('#AddCompnayModal').modal('show');
+    }
+
+
 }]);
 
 

@@ -28,6 +28,7 @@ namespace Restaurant
                        "~/css/bootstrap-datepicker.css",
                         "~/css/daterangepicker.css",
                         "~/css/jquery.toastmessage-min.css",
+                        "~/css/jquery.timepicker.css",
                         "~/css/jsoneditor.min.css"
 
                 ));
@@ -112,11 +113,12 @@ namespace Restaurant
                 "~/js/jquery.scrollTo.js",
                 "~/js/jsoneditor.min.js",
                 "~/js/ng-jsoneditor.js",
-  
-                //"~/ScriptsAngular/Angular/angular.js",
-                //"~/ScriptsAngular/Angular/angular-route.js",
-                //For test of Ui-Select
-                //"~/ScriptsAngular/Angular/src/angular-sanitize.min.js",
+                "~/js/jquery.timepicker.js",
+
+                 //"~/ScriptsAngular/Angular/angular.js",
+                 //"~/ScriptsAngular/Angular/angular-route.js",
+                 //For test of Ui-Select
+                 //"~/ScriptsAngular/Angular/src/angular-sanitize.min.js",
 
                  "~/js/Common.js",
                  "~/ScriptsAngular/app/App.js",

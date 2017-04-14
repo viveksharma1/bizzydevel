@@ -41,7 +41,7 @@
                                         <h4 style="text-align:center; margin:10px 0px">EXCISE INVOICE</h4>
                                         <h5 style="margin:0px">FIRST/SECOND STAGE DEALER'S INVOICE</h5>
                                         <small>(Under Rule 11 (7) of Central Excise Rules 2002)</small>
-                                        <h1 style="font-size:24px; margin:5px; font-weight:bold;  text-transform:uppercase; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">{{ company.CompanyName}}</h1>
+                                        <h1 style="font-size:18px; margin:5px; font-weight:bold;  text-transform:uppercase; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">{{ company.CompanyName}}</h1>
                                         <p style="margin:0px">Office Add :{{company.CompanyAddress}}<br />Phone No. : {{company.CompanyMobileNo}} Fax : {{company.CompanyMobileNo}} <br />Prop : {{}}</p>
                                     </td>
                                     <td style="vertical-align:top; text-transform:uppercase; width:250px; font-size:12px; padding:3px 0px;   padding-bottom:20px">
@@ -217,7 +217,7 @@
                                     <td style="padding:3px; width:80px">Rate of Duty %</td>
                                     <td style="padding:0px; font-size:11px; width:300px">
                                         Duty Per Unit/Total Amtount of Duty
-                                        <table style="vertical-align:top; width:100%; font-size:12px; border-left:none; border-right:none; border-color:rgba(227, 227, 227, 0.44); border-bottom:none; margin-bottom:0px" border="1">
+                                        <table style="vertical-align:top; width:100%; height:51px;border-bottom:none; font-size:12px; border-left:none; border-right:none; border-color:rgba(227, 227, 227, 0.44); border-bottom:none; margin-bottom:0px" border="1">
                                             <tr style="vertical-align:top">
                                                 <td style="padding:3px; width:120px">Excise</td>
                                                 <td style="padding:3px;width:120px">Cess <br />2%</td>
@@ -240,19 +240,19 @@
                                     <td style="padding:0px; font-size:11px; width:250px">
                                         <table style="vertical-align:top; width:100%; font-size:12px; border-left:none; border-right:none; border-color:rgba(227, 227, 227, 0.44); border-top:none; border-bottom:none; margin-bottom:0px" border="1">
                                             <tr style="vertical-align:top">
-                                                <td style="padding:3px; text-align:right;width:67px">
+                                                <td style="padding:3px; text-align:right;width:67px; border:none">
                                                     <p style="margin-bottom:2px">{{item.exciseDuty/item.NETWEIGHT |number : 2}}</p>
                                                     @*<p style="margin-bottom:2px">0.00</p>*@
                                                 </td>
-                                                <td style="padding:3px; text-align:right;width:81px">
+                                                <td style="padding:3px; text-align:right;width:81px; border:none; border-left:1px solid #e3e3e3">
                                                     <p style="margin-bottom:2px">0.00</p>
                                                     @*<p style="margin-bottom:2px">0.00</p>*@
                                                 </td>
-                                                <td style="padding:3px; text-align:right;width:93px">
+                                                <td style="padding:3px; text-align:right;width:93px; border:none; border-left:1px solid #e3e3e3">
                                                     <p style="margin-bottom:2px">0.00</p>
                                                     @*<p style="margin-bottom:2px">0.00</p>*@
                                                 </td>
-                                                <td style="padding:3px; text-align:right;width:100px">
+                                                <td style="padding:3px; text-align:right;width:100px; border:none; border-left:1px solid #e3e3e3">
                                                     <p style="margin-bottom:2px">{{item.SAD/item.NETWEIGHT |number : 2}}</p>
                                                     @*<p style="margin-bottom:2px">0.00</p>*@
                                                 </td>
@@ -269,17 +269,17 @@
                                     <td style="padding:0px; font-size:11px; width:250px">
                                         <table style="vertical-align:top; width:100%; font-size:12px; border-left:none; border-right:none; border-color:rgba(227, 227, 227, 0.44); border-top:none; border-bottom:none; margin-bottom:0px" border="1">
                                             <tr style="vertical-align:top">
-                                                <td style="padding:3px; text-align:right;width:67px">
+                                                <td style="padding:3px; text-align:right;width:68px;border:none">
                                                     <p ><strong>{{totalExciseAmount}}</strong></p>
 
                                                 </td>
-                                                <td style="padding:3px; text-align:right;width:81px">
+                                                <td style="padding:3px; text-align:right;width:81px;border:none; border-left:1px solid #e3e3e3">
                                                     <p style="margin-bottom:2px"><strong>0.00</strong></p>
                                                 </td>
-                                                <td style="padding:3px; text-align:right;width:93px">
+                                                <td style="padding:3px; text-align:right;width:93px;border:none; border-left:1px solid #e3e3e3">
                                                     <p style="margin-bottom:2px"><strong>0.00</strong></p>
                                                 </td>
-                                                <td style="padding:3px; text-align:right;width:100px">
+                                                <td style="padding:3px; text-align:right;width:100px;border:none; border-left:1px solid #e3e3e3">
                                                     <p style="margin-bottom:2px"><strong>{{totalSADAmount}}</strong></p>
                                                 </td>
                                             </tr>
@@ -350,6 +350,48 @@
                                 </tr>
                                 </table>
 </td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align:top; border-top:1px solid #e3e3e3">
+                            <table style="width:100%; font-size:12px; text-align:justify">
+                                <tr>
+                                    <td style="border-right:1px solid #e3e3e3; padding:2px 5px; vertical-align:top; width:33.3%">
+                                        <strong>CERTIFICATION</strong>
+                                        <p>
+                                            Certified the goods covered under this invoice were,(a) imported directly by us or received directly from that party, who have imporanted the said goods,(b) Received directly from the factor/depot/consignment agent/authorised permises of M/s. <strong>JINDAL STAINLESS LIMITED</strong> (C) Received from M/s. <strong>JINDAL STAINLESS LIMITED. (TALOJA)</strong> who are the first stage dealer of
+                                        </p>
+                                        <p>M/s <strong>JINDAL STAINLESS LIMITED</strong></p>
+
+                                        <p style="margin-top:42px">
+                                            <span>Place: Mumbai</span>
+                                            <span style="float:right">
+                                                Date: 22-Feb-2017
+                                            </span>
+                                        </p>
+                                    </td>
+                                    <td style="border-right:1px solid #e3e3e3; padding:2px 5px; vertical-align:top; width:33.3%">
+                                        <p>VAT TIN NO. : 27280644068 V 15-01-2008
+                                      </p>
+
+                                        <p>
+                                            CST TIN NO. : 27280644068 C 15-01-2008
+                                        </p>
+                                      <strong style="width:100%; float:left; text-align:center; border-bottom:1px solid #e3e3e3">Subject to Mumbai Jurisdiction</strong>
+                                        <p  style="width:100%; float:left; border-bottom:1px solid #e3e3e3; padding:10px 0px 23px 0px">Certified that the particulars given above are true and correct and the amount indicated represents the price actually charged and that there is no additional consideration following directly or indirectly from the buyer.</p>
+                                    <p>FOR <strong>NEEL RATAN STEEL</strong></p>
+                                        <p style="margin-top:20px">Proprietor/Authorised Signatory</p>
+                                    </td>
+                                    <td style="padding:2px 5px; vertical-align:top; width:33.3%">
+                                        <p style="width:100%; float:left; border-bottom:1px solid #e3e3e3; padding-bottom:20px">
+                                            'I/We hereby certify that my/our registration certification under the Maharashtra Value Added Tax Act, 2002 is in force on the date on which sale of goods specified in this tax invoice is made by me/us and that the transaction of sale covered by this Tax invoice has been effected by me/us and it shall be accounted for in the turnover of sales while filing my return and the due tax. If any payable on the sale has been paid or shall be paid.<br />
+
+                                        </p> 
+                                        <p>FOR <strong>NEEL RATAN STEEL</strong></p>
+                                        <p style="margin-top:20px">Proprietor/Authorised Signatory</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
                     </tr>
                 </table>
             </div>

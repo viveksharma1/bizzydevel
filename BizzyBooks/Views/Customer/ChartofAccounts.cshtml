@@ -7,7 +7,11 @@
     <div class="panel-heading" style="height:84px">
         <strong class="heading" style="margin-top: 15px; float: left;">Chart of Accounts</strong>
  
-           
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-primary btn-sm" ng-click="Accountbtn()"id="NewCustomerCreate">Create Account</button>
+      
+        </div>
+
         @*<div class="pull-right col-sm-4" style="padding:0px">
             <div class="col-sm-6 padding">
                 <h4 class="tabheading">From</h4>
@@ -43,10 +47,10 @@
     </div>
 <div class="col-sm-12" style="padding:10px">
     <input type="text" class="form-control" placeholder="Filter by name" ng-model="search"  style="width:250px; float:left"/>
-    <div class="pull-right" style="margin-top:5px">
+    @*<div class="pull-right" style="margin-top:5px">
         <i class="fa fa-plus fa-2x cursor"ng-click="Accountbtn()"id="NewCustomerCreate" title="Create Account"></i>
        
-    </div>
+    </div>*@
     <create-account value="myValue"> </create-account>
     <table class="table-bordered table-condensed table-hover " style="margin-top:10px; width:100%; float:left;table-layout:fixed">
         <thead>

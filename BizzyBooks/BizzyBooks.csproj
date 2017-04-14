@@ -208,6 +208,7 @@
     <Content Include="css\img\jsoneditor-icons.svg" />
     <Content Include="css\ion.rangeSlider.css" />
     <Content Include="css\ion.rangeSlider.skinFlat.css" />
+    <Content Include="css\jquery.timepicker.css" />
     <Content Include="css\jquery.toastmessage-min.css" />
     <Content Include="css\jsoneditor.min.css" />
     <Content Include="css\loader.css" />
@@ -297,6 +298,7 @@
     <Content Include="js\jquery.js" />
     <Content Include="js\jquery.min.js" />
     <Content Include="js\jquery.scrollTo.js" />
+    <Content Include="js\jquery.timepicker.js" />
     <Content Include="js\jquery.toastmessage-min.js" />
     <Content Include="js\jsoneditor.min.js" />
     <Content Include="js\jspdf.min.js" />

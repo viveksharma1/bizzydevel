@@ -1749,11 +1749,89 @@
 
 
         </div>
-        <div class="col-sm-12">
-            <h4 data-toggle="collapse" data-target="#ItemDetail1234" class="cursor pull-left" style="margin-top: 15px; margin-bottom: 0px;">
+
+        <div class="col-sm-6" style="padding:0px">
+            <div class="col-sm-12" style="padding:0px">
+                <div class="col-sm-10">
+
+                    <div class="form-group">
+                        <h4 style="margin-top: 15px; margin-bottom:10px;">
+                            <i class="fa fa-caret-right"></i> Narration
+                        </h4>
+                        <textarea class="form-control" style="height:80px"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-12">
+
+                <ul ng-repeat="data in datapath">
+                    <li>
+                        <span> <a href="" style="font-size:medium" class="pointer fa fa-file-pdf-o" aria-hidden="true"> <b ng-click="getfile(data)">{{data.replace("server/boot/uploads/"+ billNo,'')}}</b></a></span>
+                        <i class="fa fa-times" aria-hidden="true" ng-click="deletefile(data,$index)"></i>
+                    </li>
+                </ul>
+
+                <div class="col-sm-12" style="padding:0px">
+                 
+
+                        <div class="form-group">
+                            <h4 style="margin-top: 15px; margin-bottom:10px;">
+                                <i class="fa fa-caret-right"></i> Attachments
+                                <small class="text-primary cursor dwn">(<i class="fa fa-download"></i> Download all files)</small>
+                            </h4>
+
+                            @*<div class="attachmets">*@
+                            @*<input type="file" id="uploadBtn" multiple="multiple" name="browsefile">*@
+                            @*<div id="uploadAttchments">
+                            <i class="fa fa-plus"></i>
+                            <p>Add file</p>
+                        </div>
+                    </div>*@
+                            <div class="col-sm-5 padding5">
+                                <input type="text" class="form-control" id="NameInput" placeholder="Title" />
+                            </div>
+                            <div class="col-sm-5 padding5">
+                                @*<input type="file" class="form-control" id="id=" uploadBtn" />*@
+                                <input type="file" class="filestyle" id="uploadBtn" data-buttonName="btn-info">
+                            </div>
+
+                            <div class="col-sm-2 padding5">
+                                <button type="button" class="btn btn-sm btn-primary Attechmentdetail" style="width:100%">Add</button>
+                            </div>
+
+
+                            <div style="float:left; width:100%; padding:10px 10px; border-bottom:1px dotted #ccc;" class="filenameDiv">
+
+
+                                <div class="col-sm-5 padding5" style="word-break:break-all">
+                                    <strong id="name"></strong>
+                                </div>
+
+                                <div class="col-sm-5 padding5 cursor" style="word-break:break-all">
+                                    <a id="type" class="cursor"></a>
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <i class="fa fa-times pull-right text-danger" id="removeattachment"></i>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="col-sm-5 pull-right">
+            @*<h4 data-toggle="collapse" data-target="#ItemDetail1234" class="cursor pull-left" style="margin-top: 15px; margin-bottom: 0px;">
                 <i class="fa fa-caret-right"></i> Account details
             </h4>
-            <hr style="float:left; width:100%; margin:5px 0px" />
+            <hr style="float:left; width:100%; margin:5px 0px" />*@
 
             <div class="collapse in" id="ItemDetail1234" style="float:left; width:100%">
 
@@ -1821,108 +1899,15 @@
                         </tr>
                     </tfoot>
                 </table>
+                <div class="pull-right" style="margin-right:60px; margin-top:5px">
+                    <p class="text-right"></p>
+                    <h4> Total : <span style="width:160px; float:right; text-align:right">{{totalAccountAmount + totalAmountINR |number : 2}}</span> </h4>
 
-            </div>
-        </div>
-
-        <hr style="float:left; width:100%; margin:10px 0px" />
-        <div class="col-sm-12">
-            <div class="col-sm-4 padding">
-
-                <div class="form-group">
-                    <h4 style="margin-top: 15px; margin-bottom:10px;">
-                        <i class="fa fa-caret-right"></i> Narration
-                    </h4>
-                    <textarea class="form-control" style="height:80px"></textarea>
-                </div>
-            </div>
-
-            <div class="pull-right" style="margin-right:10px; margin-top:5px">
-                <p class="text-right"></p>
-                <h4> Total : <span style="float:right; width:150px">{{totalAccountAmount + totalAmountINR |number : 2}}</span> </h4>
-            </div>
-        </div>
-
-        <hr style="float:left; width:100%; margin:10px 0px" />
-
-        <div class="col-sm-12" style="margin-bottom:20px">
-            @*<div class="col-sm-4 padding">
-
-                    <div class="form-group">
-                        <h4 class="tabheading">Attachments</h4>
-                        <div class="attachmets">
-                            <input type="file" id="uploadBtn" multiple="multiple" name="browsefile">
-                            <div>
-                                <i class="fa fa-plus"></i>
-                                <p>Add file</p>
-                            </div>
-                        </div>
-
-
-                    </div>
-                </div>
-                <div id="upload_prev" class="upload_prev"></div>*@
-
-
-
-            <ul ng-repeat="data in datapath">
-                <li>
-                    <span> <a href="" style="font-size:medium" class="pointer fa fa-file-pdf-o" aria-hidden="true"> <b ng-click="getfile(data)">{{data.replace("server/boot/uploads/"+ billNo,'')}}</b></a></span>
-                    <i class="fa fa-times" aria-hidden="true" ng-click="deletefile(data,$index)"></i>
-                </li>
-            </ul>
-
-            <div class="col-sm-12" style="padding:0px">
-                <div class="col-sm-6" style="padding:0px">
-
-                    <div class="form-group">
-                        <h4 style="margin-top: 15px; margin-bottom:10px;">
-                            <i class="fa fa-caret-right"></i> Attachments
-                            <small class="text-primary cursor dwn">(<i class="fa fa-download"></i> Download all files)</small>
-                        </h4>
-
-                        @*<div class="attachmets">*@
-                        @*<input type="file" id="uploadBtn" multiple="multiple" name="browsefile">*@
-                        @*<div id="uploadAttchments">
-                                    <i class="fa fa-plus"></i>
-                                    <p>Add file</p>
-                                </div>
-                            </div>*@
-                        <div class="col-sm-5 padding5">
-                            <input type="text" class="form-control" id="NameInput" placeholder="Title" />
-                        </div>
-                        <div class="col-sm-5 padding5">
-                            @*<input type="file" class="form-control" id="id=" uploadBtn" />*@
-                            <input type="file" class="filestyle" id="uploadBtn" data-buttonName="btn-info">
-                        </div>
-
-                        <div class="col-sm-2 padding5">
-                            <button type="button" class="btn btn-sm btn-primary Attechmentdetail" style="width:100%">Add</button>
-                        </div>
-
-
-                        <div style="float:left; width:100%; padding:10px 10px; border-bottom:1px dotted #ccc;" class="filenameDiv">
-
-
-                            <div class="col-sm-5 padding5" style="word-break:break-all">
-                                <strong id="name"></strong>
-                            </div>
-
-                            <div class="col-sm-5 padding5 cursor" style="word-break:break-all">
-                                <a id="type" class="cursor"></a>
-                            </div>
-
-                            <div class="col-sm-2">
-                                <i class="fa fa-times pull-right text-danger" id="removeattachment"></i>
-                            </div>
-
-
-
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
+
+   
     </div>
 
 
