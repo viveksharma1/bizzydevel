@@ -373,45 +373,11 @@
       }
     // save Expense new 
          $scope.saveExpenceNew = function () {
-
              if (!$scope.tdsamount) {
                  $scope.netAmount = Number($scope.itemTableSum()) + Number($scope.accountTableSum())
              } else {
                  $scope.netAmount = Number($scope.itemTableSum()) + Number($scope.accountTableSum())- Number($scope.tdsamount)
              }
-
-        //     if ($scope.tdsRate == undefined) {
-        //         $scope.tdsAccountId = null;
-        //         $scope.tdsrate = null;
-        //     }
-        //     else {
-        //         $scope.tdsAccountId = $scope.tdsRate.selected.id;
-        //         $scope.tdsrate = $scope.tdsRate.selected.rate;
-        //     }
-        //if ($scope.totalcharges && $scope.TDS && $scope.totaltax) {
-        //    $scope.netamount = Number($scope.netTds) + Number($scope.totaltax);
-        //}
-        //else {
-        //    if ($scope.totalcharges && $scope.totaltax) {
-               
-        //        $scope.netamount = Number($scope.totalcharges) + Number($scope.totaltax);
-        //    }
-        //    else {
-        //        if ($scope.totalcharges && $scope.TDS) {
-        //            $scope.netamount = $scope.netTds
-        //        }
-        //        else {
-                    
-        //            if ($scope.totalcharges) {
-                       
-        //                $scope.netamount = Number($scope.totalcharges);
-        //            } else {
-        //                $scope.netamount = Number($scope.totaltax);
-        //            }
-        //        }
-        //    }
-             //}
-
              var data = {
                  type: "EXPENSE",
                  state: "OPEN",
