@@ -109,7 +109,7 @@
                 //} if (localStorage['adminrole'] = '2') {
                 //    var isUo = false
                 //}
-                var isUO=localStorage.usertype=='UO'?true:false;
+                var isUo = localStorage.usertype == 'UO' ? true : false;
                 console.log($scope.groupMasters);
                 console.log($scope.checkboxModel.value1);
                 if ($scope.isAccount) {

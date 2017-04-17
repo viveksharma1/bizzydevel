@@ -167,7 +167,7 @@
     $scope.account = {}
     //$scope.totalAmountINR = 0;
     $scope.invoiceType = "Tax";
-    $scope.customerType = "Buyer";
+    $scope.customerType = "Consignee";
 
     $scope.remarks = {};
     $scope.godown = {};
@@ -210,7 +210,7 @@
             //$scope.ItemCount = response.data.length;
         });
     }
-    getSupplier();
+
     $http.get(config.api + "Inventories?filter[where][visible]=true&filter[limit]=20").then(function (response) {
         $scope.ItemList2 = response.data;
         $scope.filterList = $scope.ItemList2;
@@ -299,6 +299,10 @@
                 $scope.email = $scope.supplier.selected.email
 
             }
+            if ($scope.supplier.selected.phone) {
+                $scope.contactNo = $scope.supplier.selected.phone;
+
+            }
 
         }
     });
@@ -309,6 +313,10 @@
             }
             if ($scope.supplier2.selected.email) {
                 $scope.email2 = $scope.supplier2.selected.email
+
+            }
+            if ($scope.supplier2.selected.phone) {
+                $scope.contactNo2 = $scope.supplier2.selected.phone;
 
             }
 
@@ -394,19 +402,31 @@
     })
 
     $scope.paymentTerm = function () {
-        $scope.billDueDate = moment($scope.billDate, "DD/MM/YYYY").add($scope.paymentDays, 'days').format('DD/MM/YYYY');
+        var days=0;
+        if ($scope.paymentDays)
+            days = $scope.paymentDays;
+        if ($scope.billDate)
+            $scope.billDueDate = moment($scope.billDate, "DD/MM/YYYY").add(days, 'days').format('DD/MM/YYYY');
     }
 
     $scope.supliers = [];
     $scope.supliers2 = [];
 
-    function getSupplier() {
-        
-        $http.get(config.api + "suppliers" + "?filter[where][compCode]=" + localStorage.CompanyId).then(function (response) {
-            $scope.supliers = response.data;
+    $scope.getSupplier = function () {
+        $http.get(config.login + "getPartytAccount/" + localStorage.CompanyId).then(function (response) {
+            $scope.supliers = response.data
             angular.copy($scope.supliers, $scope.supliers2);
+            //console.log($scope.partyAccounts);
         });
     }
+    $scope.getSupplier();
+    //function getSupplier() {
+        
+    //    $http.get(config.api + "suppliers" + "?filter[where][compCode]=" + localStorage.CompanyId).then(function (response) {
+    //        $scope.supliers = response.data;
+    //        angular.copy($scope.supliers, $scope.supliers2);
+    //    });
+    //}
     function getSupplierDetail(supplierName,isConsignee) {
         //$scope.supliersDetail = []
         $http.get(config.api + "suppliers" + "?filter[where][compCode]=" + localStorage.CompanyId + "&filter[where][company]=" + supplierName).then(function (response) {
@@ -424,7 +444,14 @@
         });
     }
     $scope.accounts = [];
-    $http.get(config.api + "accounts").then(function (response) {
+
+    //$scope.getAccount = function () {
+    //    $http.get(config.login + "getPaymentAccount/" + localStorage.CompanyId).then(function (response) {
+    //        $scope.bankAccounts = response.data
+    //        console.log($scope.bankAccounts);
+    //    });
+    //}
+    $http.get(config.login + "getPaymentAccount/" + localStorage.CompanyId).then(function (response) {
         $scope.salesAccounts = response.data;
         angular.copy($scope.salesAccounts, $scope.accounts);
 
@@ -844,8 +871,8 @@
     }
 
     $scope.saveInvoice = function () {
-        if ($scope.supplier.selected == undefined || $scope.supplier.selected==null) {
-            showErrorToast("Please select customer");
+        if ($scope.supplier2.selected == undefined || $scope.supplier2.selected==null) {
+            showErrorToast("Please select consignee");
             return;
         }
         if ($scope.salesAccount.selected == undefined || $scope.salesAccount.selected == null) {
@@ -899,23 +926,26 @@
             roundOff:$scope.roundOff,
             vochNo: $scope.billNo,
             state: "PAID",
-            customerName: $scope.supplier.selected.company,
-            email: $scope.supplier.selected.email,
+            customerId: $scope.supplier2.selected.id,
+            balance:$scope.gTotal,
+            //email: $scope.suppliers2.selected.email,
             remark: $scope.narration,
             invoiceData: {
+                comInvoiceNo:$scope.comInvoiceNo,
                 invoiceSubType: $scope.invoiceType,
                 customerType:$scope.customerType,
                 issueDate: dateFormat($scope.billIssueDate),
                 removalDate: dateFormat($scope.billRemovalDate),
-                customerAccount: $scope.supplier.selected.company,
-                consigneeAccount: $scope.supplier2.selected ? $scope.supplier2.selected.company : $scope.supplier.selected.company,
+                customerAccountId: $scope.supplier.selected?$scope.supplier.selected.id : $scope.supplier2.selected.id,
+                consigneeAccountId: $scope.supplier2.selected.id,// ? $scope.supplier2.selected.company : $scope.supplier.selected.company,
                 rdi:$scope.rdi,
-                ledgerAccount: $scope.salesAccount.selected.accountName,
+                ledgerAccountId: $scope.salesAccount.selected.id,
                 saleAmount:$scope.salesAmount,
                 remarks: $scope.narration,
-                paymentDays: $scope.paymentDays,
+                paymentDays: $scope.paymentDays == undefined ? 0 : $scope.paymentDays,
                 modeTransport: $scope.modeTransport,
-                roi:$scope.intRate,
+                vehicleNo:$scope.vehicleNo,
+                roi: $scope.intRate == undefined ? 0 : $scope.intRate,
                 accountlineItem: $scope.accountTable,
                 billData: $scope.itemTable,
                 attachements:attachements

@@ -58,12 +58,12 @@
 
             <div class="col-lg-5 padding">
                 <div class="col-sm-4 padding">
-                    <h4 class="tabheading">Payment no.</h4>
+                    <h4 class="tabheading">Receipt No.</h4>
                     <input type="text" ng-model="paymentNo" class="form-control" value="3" disabled />
                 </div>
 
                 <div class="col-sm-4 padding">
-                    <h4 class="tabheading">Payment Date</h4>
+                    <h4 class="tabheading">Receipt Date</h4>
 
                     <div class='input-group date' id='paymentdate'>
                         <input type='text' class="form-control" ng-model="paymentdate" id='paymentdate' />
@@ -118,30 +118,30 @@
 
                 <div class="col-sm-3 padding">
                     <h4 class="tabheading">Rs.</h4>
-                    <input type="text"  ng-model="totalPaidAmount"class="form-control" />
+                    <input type="number" step="0.01" ng-model="totalPaidAmount"class="form-control" />
                 </div>
 
 
             </div>
 
-            <div class="col-sm-3 pull-right" style="padding:10px; background:rgba(139, 195, 74, 0.09)">
+            <div  class="col-sm-4 pull-right" style="padding:10px; background:rgba(139, 195, 74, 0.09)">
                 <div class="col-sm-6 padding">
-                    <h4 style="margin:0px 0px 10px 0px; font-size:14px; font-weight:bold" class="text-primary"><input type="checkbox" /> Badla Payment</h4>
+                    <h4 style="margin:0px 0px 10px 0px; font-size:14px; font-weight:bold" class="text-primary"><input ng-model="chkBadla" ng-click="selectbadla()" ng-disabled="itemChecked.length!=1" type="checkbox" /> Badla Payment</h4>
                 </div>
                 <div class="col-sm-6 padding">
                     @*<h4 class="tabheading">Rs.</h4>*@
-                    <input type="text" placeholder="Badla Amount" ng-model="totalPaidAmount" id="badlaamnt" class="form-control" />
+                    <input ng-disabled="itemChecked.length!=1" type="number" step="0.01" placeholder="Badla Amount" ng-model="badlaAmount" id="badlaamnt" class="form-control" />
                 </div>
                 <div class="col-sm-7 padding5">
-                    <label>Badla Person</label>
-                    <ui-select ui-tree-select ng-model="partyAccount.selected" id="countryCode"
+                    <label>Badla Party</label>
+                    <ui-select ng-disabled="itemChecked.length!=1" ui-tree-select ng-model="badlaAccount.selected" id="countryCode"
                                ui-select-focuser
                                theme="selectize">
-                        <ui-select-match placeholder="Select Suppliers">{{ $select.selected.accountName }}</ui-select-match>
+                        <ui-select-match placeholder="Select Badla Party">{{ $select.selected.accountName }}</ui-select-match>
 
-                        <ui-select-choices repeat="person in partyAccounts  | filter: $select.search">
+                        <ui-select-choices repeat="account in badlaAccounts  | filter: $select.search">
                             <div>
-                                <span ng-model="supplier1" ng-bind-html="person.accountName | highlight: $select.search"></span>
+                                <span ng-bind-html="account.accountName | highlight: $select.search"></span>
                             </div>
 
 
@@ -151,7 +151,7 @@
                 <div class="col-sm-5 padding5">
                     <label>Date of Badla</label>
                     <div class='input-group'>
-                        <input type='text' class="form-control" id='BadlaDate' />
+                        <input ng-disabled="itemChecked.length!=1" ng-model="badlaDate" type='text' class="form-control" id='badlaDate' />
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
@@ -170,15 +170,15 @@
                     <tbody>
                         <tr>
                             <td style="vertical-align:middle"><strong>DAYS</strong></td>
-                            <td><input type="text" class="form-control" /></td>
-                            <td><input type="text" class="form-control" /></td>
-                            <td><input type="text" class="form-control" /></td>
+                            <td><input ng-disabled="itemChecked.length!=1" type="number" ng-model="dayTotal" placeholder="days" class="form-control" /></td>
+                            <td><input ng-disabled="itemChecked.length!=1" type="number" ng-model="dayInterest" placeholder="days" class="form-control" /></td>
+                            <td><input ng-disabled="itemChecked.length!=1" type="number" ng-model="dayDiff" placeholder="days" class="form-control" /></td>
                         </tr>
                         <tr>
                             <td style="vertical-align:middle"><strong>INTEREST (%)</strong></td>
-                            <td><input type="text" class="form-control" /></td>
-                            <td><input type="text" class="form-control" /></td>
-                            <td><input type="text" class="form-control" /></td>
+                            <td><input ng-disabled="itemChecked.length!=1" type="number" ng-model="perTotal" placeholder="%" step="0.01" class="form-control" /></td>
+                            <td><input ng-disabled="itemChecked.length!=1" type="number" ng-model="perInterest" placeholder="%" step="0.01" class="form-control" /></td>
+                            <td><input ng-disabled="itemChecked.length!=1" type="number" ng-model="perDiff" placeholder="%" step="0.01" class="form-control" /></td>
                         </tr>
 
                     </tbody>
@@ -409,12 +409,13 @@
                 <table class="table-bordered table-condensed table-hover borderless" fixed-header style="width:100%">
                     <thead>
                         <tr>
-                            <th class="text-right" style="width:50px"><input type="checkbox" /></th>
+                            <th class="text-right" style="width:50px">@*<input ng-click="selectAllLineItem(filterList)" ng-model="selectAllItem" type="checkbox" />*@</th>
                             <th>Date</th>
                             <th>Due Date</th>
                             <th>Ref No.</th>
                             <th>Type</th>
                             <th class="text-right">Total Amount</th>
+                            <th class="text-right">Interest</th>
                             <th class="text-right">Balance</th>
                             <th class="text-right" style="width:100px"> Receive</th>
                         </tr>
@@ -425,15 +426,15 @@
 
 
                         <tr ng-repeat="data in paymentData" class="cursor">
-                            <td class="text-right" style="width:50px"><input type="checkbox" /></td>
+                            <td class="text-right" style="width:50px"><input ng-click="selectLineItem(data)" ng-model="data.select" type="checkbox" /></td>
                             <td ng-click="openTransaction(data.id,data.type)">{{data.date | date }}</td>
                             <td>{{data.duedate }}</td>
                             <td>{{data.vochNo}}</td>
                             <td>{{data.type}}</td>
-
                             <td class="text-right">{{data.amount}}</td>
+                            <td class="text-right">{{data.interest}}</td>
                             <td class="text-right">{{data.balance}}</td>
-                            <td class="text-right"><input type="text" ng-blur="payBill(data.amount,data.balance,$index,data.amountPaid,data.id)" ng-model="data.amountPaid" class="form-control" /></td>
+                            <td class="text-right"><input type="text" ng-change="amountChange(data,data.amountPaid);" @*ng-blur="payBill(data.amount,data.balance,$index,data.amountPaid,data.id)"*@ ng-model="data.amountPaid" class="form-control" /></td>
                         </tr>
 
 
@@ -443,6 +444,7 @@
                         <tr>
                             <th style="width:50px">&nbsp;</th>
                             <th>Total</th>
+                            <th>&nbsp;</th>
                             <th>&nbsp;</th>
                             <th>&nbsp;</th>
                             <th>&nbsp;</th>
@@ -515,6 +517,75 @@
                             <i class="fa fa-caret-right"></i> Attachments
                             <small class="text-primary cursor dwn">(<i class="fa fa-download"></i> Download all files)</small>
                         </h4>
+                        <div class="col-sm-5 padding5">
+                            <input type="text" class="form-control" ng-model="filename" placeholder="Title" />
+                        </div>
+                        <div class="col-sm-5 padding5">
+                            @*<input type="file" class="filestyle" id="uploadBtn" data-buttonName="btn-info">*@
+                            <input type="file" nv-file-select="" uploader="uploader" />
+                        </div>
+                        <div ng-show="uploader.queue.length>0" style="float:left; width:100%; padding:10px 10px; border-bottom:1px dotted #ccc;">
+                            <table class="table" width="100">
+                                <thead>
+                                    <tr>
+                                        <th width="50%">Title</th>
+                                        <th width="50%">Name</th>
+                                        <th ng-show="uploader.isHTML5">Size</th>
+                                        <th ng-show="uploader.isHTML5">Progress</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="item in uploader.queue">
+                                        <td><strong>{{ item.title}}</strong></td>
+                                        <td><strong>{{ item.file.name }}</strong></td>
+                                        <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
+                                        <td ng-show="uploader.isHTML5">
+                                            <div class="progress" style="margin-bottom: 0;">
+                                                <div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                                            <span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                                            <span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                                        </td>
+                                        <td nowrap>
+                                            <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">
+                                                <span class="glyphicon glyphicon-upload"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading">
+                                                <span class="glyphicon glyphicon-ban-circle"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
+                                                <span class="glyphicon glyphicon-trash"></span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+
+
+                        </div>
+                        <div ng-show="uploader.queue.length>0">
+                            <div>
+                                Queue progress:
+                                <div class="progress" style="">
+                                    <div class="progress-bar" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }"></div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-success btn-s" ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length">
+                                <span class="glyphicon glyphicon-upload"></span> Upload all
+                            </button>
+                            <button type="button" class="btn btn-warning btn-s" ng-click="uploader.cancelAll()" ng-disabled="!uploader.isUploading">
+                                <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
+                            </button>
+                            <button type="button" class="btn btn-danger btn-s" ng-click="uploader.clearQueue()" ng-disabled="!uploader.queue.length">
+                                <span class="glyphicon glyphicon-trash"></span> Remove all
+                            </button>
+                        </div>
 
                         @*<div class="attachmets">*@
                         @*<input type="file" id="uploadBtn" multiple="multiple" name="browsefile">*@
@@ -523,11 +594,10 @@
                                     <p>Add file</p>
                                 </div>
                             </div>*@
-                        <div class="col-sm-5 padding5">
+                        @*<div class="col-sm-5 padding5">
                             <input type="text" class="form-control" id="NameInput" placeholder="Title" />
                         </div>
                         <div class="col-sm-5 padding5">
-                            @*<input type="file" class="form-control" id="id=" uploadBtn" />*@
                             <input type="file" class="filestyle" id="uploadBtn" data-buttonName="btn-info">
                         </div>
 
@@ -553,7 +623,7 @@
 
 
 
-                        </div>
+                        </div>*@
                     </div>
                 </div>
             </div>

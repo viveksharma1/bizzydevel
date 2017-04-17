@@ -39,7 +39,7 @@
             <span style="float:left; font-size:18px; margin-top:-2px">
                 <label style="color:#000">State :</label>
                 <span class="dropdown my" style="width:auto; margin-right:20px;">
-                    <a href="#" class="dropdown-toggle stagesdrpdwn" data-toggle="dropdown" style="color:#ff9800">Closed<span class="caret" style="margin-top:0px;color:#000"></span></a>
+                    <a href="#" class="dropdown-toggle stagesdrpdwn" data-toggle="dropdown" style="color:#ff9800">{{state}}<span class="caret" style="margin-top:0px;color:#000"></span></a>
                     <ul class="dropdown-menu dropmenu">
                         <li>Closed</li>
                         <li>Edit</li>
@@ -61,7 +61,7 @@
                 <div class="col-sm-3 padding">
 
                     <h4 class="tabheading font_11">Invoice Ref.</h4>
-                    <input type="text" class="form-control" disabled />
+                    <input ng-model="billInfo.vochNo" type="text" class="form-control" disabled />
 
                 </div>
 
@@ -69,15 +69,15 @@
                 <div class="col-sm-3 padding">
 
                     <h4 class="tabheading font_11">Invoice Date</h4>
-                    <input type='text' class="form-control" disabled />
+                    <input ng-model="invoiceDate" type='text' class="form-control" disabled />
 
                 </div>
-                <div class="col-sm-3 padding">
+                @*<div class="col-sm-3 padding">
 
                     <h4 class="tabheading font_11">Invoice No.</h4>
                     <input type="text" class="form-control" disabled style="width:100px" />
 
-                </div>
+                </div>*@
 
 
 
@@ -87,20 +87,20 @@
 
                     <div class="col-sm-6 padding">
 
-                        <h4 class="tabheading font_11">Supplier Name</h4>
-                        <input type="text" class="form-control" disabled />
+                        <h4 class="tabheading font_11">Party Name</h4>
+                        <input ng-model="voucherData.vo_badla.partyAccountName" type="text" class="form-control" disabled />
 
                     </div>
 
                     <div class="col-sm-3 padding">
 
                         <h4 class="tabheading font_11">Payment Days</h4>
-                        <input type="text" class="form-control" disabled />
+                        <input ng-model="billInfo.paymentDays" type="text" class="form-control" disabled />
                     </div>
                     <div class="col-sm-3 padding">
 
                         <h4 class="tabheading font_11">Due Date</h4>
-                        <input type="text" class="form-control" disabled style="width:100px" />
+                        <input ng-model="dueDate" type="text" class="form-control" disabled style="width:100px" />
                     </div>
                 </div>
 
@@ -111,10 +111,10 @@
                 <div class="totalIncomeSection card accordion" style="text-align:left; padding:5px 15px">
                     <h4>INTEREST</h4>
                     <div style="color: #1E294B; width:100%; float:left;">
-                        <div class="subheading" style="float: left; margin: 5px 0px; text-transform:capitalize">Rate</div> <b class="pull-right" style="font-size:22px">0</b>
+                        <div class="subheading" style="float: left; margin: 5px 0px; text-transform:capitalize">Rate</div> <b class="pull-right" style="font-size:22px">{{billInfo.roi}}</b>
                     </div>
                     <div style="color: #1E294B;">
-                        <div class="subheading" style="float: left; margin: 5px 0px;  text-transform:capitalize">Amount</div> <b class="pull-right" style="font-size:22px">0</b>
+                        <div class="subheading" style="float: left; margin: 5px 0px;  text-transform:capitalize">Amount</div> <b class="pull-right" style="font-size:22px">{{voucherData.amount}}</b>
                     </div>
                 </div>
 
@@ -124,7 +124,7 @@
             <div class="col-sm-2 padding text-right pull-right" style="margin-top:0px">
 
                 <h4 class="tabheading" style="float:right; width:100%; margin-top:0px !important">B. Ref No.</h4>
-                <input type="text" class="form-control pull-right" ng-model="expenseNo" disabled style="width:100px" />
+                <input ng-model="voucherData.vochNo" type="text" class="form-control pull-right" disabled style="width:100px" />
 
 
 
@@ -168,25 +168,26 @@
         <div class="col-lg-12" style="padding:10px">
             <div class="col-sm-4">
                 <label>Badla Person</label>
-                <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
+                <input ng-model="badlaAccount" type="text" class="form-control" disabled />
+                @*<ui-select ui-tree-select ng-model="badlaAccount.selected" id="countryCode"
                            ui-select-focuser
                            theme="selectize">
-                    <ui-select-match placeholder="Select Suppliers">{{ $select.selected.company }}</ui-select-match>
+                    <ui-select-match >{{ $select.selected.accountName }}</ui-select-match>
 
                     <ui-select-choices repeat="person in supliers  | filter: $select.search">
                         <div>
-                            <span ng-model="supplier1" ng-bind-html="person.company | highlight: $select.search"></span>
+                            <span  ng-bind-html="person.company | highlight: $select.search"></span>
                         </div>
 
 
                     </ui-select-choices>
-                </ui-select>
+                </ui-select>*@
             </div>
 
             <div class="col-sm-2">
                 <label>Date of Badla</label>
                 <div class='input-group'>
-                    <input type='text' class="form-control" id='BadlaDate' />
+                    <input type='text' ng-model="badlaDate" class="form-control" id='BadlaDate' disabled />
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
@@ -212,15 +213,15 @@
                     <tbody>
                         <tr>
                             <td class="tablepadding"><strong>DAYS</strong></td>
-                            <td class="tablepadding"><input type="text" class="form-control" /></td>
-                            <td class="tablepadding"><input type="text" class="form-control" /></td>
-                            <td class="tablepadding"><input type="text" class="form-control" /></td>
+                            <td class="tablepadding"><input ng-model="dayTotal"  type="number" class="form-control" /></td>
+                            <td class="tablepadding"><input ng-model="dayInterest" type="text" class="form-control" /></td>
+                            <td class="tablepadding"><input ng-model="dayDiff" type="text" class="form-control" /></td>
                         </tr>
                         <tr>
                             <td class="tablepadding"><strong>INTEREST (%)</strong></td>
-                            <td class="tablepadding"><input type="text" class="form-control" /></td>
-                            <td class="tablepadding"><input type="text" class="form-control" /></td>
-                            <td class="tablepadding"><input type="text" class="form-control" /></td>
+                            <td class="tablepadding"><input ng-model="perTotal" type="text" class="form-control" /></td>
+                            <td class="tablepadding"><input ng-model="perInterest" type="text" class="form-control" /></td>
+                            <td class="tablepadding"><input ng-model="perDiff" type="text" class="form-control" /></td>
                         </tr>
 
                     </tbody>
@@ -254,11 +255,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            @*<tr>
                                 <td class="tablepadding">12/3/2017</td>
                                 <td class="tablepadding" style="text-align:right">200</td>
                                 <td class="text-center Count tablepadding" value="0.00"><a class="edit" title="Edit"> <i class="fa fa-times-circle cursor RemoveTR" style="font-size:16px" ng-click="remove($index)"></i></a></td>
-                            </tr>
+                            </tr>*@
 
 
                         </tbody>

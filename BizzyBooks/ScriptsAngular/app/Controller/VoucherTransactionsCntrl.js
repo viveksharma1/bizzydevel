@@ -40,7 +40,10 @@
 
             $state.go('Customer.Expense', { expenceId: id });
         }
+        if (voType == 'Badla Voucher') {
 
+            $state.go('Customer.BadlaVoucher', { voId: id });
+        }
 
 
     }
