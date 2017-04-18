@@ -85,8 +85,11 @@ myApp.factory('authService', ['$http', 'jwtHelper', 'localStorageService','$root
         if (typeof defval == 'undefined') defval = null;
         prop = prop.split('.');
         for (var i = 0; i < prop.length; i++) {
-            if (typeof obj[prop[i]] == 'undefined')
-                return defval;
+            if (typeof obj[prop[i]] == 'undefined') {
+                //also check in localstorage
+                var locValue = localStorage[prop[i]];
+                return locValue?locValue:defval;
+            }
             obj = obj[prop[i]];
         }
         return obj;

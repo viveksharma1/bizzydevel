@@ -123,11 +123,63 @@ myApp.controller('HomeCntrl', ['$state', '$http', '$rootScope', '$scope', 'confi
         }
     });
     //$scope.usertype = localStorage['usertype'];
-
+    $scope.edit = false;
     $scope.AddCompnay = function () {
+        $scope.edit = false;
+        $scope.companyInfo = {};
         $('#AddCompnayModal').modal('show');
     }
+    $scope.companyInfo = {};
+    //moment().format('DD-MMM-YY')
+    $scope.closenClear = function () {
+        $('#AddCompnayModal').modal('hide');
+        $scope.companyInfo = {};
+    }
+    $scope.editCompany = function (item) {
+        $scope.edit = true;
+        $scope.companyInfo = item;
+        $('#AddCompnayModal').modal('show');
+    }
+    $scope.saveCompany = function () {
+        $scope.companyInfo.CompanyId = 'COM' + moment().format("YYYYMMDDHHmmssSSS");
+        $scope.companyInfo.IsActive = 1;
+        //var data = {
+        //    CompanyId: 'COM' + moment().format("YYYYMMDDHHmmssSSS"),
+        //    CompanyName: $scope.companyInfo.companyName,
+        //    companyAddress: $scope.companyInfo.address,
+        //    CompanyMobileNo: $scope.companyInfo.contactNo,
+        //    TIN_NO: $scope.companyInfo.TIN_NO,
+        //    CST_NO: $scope.companyInfo.CST_NO,
+        //    PAN_NO: $scope.companyInfo.PAN_NO,
+        //    Range: $scope.companyInfo.Range,
+        //    Division: $scope.companyInfo.division,
+        //    Commisionerate: $scope.companyInfo.commisionerate,
+        //    CE_RegionNo: $scope.companyInfo.ceRegionNo,
+        //    ECC_Code_NO: $scope.companyInfo.eccCodeNo,
+        //    IEC_NO: $scope.companyInfo.iecNo,
+        //    ProprietorName: $scope.companyInfo.propName,
+        //    IsActive:1
 
+        //}
+        if ($scope.edit) {
+            $http.put(config.api + "CompanyMasters", $scope.companyInfo).then(function (response) {
+                showSuccessToast("Company info updated");
+                $scope.closenClear();
+            }, function () {
+                showSuccessToast("Error! while updating company info");
+            });
+        } else {
+            $http.post(config.api + "CompanyMasters", $scope.companyInfo).then(function (response) {
+                showSuccessToast("Company created");
+                $scope.closenClear();
+            }, function () {
+                showSuccessToast("Error! while creating company");
+            });
+        }
+        
+
+
+    }
 
 }]);
 
