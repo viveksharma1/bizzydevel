@@ -314,7 +314,7 @@
 
             <div class="col-sm-3 padding pull-right">
                 <div class="pull-right" style="margin-right:10px; margin-top:25px; height:96px; width:100%; text-align:right">
-                    <span class="balancedue"><small><i class="fa fa-rupee" style="color:#9E9E9E"></i></small> {{totalAmountINR |number : fractionSize}}</span>
+                    <span class="balancedue"><small><i class="fa fa-rupee" style="color:#9E9E9E"></i></small> {{manualTableSum() + accountTableSum()}}</span>
                     
                 </div>
                
@@ -1738,8 +1738,8 @@
                         <th style="text-align:center;">&nbsp;</th>
                         <th style="text-align:right;">{{netweight |number : 2}}&nbsp;</th>
                         <th style="text-align:left;">&nbsp;</th>
-                        <th style="text-align:right;">{{manualTotal |number : 2}}&nbsp;</th>
-                        <th style="text-align:right;">{{totalAmountINR |number : 2}}&nbsp;</th>
+                        <th style="text-align:right;color:forestgreen">{{manualTotal |number : 2}}&nbsp;</th>
+                        <th style="text-align:right;color:forestgreen">{{manualTotalINR |number : 2}}&nbsp;</th>
 
 
                         <th style="text-align:center;">&nbsp;</th>
@@ -1856,6 +1856,7 @@
 
                                         <div>
                                             <span ng-bind-html="person.accountName | highlight: $select.search"></span>
+                                            <span style="color:forestgreen">({{person.Under}})</span>
                                         </div>
                                     </ui-select-choices>
                                 </ui-select>
@@ -1894,14 +1895,15 @@
                         <tr style="background:#F0EEEE">
                             <th style="padding:5px;">Total</th>
                             @*<th style="padding:5px;width:300px;">&nbsp;</th>*@
-                            <th style="width:150px; white-space:nowrap; padding:5px; text-align:right">{{totalAccountAmount |number : 2}}</th>
+                            <th style="width:150px; white-space:nowrap; padding:5px; text-align:right;color:forestgreen">{{totalAccountAmount |number : 2}}</th>
                             <th style="width:15px; padding:5px;">&nbsp;</th>
                         </tr>
                     </tfoot>
                 </table>
                 <div class="pull-right" style="margin-right:60px; margin-top:5px">
                     <p class="text-right"></p>
-                    <h4> Total : <span style="width:160px; float:right; text-align:right">{{totalAccountAmount + totalAmountINR |number : 2}}</span> </h4>
+                    <h4> Total : <span style="width:160px; float:right; text-align:right" ng-permission="usertype:O">{{manualTableSum() + accountTableSum()}}</span> </h4>
+                    <h4> Total : <span style="width:160px; float:right; text-align:right" ng-permission="usertype:UO">{{excelTableItemSum() + accountTableSum()}}</span> </h4>
 
                 </div>
             </div>

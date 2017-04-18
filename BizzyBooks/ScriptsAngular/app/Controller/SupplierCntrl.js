@@ -68,7 +68,7 @@ myApp.controller('SupplierCntrl', ['$scope', '$http', '$timeout', '$stateParams'
         $scope.url2 = url2;
         $scope.globalUrl = globalUrl;
 
-        $http.get(config.login + 'getTransactionData/'+ localStorage.CompanyId).then(function (response) {
+        $http.get(config.login + 'getTransactionData/'+ localStorage.CompanyId + '?role=' + localStorage["usertype"]).then(function (response) {
             $scope.InventoryList = response.data;
             console.log(response);
             for (var i = 0; i < $scope.InventoryList.length; i++) {
