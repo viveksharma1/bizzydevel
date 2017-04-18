@@ -609,10 +609,30 @@
             ret = 0;
         }
     }
-    function getIneterest(item,payAmount, inline) {
-        var days = getDays(item);
-        var dayCal = days - Number(item.invoiceData.paymentDays == undefined ? 0 : item.invoiceData.paymentDays);
-        var ret= Number((payAmount * (item.invoiceData.roi / (100 * 30)) * dayCal).toFixed(2));
+    function getIneterest(item, payAmount, inline) {
+        var ret=0;
+        if (item.type == 'Badla Voucher') {
+
+            var badlaCondition=item.vo_badla.conditons;
+
+
+            var days = getDays(item);
+            var days2 = badlaCondition.dayTotal-days;
+            var days3 = Math.max(days - badlaCondition.dayInterest);
+            var intOnRec = days > badlaCondition.dayInterest ? 0 : perInterest;// IF(M35<$G$28,0,$G$29)
+
+            var dayCal = days - Number(item.invoiceData.paymentDays == undefined ? 0 : item.invoiceData.paymentDays);
+            ret = Number((payAmount * (item.invoiceData.roi / (100 * 30)) * dayCal).toFixed(2));
+
+
+
+        }else{
+
+            var days = getDays(item);
+            var dayCal = days - Number(item.invoiceData.paymentDays == undefined ? 0 : item.invoiceData.paymentDays);
+            ret= Number((payAmount * (item.invoiceData.roi / (100 * 30)) * dayCal).toFixed(2));
+            
+        }
         if (inline) item.interest = ret;
         else return ret;
     }
