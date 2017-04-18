@@ -40,6 +40,13 @@
 
             $state.go('Customer.Expense', { expenceId: id });
         }
+
+        if (voType == 'PURCHASE INVOICE') {
+
+            $state.go('Customer.Bill', { billNo: id });
+        }
+        
+
         if (voType == 'Badla Voucher') {
 
             $state.go('Customer.BadlaVoucher', { voId: id });

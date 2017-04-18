@@ -1476,7 +1476,7 @@
 
                                 </ui-select-match>
 
-                                <ui-select-choices repeat="person.accountName as person in account  | filter: $select.search" refresh="refreshAccountTable($select)" refresh-delay="2">
+                                <ui-select-choices repeat="person in account  | filter: $select.search" refresh="refreshAccountTable($select)" refresh-delay="2">
 
                                     <div>
                                         <span ng-bind-html="person.accountName | highlight: $select.search"></span>
@@ -1498,7 +1498,7 @@
 
                                 </ui-select-match>
 
-                                <ui-select-choices repeat="person.accountName as person in account  | filter: $select.search" refresh="refreshAccountTable($select)" refresh-delay="2">
+                                <ui-select-choices repeat="person in account  | filter: $select.search" refresh="refreshAccountTable($select)" refresh-delay="2">
 
                                     <div>
                                         <span ng-bind-html="person.accountName | highlight: $select.search"></span>
