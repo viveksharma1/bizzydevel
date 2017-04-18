@@ -286,8 +286,9 @@
     }
 
     .selectize-dropdown .active {
-        background-color: #f5f5f5;
-        color: #262626;
+        
+        background: rgb(227, 234, 243)!important;
+        color: #337ab7;
     }
 
         .selectize-dropdown .active.create {
