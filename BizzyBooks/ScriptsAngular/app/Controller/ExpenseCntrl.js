@@ -81,85 +81,42 @@
         $scope.add3 = function () {
             $('#formaccount').modal('show');
         }
-
-  
-        // supplier select box
-        $scope.accounts = {};   
-        $scope.refNo = $stateParams.no;
-  
-        $scope.sup = $stateParams.suppliers; 
-    
-        $scope.accountTable = [];
-       
-
-    
-   
+        $('#expenseDate').datepicker();
+        $scope.accounts = {};
+        $scope.supplier = {};
+        $scope.tdsRate = {};
+        $scope.refNo = $stateParams.no;    
+        $scope.accountTable = []; 
         $scope.idSelectedVote = null;
-
         //get supplier data
 
-        $scope.getSupplier = function () {
-            $http.get(config.login + "getSupplierAccount/" + localStorage.CompanyId).then(function (response) {
-                $scope.supliers = response.data
-
-            });
+        $scope.paymentTerm = function () {
+            $scope.expenseDueDate = moment($scope.expenseDate, "DD/MM/YYYY").add($scope.paymentDays, 'days').format('DD/MM/YYYY');
         }
        
-        $scope.getSupplier();
-
-
-        //calculate total tax and total amount
-        var totalTax = function () {
-            var total1 = 0;
-            for (var i = 0; i < $scope.accountTable.length; i++) {
-                var product = Number($scope.accountTable[i]);
-                total1 += Number($scope.accountTable[i].amount);
-            }
-            $scope.taxTotal = total1.toFixed(2);
-            $scope.totalTax = Number($scope.subtotalnew) + Number($scope.taxTotal);
-            $scope.totalWithTax = $scope.totalTax.toFixed(2)
+      $scope.dateFormat = function (date) {
+          var res = date.split("/");
+          var month = res[1];
+          var days = res[0]
+          var year = res[2]
+          var date = month + '/' + days + '/' + year;
+          return date;
         }
-
-
-        //calculate TDS
-        $scope.tdsRate = {};
-       
-
-        //get account data
-
-    $http.get(config.api + "accounts" ).then(function (response) {
-        $scope.account = response.data
-       
-
-    })
-   
-    //create account 
-    $scope.createAccount = function () {
-
-        var accountData = {
-            compCode: localStorage.CompanyId,
-            accountName: $scope.accountName,
-            category: '',
-            group: $scope.accountgroup,
-            type: $scope.accountType,
-            balance: $scope.balance,
-            credit: 0,
-            debit: 0
-        }
-
-
-        $http.post(config.api + "accounts", accountData).then(function (response) {
-            $http.get(config.api + "accounts").then(function (response) {
-                $scope.account = response.data;
-            })
-        });
-
-    }
-
-
-        // bind accountId in account and item table 
-
-
+      
+     $scope.getSupplier = function () {
+           $http.get(config.login + "getSupplierAccount/" + localStorage.CompanyId).then(function (response) {
+               $scope.supliers = response.data
+           });
+     }
+     $scope.getExpenseAccount = function () {
+         $http.get(config.login + "getExpenseAccount/" + localStorage.CompanyId).then(function (response) {
+             $scope.account = response.data
+         });
+     }
+     $scope.getExpenseAccount();
+     $scope.getSupplier();
+        
+      
     
     $scope.bindAccountId = function (data) {
         var accountData = data;
@@ -168,22 +125,17 @@
         }
         return accountData;
     }
-    
-    //get Expense data
-    $scope.supplier = {};
-
-   
-
     $scope.getExpenseData = function (expenseId) {  
         $http.get(config.api + 'voucherTransactions/'+ expenseId)
                     .then(function (response) {
-                        var expenseData = response.data.expenseData;
+                        var expenseData = response.data.transactionData;
                         console.log(response)
                         $scope.accountTable = $scope.bindAccountId(expenseData.accountTable);
                         $scope.itemTable = $scope.bindAccountId(expenseData.itemTable);
                         $scope.supplier = { selected: { accountName: localStorage[expenseData.supliersId], id: expenseData.supliersId } };
                         $scope.tdsRate = { selected: { accountName: localStorage[expenseData.tdsAccountId], id: expenseData.tdsAccountId } };
                         $scope.applyTdsRate(expenseData.tdsRate);
+                        $scope.getSupplierDetail(localStorage[expenseData.supliersId]);
                         $scope.expenseDueDate = $filter('date')(expenseData.billDueDate, 'dd/MM/yyyy');
                         $scope.expenseDate = $filter('date')(expenseData.date, 'dd/MM/yyyy');
                         $scope.expenseId = expenseData.expenseId
@@ -194,20 +146,25 @@
                     });
     }
 
-    if ($stateParams.expenceId) {
-
-       
+    if ($stateParams.expenceId) {   
         $scope.supplier = { selected: { company: $stateParams.suppliers } };
-        $scope.getExpenseData($stateParams.expenceId)
-        
+        $scope.getExpenseData($stateParams.expenceId)      
     }
-   // $http.get(config.api + "transactions" + "/count" + "?where[ordertype]=" + "EXPENSE").then(function (response) {
-     //   $scope.expenseNoCount = response.data.count;
-      //  $scope.expenseId = "EXPENSE" + response.data.count;
 
-    ///})
-        // calculate sum of Item table and acoount table
-
+    $scope.getSupplierDetail = function (supplierName) {
+        $scope.supliersDetail = []
+        $http.get(config.api + "accounts" + "?filter[where][compCode]=" + localStorage.CompanyId + "&filter[where][accountName]=" + supplierName).then(function (response) {
+            $scope.supliersDetail = response.data;
+            console.log(response.data)
+            $scope.shippingAddress = $scope.supliersDetail[0].billingAddress[0].street;
+            $scope.email = $scope.supliersDetail[0].email;
+        });
+    }
+    $scope.bindSupplierDetail = function (data) {
+        $scope.email = data.email
+        $scope.shippingAddress = data.billingAddress[0].street
+        console.log(data)
+    }
     $scope.accountTableSum = function () {
         var total = 0;
         for (var i = 0; i < $scope.accountTable.length; i++) {
@@ -229,23 +186,19 @@
 
         return $scope.totalcharges;
     }
-    //add acount 
-
+    
+      // remove accountTable line
     $scope.removeAccountLine = function (index) {
         $scope.accountTable.splice(index, 1);
         $scope.accountTableSum();
     }
-
+     // edit accountTable 
     $scope.editAccountTable = function (data, index) {
         $scope.idSelectedVote = index;
         $scope.index = index;
         $scope.edit1 = true;
-        $scope.accounts = { selected: { accountName: data.accountName } };
-       
+        $scope.accounts = { selected: { accountName: data.accountName } };  
         $scope.accountAmount = data.amount
-
-       
-
     }
 
     $scope.accounts = {}
@@ -268,49 +221,21 @@
         $scope.accountTableSum();
     }
 
-
-    $scope.refreshAccountTable = function ($select) {
-        var search = $select.search,
-          list = angular.copy($select.items),
-          FLAG = -1;
-        list = list.filter(function (item) {
-            return item.id !== FLAG;
-        });
-        if (!search) {
-            //use the predefined list
-            $select.items = list;
-        }
-        else {
-            //manually add user input and set selection
-            var userInputItem = {
-                id: FLAG,
-                name: search
-            };
-            $select.items = [userInputItem].concat(list);
-            $select.selected = userInputItem.name
-            // $scope.account.push({ accountName: $scope.accounts.selected.accountName });
-
-        }
-    }
-
-
-    // add line Item
+    // remove itemDetail
     $scope.removeItemDetail = function (index) {
         $scope.itemTable.splice(index, 1);
         $scope.itemTableSum();
     }
-
     $scope.editItemDetail = function (data, index) {
         $scope.idSelectedVote = index;
         $scope.index = index;
         $scope.edit1 = true;
-        $scope.itemAccount = { selected: { accountName: data.accountName } };
-      
+        $scope.itemAccount = { selected: { accountName: data.accountName } };      
         $scope.itemAmount = data.amount
-
     }
 
     $scope.itemTable = [];
+    // add itemDetail
     $scope.addItemDetail = function () {
         var accountData = {
             accountName: $scope.itemAccount.selected.accountName,
@@ -328,51 +253,25 @@
         $scope.itemTableSum();
     }
 
-
-    $scope.refreshAccountTable = function ($select) {
-        var search = $select.search,
-          list = angular.copy($select.items),
-          FLAG = -1;
-        list = list.filter(function (item) {
-            return item.id !== FLAG;
-        });
-        if (!search) {
-            //use the predefined list
-            $select.items = list;
-        }
-        else {
-            //manually add user input and set selection
-            var userInputItem = {
-                id: FLAG,
-                name: search
-            };
-            $select.items = [userInputItem].concat(list);
-            $select.selected = userInputItem.name
-            // $scope.account.push({ accountName: $scope.accounts.selected.accountName });
-
-        }
-    }
-    $scope.saveAndClose = function () {
-        $scope.saveExpense();
-        $scope.goBack();
-    }
-   
-    $scope.paymentTerm = function () {
-        $scope.expenseDueDate = moment($scope.expenseDate, "DD/MM/YYYY").add($scope.paymentDays, 'days').format('DD/MM/YYYY');
-    }
-    $('#expenseDate').datepicker();
-
-         $scope.dateFormat = function (date) {
-          var res = date.split("/");
-         
-          var month = res[1];
-          var days = res[0]
-          var year = res[2]
-          var date = month + '/' + days + '/' + year;
-          return date;
-      }
-    // save Expense new 
+        // save Expense new 
+         $scope.saving = false;
          $scope.saveExpenceNew = function () {
+             if ($scope.supplier.selected == undefined || $scope.supplier.selected == null) {
+                 showErrorToast("Please select Supplier");
+                 return;
+             }
+
+             if (!$scope.expenseDate) {
+                 showErrorToast("Expense date is not valid");
+                 return;
+             }
+
+             if (!$scope.expenseId) {
+                 showErrorToast("Please Enter Expense No");
+                 return;
+             }
+
+             $scope.saving = true;
              if (!$scope.tdsamount) {
                  $scope.netAmount = Number($scope.itemTableSum()) + Number($scope.accountTableSum())
              } else {
@@ -388,7 +287,7 @@
                  refNo: $stateParams.no,
                  no: $scope.expenseId,
                  vochNo:$scope.expenseId,
-                 expenseData: {
+                 transactionData: {
                      compCode: localStorage.CompanyId,
                      no: $scope.expenseId,
                      expenseId: $scope.expenseId,
@@ -413,7 +312,14 @@
                  }
              }
              $http.post(config.login + "saveExpensetest/" + $stateParams.expenceId, data).then(function (response) {
-            showSuccessToast("Expense Save Succesfully");
+                 if (response.status == 200) {
+                     $scope.saving = false;
+                     showSuccessToast("Expense Save Succesfully");
+                     $stateParams.expenceId = response.data
+                     $state.go('Customer.Expense', { expenceId: response.data });
+                     
+                 }
+              
         });
     }
         // apply rate to account

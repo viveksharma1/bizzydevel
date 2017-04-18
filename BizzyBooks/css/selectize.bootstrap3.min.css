@@ -128,7 +128,7 @@
 
 .selectize-input {
     border: 1px solid #ccc;
-    padding: 5px;
+    padding: 3px;
     display: inline-block;
     width: 100%;
     overflow: hidden;
@@ -139,9 +139,9 @@
     box-sizing: border-box;
     -webkit-box-shadow: none;
     box-shadow: none;
-    -webkit-border-radius: 2px;
-    -moz-border-radius: 2px;
-    border-radius: 2px;
+    -webkit-border-radius: 1px;
+    -moz-border-radius: 1px;
+    border-radius: 1px;
        background:url('../images/drop.png') right no-repeat #fff;
         -webkit-appearance: none;
         -moz-appearance: none;
@@ -353,7 +353,7 @@
     margin: 2px 0 0 0;
     z-index: 1000;
     background: #fff;
-    border: 1px solid #ccc;
+    border: 1px solid #428bca;
     border: 1px solid rgba(0,0,0,0.15);
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
@@ -377,7 +377,7 @@
         height: 1px;
         margin: 9px 0;
         overflow: hidden;
-        background-color: #e5e5e5;
+        background-color: #428bca;
         margin-left: -12px;
         margin-right: -12px;
     }

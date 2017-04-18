@@ -578,22 +578,23 @@
     $scope.getSupplier();
     $scope.getBilldata = function (billNo, fields) {       
         $scope.field = fields       
-        $http.get(config.api + 'transactions/' + billNo + $scope.field)
+        $http.get(config.api + 'voucherTransactions/' + billNo)
                     .then(function (response) {
-                        console.log(response);                        
-                        $scope.customPaymentInfo = response.datacustomPaymentInfo;
-                        if (response.data.itemDetail) {
-                            $scope.billtable1 = response.data.itemDetail;
+                        console.log(response);
+                        var billData = response.data.billData;
+                        $scope.customPaymentInfo = billData.customPaymentInfo;
+                        if (billData.itemDetail) {
+                            $scope.billtable1 = billData.itemDetail;
                             $scope.excelTableItemSum();                         
-                            $scope.id = response.data.id   
-                            $scope.totalAmountINR = response.data.adminAmount
+                            $scope.id = billData.id
+                            $scope.totalAmountINR = billData.adminAmount
                         }
-                        if (response.data.manualLineItem) {
-                            $scope.billtable = response.data.manualLineItem;
+                        if (billData.manualLineItem) {
+                            $scope.billtable = billData.manualLineItem;
                             $scope.manualTableSum();                         
-                            $scope.id = response.data.id
+                            $scope.id = billData.id
                             console.log($scope.id);
-                            $scope.billData = response.data
+                            $scope.billData = billData
                         }
                         if (!response.data.balance) {
                             $('#paymentStatus').show();
@@ -602,25 +603,25 @@
                         if (response.data.accountlineItem) {
                             $scope.accountTableSum();
                         }
-                        $scope.paymentDays = response.data.paymentDays
-                        $scope.paymentLog = response.data.paymentLog;
+                        $scope.paymentDays = billData.paymentDays
+                        $scope.paymentLog = billData.paymentLog;
                         console.log($scope.paymentLog)
-                        $scope.billNo = response.data.no
-                        $scope.accountTable = response.data.accountlineItem;
-                        $scope.ExchangeRateINR = response.data.ExchangeRate
-                        $scope.email = response.data.email
+                        $scope.billNo = billData.no
+                        $scope.accountTable = billData.accountlineItem;
+                        $scope.ExchangeRateINR = billData.ExchangeRate
+                        $scope.email = billData.email
                        
 
-                        $scope.supplier = { selected: { accountName: localStorage[response.data.supliersId], id: response.data.supliersId} };
-                        $scope.purchaseAccounts = { selected: { accountName: localStorage[response.data.purchaseAccountId], id: response.data.purchaseAccountId } };
+                        $scope.supplier = { selected: { accountName: localStorage[billData.supliersId], id: billData.supliersId } };
+                        $scope.purchaseAccounts = { selected: { accountName: localStorage[billData.purchaseAccountId], id: billData.purchaseAccountId } };
                       
-                        $scope.getSupplierDetail(localStorage[response.data.supliersId]);
-                        $scope.invoiceType1(response.data.invoiceType);                      
-                        $scope.billDate1 = response.data.date
+                        $scope.getSupplierDetail(localStorage[billData.supliersId]);
+                        $scope.invoiceType1(billData.invoiceType);
+                        $scope.billDate1 = billData.date
                         $scope.billDate = $filter('date')($scope.billDate1, 'dd/MM/yyyy');
-                        $scope.billDueDate1 = response.data.billDueDate
+                        $scope.billDueDate1 = billData.billDueDate
                         $scope.billDueDate = $filter('date')($scope.billDueDate1, 'dd/MM/yyyy');
-                        $scope.actualDate = $filter('date')(response.data.actualDate, 'dd/MM/yyyy');
+                        $scope.actualDate = $filter('date')(billData.actualDate, 'dd/MM/yyyy');
                        
                        
                     });
@@ -679,7 +680,7 @@
       $scope.saving = false;
       $scope.saveBill = function (index) {   
           
-          $scope.saving = true;
+         $scope.saving = true;
           var date = $scope.dateFormat($scope.billDate);
           var billDueDate = $scope.dateFormat($scope.billDueDate);
           var actualDate = $scope.dateFormat($scope.actualDate);
@@ -712,46 +713,62 @@
             }
         }
         var data = {
-            compCode: localStorage.CompanyId,
-            supliersId: $scope.supplier.selected.id,
-            email: $scope.supplier.selected.email,
-            role: localStorage['adminrole'],
-            currency: $scope.currency,
+            type: "PURCHASE INVOICE",
+            state: "OPEN",
             date: date,
-            billDueDate: billDueDate,
-            actualDate:actualDate,
-            ordertype: "BILL",
-            no: $scope.billNo,
-            status: ["OPEN"],
-            paymentDays:$scope.paymentDays,
-            itemDetail: $scope.billtable1,
-            manualLineItem: $scope.billtable,
-            accountlineItem: $scope.accountTable,
-            purchaseAccountId: $scope.purchaseAccounts.selected.id,
-            adminAmount: $scope.totalAmountINR.toFixed(2),
-            adminBalance: $scope.totalAmountINR.toFixed(2),
-            purchaseAmount: $scope.purchaseAmount,
             amount: $scope.totalAmountINR.toFixed(2),
-            balance: $scope.totalAmountINR.toFixed(2),
-            totalWeight: $scope.totalWeight,
-            ExchangeRate: $scope.ExchangeRateINR,
-            supCode: $scope.supplier.selected.supCode,
-            billId: $scope.id,
-            invoiceType: $scope.invoiceType,
-            customPaymentInfo :{
-                   status:"pending",
-                   amount: 0,
-                   paymentDate:'',
-                   bankAccount:'',
-                   partyAccount:'',
-                   voRefId:''
-        }  
+            compCode: localStorage.CompanyId,
+            role: localStorage['usertype'],
+            no: $scope.billNo,
+            vochNo: $scope.billNo,
+            billData: {
+                compCode: localStorage.CompanyId,
+                supliersId: $scope.supplier.selected.id,
+                email: $scope.supplier.selected.email,
+                role: localStorage['usertype'],
+                currency: $scope.currency,
+                date: date,
+                billDueDate: billDueDate,
+                actualDate: actualDate,
+                ordertype: "BILL",
+                no: $scope.billNo,
+                status: ["OPEN"],
+                paymentDays: $scope.paymentDays,
+                itemDetail: $scope.billtable1,
+                manualLineItem: $scope.billtable,
+                accountlineItem: $scope.accountTable,
+                purchaseAccountId: $scope.purchaseAccounts.selected.id,
+                adminAmount: $scope.totalAmountINR.toFixed(2),
+                adminBalance: $scope.totalAmountINR.toFixed(2),
+                purchaseAmount: $scope.purchaseAmount,
+                amount: $scope.totalAmountINR.toFixed(2),
+                balance: $scope.totalAmountINR.toFixed(2),
+                totalWeight: $scope.totalWeight,
+                ExchangeRate: $scope.ExchangeRateINR,
+                supCode: $scope.supplier.selected.supCode,
+                billId: $scope.id,
+                invoiceType: $scope.invoiceType,
+                customPaymentInfo: {
+                    status: "pending",
+                    amount: 0,
+                    paymentDate: '',
+                    bankAccount: '',
+                    partyAccount: '',
+                    voRefId: ''
+                }
 
+            }
         }
 
-        $http.post(config.login + "saveBill", data).then(function (response) {
-            showSuccessToast("Bill Save Succesfully");
-            $scope.saving = false;
+        $http.post(config.login + "saveBillTest/" + $stateParams.billNo,data).then(function (response) {
+            if (response.status == 200) {
+                $scope.saving = false;
+                showSuccessToast("Purchase Invoice Save Succesfully");
+                $stateParams.billNo = response.data
+                $state.go('Customer.Bill', { billNo: response.data });
+
+            }
+            //$scope.saving = false;
         });
         /*
                         var data = {
@@ -1015,6 +1032,7 @@
                 $scope.billtable12 = $scope.ExeclDataRows
                 //  console.log($scope.billtable12)
                 $scope.billtable1 = $scope.ExeclDataRows
+                console.log($scope.ExeclDataRows)
                 $scope.excelTableItemSum();
 
             };
@@ -1205,8 +1223,8 @@
             state: "PAID",
             remark: $scope.customReamarks,
             vo_payment: {
-                bankAccount:$scope.paymentAccounts.selected.accountName,
-                partyAccount: $scope.partyAccount.selected.accountName,
+                bankAccountId:$scope.paymentAccounts.selected.id,
+                partyAccountId: $scope.partyAccount.selected.id,
                 paymentAmount:$scope.customAmount,
                 currency:'',
                 exchangeRate:0,

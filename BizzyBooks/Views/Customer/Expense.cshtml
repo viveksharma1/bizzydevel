@@ -4,76 +4,12 @@
     Layout = null;
 }
 
-<script type="text/ng-template" id="/ui-tree-select.html">
 
-    <ui-select ng-model="model.$selected"
-               ui-select-focuser
-               theme="selectize">
-        <ui-select-match id="salect1" placeholder="Select a group">
-            {{ $select.selected.company }}
-        </ui-select-match>
-        <ui-select-choices repeat="group in groups | filter: $select.search">
-            <div>
-                <span ng-bind-html="group.company | highlight: $select.search"></span>
-                <!--<span ng-bind-html="'('+group.size+' users)'"></span>
-                <a href
-                  ng-show="group.parent"
-                  class="goto-child-group"
-                  ng-click="loadChildGroupsOf(group, $select)">
-                  <i class="fa fa-angle-right"></i>
-                </a>-->
-            </div>
-        </ui-select-choices>
-    </ui-select>
-</script>
-<script type="text/ng-template" id="/ui-tree-Account.html">
-    <ui-select ng-model="model.$selected"
-               ui-select-focuser
-               theme="selectize">
-        <ui-select-match placeholder="Select a account">
-            {{ $select.selected.title }}
-        </ui-select-match>
-        <ui-select-choices repeat="group in groups | filter: $select.search">
-            <div>
-                <span ng-bind-html="group.title | highlight: $select.search"></span>
-                <!--<span ng-bind-html="'('+group.size+' users)'"></span>
-                <a href
-                  ng-show="group.parent"
-                  class="goto-child-group"
-                  ng-click="loadChildGroupsOf(group, $select)">
-                  <i class="fa fa-angle-right"></i>
-                </a>-->
-            </div>
-        </ui-select-choices>
-    </ui-select>
-</script>
-
-<script type="text/ng-template" id="/ui-tree-Item.html">
-    <ui-select ng-model="model.$selected"
-               ui-select-focuser
-               theme="selectize">
-        <ui-select-match placeholder="Select a item">
-            {{ $select.selected.title }}
-        </ui-select-match>
-        <ui-select-choices repeat="group in groups | filter: $select.search">
-            <div>
-                <span ng-bind-html="group.title | highlight: $select.search"></span>
-                <!--<span ng-bind-html="'('+group.size+' users)'"></span>
-                <a href
-                  ng-show="group.parent"
-                  class="goto-child-group"
-                  ng-click="loadChildGroupsOf(group, $select)">
-                  <i class="fa fa-angle-right"></i>
-                </a>-->
-            </div>
-        </ui-select-choices>
-    </ui-select>
-</script>
 <div class="FlexPopup" style="display:block" ng-init="model = {}">
     <div class="flexheader lightblue ">
         <label style="float:left;padding:15px ">
 
-            <strong><span style="font-size:20px;  color:#585655">Add Expense</span></strong>
+            <strong><span style="font-size:20px;  color:#35460A">Expense</span></strong>
         </label>
         <label style="float:right;padding:15px ">
             <span style="float:left; font-size:18px; margin-top:-2px">
@@ -102,7 +38,7 @@
 
                 <h4 class="tabheading font_11">Supplier</h4>
                 <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
-                           ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';"
+                           ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';" on-select="bindSupplierDetail($select.selected)"
                            theme="selectize">
                     <ui-select-match placeholder="Select Suppliers">{{ $select.selected.accountName}}</ui-select-match>
 
@@ -116,11 +52,16 @@
                 <div class="col-sm-6" style="padding-left:0px">
                     <h4 class="tabheading font_11">Shipping address</h4>
 
-                    <textarea class="form-control" style="height:88px"></textarea>
+                    <textarea class="form-control" ng-model="shippingAddress" style="height:88px"></textarea>
                 </div>
                 <div class="col-sm-6" style="padding:0px">
                     <h4 class="tabheading font_11">Email</h4>
                     <input type="text" ng-model="email" class="form-control" />
+
+                </div>
+                <div class="col-sm-6" style="padding:0px">
+                    <h4 class="tabheading font_11">Contact</h4>
+                    <input type="text" ng-model="mobile" class="form-control" />
 
                 </div>
             </div>
@@ -128,7 +69,7 @@
             <create-account value="myValue"> </create-account>
             <div class="col-sm-4 padding" style="padding-left:10px">
               
-                <div class="col-sm-6" style="padding-left:0px">
+                <div class="col-sm-4" style="padding-left:0px">
 
                     <h4 class="tabheading font_11">Expense Date</h4>
                     <div class='input-group date'id="expenseDate">
@@ -139,9 +80,9 @@
                     </div>
 
                     <h4 class="tabheading font_11" style="margin-top:17px !important;">Due Date</h4>
-                    <div class='input-group'>
+                    <div class='input-group date'id='expenseDueDate'>
                         <input type='text' class="form-control" ng-model="expenseDueDate" id='expenseDueDate' />
-                        <span class="input-group-addon">
+                        <span class="input-group-addon active">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
                     </div>
@@ -149,9 +90,9 @@
 
                 </div>
 
-                <div class="col-sm-6" style="padding:0px">
+                <div class="col-sm-2" style="padding:0px">
 
-                    <h4 class="tabheading font_11">Payment Days</h4>
+                    <h4 class="tabheading font_11">Days</h4>
                     <input type='text'  ng-blur ="paymentTerm()"
                              ng-model="paymentDays" class="form-control" />
 
@@ -286,7 +227,7 @@
                         <div class="collapse in" id="ItemDetail1234" style="float:left; width:100%">
                     <table class="table-bordered table-condensed table-hover table" fixed-header id="ItemTable" style="height:180px; border-collapse:collapse">
                         <thead>
-                            <tr style="background:rgb(243, 245, 248)">
+                            <tr style="background:#ddd">
                                 <th style="padding-top:5px">
                                     <ui-select ui-tree-select ng-model="itemAccount.selected" id="countryCode"
                                                ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';"
@@ -294,7 +235,7 @@
 
                                         <ui-select-match placeholder="ACCOUNT">
                                             <span class="selectuiTable" style="width:97%">
-                                                <span>{{ $select.selected.accountName || $select.search }}</span>
+                                                <span>{{ $select.selected.accountName || $select.search }} </span>
                                                 <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
 
                                             </span>
@@ -304,6 +245,7 @@
 
                                             <div>
                                                 <span ng-bind-html="person.accountName | highlight: $select.search"></span>
+                                                <span style="color:forestgreen">({{person.Under}})</span>
                                             </div>
                                         </ui-select-choices>
                                     </ui-select>
@@ -319,7 +261,7 @@
                                 </th>
                                 <th style="text-align:center"><button ng-click="addItemDetail()" class="btn btn-primary btn-sm">Add</button></th>
                             </tr>
-                            <tr>
+                            <tr >
                                 <th>ACCOUNT</th>
                                 <th>DESCRIPTION</th>
                                 <th style="width:200px;text-align:right">AMOUNT (&#8377;)</th>
@@ -329,7 +271,7 @@
 
                         <tbody>
                             <tr ng-repeat="item in itemTable track by $index" class="cursor"  ng-click="editItemDetail(item,$index)" ng-class="{selected: $index === idSelectedVote}">
-                                <td class="Count" >{{item.accountName}}</td>
+                                <td class="Count" ><b style="color:#115645">{{item.accountName}}</b></td>
                                 <td class="Count">{{item.description}}</td>
                                 <td class="Count" style="text-align:right">{{item.amount}}</td>
                                 <td class="text-right Count" value="0.00"><a class="edit" title="Edit"> <i class="fa fa-times-circle cursor RemoveTR" style="font-size:16px" ng-click="removeItemDetail($index)"></i></a></td>
@@ -340,7 +282,7 @@
                             <tr style="background:#F0EEEE">
                                 <th>Total</th>
                                 <th>&nbsp;</th>
-                                <th style="text-align:right">{{totalcharges |number : 2}}</th>
+                                <th style="text-align:right;color:green">{{totalcharges |number : 2}}</th>
                                 <th>&nbsp;</th>
                             </tr>
                         </tfoot>
@@ -363,15 +305,15 @@
 
 
 
-                        <table class="table-bordered table-condensed table-hover table" fixed-header id="ItemTable" style=" height:180px">
+                        <table class="table-bordered table-condensed table-hover table" fixed-header id="ItemTable" style="height:180px">
                             <thead>
-                                <tr style="background:rgb(243, 245, 248)">
+                                <tr style="background:#ddd">
                                     <th>
                                         <ui-select ui-tree-select ng-model="accounts.selected" on-select="applyRate($select.selected.rate)"style="margin-top:5px;" id="countryCode"
                                                    ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';"
                                                    theme="selectize">
 
-                                            <ui-select-match placeholder="ACCOUNT">
+                                            <ui-select-match placeholder="ACCOUNT" >
                                                 <span class="selectuiTable" style="width:97%">
                                                     <span>{{ $select.selected.accountName || $select.search }}</span>
                                                     <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
@@ -379,18 +321,16 @@
 
                                             </ui-select-match>
 
-                                            <ui-select-choices repeat="person in account  | filter: $select.search" refresh="refreshAccountTable($select)" refresh-delay="2">
+                                            <ui-select-choices repeat="person in account  | filter: $select.search" ng-class="{active: $select.isActive(this), disabled: $select.isDisabled(this)}">
 
                                                 <div>
                                                     <span ng-bind-html="person.accountName | highlight: $select.search"></span>
+                                                    <span style="color:forestgreen">({{person.Under}})</span>
                                                 </div>
                                             </ui-select-choices>
                                         </ui-select>
                                     </th>
-                                    @*<th>
-                                    <input type="text" id="arshiyaCharge"
-                                           ng-model="accountDescription" placeholder="DESCRIPTION" class="form-control pull-left" style="margin-top:-3px;" />
-                                </th>*@
+                                   
                                     <th style="vertical-align:middle">
                                         <input type="text" id="arshiyaCharge"
                                                ng-model="accountAmount" placeholder="AMOUNT" class="form-control text-right" />
@@ -406,8 +346,8 @@
                             </thead>
 
                             <tbody>
-                                <tr ng-repeat="item in accountTable track by $index"  class="cursor" ng-click="editAccountTable(item,$index)" ng-class="{selected: $index === idSelectedVote}">
-                                    <td class="Count " >{{item.accountName}}</td>
+                                <tr  ng-repeat="item in accountTable track by $index"  class="cursor" ng-click="editAccountTable(item,$index)" ng-class="{selected: $index === idSelectedVote}">
+                                    <td class="Count" ><b>{{item.accountName}}</b></td>
                                   
                                     <td class="Count" style="text-align:right">{{item.amount}}</td>
                                     <td class="text-right Count" value="0.00"><a class="edit" title="Edit"> <i class="fa fa-times-circle cursor RemoveTR" style="font-size:16px" ng-click="removeAccountLine($index)"></i></a></td>
@@ -418,7 +358,7 @@
                                 <tr style="background:#F0EEEE">
                                     <th>Total</th>
                                     @*<th>&nbsp;</th>*@
-                                    <th style="text-align:right">{{totaltax |number : 2}}</th>
+                                    <th style="text-align:right;color:green">{{totaltax |number : 2}}</th>
                                     <th>&nbsp;</th>
                                 </tr>
                             </tfoot>
@@ -443,10 +383,7 @@
                     <div class="pull-right" style="width:350px">
                      
                         <label class="subtotal" style="font-size:1.5rem;">Total Amount</label>
-                        <span class="subtotalvalue" style="font-size:1.5rem; font-weight:bold"> {{totaltax + totalcharges   |number : fractionSize}} &#8377;</span>
-                      
-                    
-                      
+                        <span class="subtotalvalue" style="font-size:1.5rem; font-weight:bold"> {{totaltax + totalcharges   |number : fractionSize}} &#8377;</span>                      
                             <ui-select ui-tree-select ng-model="tdsRate.selected" on-select="applyTdsRate($select.selected.rate)" id="countryCode"
                                        ui-select-focuser
                                        theme="selectize" style="width:220px">
@@ -458,7 +395,7 @@
 
                                 </ui-select-match>
 
-                                <ui-select-choices repeat="person in account  | filter: $select.search" refresh="refreshAccountTable($select)" refresh-delay="2">
+                                <ui-select-choices repeat="person in account  | filter: $select.search" >
                                     <div style="color:steelblue">
                                         <span ng-bind-html="person.accountName | highlight: $select.search"></span>
                                     </div>
@@ -559,7 +496,7 @@
     
 
 
-        <div class="flexfooter">
+        <div class="flexfooter lightblue">
             <span class="pull-left">
                 <button type="button" class="btn btn-sm btn-primary">Cancel</button>
 
@@ -567,8 +504,10 @@
 
 
             <div class="pull-right">
-                <button type="button" class="btn btn-sm btn-primary" ng-click=saveExpenceNew()>Save</button>
-                <button type="button" class="btn btn-sm btn-primary" ng-click=saveAndClose()>Save And Close</button>
+                <button type="button" ng-hide="saving" class="btn btn-sm btn-primary " ng-click="saveExpenceNew()"> Save</button>
+                <button class="btn btn-sm btn-success" ng-show="saving" id="loaderbtn" ><i class="fa fa-spin fa-spinner"></i> </button>
+               
+                @*<button type="button" class="btn btn-sm btn-primary" ng-click=saveAndClose()>Save And Close</button>*@
             </div>
 
         </div>

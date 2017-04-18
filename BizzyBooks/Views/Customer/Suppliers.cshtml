@@ -472,9 +472,9 @@
                    
                     <tr ng-repeat="data in InventoryList track by $index | filter:search" class="cursor" >
                         <td style="padding-left:15px; width:15px"><input type="checkbox" class="checkboxcss" /></td>
-                        <td>{{data.supliersId}}</td>
+                        <td>{{data.supplier}}</td>
                         <td>{{data.email}}</td>
-                        <td>{{data.no}}</td>
+                        <td>{{data.invoiceNo}}</td>
                         <td ng-bind="data.date | date:'dd MMM yyyy'"></td>
                       
                         <td ng-hide="Role =='3'">{{data.amount |number : fractionSize}}</td>

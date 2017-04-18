@@ -68,11 +68,11 @@ myApp.controller('SupplierCntrl', ['$scope', '$http', '$timeout', '$stateParams'
         $scope.url2 = url2;
         $scope.globalUrl = globalUrl;
 
-        $http.get(config.api + $scope.url2 + "&filter[where][compCode]=" + localStorage.CompanyId + "&filter[limit]=10&filter[skip]=0").then(function (response) {
+        $http.get(config.login + 'getTransactionData/'+ localStorage.CompanyId).then(function (response) {
             $scope.InventoryList = response.data;
             console.log(response);
             for (var i = 0; i < $scope.InventoryList.length; i++) {
-                $scope.InventoryList[i].supliersId = localStorage[$scope.InventoryList[i].supliersId];
+                $scope.InventoryList[i].supplier = localStorage[$scope.InventoryList[i].supplier];
 
             }
            
@@ -81,12 +81,7 @@ myApp.controller('SupplierCntrl', ['$scope', '$http', '$timeout', '$stateParams'
 
 
         });
-        var compFilter = "&where[compCode]=" + localStorage.CompanyId
-        var url = config.api + $scope.globalUrl + compFilter;
-
-        $http.get(url).then(function (response) {
-            $scope.TotalCount = response.data.count;
-        });
+       
 
 
 
@@ -148,7 +143,6 @@ myApp.controller('SupplierCntrl', ['$scope', '$http', '$timeout', '$stateParams'
 
 
     $scope.OpenBillTable = function (status) {
-
         $(".loader").show()
         $scope.InventoryList = [];
         $scope.newStatus = "&filter[where][status]=" + status;
@@ -156,7 +150,7 @@ myApp.controller('SupplierCntrl', ['$scope', '$http', '$timeout', '$stateParams'
 
         $scope.url2 = "transactions?filter[where][ordertype]=BILL" + $scope.newStatus
         $scope.globalUrl = "transactions/count?where[ordertype]=BILL" + $scope.newStatus1;
-        $scope.paginationTable($scope.url2, $scope.globalUrl)
+        $scope.paginationTable()
 
 
 

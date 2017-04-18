@@ -136,7 +136,7 @@
                 <div class="col-sm-3 padding">
 
                     <h4 class="tabheading text-primary">Invoice Date</h4>
-                    <p>{{Item.date}}</p>
+                    <p>{{billDetail.date}}</p>
 
                 </div>
 
@@ -150,7 +150,7 @@
                 <div class="col-sm-3 padding">
 
                     <h4 class="tabheading text-primary">Actual Date</h4>
-                    <p>{{billDetail.actualDate | date}}</p>
+                    <p>{{billDetail.billData.actualDate | date}}</p>
                 </div>
 
 
@@ -158,7 +158,7 @@
 
                 <div class="col-sm-3 padding">
                     <h4 class="tabheading text-primary">Supplier Name</h4>
-                    <p class="cursor" ui-sref="Customer.Bill({billNo:billDetail.id,suppliers:billDetail.supliersName})"><b>{{billDetail.supliersName}}</b></p>
+                    <p class="cursor" ui-sref="Customer.Bill({billNo:billDetail.id})"><b>{{supplierName}}</b></p>
                 </div>
 
 

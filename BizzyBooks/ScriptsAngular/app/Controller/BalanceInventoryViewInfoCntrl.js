@@ -21,9 +21,10 @@
     $http.get(config.api + "Inventories/" + $stateParams.voId).then(function (response) {
         $scope.Item = response.data;
         console.log($scope.Item);
-        $http.get(config.api + "transactions/" + $scope.Item.invId +"?filter[fields][actualDate] =true&filter[fields][supliersName]=true&filter[fields][id]=true").then(function (response) {
-            $scope.billDetail = response.data;
+        $http.get(config.api + "voucherTransactions/" + $scope.Item.invId).then(function (result) {
+            $scope.billDetail = result.data;
             console.log($scope.billData);
+            $scope.supplierName = localStorage[$scope.billDetail.billData.supliersId]
         });
         $scope.GRNDetail($scope.Item);
 
@@ -38,28 +39,28 @@
         $('#GRNDetailDiv').slideDown();
 
         $scope.billNo = data.no;
+        $scope.billId = data.invId;
         $scope.NetWeight = data.NETWEIGHT;
         $scope.itemAmount1 = data.TOTALAMOUNTUSD * data.exchangeRate;
         $scope.itemAmountinINR = $filter('currency')($scope.itemAmount1, '₹', 2)
         $scope.costPerMTinINR = $filter('currency')($scope.itemAmount1 / data.NETWEIGHT, '₹', 2)
 
-        $http.get(config.api + "transactions" + "?[filter][where][no]=" + $scope.billNo).then(function (response) {
+        $http.get(config.api + "voucherTransactions/" + $scope.billId).then(function (response) {
             console.log(response.data)
-            $scope.billData = response.data[0].manualLineItem[0].totalDutyAmt;
+            var billdata = response.data.billData
+            $scope.billData = billdata.manualLineItem[0].totalDutyAmt;
             console.log($scope.billData)
-
-            $scope.totalDutyAmt = response.data[0].manualLineItem[0].totalDutyAmt;
-            $scope.totalBillAmount = response.data[0].amount;
-            $scope.totalCustom = (Number($scope.totalDutyAmt) * Number(data.TOTALAMOUNTUSD) * Number(data.exchangeRate)) / Number($scope.totalBillAmount) * Number(data.NETWEIGHT);
+            $scope.totalDutyAmt = billdata.manualLineItem[0].totalDutyAmt;
+            $scope.totalBillAmount = billdata.amount;
+            $scope.totalCustom = (Number($scope.totalDutyAmt) * Number(data.TOTALAMOUNT) * Number(billdata.ExchangeRate)) / Number($scope.totalBillAmount) * Number(data.NETWEIGHT);
 
         });
-        $http.get(config.api + "transactions" + "?[filter][where][ordertype]=EXPENSE" + "&[where][refNo]=" + $scope.billNo).then(function (response) {
-
-            $scope.expenseData = response.data;
+        $http.get(config.api + "voucherTransactions" + "?[filter][where][type]=EXPENSE" + "&[where][refNo]=" + $scope.billNo).then(function (response) {
+            $scope.expenseData = response.data.expenseData;
             console.log(response.data)
-            $scope.supliersName1 = response.data.supliersName;
-            $scope.amount1 = response.data.amount;
-            $scope.date1 = response.data.date;
+            $scope.supliersName1 = localStorage[$scope.expenseData.supliersId]
+            $scope.amount1 = $scope.expenseData.amount;
+            $scope.date1 = $scope.expenseData.date;
             console.log($scope.expenseData)
 
             var total = 0;

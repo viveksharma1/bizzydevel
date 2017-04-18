@@ -14,7 +14,7 @@ myApp.controller('LoginCntrl', ['$state', '$http', '$rootScope', '$scope', 'conf
         if ($scope.showCaptcha) {
             var res=ValidCaptcha();
             if (res == 1) { authData.usertype = "O"; $scope.loggedin(authData); }
-            else if (res == -1) { $scope.usertype = "UO";$scope.loggedin(authData); }
+            else if (res == -1) { authData.usertype = "UO"; $scope.loggedin(authData); }
             else { showErrorToast("Login Failed"); resetLogin(); }
         } else {
             $scope.username = $('#usernamedetail').val();

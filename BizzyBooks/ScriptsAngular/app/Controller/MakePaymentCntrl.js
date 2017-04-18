@@ -124,16 +124,16 @@
     $scope.paymentData = [];
     $scope.transaction = []
     $scope.createPaymentData = function (role) {
-        if (role == '2') {
+        if (role == 'O') {
             for (var i = 0; i < $scope.transaction.length; i++) {
                 $scope.paymentData.push({
-                    date: $scope.transaction[i].date, billDueDate: $scope.transaction[i].billDueDate, id: $scope.transaction[i].id, amount: $scope.transaction[i].amount, no: $scope.transaction[i].no
-                    , ordertype: $scope.transaction[i].ordertype, balance: $scope.transaction[i].balance
+                    date: $scope.transaction[i].date, billDueDate: $scope.transaction[i].dueDate, id: $scope.transaction[i].id, amount: $scope.transaction[i].amount, no: $scope.transaction[i].vochNo
+                    , ordertype: $scope.transaction[i].type, balance: $scope.transaction[i].balance
                 });
             }
 
         }
-        if (role == '3') {
+        if (role == 'UO') {
             for (var i = 0; i < $scope.transaction.length; i++) {
                 $scope.paymentData.push({
                     date: $scope.transaction[i].date, billDueDate: $scope.transaction[i].billDueDate, id: $scope.transaction[i].id, amount: $scope.transaction[i].adminAmount, no: $scope.transaction[i].no
@@ -148,19 +148,21 @@
     }
    
     $scope.getAllBill = function (supliersId, fields) {
-       
-        $http.get(config.api + "transactions" + "?[filter][where][supliersId]=" + supliersId + fields).then(function (response) {
-            if (response.data[0]) {
-                $scope.paymentData = [];
-                console.log(response);
-                angular.copy(response.data, $scope.transaction);              
-                $scope.createPaymentData(localStorage['usertype']);
-            }
-            else {
-                $scope.paymentData = [];
-                showSuccessToast("No Open Invoice");
-            }
-        });
+        if (supliersId){
+            $http.get(config.login + "getAllTransaction/"+ supliersId).then(function (response) {
+                if (response) {
+                    $scope.paymentData = [];
+                    console.log(response);
+                    angular.copy(response.data, $scope.transaction);              
+                    $scope.createPaymentData(localStorage['usertype']);
+                }
+                else {
+                    $scope.paymentData = [];
+                    showSuccessToast("No Open Invoice");
+                }
+            
+            });
+        }
     }
     
     var savepaymentamount;
@@ -272,7 +274,7 @@
 
     "get open invoice"
     $scope.getOpenInvoice = function() {      
-            if (localStorage['usertype'] == '2') {
+            if (localStorage['usertype'] == 'O') {
                 var fields = '&filter[fields][adminAmount]=false&filter[fields][adminBalance]=false&[filter][where][balance][gt]=0'
                 $scope.getAllBill($scope.partyAccount.selected.id, fields);
             }

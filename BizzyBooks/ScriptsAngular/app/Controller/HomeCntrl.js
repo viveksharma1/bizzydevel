@@ -6,6 +6,7 @@ myApp.controller('HomeCntrl', ['$state', '$http', '$rootScope', '$scope', 'confi
         e.preventDefault();
     });
     function initiateHome() {
+        authService.fillAuthData();
         $scope.userInfo = $rootScope.authentication;
         //if ($scope.CompanyList == undefined) {
             if (localStorage.comobj != undefined) {
