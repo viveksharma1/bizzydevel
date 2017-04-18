@@ -721,7 +721,7 @@
             role: localStorage['usertype'],
             no: $scope.billNo,
             vochNo: $scope.billNo,
-            billData: {
+            transactionData: {
                 compCode: localStorage.CompanyId,
                 supliersId: $scope.supplier.selected.id,
                 email: $scope.supplier.selected.email,

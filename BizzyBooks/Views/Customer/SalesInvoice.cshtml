@@ -70,11 +70,11 @@
                         <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
                                    ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';"
                                    theme="selectize">
-                            <ui-select-match placeholder="Select Buyer">{{ $select.selected.company }}</ui-select-match>
+                            <ui-select-match placeholder="Select Buyer">{{ $select.selected.accountName }}</ui-select-match>
 
                             <ui-select-choices repeat="person in supliers  | filter: $select.search">
                                 <div>
-                                    <span ng-bind-html="person.company | highlight: $select.search"></span>
+                                    <span ng-bind-html="person.accountName | highlight: $select.search"></span>
                                 </div>
 
 
@@ -86,11 +86,11 @@
                         <ui-select ui-tree-select ng-model="supplier2.selected" 
                                    ui-select-focuser ng-init="$select.addnew=1;$select.type='consignee'"
                                    theme="selectize">
-                            <ui-select-match placeholder="Select Consignee">{{ $select.selected.company }}</ui-select-match>
+                            <ui-select-match placeholder="Select Consignee">{{ $select.selected.accountName }}</ui-select-match>
 
                             <ui-select-choices repeat="person2 in supliers2  | filter: $select.search">
                                 <div>
-                                    <span ng-bind-html="person2.company | highlight: $select.search"></span>
+                                    <span ng-bind-html="person2.accountName | highlight: $select.search"></span>
                                 </div>
 
 
@@ -128,7 +128,7 @@
                         <input type="text" ng-show="customerType=='Buyer'" ng-model="contactNo" class="form-control" />
                         <input type="text" ng-show="customerType=='Consignee'" ng-model="contactNo2" class="form-control" />
                         <h4 class="tabheading font_11">Vehical No.</h4>
-                        <input type="number" class="form-control" />
+                        <input type="text" ng-model="vehicleNumber" class="form-control" />
                        
                     </div>
                  
@@ -183,7 +183,7 @@
 
                         <h4 class="tabheading font_11">Invoice Date</h4>
                         <div class='input-group'>
-                            <input type='text' class="form-control" ng-model="billDate" id='InvoiceDate' placeholder="dd/mm/yyyy" />
+                            <input type='text' ng-blur="paymentTerm()" class="form-control" ng-model="billDate" id='InvoiceDate' placeholder="dd/mm/yyyy" />
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
@@ -197,15 +197,15 @@
                             </span>
                         </div>
                         <h4 class="tabheading font_11">Date & time of issue</h4>
-                        <div class='input-group' style="float:left; width:112px; margin-right:5px">
+                        <div class='input-group' style="float:left; width:103px; margin-right:5px">
                             <input type='text' class="form-control" ng-model="billIssueDate" id='IssueDate' placeholder="dd/mm/yyyy" />
                             <span class="input-group-addon" style="padding:6px 8px">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
                         </div>
 
-                        <div class='input-group' style="float:left; width:75px;">
-                            <input type='text' class="form-control" id='IssueTime' placeholder="00:00" />
+                        <div class='input-group' style="float:left; width:82px;">
+                            <input type='text' class="form-control" ng-model="billIssueTime" id='IssueTime' placeholder="00:00" />
                             <span class="input-group-addon" style="padding:6px 8px">
                                 <span class="fa fa-clock-o"></span>
                             </span>
@@ -228,16 +228,16 @@
                 </div>*@
 
                         <h4 class="tabheading font_11">Date & time of removal</h4>
-                        <div class='input-group' style="float:left; width:120px; margin-right:5px">
+                        <div class='input-group' style="float:left; width:109px; margin-right:5px">
                             <input type='text' class="form-control" ng-model="billRemovalDate" id='RemovalDate' placeholder="dd/mm/yyyy" />
-                            <span class="input-group-addon">
+                            <span class="input-group-addon" style="padding:6px 8px">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
                         </div>
 
-                        <div class='input-group' style="float:left; width:82px;">
-                            <input type='text' class="form-control"  id='RemovalTime' placeholder="00:00" />
-                            <span class="input-group-addon">
+                        <div class='input-group' style="float:left; width:90px;">
+                            <input type='text' class="form-control" ng-model="billRemovalTime"  id='RemovalTime' placeholder="00:00" />
+                            <span class="input-group-addon" style="padding:6px 8px">
                                 <span class="fa fa-clock-o"></span>
                             </span>
                         </div>
@@ -275,7 +275,7 @@
 
                     <div class="col-sm-6 pull-right padding">
                         <h4 class="tabheading" style="float:right; width:100%; margin-top:0px !important">Commercial Invoice no.</h4>
-                        <input type="text" class="form-control pull-right" id="billNo" ng-model="billNo" style="width:150px" />
+                        <input type="text" class="form-control pull-right" id="billNo" ng-model="comInvoiceNo" style="width:150px" />
                     </div>
                 
                 </div>
@@ -623,7 +623,7 @@
 
 
                                         </tbody>
-                                        <tfoot ng-hide="isCart">
+                                        @*<tfoot ng-hide="isCart">
                                             <tr style="background:#F0EEEE">
                                                 <th style="text-align:center"></th>
                                                 <th style="text-align:center"></th>
@@ -637,7 +637,7 @@
                                                 <th style="text-align:right"></th>
                                                 <th style="text-align:right">{{totalAmount}}(&#8377;)</th>
                                             </tr>
-                                        </tfoot>
+                                        </tfoot>*@
                                     </table>
 
                                 </div>
@@ -746,7 +746,6 @@
                             <i class="fa fa-caret-right"></i> Attachments
                             <small ng-show="hasVoId" ng-click="downloadAttachments();" class="text-primary cursor dwn">(<i class="fa fa-download"></i> Download all files)</small>
                         </h4>
-
                         <div class="col-sm-5 padding5">
                             <input type="text" class="form-control" ng-model="filename" placeholder="Title" />
                         </div>
@@ -754,12 +753,6 @@
                             @*<input type="file" class="filestyle" id="uploadBtn" data-buttonName="btn-info">*@
                             <input type="file" nv-file-select="" uploader="uploader" />
                         </div>
-
-                        @*<div class="col-sm-2 padding5">
-                        <button type="button" class="btn btn-sm btn-primary Attechmentdetail" style="width:100%">Add</button>
-                    </div>*@
-
-
                         <div ng-show="uploader.queue.length>0" style="float:left; width:100%; padding:10px 10px; border-bottom:1px dotted #ccc;">
                             <table class="table" width="100">
                                 <thead>

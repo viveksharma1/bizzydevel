@@ -349,11 +349,14 @@ var myApp = angular
 
 
         $stateProvider.state("Customer.BadlaVoucher", {
-            url: "/BadlaVoucher",
+            url: "/BadlaVoucher/:voId",
             templateUrl: "Customer/BadlaVoucher",
             controller: "BadlaVoucherCntrl",
             requiresAuthentication: true,
             permissions: 'Float.add.Customers.Badla Voucher.active',
+            params: {
+                voId: null,
+            }
         });
 
 

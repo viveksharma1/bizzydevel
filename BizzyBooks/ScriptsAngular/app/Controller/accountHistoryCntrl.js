@@ -17,7 +17,7 @@
         var debit = 0;
         for (var i = 0; i < $scope.ledgerData.length; i++) {
             $scope.ledgerData[i].accountName = localStorage[$scope.ledgerData[i].accountName]
-            $scope.ledgerData[i].particulars = localStorage[$scope.ledgerData[i].particular]
+            $scope.ledgerData[i].particulars = localStorage[$scope.ledgerData[i].particular] + $scope.ledgerData[i].remarks
             if ($scope.ledgerData[i].credit) {
                 credit += Number($scope.ledgerData[i].credit);
             }
@@ -176,6 +176,12 @@
         if (voType == 'Receive Payment') {
 
             $state.go('Customer.ReceivePayment', { voId: id });
+        }
+       
+
+        if (voType == 'Badla') {
+
+            $state.go('Customer.BadlaVoucher', { voId: id });
         }
 
 
