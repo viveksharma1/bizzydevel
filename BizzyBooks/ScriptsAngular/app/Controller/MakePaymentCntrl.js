@@ -136,8 +136,8 @@
         if (role == 'UO') {
             for (var i = 0; i < $scope.transaction.length; i++) {
                 $scope.paymentData.push({
-                    date: $scope.transaction[i].date, billDueDate: $scope.transaction[i].billDueDate, id: $scope.transaction[i].id, amount: $scope.transaction[i].adminAmount, no: $scope.transaction[i].no
-                    , ordertype: $scope.transaction[i].ordertype, balance: $scope.transaction[i].adminBalance
+                    date: $scope.transaction[i].date, billDueDate: $scope.transaction[i].dueDate, id: $scope.transaction[i].id, amount: $scope.transaction[i].amount, no: $scope.transaction[i].vochNo
+                    , ordertype: $scope.transaction[i].type, balance: $scope.transaction[i].balance
                 });
             }
         }

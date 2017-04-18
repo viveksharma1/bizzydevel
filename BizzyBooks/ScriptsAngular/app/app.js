@@ -513,8 +513,8 @@ login: 'http://localhost:4000/',
 api: 'http://localhost:4000/api/'
 
 
- //   login: 'http://bizzy-book-api.azurewebsites.net/',
- //   api: 'http://bizzy-book-api.azurewebsites.net/api',
+  // login: 'http://bizzy-book-api.azurewebsites.net/',
+// api: 'http://bizzy-book-api.azurewebsites.net/api/',
 });
 
 

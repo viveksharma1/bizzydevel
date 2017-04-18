@@ -581,7 +581,7 @@
         $http.get(config.api + 'voucherTransactions/' + billNo)
                     .then(function (response) {
                         console.log(response);
-                        var billData = response.data.billData;
+                        var billData = response.data.transactionData;
                         $scope.customPaymentInfo = billData.customPaymentInfo;
                         if (billData.itemDetail) {
                             $scope.billtable1 = billData.itemDetail;

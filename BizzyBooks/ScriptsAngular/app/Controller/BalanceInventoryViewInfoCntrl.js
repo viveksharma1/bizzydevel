@@ -24,7 +24,7 @@
         $http.get(config.api + "voucherTransactions/" + $scope.Item.invId).then(function (result) {
             $scope.billDetail = result.data;
             console.log($scope.billData);
-            $scope.supplierName = localStorage[$scope.billDetail.billData.supliersId]
+            $scope.supplierName = localStorage[$scope.billDetail.transactionData.supliersId]
         });
         $scope.GRNDetail($scope.Item);
 
@@ -47,7 +47,7 @@
 
         $http.get(config.api + "voucherTransactions/" + $scope.billId).then(function (response) {
             console.log(response.data)
-            var billdata = response.data.billData
+            var billdata = response.data.transactionData
             $scope.billData = billdata.manualLineItem[0].totalDutyAmt;
             console.log($scope.billData)
             $scope.totalDutyAmt = billdata.manualLineItem[0].totalDutyAmt;
@@ -58,7 +58,7 @@
         $http.get(config.api + "voucherTransactions" + "?[filter][where][type]=EXPENSE" + "&[where][refNo]=" + $scope.billNo).then(function (response) {
             $scope.expenseData = response.data.expenseData;
             console.log(response.data)
-            $scope.supliersName1 = localStorage[$scope.expenseData.supliersId]
+            $scope.supliersName1 = localStorage[$scope.transactionData.supliersId]
             $scope.amount1 = $scope.expenseData.amount;
             $scope.date1 = $scope.expenseData.date;
             console.log($scope.expenseData)
