@@ -296,6 +296,7 @@
         $scope.TOTALAMOUNTUSD = Math.round(total);
         $scope.totalAmountINR = Number($scope.TOTALAMOUNTUSD) * Number($scope.ExchangeRateINR);
         console.log($scope.TOTALAMOUNTUSD)
+        return $scope.totalAmountINR;
 
     }
 
@@ -310,6 +311,7 @@
             totalAmountINR += Number($scope.billtable[i].AMOUNTINR);
         }
         $scope.totalAmountINR = Number(totalAmountINR);
+        $scope.manualTotalINR = Number(totalAmountINR)
         $scope.manualTotal = Number(manualTotal);
         $scope.netweight = Number(netweight);
         return $scope.totalAmountINR;
@@ -394,7 +396,7 @@
             description: $scope.accountDescription,
             amount: $scope.accountAmount
         }
-
+       
         if ($scope.edit1 == true) {
             $scope.accountTable[$scope.index] = accountData;
         } else {
@@ -583,15 +585,17 @@
                         console.log(response);
                         var billData = response.data.transactionData;
                         $scope.customPaymentInfo = billData.customPaymentInfo;
-                        if (billData.itemDetail) {
+                        $scope.accountTable = billData.accountlineItem;
+                        if (billData.itemDetail && localStorage["usertype"] == 'UO') {
                             $scope.billtable1 = billData.itemDetail;
-                            $scope.excelTableItemSum();                         
+                            $scope.excelTableItemSum();
+                            //$scope.accountTableSum();
                             $scope.id = billData.id
-                            $scope.totalAmountINR = billData.adminAmount
+                            $scope.totalAmountINR = billData.adminAmount + $scope.accountTableSum();
                         }
-                        if (billData.manualLineItem) {
+                        if (billData.manualLineItem && localStorage["usertype"] == 'O') {
                             $scope.billtable = billData.manualLineItem;
-                            $scope.manualTableSum();                         
+                            $scope.totalAmountINR = $scope.manualTableSum() + $scope.accountTableSum();
                             $scope.id = billData.id
                             console.log($scope.id);
                             $scope.billData = billData
@@ -607,7 +611,7 @@
                         $scope.paymentLog = billData.paymentLog;
                         console.log($scope.paymentLog)
                         $scope.billNo = billData.no
-                        $scope.accountTable = billData.accountlineItem;
+                        
                         $scope.ExchangeRateINR = billData.ExchangeRate
                         $scope.email = billData.email
                        
@@ -666,7 +670,7 @@
 
           });
       }
-    
+     // authService.userHasPermission('usertype:O');
       
       $scope.dateFormat = function (date) {
           var res = date.split("/");
@@ -684,15 +688,20 @@
           var date = $scope.dateFormat($scope.billDate);
           var billDueDate = $scope.dateFormat($scope.billDueDate);
           var actualDate = $scope.dateFormat($scope.actualDate);
-          if ($scope.totalAccountAmount) {
-              $scope.purchaseAmount = $scope.totalAmountINR.toFixed(2)
-              $scope.totalAmountINR = $scope.totalAmountINR + $scope.totalAccountAmount;
+          ////if ($scope.totalAccountAmount) {
+          ////    $scope.purchaseAmount = $scope.totalAmountINR.toFixed(2)
+          ////    $scope.totalAmountINR = $scope.totalAmountINR + $scope.totalAccountAmount;
+          ////}
+          //else {
+          //    $scope.purchaseAmount = $scope.totalAmountINR.toFixed(2)
+          //}
+          if (authService.userHasPermission('usertype:O')) {
+              var totalAmountINR = $scope.manualTableSum() + $scope.accountTableSum();
           }
-          else {
-              $scope.purchaseAmount = $scope.totalAmountINR.toFixed(2)
+          if (authService.userHasPermission('usertype:UO')) {
+              var totalAmountINR = $scope.excelTableItemSum() + $scope.accountTableSum();
           }
 
-          
         if ($scope.assesableValue) {
             $scope.billtable[$scope.tableIndex].assesableValue = $scope.assesableValue;
             $scope.billtable[$scope.tableIndex].exciseDuty = $scope.exciseDuty1;
@@ -740,9 +749,9 @@
                 purchaseAccountId: $scope.purchaseAccounts.selected.id,
                 adminAmount: $scope.totalAmountINR.toFixed(2),
                 adminBalance: $scope.totalAmountINR.toFixed(2),
-                purchaseAmount: $scope.purchaseAmount,
-                amount: $scope.totalAmountINR.toFixed(2),
-                balance: $scope.totalAmountINR.toFixed(2),
+                purchaseAmount: $scope.manualTotalINR,
+                amount: totalAmountINR,
+                balance: totalAmountINR,
                 totalWeight: $scope.totalWeight,
                 ExchangeRate: $scope.ExchangeRateINR,
                 supCode: $scope.supplier.selected.supCode,
@@ -1364,6 +1373,7 @@
 
         }
         $scope.manualTableSum();
+       // $scope.totalAmountINR = $scope.manualTableSum() + $scope.accountTableSum();
 
         $scope.edit1 = false;
     }
