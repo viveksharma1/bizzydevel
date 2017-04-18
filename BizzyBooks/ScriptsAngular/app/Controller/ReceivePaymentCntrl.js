@@ -260,8 +260,8 @@
         angular.forEach($scope.itemChecked, function (item) {
             $scope.totalPaid = $scope.totalPaid + item.amountPaid;
             item.balance = item.balance - item.amountPaid;
-            item.roi = item.invoiceData.roi;
-            item.paymentDays = item.invoiceData.paymentDays;
+            //item.roi = item.invoiceData.roi;
+            //item.paymentDays = item.invoiceData.paymentDays;
             delete item.invoiceData;
             
         });
@@ -371,6 +371,7 @@
                 $http.post(config.login + 'receivePayment?id=' + $stateParams.voId, data)
                          .then(function (response) {
                              showSuccessToast("Payment Received.");
+                             $state.reload();
 
                          });
             }
@@ -419,6 +420,7 @@
     $http.post(config.login + 'saveBadlaVoucher?id=' + $stateParams.voId, datas)
                  .then(function (response) {
                      showSuccessToast("Payment Received.");
+                     $state.reload();
 
                  });
     }
@@ -607,6 +609,9 @@
             ret = 0;
         }
     }
+    function getLastDigit(value){
+       return value.toString().split('').pop()
+    }
     function getIneterest(item, payAmount, inline) {
         var ret=0;
         if (item.type == 'Badla Voucher') {
@@ -615,12 +620,15 @@
 
 
             var days = getDays(item);
-            var days2 = badlaCondition.dayTotal-days;
-            var days3 = Math.max(days - badlaCondition.dayInterest);
-            var intOnRec = days > badlaCondition.dayInterest ? 0 : perInterest;// IF(M35<$G$28,0,$G$29)
-
-            var dayCal = days - Number(item.invoiceData.paymentDays == undefined ? 0 : item.invoiceData.paymentDays);
-            ret = Number((payAmount * (item.invoiceData.roi / (100 * 30)) * dayCal).toFixed(2));
+            var days2 =days- badlaCondition.dayTotal;
+            var days3 = Math.max(days - badlaCondition.dayInterest,0);
+            var perOnRec = days < badlaCondition.dayInterest ? 0 : badlaCondition.perInterest;// IF(M35<$G$28,0,$G$29)
+            var interest1 = payAmount * ((days2 < 0 ? badlaCondition.perTotal / 100 : badlaCondition.perDiff / 100) / 30) * (days2 < 0 ? days2 : badlaCondition.dayDiff * -1);
+            var interest2 = payAmount * (perOnRec/100 / 30) * getLastDigit(days3);
+            ret = interest1 + interest2;
+            ret = Number(ret.toFixed(2));
+            //var dayCal = days - Number(item.invoiceData.paymentDays == undefined ? 0 : item.invoiceData.paymentDays);
+            //ret = Number((payAmount * (item.invoiceData.roi / (100 * 30)) * dayCal).toFixed(2));
 
 
 
@@ -634,19 +642,30 @@
         if (inline) item.interest = ret;
         else return ret;
     }
-    $scope.amountChange = function (item, payAmount) {
+    $scope.amountChange = function (item, payAmount, oldPayAmount) {
         $scope.selectLineItem(item, true);
 
         if ($scope.itemChecked.length > 0) {
             for (var i = 0; i < $scope.itemChecked.length; i++) {
                 if (item) {
                     if ($scope.itemChecked[i].id == item.id) {
-                        $scope.itemChecked[i].amountPaid = payAmount;
-                        $scope.itemChecked[i].balance -= payAmount;
-                        var interest = getIneterest(item,payAmount);
-                        $scope.itemChecked[i].interest = interest;
-                        item.interest = interest;
-                        //item.balance -= payAmount;
+
+
+                        if ($scope.itemChecked[i].balance - payAmount >= 0) {
+                            $scope.itemChecked[i].amountPaid = payAmount;
+                            var interest = getIneterest(item, payAmount);
+                            $scope.itemChecked[i].interest = interest;
+                            item.interest = interest;
+                        } else {
+                            if (oldPayAmount && oldPayAmount.length > 0) {
+                                item.amountPaid = item.balance;
+                                $scope.itemChecked[i].amountPaid = item.balance;
+                                var interest = getIneterest(item, item.balance);
+                                $scope.itemChecked[i].interest = interest;
+                                item.interest = interest;
+                            }
+                                
+                        }
                         break;
                     }
                 }

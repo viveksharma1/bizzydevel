@@ -124,7 +124,7 @@
 
             </div>
 
-            <div  class="col-sm-4 pull-right" style="padding:10px; background:rgba(139, 195, 74, 0.09)">
+            <div  permission="usertype:UO"  class="col-sm-4 pull-right" style="padding:10px; background:rgba(139, 195, 74, 0.09)">
                 <div class="col-sm-6 padding">
                     <h4 style="margin:0px 0px 10px 0px; font-size:14px; font-weight:bold" class="text-primary"><input ng-model="chkBadla" ng-click="selectbadla()" ng-disabled="itemChecked.length!=1" type="checkbox" /> Badla Payment</h4>
                 </div>
@@ -434,7 +434,7 @@
                             <td class="text-right">{{data.amount}}</td>
                             <td class="text-right">{{data.interest}}</td>
                             <td class="text-right">{{data.balance}}</td>
-                            <td class="text-right"><input type="text" ng-change="amountChange(data,data.amountPaid);" @*ng-blur="payBill(data.amount,data.balance,$index,data.amountPaid,data.id)"*@ ng-model="data.amountPaid" class="form-control" /></td>
+                            <td class="text-right"><input type="text" ng-change="amountChange(data,data.amountPaid,'{{data.amountPaid}}');" @*ng-blur="payBill(data.amount,data.balance,$index,data.amountPaid,data.id)"*@ ng-model="data.amountPaid" class="form-control" /></td>
                         </tr>
 
 

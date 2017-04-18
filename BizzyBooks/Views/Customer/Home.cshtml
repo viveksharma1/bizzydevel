@@ -212,7 +212,7 @@
     <div id="page-content-wrapper" style="padding:0px">
 
 
-        <div class="container-fluid" ng-init="model = {}">
+        <div class="container-fluid" >
             <div class="row">
 
                 <div class="bg-info cursor topbar">
@@ -293,13 +293,13 @@
                         <div class="arrow-up" style="margin-right:62%; float:right"></div>
                         <div class="flyoutdiv">
                             <h3 class="title" style="border-bottom:1px solid rgba(204, 204, 204, 0.26); padding-bottom:15px">{{DefaultCompany.CompanyName}}  ({{userInfo.username}})
-                                <button type="button" class="btn btn-sm btn-warning pull-right btn-xs" ng-click="AddCompnay()">Add New Company</button>
+                                <button permission="usertype:UO" type="button" class="btn btn-sm btn-warning pull-right btn-xs" ng-click="AddCompnay()">Add New Company</button>
                             </h3>
 
                             <div class="col-sm-7" style="padding:0px">
                                 <h3 class="Subtitle">Comapny List</h3>
                                 <ul class="list-unstyled my" ng-repeat="list in CompanyList">
-                                    <li><a ng-click="changeCompany(list)">{{list.CompanyName}}</a></li>
+                                    <li><a><span ng-click="changeCompany(list)">{{list.CompanyName}}</span> &nbsp; <i ng-click="editCompany(list);" class="fa fa-pencil-square text-warning"></i></a></li>
                                 </ul>
 
                             </div>
@@ -345,19 +345,19 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label>Company Name</label>
-                                            <input type="text" class="form-control" />
+                                            <input ng-model="companyInfo.CompanyName" type="text" class="form-control" />
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label>Contact</label>
-                                            <input type="text" class="form-control" />
+                                            <input ng-model="companyInfo.CompanyMobileNo" type="text" class="form-control" />
                                         </div>
                                         </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label>TIN No.</label>
-                                            <input type="text" class="form-control" />
+                                            <input ng-model="companyInfo.TIN_NO" type="text" class="form-control" />
                                         </div>
                                         </div>
 
@@ -365,7 +365,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label>CST Reg No.</label>
-                                            <input type="text" class="form-control" />
+                                            <input ng-model="companyInfo.CST_NO" type="text" class="form-control" />
                                         </div>
                                     </div>
 
@@ -373,42 +373,42 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label>PAN No.</label>
-                                            <input type="text" class="form-control" />
+                                            <input ng-model="companyInfo.PAN_NO" type="text" class="form-control" />
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label>Range</label>
-                                            <input type="text" class="form-control" />
+                                            <input ng-model="companyInfo.Range" type="text" class="form-control" />
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label>Division</label>
-                                            <input type="text" class="form-control" />
+                                            <input ng-model="companyInfo.Division" type="text" class="form-control" />
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label>Commisionerate</label>
-                                            <input type="text" class="form-control" />
+                                            <input ng-model="companyInfo.Commisionerate" type="text" class="form-control" />
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label>CE Region No.</label>
-                                            <input type="text" class="form-control" />
+                                            <input ng-model="companyInfo.CE_RegionNo" type="text" class="form-control" />
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label>ECC Code No.</label>
-                                            <input type="text" class="form-control" />
+                                            <input ng-model="companyInfo.ECC_Code_NO" type="text" class="form-control" />
                                         </div>
                                     </div>
     
@@ -416,7 +416,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label>IEC No.</label>
-                                            <input type="text" class="form-control" />
+                                            <input ng-model="companyInfo.IEC_NO" type="text" class="form-control" />
                                         </div>
                                     </div>
 
@@ -424,7 +424,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label>Proprietor Name </label>
-                                            <input type="text" class="form-control" />
+                                            <input ng-model="companyInfo.ProprietorName" type="text" class="form-control" />
                                         </div>
                                     </div>
 
@@ -432,7 +432,7 @@
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <label>Address</label>
-                                           <textarea class="form-control" style="height:100px"></textarea>
+                                           <textarea ng-model="companyInfo.companyAddress" class="form-control" style="height:100px"></textarea>
                                         </div>
                                     </div>
 
@@ -442,8 +442,8 @@
 
                                     </div>
                                 <div class="modal-footer content">
-                                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" style="width:80px">Cancel</button>
-                                    <button type="button" class="btn btn-primary btn-sm" style="width:80px">Save</button>
+                                    <button type="button" ng-click="closenClear()" class="btn btn-default btn-sm" data-dismiss="modal" style="width:80px">Cancel</button>
+                                    <button type="button" ng-click="saveCompany()" class="btn btn-primary btn-sm" style="width:80px">Save</button>
 
                                 </div>
                             </div>
@@ -491,7 +491,7 @@
 
 
 
-                    <div id="flyoutChange" class="flytopbar">
+                    @*<div id="flyoutChange" class="flytopbar">
                         <div class="arrow-up" style="margin-right:9%; float:right"></div>
                         <div class="flyoutdiv">
 
@@ -504,7 +504,7 @@
 
 
                         </div>
-                    </div>
+                    </div>*@
                 </div>
                 <div ui-view style="margin-top:37px"></div>
             </div>
