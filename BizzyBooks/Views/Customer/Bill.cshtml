@@ -314,7 +314,8 @@
 
             <div class="col-sm-3 padding pull-right">
                 <div class="pull-right" style="margin-right:10px; margin-top:25px; height:96px; width:100%; text-align:right">
-                    <span class="balancedue"><small><i class="fa fa-rupee" style="color:#9E9E9E"></i></small> {{manualTableSum() + accountTableSum()}}</span>
+                    <span permission="usertype:O" class="balancedue"><small><i class="fa fa-rupee" style="color:#9E9E9E"></i></small> {{manualTableSum() + accountTableSum()}}</span>
+                    <span permission="usertype:UO" class="balancedue"><small><i class="fa fa-rupee" style="color:#9E9E9E"></i></small> {{excelTableItemSum() + accountTableSum()}}</span>
                     
                 </div>
                
@@ -1902,8 +1903,8 @@
                 </table>
                 <div class="pull-right" style="margin-right:60px; margin-top:5px">
                     <p class="text-right"></p>
-                    <h4> Total : <span style="width:160px; float:right; text-align:right" ng-permission="usertype:O">{{manualTableSum() + accountTableSum()}}</span> </h4>
-                    <h4> Total : <span style="width:160px; float:right; text-align:right" ng-permission="usertype:UO">{{excelTableItemSum() + accountTableSum()}}</span> </h4>
+                    <h4 permission="usertype:O"> Total : <span style="width:160px; float:right; text-align:right" >{{manualTableSum() + accountTableSum()}}</span> </h4>
+                    <h4 permission="usertype:UO"> Total : <span style="width:160px; float:right; text-align:right" >{{excelTableItemSum() + accountTableSum()}}</span> </h4>
 
                 </div>
             </div>

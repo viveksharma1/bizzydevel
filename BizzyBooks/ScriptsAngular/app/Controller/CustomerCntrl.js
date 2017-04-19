@@ -32,6 +32,8 @@
    },
 
    $scope.paidInvoicebtn = function () {
+
+       $scope.getInvoice()
        $('#overdueInvoiceTable').hide();
        $('#paidInvoiceTable').show();
        $('#example').hide();
@@ -40,7 +42,7 @@
    },
 
    $scope.openInvoicebtn = function (status) {
-      
+       $scope.getInvoice()
        $('#overdueInvoiceTable').hide();
        $('#paidInvoiceTable').hide();
        $('#example').hide();
@@ -223,6 +225,28 @@
 
 
     }
+
+    // get invoice data 
+
+
+
+    $scope.getInvoice = function () {
+        $http.get(config.login + 'getInvoiceData/' + localStorage.CompanyId + '?role=' + localStorage["usertype"]).then(function (response) {
+            $scope.invoiceData = response.data;
+            console.log(response.data);
+            for (var i = 0; i < $scope.invoiceData.length; i++) {
+                $scope.invoiceData[i].customer = localStorage[$scope.invoiceData[i].customer];
+
+            }
+
+            console.log($scope.InventoryList)
+            $(".loader").hide()
+
+
+        });
+    }
+
+
 
     $('.btnhover button').click(function () {
         $(this).siblings().removeClass('active')

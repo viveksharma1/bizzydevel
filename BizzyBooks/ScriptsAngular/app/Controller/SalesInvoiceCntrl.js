@@ -250,9 +250,12 @@
 
                       $scope.invoiceType = response.data.invoiceData.invoiceSubType;
                       //$scope.customerType=customerType:,
-                      $scope.salesAccount = { selected: { accountName: response.data.invoiceData.ledgerAccount } };
-                      $scope.supplier = { selected: { company: response.data.invoiceData.customerAccount } };
-                      $scope.supplier2 = { selected: { company: response.data.invoiceData.consigneeAccount } };
+                      $scope.salesAccount = { selected: { accountName: localStorage[response.data.invoiceData.ledgerAccountId], id: response.data.invoiceData.ledgerAccountId } };
+                      $scope.supplier = { selected: { accountName: localStorage[response.data.invoiceData.customerAccountId], id: response.data.invoiceData.customerAccountId } };
+                      $scope.supplier2 = { selected: { accountName: localStorage[response.data.invoiceData.consigneeAccountId], id: response.data.invoiceData.consigneeAccountId } };
+                     // $scope.salesAccount = { selected: { accountName: response.data.invoiceData.ledgerAccount } };
+                     // $scope.supplier = { selected: { company: response.data.invoiceData.customerAccount } };
+                      //$scope.supplier2 = { selected: { company: response.data.invoiceData.consigneeAccount } };
                       //$scope.email = { selected: { company: response.data.email } };
                       $scope.totalAmount = response.data.amount;
                       //$scope.billDate = response.data.date;
@@ -270,8 +273,8 @@
                       $scope.billDueDate = $filter('date')(response.data.duedate, 'dd/MM/yyyy');
                       $scope.billRemovalDate = $filter('date')(response.data.invoiceData.removalDate, 'dd/MM/yyyy');
                       $scope.paymentDays = response.data.invoiceData.paymentDays;
-                      getSupplierDetail($scope.supplier.selected.company);
-                      getSupplierDetail($scope.supplier2.selected.company, true);
+                      getSupplierDetail(localStorage[response.data.invoiceData.customerAccountId]);
+                      getSupplierDetail(localStorage[response.data.invoiceData.consigneeAccountId], true);
                       
                       sumItemListTable($scope.itemTable);
                       accountTableSum();
@@ -429,17 +432,17 @@
     //}
     function getSupplierDetail(supplierName,isConsignee) {
         //$scope.supliersDetail = []
-        $http.get(config.api + "suppliers" + "?filter[where][compCode]=" + localStorage.CompanyId + "&filter[where][company]=" + supplierName).then(function (response) {
+        $http.get(config.api + "accounts" + "?filter[where][accountName]=" + supplierName).then(function (response) {
             if (isConsignee) {
                 $scope.supliersDetail2 = response.data;
                 console.log(response.data)
-                $scope.shippingAddress2 = $scope.supliersDetail2[0].billingAddress[0].street;
-                $scope.email2 = $scope.supliersDetail2[0].email;
+                $scope.shippingAddress2 = response.data[0].shippingAddress[0].street;
+                $scope.email2 = response.data[0].email;
             }else{
                 $scope.supliersDetail = response.data;
                 console.log(response.data)
-                $scope.shippingAddress = $scope.supliersDetail[0].billingAddress[0].street;
-                $scope.email = $scope.supliersDetail[0].email;
+                $scope.shippingAddress = response.data[0].shippingAddress[0].street;
+                $scope.email = response.data[0].email;
             }
         });
     }
@@ -451,9 +454,15 @@
     //        console.log($scope.bankAccounts);
     //    });
     //}
-    $http.get(config.login + "getPaymentAccount/" + localStorage.CompanyId).then(function (response) {
+    $http.get(config.login + "getSaleAccount/" + localStorage.CompanyId).then(function (response) {
         $scope.salesAccounts = response.data;
         angular.copy($scope.salesAccounts, $scope.accounts);
+
+    });
+
+    $http.get(config.login + "getExpenseAccount/" + localStorage.CompanyId).then(function (response) {
+        $scope.taxAccounts = response.data;
+        //angular.copy($scope.salesAccounts, $scope.taxAccounts);
 
     });
     //$http.get(config.api + "accounts").then(function (response) {

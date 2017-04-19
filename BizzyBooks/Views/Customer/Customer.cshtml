@@ -93,12 +93,12 @@
                 </thead>
 
                 <tbody>
-                    <tr ng-repeat="data in transactions | orderBy: orderData|filter:search">
+                    <tr ng-repeat="data in invoiceData | orderBy: orderData|filter:search">
                         <td style="padding-left:30px; width:30px"><input type="checkbox" class="checkboxcss" /></td>
                         <td ng-click="GRNDetail(data.no)">{{data.invoiceNo}}</td>
-                        <td ng-bind="data.invoiceDate | date:'dd MMM yyyy'"></td>
-                        <td style="color:red" ng-bind="data.invoiceDate | date :'dd MMM yyyy'"></td>
-                        <td style="color:#000">{{data.customerName}}</td>
+                        <td ng-bind="data.date | date:'dd MMM yyyy'"></td>
+                        <td style="color:red" ng-bind="data.duedate | date :'dd MMM yyyy'"></td>
+                        <td style="color:#000">{{data.customer}}</td>
                         <td style="color:#000">{{data.amount}}</td>
                        
                         <td style="text-align:right; width:150px">

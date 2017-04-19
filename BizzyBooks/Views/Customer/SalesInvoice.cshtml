@@ -65,7 +65,7 @@
                 <create-account value="myValue"> </create-account>
                 <div class="col-sm-12 padding">
                     <div ng-show="customerType=='Buyer'">
-                        <h4 class="tabheading font_11">Buyer<span class="pull-right text-primary"><i class="fa fa-rupee"></i> 2,30,000</span></h4>
+                        <h4 class="tabheading font_11">Buyer</h4>
 
                         <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
                                    ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';"
@@ -82,7 +82,7 @@
                         </ui-select>
                     </div>
                     <div ng-show="customerType=='Consignee'">
-                        <h4 class="tabheading font_11">Consignee<span class="pull-right text-primary"><i class="fa fa-rupee"></i> 2,30,000</span></h4>
+                        <h4 class="tabheading font_11">Consignee</h4>
                         <ui-select ui-tree-select ng-model="supplier2.selected" 
                                    ui-select-focuser ng-init="$select.addnew=1;$select.type='consignee'"
                                    theme="selectize">
@@ -103,12 +103,12 @@
                         <textarea ng-show="customerType=='Buyer'" class="form-control"  ng-model="shippingAddress" style="height:88px"></textarea>
                         <textarea ng-show="customerType=='Consignee'" class="form-control" ng-model="shippingAddress2" style="height:88px"></textarea>
 
-                        <div class="col-sm-6 padding">
-                            <h4 class="tabheading font_11">Interest Rate</h4>
+                        <div class="col-sm-7 padding">
+                            <h4 class="tabheading font_11">Interest Per Month</h4>
                             <input type="number" step="0.01" ng-model="intRate" class="form-control" />
                         </div>
 
-                        <div class="col-sm-6 padding">
+                        <div class="col-sm-5 padding">
                             <h4 class="tabheading font_11">Transport</h4>
                             <select ng-model="modeTransport" class="form-control">
                                 <option>Road</option>
@@ -147,7 +147,7 @@
                         <button ng-click="setCustomerType('Buyer')" type="button" ng-class="{active: customerType=='Buyer'}" class="btn btn-xs btn-default">Buyer</button>
                     </div>
                 </div>
-                <h4 class="tabheading font_11 pull-left" style="width:100%; ">Sales Ledger <span class="pull-right text-primary"><i class="fa fa-rupee"></i> 2,30,000</span></h4>
+                <h4 class="tabheading font_11 pull-left" style="width:100%; ">Sales Ledger </h4>
                 @*<ui-select ng-model="groupMasters.selected.name" id="countryCode" ui-select-focuser
                            theme="selectize">
 
@@ -843,7 +843,7 @@
 
                                     </ui-select-match>
 
-                                    <ui-select-choices repeat="acc in accounts  | filter: $select.search" refresh="refreshAccountTable($select)" refresh-delay="2">
+                                    <ui-select-choices repeat="acc in taxAccounts  | filter: $select.search" refresh="refreshAccountTable($select)" refresh-delay="2">
 
                                         <div>
                                             <span ng-bind-html="acc.accountName | highlight: $select.search"></span>

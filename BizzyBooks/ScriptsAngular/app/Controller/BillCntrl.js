@@ -1,4 +1,4 @@
-﻿myApp.controller('BillCntrl', ['$scope', '$http', '$timeout', '$stateParams', 'myService', '$rootScope', '$state', 'config', '$filter', function ($scope, $http, $timeout, $stateParams, myService, $rootScope, $state, config, $filter) {
+﻿myApp.controller('BillCntrl', ['$scope', '$http', '$timeout', '$stateParams', 'myService', '$rootScope', '$state', 'config', '$filter','authService', function ($scope, $http, $timeout, $stateParams, myService, $rootScope, $state, config, $filter,authService) {
 
     $scope.manualTotal = 0;
     $scope.CIFTOTAL1 = 0;
@@ -294,9 +294,9 @@
         $scope.totalWeight = Number(totalweight);
         console.log($scope.totalWeight);
         $scope.TOTALAMOUNTUSD = Math.round(total);
-        $scope.totalAmountINR = Number($scope.TOTALAMOUNTUSD) * Number($scope.ExchangeRateINR);
+        $scope.totalAmountINR = Number($scope.TOTALAMOUNTUSD.toFixed(2)) * Number($scope.ExchangeRateINR.toFixed(2));
         console.log($scope.TOTALAMOUNTUSD)
-        return $scope.totalAmountINR;
+        return $scope.totalAmountINR
 
     }
 
@@ -310,11 +310,11 @@
             netweight += Number($scope.billtable[i].NETWEIGHT);
             totalAmountINR += Number($scope.billtable[i].AMOUNTINR);
         }
-        $scope.totalAmountINR = Number(totalAmountINR);
+        $scope.totalAmountINR = Number(totalAmountINR.toFixed(2));
         $scope.manualTotalINR = Number(totalAmountINR)
         $scope.manualTotal = Number(manualTotal);
         $scope.netweight = Number(netweight);
-        return $scope.totalAmountINR;
+        return $scope.totalAmountINR
     }
     //total sum
 
@@ -381,7 +381,7 @@
     $scope.applyRate = function (rate) {
         if (rate) {
             $scope.accountAmount = null;                     
-           $scope.accountAmount = ($scope.accountTableSum() + $scope.manualTableSum() * Number(rate) / 100).toFixed(2);       
+           $scope.accountAmount = (($scope.accountTableSum() + $scope.manualTableSum())* Number(rate) / 100).toFixed(2);       
         }
         else
             $scope.accountAmount = '';
@@ -591,7 +591,7 @@
                             $scope.excelTableItemSum();
                             //$scope.accountTableSum();
                             $scope.id = billData.id
-                            $scope.totalAmountINR = billData.adminAmount + $scope.accountTableSum();
+                            $scope.totalAmountINR = $scope.excelTableItemSum() + $scope.accountTableSum();
                         }
                         if (billData.manualLineItem && localStorage["usertype"] == 'O') {
                             $scope.billtable = billData.manualLineItem;
@@ -699,7 +699,7 @@
               var totalAmountINR = $scope.manualTableSum() + $scope.accountTableSum();
           }
           if (authService.userHasPermission('usertype:UO')) {
-              var totalAmountINR = $scope.excelTableItemSum() + $scope.accountTableSum();
+              var totalAmountINR = $scope.excelTableItemSum() + $scope.accountTableSum()
           }
 
         if ($scope.assesableValue) {
@@ -749,7 +749,7 @@
                 purchaseAccountId: $scope.purchaseAccounts.selected.id,
                 adminAmount: $scope.totalAmountINR.toFixed(2),
                 adminBalance: $scope.totalAmountINR.toFixed(2),
-                purchaseAmount: $scope.manualTotalINR,
+                purchaseAmount: $scope.manualTotalINR.toFixed(2),
                 amount: totalAmountINR,
                 balance: totalAmountINR,
                 totalWeight: $scope.totalWeight,
