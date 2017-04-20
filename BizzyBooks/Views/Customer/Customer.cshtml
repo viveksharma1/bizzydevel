@@ -9,60 +9,58 @@
 <div>
 
     <div class="content">
-        <div class="panel lightblue bluebrdr marginbottom">
+        <div class="panel lightblue marginbottom">
             <div class="panel-heading">
                 <strong class="heading">Customers</strong>
                 @*<a href="/Customer/GetExcel_Click" class="brdrnone">Download</a>*@
-                <div class="btn-group pull-right">
-                    <button permission="Customers.new.true" type="button" class="btn btn-primary btn-sm" @*ng-click="NewCustomerCreate();"*@ id="NewCustomerCreate"> New Cutomer</button>
-                    <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li permission="Customers.import.true"><a href="#/Customer/Import">Import Customers</a></li>
+                @*<div class="btn-group pull-right">
+                    <button permission="Customers.new.true" type="button" class="btn btn-primary btn-sm" @*ng-click="NewCustomerCreate();"*@ @*id="NewCustomerCreate"> New Cutomer</button>*@
+                   @* <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li permission="Customers.import.true"><a href="#/Customer/Import">Import Customers</a></li>
 
-                    </ul>
-                </div>
+        </ul>
+    </div>*@
 
             </div>
-
+            <create-account value="myValue"> </create-account>
             <div class="panel-body statusBody" style="margin-top:10px">
 
                 <div class="col-sm-3 cursor padding">
 
-                    <div class="col-sm-12 estimate" ng-click="totalCustomerbtn()" style="background:#486C8F">
+                    <div class="col-sm-12 card" ng-click="totalCustomerbtn()" style="background:white">
 
-                        <p class="text-uppercase marginbottom status fa-address-book"><span style="font-size: 200%; color: red; "> <b>{{customerCount.count}}</b></span> Customer</p>
+                        <p class="text-uppercase marginbottom status"><span style="font-size: 200%; color: #486C8F; "><b>{{customerData.length}} </b> </span>  </b> Customer </p>
                     </div>
 
                 </div>
                 <div class="col-sm-3 cursor padding">
 
-                    <div class="col-sm-12 estimate" ng-click="openInvoicebtn()" style="background:#e91e63">
+                    <div class="col-sm-12 card" ng-click="openInvoicebtn()" style="background:white">
 
-                        <p class="text-uppercase marginbottom status fa-address-book"><span style="font-size: 200%; color: #1E294B; "> <b>{{openInvoiceCount.count}}</b></span> Open Invoice</p>
-                    </div>
-
-                </div>
-
-
-                <div class="col-sm-3 cursor padding">
-
-                    <div class="col-sm-12 estimate" ng-click="paidInvoicebtn()" style="background:#486C8F">
-
-                        <p class="text-uppercase marginbottom status"><span style="font-size: 200%; color: white; "><b> </b> </span> Paid Invoice</p>
+                        <p class="text-uppercase marginbottom status"><span style="font-size: 200%; color: #486C8F; "><b>{{invoiceData.length}} </b> </span> Open Invoice </p>
                     </div>
 
                 </div>
                 <div class="col-sm-3 cursor padding">
 
-                    <div class="col-sm-12 estimate blue padding" ng-click="overDueInvoicebtn()">
-                        <div class="col-sm-12" style="padding:10px">
-                            <p class="text-uppercase marginbottom status"><span style="font-size: 200%; color: yellowgreen; "> <b></b></span> Overdue Invoice</p>
-                        </div>
+                    <div class="col-sm-12 card" ng-click="paidInvoicebtn()" style="background:white">
+
+                        <p class="text-uppercase marginbottom status"><span style="font-size: 200%; color: #486C8F; "><b>{{invoiceData.length}} </b> </span> Paid Invoice </p>
                     </div>
+
                 </div>
-               
+                <div class="col-sm-3 cursor padding">
+
+                    <div class="col-sm-12 card" ng-click="overDueInvoicebtn()" style="background:white">
+
+                        <p class="text-uppercase marginbottom status"><span style="font-size: 200%; color: #486C8F; "><b>{{customerCount.count}} </b> </span> Overdue Invoice </p>
+                    </div>
+
+                </div>
+                
 
 
 
@@ -78,15 +76,15 @@
             
 
 
-            <table id="openInvoiceTable" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%" dt-options="dtOptions" dt-columns="dtColumns">
+            <table id="openInvoiceTable" class="table table-striped table-bordered  fixed-header table-hover" cellspacing="0" width="100%" dt-options="dtOptions" dt-columns="dtColumns">
 
-                <thead style="background:#75757A; color:white; text-transform:uppercase">
+                <thead style="background:#e3e3e3; color:black; text-transform:uppercase">
                     <tr>
                         <th style="padding-left:30px; width:30px"><input type="checkbox" class="checkboxcss" /></th>
                         <th class="fontnormal" ng-click="order('no')">Invoice No </th>
-                        <th class="fontnormal" ng-click="order('date')">Invoice Date</th>
-                        <th class="fontnormal">Invoice Due Date</th>
-                        <th class="fontnormal">Customers </th>
+                        <th class="fontnormal" ng-click="order('date')">Date</th>
+                        <th class="fontnormal">Due Date</th>
+                        <th class="fontnormal">Customer </th>
                         <th class="fontnormal">Amount </th>
                         <th class="fontnormal text-right">Action</th>
                     </tr>
@@ -95,7 +93,7 @@
                 <tbody>
                     <tr ng-repeat="data in invoiceData | orderBy: orderData|filter:search">
                         <td style="padding-left:30px; width:30px"><input type="checkbox" class="checkboxcss" /></td>
-                        <td ng-click="GRNDetail(data.no)">{{data.invoiceNo}}</td>
+                        <td>{{data.invoiceNo}}</td>
                         <td ng-bind="data.date | date:'dd MMM yyyy'"></td>
                         <td style="color:red" ng-bind="data.duedate | date :'dd MMM yyyy'"></td>
                         <td style="color:#000">{{data.customer}}</td>
@@ -108,13 +106,8 @@
                             <div class="btn-group editcaret">
                                 <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>
                                 <ul class="dropdown-menu editdrpdwn" role="menu" style="left:-135px">
-
-                                    <li><a ui-sref="Customer.Enquiry({email:data.no,edit:1})">Edit</a></li>
-                                    <li><a ui-sref="Customer.PurchaseOrder({poNo:data.no})">Receive Payment  </a></li>
-
-                                    <li><a href="">Cancel</a></li>
-
-
+                                    <li><a ui-sref="Customer.SalesInvoice({voId:data.id})">Edit</a></li>
+                                    <li><a ui-sref="Customer.ReceivePayment()">Receive Payment  </a></li>
                                 </ul>
 
                             </div>
@@ -128,33 +121,31 @@
             </table>
 
             <table id="example" class="table table-striped table-bordered table-hover"cellspacing="0" width="100%">
-                <thead style="background:#75757A; color:white; text-transform:uppercase">
+                <thead style="background:#e3e3e3; color:black; text-transform:uppercase">
                     <tr>
                         <th style="padding-left:30px; width:30px"><input type="checkbox" class="checkboxcss" /></th>
                         <th style="display:none">id</th>
-                        <th>Customer</th>
+                        <th> Customer </th>
 
-                        <th class="fontnormal">Phone</th>
-                        <th class="fontnormal">Due Balance</th>
-                        <th class="fontnormal text-right">Action</th>
+                        <th> Phone </th>
+                        <th> Opening Balance </th>
+                        <th> Action </th>
                     </tr>
                 </thead>
 
-                <tbody ng-repeat="data in customerlist">
-                    <tr ui-sref="Customer.Customerdetail({cusCode:data.cusCode,cusName:data.company})">
+                <tbody ng-repeat="data in customerData">
+                    <tr >
                         <td style="padding-left:30px; width:30px"><input type="checkbox" class="checkboxcss" /></td>
-                        <td style="display:none" ng-click="UpdateCustomerInfo(data.id)">{{data.id}}</td>
-
-                        <td>{{data.company}}</td>
+                        <td>{{data.accountName}}</td>
                         <td>{{data.mobile}}</td>
-                        <td>{{data.paymentInfo[0].openingBalance}}</td>
+                        <td>{{data.openingBalance}}</td>
                         <td style="text-align:right;">
-                            <button type="button" class="editbtn"><a ui-sref="Customer.Invoice({cusCode:data.cusCode,cusName:data.company})">Create Invoice</a></button>
+                            <button type="button" class="editbtn"><a ui-sref="Customer.SalesInvoice()">Create Invoice</a></button>
                             <class class="linkseparator" style="margin-top:4px; margin-right:0px">|</class>
                             <div class="btn-group editcaret">
                                 <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>
                                 <ul class="dropdown-menu editdrpdwn" role="menu" style="top:18px">
-                                    <li><a ui-sref="Customer.Invoice({cusCode:data.cusCode})">Create Invoice</a></li>
+                                    <li><a ui-sref="Customer.SalesInvoice()">Create Invoice</a></li>
 
                                 </ul>
 
@@ -168,39 +159,43 @@
            
 
             <table id="paidInvoiceTable" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
-                <thead style="background:#75757A; color:white; text-transform:uppercase">
+                <thead style="background:#e3e3e3; color:black; text-transform:uppercase">
                     <tr>
                         <th style="padding-left:30px; width:30px"><input type="checkbox" class="checkboxcss" /></th>
-                        <th class="fontnormal" ng-click="order('no')">Invoice No </th>
-                        <th class="fontnormal" ng-click="order('date')">Invoice Date</th>
-                        <th class="fontnormal">Invoice Due Date</th>
-                        <th class="fontnormal">Customers </th>
-                        <th class="fontnormal">Amount </th>
-                        <th class="fontnormal text-right">Action</th>
+                        <th  ng-click="order('no')">Invoice No </th>
+                        <th  ng-click="order('date')">Date</th>
+                        <th> Due Date</th>
+                        <th> Customer </th>
+                        <th> Amount </th>
+                        <th class="text-right">Action</th>
                     </tr>
                 </thead>
 
-                <tbody ng-repeat="data in customerlist">
-                    <tr>
+                <tbody>
+                    <tr ng-repeat="data in invoiceData | orderBy: orderData|filter:search">
                         <td style="padding-left:30px; width:30px"><input type="checkbox" class="checkboxcss" /></td>
-                        <td style="display:none" ng-click="UpdateCustomerInfo(data.id)">{{data.id}}</td>
+                        <td>{{data.invoiceNo}}</td>
+                        <td ng-bind="data.date | date:'dd MMM yyyy'"></td>
+                        <td style="color:red" ng-bind="data.duedate | date :'dd MMM yyyy'"></td>
+                        <td style="color:#000">{{data.customer}}</td>
+                        <td style="color:#000">{{data.amount}}</td>
 
-                        <td>{{data.company}}</td>
-                        <td>{{data.mobile}}</td>
-                        <td>{{data.paymentInfo[0].openingBalance}}</td>
-                        <td style="text-align:right;">
-                            <button type="button" class="editbtn"><a href="#/Customer/ReceivePayment">Receive Payment</a></button>
+                        <td style="text-align:right; width:150px">
+                            <button type="button" class="editbtn" <a ui-sref="Customer.ReceivePayment()">Receive Payment  </a></button>
+
                             <class class="linkseparator" style="margin-top:4px; margin-right:0px">|</class>
                             <div class="btn-group editcaret">
                                 <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>
-                                <ul class="dropdown-menu editdrpdwn" role="menu" style="top:18px">
-                                    <li><a href="#/Customer/Invoice" ng-click="GetId_Customer(data.id)">Create Invoice</a></li>
-
+                                <ul class="dropdown-menu editdrpdwn" role="menu" style="left:-135px">
+                                    <li><a ui-sref="Customer.SalesInvoice({voId:data.id})">Edit</a></li>
+                                    <li><a ui-sref="Customer.ReceivePayment()">Receive Payment  </a></li>
                                 </ul>
 
                             </div>
                         </td>
                     </tr>
+
+
 
                 </tbody>
             </table>
@@ -208,41 +203,45 @@
 
 
             <table id="overdueInvoiceTable" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
-                <thead style="background:#75757A; color:white; text-transform:uppercase">
+                <thead style="background:#e3e3e3; color:black; text-transform:uppercase">
                     <tr>
                         <th style="padding-left:30px; width:30px"><input type="checkbox" class="checkboxcss" /></th>
-                        <th class="fontnormal" ng-click="order('no')">Invoice No </th>
-                        <th class="fontnormal" ng-click="order('date')">Invoice Date</th>
-                        <th class="fontnormal">Invoice Due Date</th>
-                        <th class="fontnormal">Customers </th>
-                        <th class="fontnormal text-right">Action</th>
+                        <th  ng-click="order('no')">Invoice No </th>
+                        <th  ng-click="order('date')">Date</th>
+                        <th> Due Date</th>
+                        <th> Customer </th>
+                        <th> Amount </th>
+                        <th class="text-right">Action</th>
                     </tr>
                 </thead>
 
-                <tbody ng-repeat="data in customerlist">
-                    <tr>
+                <tbody>
+                    <tr ng-repeat="data in invoiceData | orderBy: orderData|filter:search">
                         <td style="padding-left:30px; width:30px"><input type="checkbox" class="checkboxcss" /></td>
-                        <td style="display:none" ng-click="UpdateCustomerInfo(data.id)">{{data.id}}</td>
+                        <td>{{data.invoiceNo}}</td>
+                        <td ng-bind="data.date | date:'dd MMM yyyy'"></td>
+                        <td style="color:red" ng-bind="data.duedate | date :'dd MMM yyyy'"></td>
+                        <td style="color:#000">{{data.customer}}</td>
+                        <td style="color:#000">{{data.amount}}</td>
 
-                        <td>{{data.company}}</td>
-                        <td>{{data.mobile}}</td>
-                        <td>{{data.paymentInfo[0].openingBalance}}</td>
-                        <td style="text-align:right;">
-                            <button type="button" class="editbtn"><a href="#/Customer/ReceivePayment">Receive Payment</a></button>
+                        <td style="text-align:right; width:150px">
+                            <button type="button" class="editbtn" <a ui-sref="Customer.ReceivePayment()">Receive Payment  </a></button>
+
                             <class class="linkseparator" style="margin-top:4px; margin-right:0px">|</class>
                             <div class="btn-group editcaret">
                                 <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>
-                                <ul class="dropdown-menu editdrpdwn" role="menu" style="top:18px">
-                                    <li><a href="#/Customer/Invoice" ng-click="GetId_Customer(data.id)">Create Invoice</a></li>
-
+                                <ul class="dropdown-menu editdrpdwn" role="menu" style="left:-135px">
+                                    <li><a ui-sref="Customer.SalesInvoice({voId:data.id})">Edit</a></li>
+                                    <li><a ui-sref="Customer.ReceivePayment()">Receive Payment  </a></li>
                                 </ul>
 
                             </div>
                         </td>
                     </tr>
 
+
+
                 </tbody>
-            </table>
 
             
         </div>

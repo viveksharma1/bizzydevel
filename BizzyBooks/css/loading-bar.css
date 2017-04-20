@@ -30,7 +30,7 @@
   -o-transition: width 350ms;
   transition: width 350ms;
 
-  background: #486C8F;
+  background: #29d;
   position: fixed;
   z-index: 10002;
   top: 0;
@@ -58,21 +58,7 @@
   border-radius: 100%;
 }
 
-#loading-bar-spinner {
-  display: block;
-  position: fixed;
-  z-index: 10002;
-  bottom: 600px;
-  top: 400px;
-  left: 660px;
-  right: 400px;
-  font-size:large;
 
- 
-
-  
-         
-}
 
 #loading-bar-spinner .spinner-icon {
   width: 50px;

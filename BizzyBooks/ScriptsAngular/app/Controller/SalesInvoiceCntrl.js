@@ -336,9 +336,19 @@
     $scope.$watch('account.selected', function () {
         $scope.accountAmount = null;
         if ($scope.account.selected && $scope.account.selected.rate) {
-            $scope.accountAmount = Number($scope.listTotalAmount) * Number($scope.account.selected.rate) / 100;
+            $scope.accountAmount = Number(((Number($scope.totalAccountAmount)+Number($scope.listTotalAmount)) * Number($scope.account.selected.rate) / 100).toFixed(2));
         }
     });
+
+    //$scope.applyRate = function (rate) {
+    //    if (rate) {
+    //        $scope.accountAmount = null;
+    //        $scope.accountAmount = (($scope.accountTableSum() + $scope.manualTableSum()) * Number(rate) / 100).toFixed(2);
+    //    }
+    //    else
+    //        $scope.accountAmount = '';
+    //}
+
     $scope.$watch('rdi', function () {
         updateItemTable();
     });
@@ -468,11 +478,15 @@
 
     });
 
-    $http.get(config.login + "getExpenseAccount/" + localStorage.CompanyId).then(function (response) {
-        $scope.taxAccounts = response.data;
-        //angular.copy($scope.salesAccounts, $scope.taxAccounts);
-
+    $http.get(config.api + "accounts").then(function (response) {
+        $scope.taxAccounts = response.data
+        console.log($scope.account);
     });
+    //$http.get(config.login + "getExpenseAccount/" + localStorage.CompanyId).then(function (response) {
+    //    $scope.taxAccounts = response.data;
+    //    //angular.copy($scope.salesAccounts, $scope.taxAccounts);
+
+    //});
     //$http.get(config.api + "accounts").then(function (response) {
     //    $scope.accounts = response.data
     //    console.log($scope.accounts);
@@ -504,28 +518,30 @@
             amount: $scope.accountAmount
         }
 
-        if ($scope.edit1 == true) {
-            $scope.accountTable[$scope.index] = accountData;
+        if ($scope.selectedAccIndex!=null) {
+            $scope.accountTable[$scope.selectedAccIndex] = accountData;
         } else {
             $scope.accountTable.push(accountData);
         }
-        $scope.edit1 = false;
+        $scope.selectedAccIndex = null;
         clearAccountbox();
        accountTableSum();
     }
     function clearAccountbox() {
         $scope.account = {};
-        $scope.accountDescription = null;
+        //$scope.accountDescription = null;
         $scope.accountAmount = null;
     }
+    $scope.selectedAccIndex = null;
     $scope.editAccountTable = function (data, index) {
-        $scope.idSelected = index;
-        $scope.index = index;
-        $scope.edit1 = true;
-        $scope.account = { selected: data.account};
-        $scope.accountDescription = data.description;
-        $scope.accountAmount = data.amount;
-
+        if ($scope.selectedAccIndex === index) {
+            $scope.selectedAccIndex = null;
+            clearAccountbox();
+        } else {
+            $scope.selectedAccIndex = index;
+            $scope.account = { selected: data.account };
+            $scope.accountAmount = data.amount;
+        }
     }
     $scope.removeAccountTable = function (index) {
         $scope.accountTable.splice(index, 1);
@@ -615,7 +631,8 @@
         $scope.itemRate = null;
         $scope.applyRate('');
     }
-    $scope.applyRate = function (rate,item) {
+    $scope.applyRate = function (rate, item) {
+        var copy = false;
         if(!$scope.isCart){
             if ($scope.itemChecked.length > 0) {
 
@@ -633,6 +650,8 @@
                         $scope.itemChecked[i].itemRate = rate
                         $scope.itemChecked[i].itemAmount = rate * Number($scope.itemChecked[i].itemQty);
                         $scope.itemChecked[i].select = true;
+                        updateItem($scope.itemChecked[i]);
+
                     }
 
                 }
@@ -644,8 +663,19 @@
         else {
             showSuccessToast("Please Select Item");
         }
-
-
+    }
+    function updateItem(itemData,remove) {
+        angular.forEach($scope.filterList, function (item) {
+            if (item.id === itemData.id) {
+                if (remove) {
+                    item.select = false;
+                    item.itemRate = null;
+                    item.itemAmount = null;
+                }
+                else angular.copy(itemData, item);
+            }
+        });
+        
     }
 
 
@@ -710,9 +740,10 @@
             }else{
                 $scope.selectAllItem = false;
                 for (var i = 0; i < $scope.itemChecked.length; i++) {
-                    if ($scope.itemChecked[i].id == item.id)
-                        $scope.itemChecked.splice(i, 1)
-
+                    if ($scope.itemChecked[i].id == item.id) {
+                        updateItem($scope.itemChecked[i], true);
+                        $scope.itemChecked.splice(i, 1);
+                    }
                 }
                 sumItemTable($scope.itemChecked);
             }
@@ -1029,7 +1060,22 @@
         }
     };
 
-
+    $scope.Accountbtn = function (id, type) {
+        if (type) {
+            console.log(id);
+            $('#formaccount').modal('show');
+            if (id != undefined) {
+                $http.get(config.api + "accounts/" + id).then(function (response) {
+                    console.log(response);
+                    $scope.myValue = response.data;
+                    $scope.isAccount = false
+                });
+            }
+            else {
+                $scope.myValue = null;
+            }
+        }
+    };
     var Promise = window.Promise;
     if (!Promise) {
         Promise = JSZip.external.Promise;

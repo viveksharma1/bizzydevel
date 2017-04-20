@@ -79,12 +79,12 @@
                         </div>
                         <div class="col-sm-6 form-group padding5">
                             <label>Rate (%)</label>
-                            <input ng-model="rate" only-digits ng-disabled="isDisabled" type="text" class="form-control" />
+                            <input ng-model="rate" ng-disabled="isDisabled" type="number" step="0.01" class="form-control" />
 
                            
                             <span>
                                 <label>Opening Balance</label>
-                                <input ng-model="openingBalance" only-digits ng-disabled="isDisabled" type="text" class="form-control" />
+                                <input ng-model="openingBalance" ng-disabled="isDisabled" type="number" step="0.01" class="form-control" />
                             </span>
 
                         </div>

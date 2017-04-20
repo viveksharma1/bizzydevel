@@ -6632,6 +6632,8 @@ button.close {
     line-break: auto;
 }
 
+.tablepopover .popover{width:270px}
+
     .popover.top {
         margin-top: -10px;
     }

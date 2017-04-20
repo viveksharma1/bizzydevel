@@ -88,9 +88,9 @@
                                    theme="selectize">
                             <ui-select-match placeholder="Select Consignee">{{ $select.selected.accountName }}</ui-select-match>
 
-                            <ui-select-choices repeat="person2 in supliers2  | filter: $select.search">
+                            <ui-select-choices repeat="person in supliers2  | filter: $select.search">
                                 <div>
-                                    <span ng-bind-html="person2.accountName | highlight: $select.search"></span>
+                                    <span ng-bind-html="person.accountName | highlight: $select.search"></span>
                                 </div>
 
 
@@ -163,15 +163,16 @@
                     </ui-select-choices>
                 </ui-select>*@
                 <div class="content">
+
+
                     <ui-select ng-model="salesAccount.selected" id="countryCode" ui-select-focuser ng-init="$select.addnew=1;$select.type='account';"
                                theme="selectize">
 
                         <ui-select-match placeholder="Choose an account">{{$select.selected.accountName}}</ui-select-match>
-                        <ui-select-header>Top of the list!</ui-select-header>
-                        <ui-select-choices repeat="account in salesAccounts  | filter: $select.search">
+                        <ui-select-choices repeat="person in salesAccounts  | filter: $select.search">
                             <div>
-                                <span style="color:black" ng-bind-html="account.name | highlight: $select.search">{{account.type}}</span>
-                                <span style="color:forestgreen">{{account.accountName}}</span>
+                                @*<span style="color:black" ng-bind-html="account.name | highlight: $select.search">{{account.type}}</span>*@
+                                <span style="color:forestgreen">{{person.accountName}}</span>
                             </div>
 
 
@@ -838,7 +839,7 @@
                             <th>
                                 <ui-select ng-model="account.selected" id="countryCode"
                                            ui-select-focuser
-                                           theme="selectize">
+                                           theme="selectize" ng-init="$select.addnew=1;$select.type='accounts';">
                                     <ui-select-match placeholder="ACCOUNT">
                                         <span class="selectuiTable" style="width:100%">
                                             <span>{{ $select.selected.accountName || $select.search }}</span>
@@ -846,11 +847,9 @@
                                         </span>
 
                                     </ui-select-match>
-
-                                    <ui-select-choices repeat="acc in taxAccounts  | filter: $select.search" @*refresh="refreshAccountTable($select)" refresh-delay="2"*@>
-
+                                    <ui-select-choices repeat="person in taxAccounts  | filter: $select.search" @*refresh="refreshAccountTable($select)" refresh-delay="2"*@>
                                         <div>
-                                            <span ng-bind-html="acc.accountName | highlight: $select.search"></span>
+                                            <span ng-bind-html="person.accountName | highlight: $select.search"></span>
                                         </div>
                                     </ui-select-choices>
                                 </ui-select>
@@ -869,8 +868,8 @@
                     </thead>
 
                     <tbody >
-                        <tr ng-repeat="item in accountTable track by $index" class="cursor" ng-click="editAccountTable(item,$index)" ng-class="{selected: $index === idSelected}">
-                            <td class="Count" ng-click="editAccountTable(item,$index)">{{item.account.accountName}}</td>
+                        <tr ng-repeat="item in accountTable track by $index" class="cursor" ng-click="editAccountTable(item,$index)" ng-class="{selected: $index === selectedAccIndex}">
+                            <td class="Count" >{{item.account.accountName}}</td>
                             <td class="Count" style="text-align:right">{{item.amount}}</td>
                             <td class="text-center Count" value="0.00"><a class="edit" title="Edit"> <i class="fa fa-times-circle cursor RemoveTR" style="font-size:16px" ng-click="removeAccountTable($index)"></i></a></td>
                         </tr>

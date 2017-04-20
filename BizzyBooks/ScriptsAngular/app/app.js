@@ -513,7 +513,7 @@ login: 'http://localhost:4000/',
 api: 'http://localhost:4000/api/'
 
 
-  //login: 'http://bizzy-book-api.azurewebsites.net/',
+ //login: 'http://bizzy-book-api.azurewebsites.net/',
 //api: 'http://bizzy-book-api.azurewebsites.net/api/',
 });
 
@@ -1033,7 +1033,7 @@ myApp.run(['$templateCache', function ($templateCache) {
       '  <div  class="ui-select-breadcrumbs cursor" tabindex="2" ng-click="add($select.type,$select.search);"ng-show="$select.addnew==1" >',
       '    <span   class="ui-breadcrumb"',
      
-      '       <span  ><i class="fa fa-plus fa-2x" style="color:green" aria-hidden="false"></i> {{$select.search }}</span>',
+      '       <span><label class="badge cursor" aria-hidden="false"><i class="fa fa-plus"></i> Add</label> <span class="pull-right text-warning">{{$select.search }}</span></span>',
       '    </span>',
       '  </div>',
       '  <div class="ui-select-choices-content selectize-dropdown-content">',
@@ -1043,8 +1043,9 @@ myApp.run(['$templateCache', function ($templateCache) {
       '        {{$group}}',
       '      </div>',
       '      <div class="ui-select-choices-row" ng-class="{active: $select.isActive(this), disabled: $select.isDisabled(this)}">',
-      '        <div class="option ui-select-choices-row-inner" ',
+      '        <div class="ui-select-choices-row-inner" ',
       '           data-selectable="">',
+      '<span class="pull-right" style="margin:6px 5px 0px 5px"> <i class="fa fa-pencil-square-o" ng-click="Accountbtn(person.id,person.accountName)" style="color:seagreen" aria-hidden="true"></i></span>',
       '        </div>',
       '      </div>',
       '    </div>',
