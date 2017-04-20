@@ -260,6 +260,8 @@
         angular.forEach($scope.itemChecked, function (item) {
             $scope.totalPaid = $scope.totalPaid + item.amountPaid;
             item.balance = item.balance - item.amountPaid;
+            if (!$scope.isInterest)
+                item.interest = 0;
             //item.roi = item.invoiceData.roi;
             //item.paymentDays = item.invoiceData.paymentDays;
             delete item.invoiceData;
@@ -565,6 +567,7 @@
             paymentDateChange();
 
     });
+    $scope.isInterest = localStorage.usertype=='UO'?true:false;
     $scope.itemChecked = [];
     $scope.selectLineItem = function (itemData, force) {
         if (itemData) {
@@ -636,7 +639,7 @@
 
             var days = getDays(item);
             var dayCal = days - Number(item.invoiceData.paymentDays == undefined ? 0 : item.invoiceData.paymentDays);
-            ret= Number((payAmount * (item.invoiceData.roi / (100 * 30)) * dayCal).toFixed(2));
+            ret= Number((payAmount * (item.invoiceData.roi /100/30) * dayCal).toFixed(2));
             
         }
         if (inline) item.interest = ret;

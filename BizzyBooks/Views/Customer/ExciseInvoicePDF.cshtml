@@ -42,7 +42,7 @@
                                         <h5 style="margin:0px">FIRST/SECOND STAGE DEALER'S INVOICE</h5>
                                         <small>(Under Rule 11 (7) of Central Excise Rules 2002)</small>
                                         <h1 style="font-size:18px; margin:5px; font-weight:bold;  text-transform:uppercase; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">{{ company.CompanyName}}</h1>
-                                        <p style="margin:0px">Office Add :{{company.CompanyAddress}}<br />Phone No. : {{company.CompanyMobileNo}} Fax : {{company.CompanyMobileNo}} <br />Prop : {{}}</p>
+                                        <p style="margin:0px">Office Add :{{company.CompanyAddress}}<br />Phone No. : {{company.CompanyMobileNo}} Fax : {{company.FaxNo}} <br />Prop : {{company.ProprietorName}}</p>
                                     </td>
                                     <td style="vertical-align:top; text-transform:uppercase; width:250px; font-size:12px; padding:3px 0px;   padding-bottom:20px">
                                         <p style="margin-bottom:2px; padding:2px 5px">
@@ -57,25 +57,25 @@
                                             triplicate for assets
                                             <em style="width:20px; height:15px; border:1px solid #666; float:right"></em>
                                         </p>
-                                        <p style="padding:2px 5px; margin-bottom:0px">Range : III &nbsp; &nbsp; Division : A</p>
-                                        <p style="padding:2px 5px; margin-bottom:0px; font-size:10px">Range & Div. Add.  &nbsp; &nbsp;: Meher Bidg. Dadiseth Lane, Chowpatty, Mumbai - 7</p>
+                                        <p style="padding:2px 5px; margin-bottom:0px">Range : {{company.Range}} &nbsp; &nbsp; Division : {{company.Division}}</p>
+                                        <p style="padding:2px 5px; margin-bottom:0px; font-size:10px">Range & Div. Add.  &nbsp; &nbsp;: {{}}</p>
                                         <table style="font-size:10px;">
 
                                             <tr>
                                                 <td style="padding:2px 5px">Commissionerate</td>
-                                                <td style="padding:2px 5px">: Mumbai - 1</td>
+                                                <td style="padding:2px 5px">: {{company.Commisionerate}}</td>
                                             </tr>
                                             <tr>
                                                 <td style="padding:2px 5px">C.E.Regn No.</td>
-                                                <td style="padding:2px 5px">: &nbsp;</td>
+                                                <td style="padding:2px 5px">: {{company.CE_RegionNo}}</td>
                                             </tr>
                                             <tr>
                                                 <td style="padding:2px 5px">ECC Code No.</td>
-                                                <td style="padding:2px 5px">: {{}}</td>
+                                                <td style="padding:2px 5px">: {{company.ECC_Code_NO}}</td>
                                             </tr>
                                             <tr>
                                                 <td style="padding:2px 5px">PAN NO.</td>
-                                                <td style="padding:2px 5px">: {{}}</td>
+                                                <td style="padding:2px 5px">: {{company.PAN_NO}}</td>
                                             </tr>
                                         </table>
                                     </td>
@@ -95,19 +95,19 @@
                                 </tr>
                                 <tr>
                                     <td style="padding:2px 5px">Date & Time of Issue</td>
-                                    <td style="padding:2px 5px">: {{invoiceData.invoiceData.issueDate|date:'dd-MMM-yyyy h:m:a'}}</td>
+                                    <td style="padding:2px 5px">: {{invoiceData.invoiceData.issueDate|date:'dd-MMM-yyyy h:mm a'}}</td>
                                     <td style="padding:2px 5px">Mode of Transport</td>
                                     <td style="padding:2px 5px">: {{invoiceData.invoiceData.modeTransport}}</td>
                                 </tr>
                                 <tr>
                                     <td style="padding:2px 5px">Date & Time of removal</td>
-                                    <td style="padding:2px 5px">: {{invoiceData.invoiceData.removalDate|date:'dd-MMM-yyyy h:m:a'}}</td>
+                                    <td style="padding:2px 5px">: {{invoiceData.invoiceData.removalDate|date:'dd-MMM-yyyy h:mm a'}}</td>
                                     <td style="padding:2px 5px">Vehicle No/Lr No.</td>
-                                    <td style="padding:2px 5px">: {{}}</td>
+                                    <td style="padding:2px 5px">: {{invoiceData.invoiceData.vehicleNo}}</td>
                                 </tr>
                                 <tr>
                                     <td style="padding:2px 5px">Comm. Invoice No.</td>
-                                    <td style="padding:2px 5px" colspan="3">: {{invoiceData.vochNo}} <span style="margin-left:50px">Date : {{invoiceData.date|date:'dd-MMM-yyyy'}}</span></td>
+                                    <td style="padding:2px 5px" colspan="3">: {{invoiceData.invoiceData.comInvoiceNo}} <span style="margin-left:50px">Date : {{invoiceData.date|date:'dd-MMM-yyyy'}}</span></td>
 
                                 </tr>
                             </table>
@@ -121,7 +121,7 @@
                                         <table>
                                             <tr>
                                                 <td style="padding:2px 5px; width:120px; vertical-align:top">Name & Add. of</td>
-                                                <td style="text-transform:uppercase; padding:2px 5px;"><strong>: {{invoiceData.invoiceData.consigneeAccount}}</strong></td>
+                                                <td style="text-transform:uppercase; padding:2px 5px;"><strong>: {{supliersDetail2.accountName}}</strong></td>
                                             </tr>
                                             <tr>
                                                 <td style="padding:2px 5px; vertical-align:top">Consignee</td>
@@ -132,9 +132,9 @@
                                                 <td>
                                                     <table style="width:100%">
                                                         <tr>
-                                                            <td style="padding:2px 5px; vertical-align:top; width:90px">: V</td>
+                                                            <td style="padding:2px 5px; vertical-align:top; width:90px">: {{supliersDetail2.taxInfo.range}}</td>
                                                             <td style="padding:2px 5px; vertical-align:top; width:137px">Divison :</td>
-                                                            <td style="padding:2px 5px; vertical-align:top">A</td>
+                                                            <td style="padding:2px 5px; vertical-align:top">{{supliersDetail2.taxInfo.division}}</td>
                                                         </tr>
                                                     </table>
                                                 </td>
@@ -144,16 +144,16 @@
                                                 <td style="vertical-align:top">
                                                     <table style="width:100%; white-space:nowrap">
                                                         <tr>
-                                                            <td style="padding:2px 5px; vertical-align:top; width:90px">: {{}}</td>
+                                                            <td style="padding:2px 5px; vertical-align:top; width:90px">: {{supliersDetail2.taxInfo.eccCodeNo}}</td>
                                                             <td style="padding:2px 5px; vertical-align:top; white-space:nowrap">Comisionerate :</td>
-                                                            <td style="padding:2px 5px; vertical-align:top">MUMBAI-1</td>
+                                                            <td style="padding:2px 5px; vertical-align:top">{{supliersDetail2.taxInfo.commisionerate}}</td>
                                                         </tr>
                                                     </table>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td style="padding:2px 5px;vertical-align:top">Excise Reg. No.</td>
-                                                <td style="text-transform:uppercase; padding:2px 5px">: {{}}</td>
+                                                <td style="text-transform:uppercase; padding:2px 5px">: {{supliersDetail2.taxInfo.exRegNo}}</td>
                                             </tr>
                                             <tr>
                                                 <td style="padding:2px 5px; vertical-align:top">Consignee VAT TIN</td>
@@ -170,7 +170,7 @@
                                         <table>
                                             <tr>
                                                 <td style="padding:2px 5px; width:120px; vertical-align:top">Name & Add. of</td>
-                                                <td style="text-transform:uppercase; padding:2px 5px;"><strong>: {{invoiceData.invoiceData.customerAccount}}</strong></td>
+                                                <td style="text-transform:uppercase; padding:2px 5px;"><strong>: {{supliersDetail.accountName}}</strong></td>
                                             </tr>
                                             <tr>
                                                 <td style="padding:2px 5px; vertical-align:top">of Buyer</td>
@@ -180,12 +180,12 @@
                                             <tr>
                                                 <td style="padding:2px 5px; vertical-align:top">ECC No. </td>
                                                 <td style="text-transform:uppercase; padding:2px 5px">
-                                                    : {{}}
+                                                    : {{supliersDetail.taxInfo.eccCodeNo}}
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td style="padding:2px 5px;vertical-align:top">Excise Reg. No.</td>
-                                                <td style="text-transform:uppercase; padding:2px 5px">: {{}}</td>
+                                                <td style="text-transform:uppercase; padding:2px 5px">: {{supliersDetail2.taxInfo.exRegNo}}</td>
                                             </tr>
                                             <tr>
                                                 <td style="padding:2px 5px; vertical-align:top">Buyer VAT TIN</td>
@@ -358,27 +358,27 @@
                                     <td style="border-right:1px solid #e3e3e3; padding:2px 5px; vertical-align:top; width:33.3%">
                                         <strong>CERTIFICATION</strong>
                                         <p>
-                                            Certified the goods covered under this invoice were,(a) imported directly by us or received directly from that party, who have imporanted the said goods,(b) Received directly from the factor/depot/consignment agent/authorised permises of M/s. <strong>JINDAL STAINLESS LIMITED</strong> (C) Received from M/s. <strong>JINDAL STAINLESS LIMITED. (TALOJA)</strong> who are the first stage dealer of
+                                            Certified the goods covered under this invoice were,(a) imported directly by us or received directly from that party, who have imporanted the said goods,(b) Received directly from the factor/depot/consignment agent/authorised permises of M/s. <strong>{{supliersDetail.accountName}}</strong> (C) Received from M/s. <strong>{{supliersDetail.accountName}}. ({{supliersDetail.ProprietorName}})</strong> who are the first stage dealer of
                                         </p>
-                                        <p>M/s <strong>JINDAL STAINLESS LIMITED</strong></p>
+                                        <p>M/s <strong>{{supliersDetail.accountName}}</strong></p>
 
                                         <p style="margin-top:42px">
-                                            <span>Place: Mumbai</span>
+                                            <span>Place: </span>
                                             <span style="float:right">
-                                                Date: 22-Feb-2017
+                                                Date: 
                                             </span>
                                         </p>
                                     </td>
                                     <td style="border-right:1px solid #e3e3e3; padding:2px 5px; vertical-align:top; width:33.3%">
-                                        <p>VAT TIN NO. : 27280644068 V 15-01-2008
+                                        <p>VAT TIN NO. : {{company.TIN_NO}}
                                       </p>
 
                                         <p>
-                                            CST TIN NO. : 27280644068 C 15-01-2008
+                                            CST TIN NO. : {{company.CST_NO}}
                                         </p>
                                       <strong style="width:100%; float:left; text-align:center; border-bottom:1px solid #e3e3e3">Subject to Mumbai Jurisdiction</strong>
                                         <p  style="width:100%; float:left; border-bottom:1px solid #e3e3e3; padding:10px 0px 23px 0px">Certified that the particulars given above are true and correct and the amount indicated represents the price actually charged and that there is no additional consideration following directly or indirectly from the buyer.</p>
-                                    <p>FOR <strong>NEEL RATAN STEEL</strong></p>
+                                    <p>FOR <strong>{{company.CompanyName}}</strong></p>
                                         <p style="margin-top:20px">Proprietor/Authorised Signatory</p>
                                     </td>
                                     <td style="padding:2px 5px; vertical-align:top; width:33.3%">
@@ -386,7 +386,7 @@
                                             'I/We hereby certify that my/our registration certification under the Maharashtra Value Added Tax Act, 2002 is in force on the date on which sale of goods specified in this tax invoice is made by me/us and that the transaction of sale covered by this Tax invoice has been effected by me/us and it shall be accounted for in the turnover of sales while filing my return and the due tax. If any payable on the sale has been paid or shall be paid.<br />
 
                                         </p> 
-                                        <p>FOR <strong>NEEL RATAN STEEL</strong></p>
+                                        <p>FOR <strong>{{company.CompanyName}}</strong></p>
                                         <p style="margin-top:20px">Proprietor/Authorised Signatory</p>
                                     </td>
                                 </tr>

@@ -126,8 +126,8 @@
                         rate: Number($scope.rate),
                         openingBalance: $scope.openingBalance,
                         balanceType: $scope.balanceType,
+                        propName:$scope.propName,
                         email: $scope.email,
-                       
                         phone: $scope.phone,
                         mobile: $scope.mobile,
                         billingAddress: [
@@ -149,10 +149,11 @@
                       country: $scope.country1
                   }
                 ],
-                taxInfo: [
+                taxInfo: 
                   {
                       taxRegNo: $scope.taxRegNo,
                       cstRegNo: $scope.cstRegNo,
+                      exRegNo:$scope.exRegNo,
                       panNo: $scope.panNo,
                       range: $scope.Range,
                       division: $scope.division,
@@ -164,7 +165,7 @@
 
 
                   }
-                ],
+                ,
             
                 notes: $scope.notes,
 

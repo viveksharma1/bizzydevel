@@ -141,7 +141,7 @@ myApp.controller('HomeCntrl', ['$state', '$http', '$rootScope', '$scope', 'confi
         $('#AddCompnayModal').modal('show');
     }
     $scope.saveCompany = function () {
-        $scope.companyInfo.CompanyId = 'COM' + moment().format("YYYYMMDDHHmmssSSS");
+        
         $scope.companyInfo.IsActive = 1;
         //var data = {
         //    CompanyId: 'COM' + moment().format("YYYYMMDDHHmmssSSS"),
@@ -169,6 +169,7 @@ myApp.controller('HomeCntrl', ['$state', '$http', '$rootScope', '$scope', 'confi
                 showSuccessToast("Error! while updating company info");
             });
         } else {
+            $scope.companyInfo.CompanyId = 'COM' + moment().format("YYYYMMDDHHmmssSSS");
             $http.post(config.api + "CompanyMasters", $scope.companyInfo).then(function (response) {
                 showSuccessToast("Company created");
                 $scope.closenClear();

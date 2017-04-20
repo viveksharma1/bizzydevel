@@ -565,9 +565,9 @@
     //        $scope.supliers = response.data;
     //    });
     //}
-    $scope.getSupplierDetail = function (supplierName) {
+    $scope.getSupplierDetail = function (id) {
         $scope.supliersDetail = []
-        $http.get(config.api + "accounts" + "?filter[where][compCode]=" + localStorage.CompanyId + "&filter[where][accountName]=" + supplierName).then(function (response) {
+        $http.get(config.api + "accounts" + "?filter[where][compCode]=" + localStorage.CompanyId + "&filter[where][id]=" + id).then(function (response) {
             $scope.supliersDetail = response.data;
             console.log(response.data)
             $scope.shippingAddress = $scope.supliersDetail[0].billingAddress[0].street;

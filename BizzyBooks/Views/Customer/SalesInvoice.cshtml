@@ -55,7 +55,7 @@
                 <div class="col-sm-8 padding">
                     <label>Type  :</label>
                     <div class="btn-group btnhover">
-                        <button ng-click="setInvoiceType('Tax')" type="button" ng-class="{active: invoiceType=='Tax'}" class="btn btn-xs btn-default">Tax</button>
+                        @*<button ng-click="setInvoiceType('Tax')" type="button" ng-class="{active: invoiceType=='Tax'}" class="btn btn-xs btn-default">Tax</button>*@
                         <button ng-click="setInvoiceType('Excise')" type="button" ng-class="{active: invoiceType=='Excise'}" class="btn btn-xs  btn-default">Excise</button>
                         <button ng-click="setInvoiceType('Non Excise')" type="button" ng-class="{active: invoiceType=='Non Excise'}" class="btn btn-xs  btn-default">Non Excise</button>
                     </div>
@@ -179,11 +179,11 @@
                     </ui-select>
                     </div>
 
-                    <div class="col-sm-6" style="padding-left:0px">
+                    <div class="col-sm-6" style="padding-left:0px; padding-right:6px">
 
                         <h4 class="tabheading font_11">Invoice Date</h4>
                         <div class='input-group'>
-                            <input type='text' ng-blur="paymentTerm()" class="form-control" ng-model="billDate" id='InvoiceDate' placeholder="dd/mm/yyyy" />
+                            <input type='text' ng-blur="paymentTerm()" class="form-control" ng-init="billDate='InvoiceDate'"  id='InvoiceDate' placeholder="dd/mm/yyyy" />
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
@@ -191,27 +191,29 @@
 
                         <h4 class="tabheading font_11">Due Date</h4>
                         <div class='input-group'>
-                            <input type='text' class="form-control" ng-model="billDueDate" id='DueDate' placeholder="dd/mm/yyyy" />
+                            <input type='text' class="form-control" ng-init="billDueDate='DueDate'"  id='DueDate' placeholder="dd/mm/yyyy" />
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
                         </div>
                         <h4 class="tabheading font_11">Date & time of issue</h4>
-                        <div class='input-group' style="float:left; width:103px; margin-right:5px">
-                            <input type='text' class="form-control" ng-model="billIssueDate" id='IssueDate' placeholder="dd/mm/yyyy" />
-                            <span class="input-group-addon" style="padding:6px 8px">
-                                <span class="glyphicon glyphicon-calendar"></span>
-                            </span>
+                        <div class="col-sm-6" style="padding:0px">
+                            <div class='input-group' >
+                                <input type='text' class="form-control" ng-init="billIssueDate='IssueDate'"  id='IssueDate' placeholder="dd/mm/yyyy" />
+                                <span class="input-group-addon" style="padding:6px 6px">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
                         </div>
-
-                        <div class='input-group' style="float:left; width:82px;">
-                            <input type='text' class="form-control" ng-model="billIssueTime" id='IssueTime' placeholder="00:00" />
-                            <span class="input-group-addon" style="padding:6px 8px">
-                                <span class="fa fa-clock-o"></span>
-                            </span>
+                        <div class="col-sm-6" style="padding:0px; padding-left:4px">
+                            <div class='input-group'>
+                                <input type='text' class="form-control" ng-init="billIssueTime='IssueTime'" id='IssueTime' placeholder="00:00" />
+                                <span class="input-group-addon" style="padding:6px 6px">
+                                    <span class="fa fa-clock-o"></span>
+                                </span>
+                            </div>
+                            </div>
                         </div>
-
-                    </div>
 
                     <div class="col-sm-6" style="padding:0px">
 
@@ -228,27 +230,29 @@
                 </div>*@
 
                         <h4 class="tabheading font_11">Date & time of removal</h4>
-                        <div class='input-group' style="float:left; width:109px; margin-right:5px">
-                            <input type='text' class="form-control" ng-model="billRemovalDate" id='RemovalDate' placeholder="dd/mm/yyyy" />
-                            <span class="input-group-addon" style="padding:6px 8px">
-                                <span class="glyphicon glyphicon-calendar"></span>
-                            </span>
+                        <div class="col-sm-6" style="padding:0px">
+                            <div class='input-group'>
+                                <input type='text' class="form-control" ng-init="billRemovalDate='RemovalDate'" id='RemovalDate' placeholder="dd/mm/yyyy" />
+                                <span class="input-group-addon" style="padding:6px 6px">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                            </div>
+                        <div class="col-sm-6" style="padding:0px; padding-left:4px">
+                            <div class='input-group'>
+                                <input type='text' class="form-control" ng-init="billRemovalTime='RemovalTime'" id='RemovalTime' placeholder="00:00" />
+                                <span class="input-group-addon" style="padding:6px 6px">
+                                    <span class="fa fa-clock-o"></span>
+                                </span>
+                            </div>
+                            </div>
+                            @*<h4 class="tabheading font_11">UNIT</h4>
+            <select ng-model="unit" ng-change="weightUnit(unit)" class="form-control pull-left" style="width:100px">
+                <option>KG</option>
+                <option>MT</option>
+            </select>*@
+
                         </div>
-
-                        <div class='input-group' style="float:left; width:90px;">
-                            <input type='text' class="form-control" ng-model="billRemovalTime"  id='RemovalTime' placeholder="00:00" />
-                            <span class="input-group-addon" style="padding:6px 8px">
-                                <span class="fa fa-clock-o"></span>
-                            </span>
-                        </div>
-
-                        @*<h4 class="tabheading font_11">UNIT</h4>
-                <select ng-model="unit" ng-change="weightUnit(unit)" class="form-control pull-left" style="width:100px">
-                    <option>KG</option>
-                    <option>MT</option>
-                </select>*@
-
-                    </div>
 
 
 

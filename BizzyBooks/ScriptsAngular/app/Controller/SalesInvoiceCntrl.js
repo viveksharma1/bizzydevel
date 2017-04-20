@@ -166,7 +166,7 @@
     $scope.supplier2 = {};
     $scope.account = {}
     //$scope.totalAmountINR = 0;
-    $scope.invoiceType = "Tax";
+    $scope.invoiceType = "Excise";
     $scope.customerType = "Consignee";
 
     $scope.remarks = {};
@@ -260,6 +260,7 @@
                       $scope.totalAmount = response.data.amount;
                       //$scope.billDate = response.data.date;
                       $scope.billNo = response.data.vochNo;
+                      $scope.comInvoiceNo = response.data.invoiceData.comInvoiceNo,
                       $scope.narration = response.data.remark;
                       $scope.totalAmount = response.data.amount;
                       $scope.intRate = response.data.invoiceData.roi;
@@ -268,13 +269,19 @@
                       $scope.itemTable = response.data.invoiceData.billData;
                       angular.copy($scope.itemTable, $scope.itemTableTemp);
                       $scope.accountTable = response.data.invoiceData.accountlineItem;
-                      $scope.billIssueDate = $filter('date')(response.data.invoiceData.issueDate, 'dd/MM/yyyy');
-                      $scope.billDate = $filter('date')(response.data.date, 'dd/MM/yyyy');
-                      $scope.billDueDate = $filter('date')(response.data.duedate, 'dd/MM/yyyy');
-                      $scope.billRemovalDate = $filter('date')(response.data.invoiceData.removalDate, 'dd/MM/yyyy');
+                      setDate($scope.billDate, response.data.date);
+                      setDate($scope.billDueDate, response.data.duedate);
+                      //$scope.billDueDate = $filter('date')(response.data.duedate, 'dd/MM/yyyy');
+
+                      //$scope.billIssueDate =
+                      setDate($scope.billIssueDate, response.data.invoiceData.issueDate, $scope.billIssueTime);// $filter('date')(response.data.invoiceData.issueDate, 'dd/MM/yyyy');
+                      //$scope.billDate =
+                      setDate($scope.billRemovalDate, response.data.invoiceData.removalDate, $scope.billRemovalTime);// $filter('date')(response.data.invoiceData.issueDate, 'dd/MM/yyyy');
+
+                      //$scope.billRemovalDate = $filter('date')(response.data.invoiceData.removalDate, 'dd/MM/yyyy');
                       $scope.paymentDays = response.data.invoiceData.paymentDays;
-                      getSupplierDetail(localStorage[response.data.invoiceData.customerAccountId]);
-                      getSupplierDetail(localStorage[response.data.invoiceData.consigneeAccountId], true);
+                      getSupplierDetail(response.data.invoiceData.customerAccountId);
+                      getSupplierDetail(response.data.invoiceData.consigneeAccountId, true);
                       
                       sumItemListTable($scope.itemTable);
                       accountTableSum();
@@ -408,8 +415,9 @@
         var days=0;
         if ($scope.paymentDays)
             days = $scope.paymentDays;
-        if ($scope.billDate)
-            $scope.billDueDate = moment($scope.billDate, "DD/MM/YYYY").add(days, 'days').format('DD/MM/YYYY');
+        var billDate = getDate($scope.billDate);
+        if (billDate)
+            setDate($scope.billDueDate,moment(getDate($scope.billDate)).add(days, 'days'));
     }
 
     $scope.supliers = [];
@@ -430,9 +438,9 @@
     //        angular.copy($scope.supliers, $scope.supliers2);
     //    });
     //}
-    function getSupplierDetail(supplierName,isConsignee) {
+    function getSupplierDetail(id,isConsignee) {
         //$scope.supliersDetail = []
-        $http.get(config.api + "accounts" + "?filter[where][accountName]=" + supplierName).then(function (response) {
+        $http.get(config.api + "accounts" + "?filter[where][id]=" + id).then(function (response) {
             if (isConsignee) {
                 $scope.supliersDetail2 = response.data;
                 console.log(response.data)
@@ -864,10 +872,13 @@
         $scope.customerType = "Buyer";
         $scope.billNoValid = false;
         $scope.uploader.clearQueue();
-        $scope.billDate = null;
+        //$scope.billDate = null;
+        setDate($scope.billDate, new Date());
+
         $scope.paymentDays = null;
         $scope.billDueDate = null;
-        $scope.billIssueDate = null;
+        setDate($scope.billIssueDate, '', $scope.billIssueTime)
+        //$scope.billIssueDate = null;
         $scope.billRemovalDate = null;
         $scope.intRate=null;
         $scope.modeTransport = null;
@@ -879,7 +890,26 @@
 
     }
 
-    $scope.saveInvoice = function () {
+   function setDate(inputDateId, val,inputTimeId) {
+       $('#' + inputDateId).datepicker('setDate', new Date(val));
+       if(inputTimeId)
+           $('#' + inputTimeId).timepicker('setTime',new Date(val));
+
+
+   }
+   function getDate(inputDateId,inputTimeId) {
+       var ret=$('#'+inputDateId).datepicker('getDate');
+       if(inputTimeId)
+           ret=$('#'+inputTimeId).timepicker('getTime',ret);
+       return ret;
+
+   }
+
+   $scope.saveInvoice = function () {
+       var billDate = getDate($scope.billDate);
+       var billIssueDateTime = getDate($scope.billIssueDate, $scope.billIssueTime);
+       var billRemovalDateTime = getDate($scope.billRemovalDate, $scope.billRemovalTime);
+       var billDueDate = getDate($scope.billDueDate);
         if ($scope.supplier2.selected == undefined || $scope.supplier2.selected==null) {
             showErrorToast("Please select consignee");
             return;
@@ -889,11 +919,11 @@
             return;
         }
         
-        if (!$scope.billDate) {
+        if (!billDate) {
             showErrorToast("Invoice date is not valid");
             return;
         }
-        if (!$scope.billDueDate) {
+        if (!billDueDate) {
             showErrorToast("Invoice due date is not valid");
             return;
         }
@@ -929,22 +959,24 @@
             compCode: localStorage.CompanyId,
             type: "Sales Invoice",
             role: localStorage.usertype,
-            date: dateFormat($scope.billDate),
-            duedate: dateFormat($scope.billDueDate),
+            date: billDate,
+            duedate: billDueDate,
             amount: $scope.gTotal,
             roundOff:$scope.roundOff,
             vochNo: $scope.billNo,
-            state: "PAID",
+            state: "OPEN",
             customerId: $scope.supplier2.selected.id,
-            balance:$scope.gTotal,
+            balance: $scope.gTotal,
+            roi: $scope.intRate == undefined ? 0 : $scope.intRate,
+            paymentDays: $scope.paymentDays == undefined ? 0 : $scope.paymentDays,
             //email: $scope.suppliers2.selected.email,
             remark: $scope.narration,
             invoiceData: {
                 comInvoiceNo:$scope.comInvoiceNo,
                 invoiceSubType: $scope.invoiceType,
                 customerType:$scope.customerType,
-                issueDate: dateFormat($scope.billIssueDate),
-                removalDate: dateFormat($scope.billRemovalDate),
+                issueDate: billIssueDateTime,
+                removalDate: billRemovalDateTime,
                 customerAccountId: $scope.supplier.selected?$scope.supplier.selected.id : $scope.supplier2.selected.id,
                 consigneeAccountId: $scope.supplier2.selected.id,// ? $scope.supplier2.selected.company : $scope.supplier.selected.company,
                 rdi:$scope.rdi,
