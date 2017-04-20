@@ -93,7 +93,7 @@
                    
                         <div class="col-sm-12 card" ng-click="OpenBillTable('OPEN')">
                             
-                            <p class="text-uppercase marginbottom status"><span  style="font-size: 200%; color: #18596A; "><b>{{billCount.count}}</b></span> <b> Purchase Invoice </b> </p>
+                            <p class="text-uppercase marginbottom status"><span  style="font-size: 200%; color: #18596A; "><b>{{InventoryList.length}}</b></span> <b> Purchase Invoice </b> </p>
                         </div>
                       
                    
@@ -160,7 +160,7 @@
                     <tbody>
                         <tr ng-repeat="data in InventoryList |filter:search">
                             <td style="padding-left:15px; width:15px"><input type="checkbox" class="checkboxcss" /></td>
-                            <td><a href="#/Customer/Supplierdetail{{data.supCode}}" style="color:#000">{{data.accountName}}<br /></a></td>
+                            <td><a  style="color:#000">{{data.accountName}}<br /></a></td>
                             <td>{{data.email}}</td>
                             <td>{{data.mobile}}</td>
                             <td>{{data.openingBalance}}</td>

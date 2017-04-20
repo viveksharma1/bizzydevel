@@ -997,7 +997,22 @@
         }
     };
 
-
+    $scope.Accountbtn = function (id, type) {
+        if (type) {
+            console.log(id);
+            $('#formaccount').modal('show');
+            if (id != undefined) {
+                $http.get(config.api + "accounts/" + id).then(function (response) {
+                    console.log(response);
+                    $scope.myValue = response.data;
+                    $scope.isAccount = false
+                });
+            }
+            else {
+                $scope.myValue = null;
+            }
+        }
+    };
     var Promise = window.Promise;
     if (!Promise) {
         Promise = JSZip.external.Promise;

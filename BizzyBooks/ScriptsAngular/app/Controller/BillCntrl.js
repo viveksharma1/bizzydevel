@@ -221,21 +221,20 @@
     // get weight unit
     $scope.unit = "KG";
     $scope.weightUnit = function (data) {
-
-
-
     }
 
-    var access_key = 'af072eeb3d8671688ff6eaa83c8dbcb8';
-    var url = 'http://apilayer.net/api/live?access_key=' + access_key;
-    $http.get(url).then(function (response) {
-        $scope.data = response.data;
-       
-        $scope.ExchangeRate = response.data.quotes.USDINR.toFixed(2);
-        $scope.ExchangeRateINR = $scope.ExchangeRate
-        $scope.ExchangeRateIDR = $scope.ExchangeRate1
-    });
+    $scope.exchangeRate = function () {
+        var access_key = 'af072eeb3d8671688ff6eaa83c8dbcb8';
+        var url = 'http://apilayer.net/api/live?access_key=' + access_key;
+        $http.get(url).then(function (response) {
+            $scope.data = response.data;
 
+            $scope.ExchangeRate = response.data.quotes.USDINR.toFixed(2);
+            $scope.ExchangeRateINR = Number($scope.ExchangeRate)
+            $scope.ExchangeRateIDR = $scope.ExchangeRate1
+        });
+
+    }
     //total sum
     $scope.billtable1 = [];
     $scope.currency1 = function (currency) {
@@ -292,10 +291,10 @@
             totalweight += Number($scope.billtable1[i].NETWEIGHT);
         }
         $scope.totalWeight = Number(totalweight);
-        console.log($scope.totalWeight);
         $scope.TOTALAMOUNTUSD = Math.round(total);
-        $scope.totalAmountINR = Number($scope.TOTALAMOUNTUSD.toFixed(2)) * Number($scope.ExchangeRateINR.toFixed(2));
-        console.log($scope.TOTALAMOUNTUSD)
+        if ($scope.ExchangeRateINR) {
+            $scope.totalAmountINR = Number($scope.TOTALAMOUNTUSD.toFixed(2)) * Number($scope.ExchangeRateINR.toFixed(2));
+        }
         return $scope.totalAmountINR
 
     }
@@ -370,8 +369,8 @@
         $scope.index = index;
         $scope.edit1 = true;
         $scope.accounts = { selected: { accountName: data.accountName } };
-       
         $scope.accountAmount = data.amount
+
 
     }
 
@@ -404,6 +403,7 @@
         }
         $scope.edit1 = false;
         $scope.accountAmount = null;
+        $scope.accounts.selected.accountName = null
         $scope.accountTableSum();
     }
 
@@ -608,11 +608,11 @@
                             $scope.accountTableSum();
                         }
                         $scope.paymentDays = billData.paymentDays
-                        $scope.paymentLog = billData.paymentLog;
+                        $scope.paymentLog = {data:"dfdgd"};
                         console.log($scope.paymentLog)
                         $scope.billNo = billData.no
                         
-                        $scope.ExchangeRateINR = billData.ExchangeRate
+                        $scope.ExchangeRateINR = Number(billData.ExchangeRate)
                         $scope.email = billData.email
                        
 
@@ -638,15 +638,25 @@
         else
             $scope.getBilldata($stateParams.billNo, '?filter[fields][manualLineItem]=false');
     }
-
+    else {
+        $scope.exchangeRate();
+    }
+    
    
-    $scope.getNewData = function (type, data) {
+    $scope.getNewData = function(type, data,e) {
 
         console.log(data);
-        if ($scope.newElement == true) {
+        console.log(type);
+        
             $scope.saveItem({ name: data, type: type });
             $scope.bindMasterData(type);
-        }
+           
+            if (!$(e.target).closest('.popover').length) {
+                $('.popover').each(function () {
+                    $(this.previousSibling).popover('hide');
+                });
+            }
+       
     };
 
       $scope.saveCustom = function () {
@@ -1102,7 +1112,7 @@
         $scope.tableIndex = index;
         $scope.count++;
         $scope.baseRate1 = rate
-        $scope.exchangeRateBill = Number(68.8);
+        $scope.exchangeRateBill = $scope.ExchangeRateINR;
 
         /* for (var i = 0; i < $scope.count; i++) {
              console.log($scope.count);
@@ -1378,13 +1388,13 @@
         $scope.edit1 = false;
     }
    $scope.transformFunction = function(new_value){ //new value is a string
-      
         var new_object = { new_value};
         console.log(new_object);
      
         return new_object;
     }
-    $scope.saveItem = function (data) {
+   $scope.saveItem = function (data) {
+       console.log(data)
         $http.post(config.login + "saveItem", data).then(function (response) {
 
         });
@@ -1398,7 +1408,7 @@
         });
         if (!search) {
             //use the predefined list
-            $scope.newElement = false;
+            
             $select.items = list;
         }
         else {
@@ -1407,26 +1417,9 @@
                 id: FLAG,
                 name: search
             };
-            $scope.newElement = true;
+            
             $select.items =  [userInputItem].concat(list)
-            $select.selected =  userInputItem.name
-
-            if (type == "GODOWN") {
-                $scope.newitem = $select.selected;
-
-            }
-            if (type == "DESCRIPTION") {       
-                   
-                 
-               
-            }
-            if (type == "RRMARKS") {
-                
-            } 
-            console.log(userInputItem.name)
-
-
-            console.log($scope.GODOWN)
+            $select.selected =  userInputItem.name         
         }
         
     }
@@ -1476,8 +1469,6 @@
         $('#formaccount').modal('show');
         $scope.myValue = { accountName: value };
         $scope.getSupplier();
-        
-
     }
     
     $scope.bindMasterData = function (type) {
@@ -1512,6 +1503,24 @@
         $scope.shippingAddress = data.billingAddress[0].street
         console.log(data)
     }
+
+
+    $scope.Accountbtn = function (id, type) {
+        if (type) {
+            console.log(id);
+            $('#formaccount').modal('show');
+            if (id != undefined) {
+                $http.get(config.api + "accounts/" + id).then(function (response) {
+                    console.log(response);
+                    $scope.myValue = response.data;
+                    $scope.isAccount = false
+                });
+            }
+            else {
+                $scope.myValue = null;
+            }
+        }
+    };
     $(".selectTable tr").click(function () {
         $(this).addClass("highlighted").siblings().removeClass("highlighted");
     });
@@ -1593,5 +1602,41 @@ myApp.directive('popOver', function ($compile, $templateCache) {
             friends: '=',
             title: '@'
         }
+    };
+});
+
+
+myApp.directive('addItem', function ($compile, $templateCache) {
+    var getTemplate = function () {
+        $templateCache.put('templateId.html', 'This is the content of the template');
+        console.log($templateCache.get("addItem_template.html"));
+        return $templateCache.get("addItem_template.html");
+    }
+    return {
+        
+        restrict: "A",
+        transclude: true,
+        template: "<span ng-transclude></span>",
+        link: function (scope, element, attrs) {
+            var popOverContent;
+            if (true) {
+                //console.log(itemtype)
+                var html = getTemplate();
+                popOverContent = $compile(html)(scope);
+                var options = {
+                    content: popOverContent,
+                    placement: "bottom",
+                    html: true,
+                    title: scope.title,      
+                };
+                $(element).popover(options);
+            }
+        },
+        scope: {
+            itemtype: '=',
+            title: '@'
+        }
+        
+       
     };
 });

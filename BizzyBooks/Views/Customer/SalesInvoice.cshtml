@@ -88,9 +88,9 @@
                                    theme="selectize">
                             <ui-select-match placeholder="Select Consignee">{{ $select.selected.accountName }}</ui-select-match>
 
-                            <ui-select-choices repeat="person2 in supliers2  | filter: $select.search">
+                            <ui-select-choices repeat="person in supliers2  | filter: $select.search">
                                 <div>
-                                    <span ng-bind-html="person2.accountName | highlight: $select.search"></span>
+                                    <span ng-bind-html="person.accountName | highlight: $select.search"></span>
                                 </div>
 
 
@@ -843,10 +843,10 @@
 
                                     </ui-select-match>
 
-                                    <ui-select-choices repeat="acc in taxAccounts  | filter: $select.search" refresh="refreshAccountTable($select)" refresh-delay="2">
+                                    <ui-select-choices repeat="person in taxAccounts  | filter: $select.search" refresh="refreshAccountTable($select)" refresh-delay="2">
 
                                         <div>
-                                            <span ng-bind-html="acc.accountName | highlight: $select.search"></span>
+                                            <span ng-bind-html="person.accountName | highlight: $select.search"></span>
                                         </div>
                                     </ui-select-choices>
                                 </ui-select>

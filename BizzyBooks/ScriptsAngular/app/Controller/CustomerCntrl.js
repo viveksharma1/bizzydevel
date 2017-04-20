@@ -15,6 +15,8 @@
 
     $scope.totalCustomerbtn = function () {
 
+        $scope.getCustomer();
+
         $('#overdueInvoiceTable').hide();
         $('#paidInvoiceTable').hide();
         $('#example').show();
@@ -40,14 +42,15 @@
        $('#openInvoiceTable').hide();
 
    },
-
+    $('#openInvoiceTable').show();
+    $('#paidInvoiceTable').show();
    $scope.openInvoicebtn = function (status) {
        $scope.getInvoice()
        $('#overdueInvoiceTable').hide();
        $('#paidInvoiceTable').hide();
        $('#example').hide();
        $('#openInvoiceTable').show();
-       $scope.getTransaction();
+       
 
    }
 
@@ -227,9 +230,6 @@
     }
 
     // get invoice data 
-
-
-
     $scope.getInvoice = function () {
         $http.get(config.login + 'getInvoiceData/' + localStorage.CompanyId + '?role=' + localStorage["usertype"]).then(function (response) {
             $scope.invoiceData = response.data;
@@ -238,11 +238,18 @@
                 $scope.invoiceData[i].customer = localStorage[$scope.invoiceData[i].customer];
 
             }
-
             console.log($scope.InventoryList)
             $(".loader").hide()
+        });
+    }
 
+    $scope.getInvoice();
+    //get customer data
 
+    $scope.getCustomer = function () {
+        $http.get(config.login + 'getPartytAccount/' + localStorage.CompanyId).then(function (response) {
+            $scope.customerData = response.data;
+            console.log(response.data);
         });
     }
 

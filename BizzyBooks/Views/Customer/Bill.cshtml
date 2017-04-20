@@ -8,9 +8,16 @@
         display: none;
     }
 </style>
+<script type="text/ng-template" id="addItem_template.html">
+    <div>{{itemtype}}
+        <input type='text' style="width:240px;background:#EEF0E8;color:black;border:3px"  ng-model="item" class="form-control focus " ng-keyup="$event.keyCode == 13 ? $parent.getNewData(itemtype,item,$event) : null"id="item"  />
+    </div>
+   
+</script>
 <script type="text/ng-template" id="popover_template.html">
-    
     <table style='width:100%'><tr><th>Date</th><th>Amount Paid</th><th>Voch No.</th></tr><tr ng-repeat='data in friends' class="cursor" ui-sref="Customer.MakePayment({voId:data.id})"><td style="color:forestgreen">{{data.date}}</td><td>Rs{{data.amount}}</td><td>{{data.vochNo}}</td></tr><tr></tr></table>
+
+    
 </script>
 <script type="text/ng-template" id="/ui-tree-select.html">
     <ui-select ng-model="model.$selected"
@@ -221,6 +228,7 @@
                     <ui-select-choices repeat="person in supliers  | filter: $select.search">
                         <div>
                             <span ng-model="supplier1" ng-bind-html="person.accountName | highlight: $select.search"></span>
+                            
                         </div>
 
 
@@ -252,7 +260,8 @@
                     <ui-select-choices repeat="person in purchaseAccount  | filter: $select.search">
                         <div>
                             <span style="color:black" ng-model="supplier1" ng-bind-html="person.name | highlight: $select.search">{{person.type}}</span>
-                            <span style="color:forestgreen">{{person.accountName}}</span>
+                            <span style="color:black">{{person.accountName}}</span>
+                           
                         </div>
 
 
@@ -323,7 +332,7 @@
                    
                    
                     <div ng-repeat="data in paymentLog | limitTo:1">
-                        <small style="float:right; width:100%; margin:10px 0px"> <a class="cursor" pop-over friends="paymentLog" , title="Payment Log">{{paymentLog.length}} Payment Made</a></small>
+                        <small style="float:right; width:100%; margin:10px 0px"> <a class="cursor"  pop-over friends="paymentLog" , title="Payment Log">{{paymentLog.length}} Payment Made</a></small>
                       </div>
                   
                     <h4 class="tabheading font_11">INVOICE NO.</h4>
@@ -466,8 +475,8 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label>CONT NO</label>
-                                    <ui-select ui-tree-select ng-model="godown.selected.name" id="countryCode"
-                                               ui-select-focuser
+                                    <ui-select ui-tree-select ng-model="godown.selected.name" id="countryCode" ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';"
+                                               
                                                theme="selectize" Sstyle="text-overflow: ellipsis">
 
                                         <ui-select-match>
@@ -1393,7 +1402,7 @@
                             </div>
                             <div class="col-sm-3">
                                
-                                <input input type="text" ng-model="dutyAmount"  only-digits class="form-control pull-left" style="width:100px; margin:0px 10px" />
+                                <input input type="text" ng-model="dutyAmount"   class="form-control pull-left" style="width:100px; margin:0px 10px" />
                             </div>
                         </div>
 
@@ -1481,6 +1490,7 @@
 
                                     <div>
                                         <span ng-bind-html="person.accountName | highlight: $select.search"></span>
+                                        <span class="pull-right"> <i class="fa fa-pencil-square-o" ng-click="Accountbtn(person.id)" style="color:seagreen" aria-hidden="true"></i></span>
                                     </div>
                                 </ui-select-choices>
                             </ui-select>
@@ -1503,6 +1513,7 @@
 
                                     <div>
                                         <span ng-bind-html="person.accountName | highlight: $select.search"></span>
+                                        <span class="pull-right"> <i class="fa fa-pencil-square-o" ng-click="Accountbtn(person.id)" style="color:seagreen" aria-hidden="true"></i></span>
                                     </div>
                                 </ui-select-choices>
                             </ui-select>
@@ -1632,13 +1643,16 @@
 
 
         <div class="collapse in" id="ItemDetail3" ng-init="role = admin">
-
-            <table class="table-bordered table-condensed tab" fixed-header id="ItemTable" style="width:98%; margin-left:10px;margin-right:10px; height:180px">
+            <create-account value="myValue"> </create-account>
+            <table class="table-bordered table-condensed tab tablepopover" fixed-header id="ItemTable" style="width:98%; margin-left:10px;margin-right:10px; height:180px">
                 <thead>
+                   
                     <tr style="background:rgb(243, 245, 248)">
-                        <th><create-account value="myValue"> </create-account>
-                            <ui-select ui-tree-select  on-select="getNewData('GODOWN', godown.selected.name)"ng-model="godown.selected.name" id="countryCode"
-                                       ui-select-focuser
+                        <th > 
+                            
+                            <i class="cursor fa fa-plus" add-item itemtype="GODOWN[0].type"></i>
+                            <ui-select ui-tree-select  ng-model="godown.selected.name" id="countryCode" 
+                                        
                                        theme="selectize" Sstyle="text-overflow: ellipsis">
 
                                 <ui-select-match placeholder="GODOWN">
@@ -1657,7 +1671,8 @@
                             </ui-select>
                         </th>
                         <th>
-                            <ui-select ui-tree-select on-select="getNewData('DESCRIPTION', description.selected.name)"ng-model="description.selected.name" id="countryCode"
+                            <i class="cursor fa fa-plus" add-item  itemtype="DESCRIPTION[0].type"></i>
+                            <ui-select ui-tree-select ng-model="description.selected.name" id="countryCode"
                                        ui-select-focuser
                                        theme="selectize">
                                 <div>
@@ -1676,7 +1691,8 @@
                             </ui-select>
                         </th>
                         <th>
-                            <ui-select ui-tree-select  on-select="getNewData('REMARKS', remarks.selected.name)"ng-model="remarks.selected.name" id="countryCode"
+                            <i class="cursor fa fa-plus" add-item itemtype="REMARKS[0].type"></i>
+                            <ui-select ui-tree-select  ng-model="remarks.selected.name" id="countryCode"
                                        ui-select-focuser
                                        theme="selectize">
                                 <ui-select-match placeholder="REMARKS">
@@ -1858,6 +1874,7 @@
                                         <div>
                                             <span ng-bind-html="person.accountName | highlight: $select.search"></span>
                                             <span style="color:forestgreen">({{person.Under}})</span>
+                                            @*<span class="pull-right"> <i class="fa fa-pencil-square-o" ng-click="Accountbtn(person.id)" style="color:seagreen" aria-hidden="true"></i></span>*@
                                         </div>
                                     </ui-select-choices>
                                 </ui-select>
