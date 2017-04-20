@@ -36,7 +36,7 @@
                                     <td style="text-align:center; width:80%;">
                                         <h1 style="border-bottom:1px solid #e3e3e3; font-size:28px; font-weight:bold; padding-bottom:10px; text-transform:uppercase; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">{{ company.CompanyName}}</h1>
                                         <p style="font-size:12px; line-height:20px">
-                                            {{company.CompanyAddress}} <strong><i class="fa fa-circle" style="font-size:8px;"></i> Tel:</strong> {{company.CompanyMobileNo}} <strong><i class="fa fa-circle" style="font-size:8px;"></i> Telefax:</strong> {{company.CompanyMobileNo}} <br /> <strong>Email:</strong> {{company.CompanyDetails}}
+                                            {{company.CompanyAddress}} <strong><i class="fa fa-circle" style="font-size:8px;"></i> Tel:</strong> {{company.CompanyMobileNo}} <strong><i class="fa fa-circle" style="font-size:8px;"></i> Telefax:</strong> {{company.FaxNo}} <br /> <strong>Email:</strong> {{company.EmailId}}
                                         </p>
                                     </td>
                                 </tr>
@@ -52,7 +52,7 @@
                                 <tr>
                                     <td style="padding:5px; vertical-align:top;text-transform:uppercase; padding-right:100px;">
                                         <em>Customer Details</em>
-                                        <h4 style="font-weight:bold; margin:2px 0px 2px 0px">{{invoiceData.invoiceData.customerAccount}}</h4>
+                                        <h4 style="font-weight:bold; margin:2px 0px 2px 0px">{{supliersDetail.accountName}}</h4>
                                         <p style="font-size:14px;">{{supliersDetail.billingAddress[0].street}}</p>
                                         <p style="margin-bottom:0px">CST TIN NO.: <strong>{{supliersDetail.taxInfo.cstRegNo}}</strong></p>
                                         <p style="margin-bottom:0px">VAT TIN NO.: <strong>{{supliersDetail.taxInfo.taxRegNo}}</strong></p>
@@ -105,7 +105,7 @@
                                                 <td width="400" style="border-left:1px solid #e3e3e3; padding:5px">
                                                     <p style="margin-bottom:0px">
                                                         Date :
-                                                        <strong>{{invoiceData.date|date:'dd-MMM-yyyy'}}</strong>
+                                                        <strong>{{invoiceData.invoiceData.removalDate|date:'dd-MMM-yyyy'}}</strong>
                                                     </p>
                                                 </td>
                                             </tr>
@@ -113,7 +113,7 @@
                                                 <td style="border-bottom:1px solid #e3e3e3; border-left:1px solid #e3e3e3; padding:5px" colspan="2">
                                                     <p style="margin-bottom:0px">
                                                         Vehicle No. :
-                                                        <strong>{{}}</strong>
+                                                        <strong>{{invoiceData.invoiceData.vehicleNo}}</strong>
                                                     </p>
                                                 </td>
                                             </tr>
@@ -373,9 +373,9 @@
                     </tr>
                     <tr>
                         <td style="vertical-align:middle; width:100%; padding:5px; height:10px; border-bottom:1px solid #e3e3e3; text-transform:uppercase">
-                            vat tin no : <strong>{{company.VAT_TIN_NO}}</strong>
-                            &nbsp; &nbsp; cst tin no. : <strong>{{company.CST_TIN_NO}}</strong>&nbsp; &nbsp;
-                            p.a.n : 
+                            vat tin no : <strong>{{company.TIN_NO}}</strong>
+                            &nbsp; &nbsp; cst tin no. : <strong>{{company.CST_NO}}</strong>&nbsp; &nbsp;
+                            p.a.n : <strong>{{company.PAN_NO}}</strong>
                         </td>
                     </tr>
                     <tr>
@@ -390,7 +390,7 @@
                                     <td style="width:50%; height:180px;">
                                         <p style="float:left; font-size:12px; margin:0px 0px 0px 5px; padding:5px; border-right:1px solid #e3e3e3;">
                                             1.) We are not responsible for anything after the goods leave our godown.<br />
-                                            2.) Interest at the rate of 24% P.A. will be charged in case Payment is delayed more than agreed.<br />
+                                            2.) Interest at the rate of {{invoiceData.invoiceData.roi}} % P.M. will be charged in case Payment is delayed more than agreed.<br />
                                             3.) Goods once sold will not be taken back.<br />
                                             4.) Payment by Cross Cheque is requested.<br />
                                             5.) Subject to Mumbai Jurisdiction.<br />

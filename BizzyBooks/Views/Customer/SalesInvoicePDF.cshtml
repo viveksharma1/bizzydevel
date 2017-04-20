@@ -68,7 +68,7 @@
                                                 </td>
                                                 <td width="400" style="border-left:1px solid #e3e3e3; padding:5px">
                                                     <p style="margin-bottom:0px">Dated</p>
-                                                    <strong>{{invoiceData.date|date:'dd-MMM-yyyy'}}&nbsp;</strong>
+                                                    <strong>{{invoiceData.invoiceData.issueDate|date:'dd-MMM-yyyy'}}&nbsp;</strong>
                                                 </td>
                                             </tr>
                                         </table>
@@ -80,42 +80,42 @@
                                 <tr>
                                     <td style="padding:5px; vertical-align:top;text-transform:uppercase; padding-right:100px;">
                                         <p style="margin-bottom:2px">Buyer</p>
-                                        <h4 style="font-weight:bold; margin:0px 0px 2px 0px">{{invoiceData.invoiceData.customerAccount}}</h4>
+                                        <h4 style="font-weight:bold; margin:0px 0px 2px 0px">{{supliersDetail.accountName}}</h4>
                                         <p style="font-size:16px; margin-bottom:0px">{{supliersDetail.billingAddress[0].street}}</p>
                                     </td>
                                     <td style="vertical-align:top">
                                         <table>
                                             <tr style="border-bottom:1px solid #e3e3e3; border-left:1px solid #e3e3e3;">
                                                 <td width="300" style="vertical-align:top;  padding:5px">
-                                                    <p style="margin-bottom:0px">Despatch Document No.</p>
+                                                    <p style="margin-bottom:0px">Dispatch Document No.</p>
                                                     <strong>{{invoiceData.vochNo}}&nbsp;</strong>
                                                 </td>
                                                 <td width="300" style="border-left:1px solid #e3e3e3; padding:5px">
                                                     <p style="margin-bottom:0px">Dated</p>
-                                                    <strong>{{invoiceData.date|date:'dd-MMM-yyyy'}}</strong>
+                                                    <strong>{{invoiceData.invoiceData.issueDate|date:'dd-MMM-yyyy'}}</strong>
                                                 </td>
                                             </tr>
                                             <tr style="border-bottom:1px solid #e3e3e3; border-left:1px solid #e3e3e3;">
                                                 <td width="400" style="vertical-align:top; padding:5px">
-                                                    <p style="margin-bottom:0px">Despatch through</p>
-                                                    <strong>&nbsp;</strong>
+                                                    <p style="margin-bottom:0px">Dispatch through</p>
+                                                    <strong>{{invoiceData.invoiceData.modeTransport}}</strong>
                                                 </td>
                                                 <td width="400" style="border-left:1px solid #e3e3e3; padding:5px">
                                                     <p style="margin-bottom:0px">Destination</p>
-                                                    <strong>&nbsp;</strong>
+                                                    <strong>{{supliersDetail.billingAddress[0].city}}</strong>
                                                 </td>
                                             </tr>
                                             <tr style="border-left:1px solid #e3e3e3;">
                                                 <td width="400" style="vertical-align:top; padding:5px">
                                                     <p style="margin-bottom:0px">Vessel/Flight No.</p>
-                                                    <strong>&nbsp;</strong>
+                                                    <strong>{{invoiceData.invoiceData.vehicleNo}}</strong>
                                                 </td>
                                                 <td width="400" style="border-left:1px solid #e3e3e3; padding:5px">
                                                     <p style="margin-bottom:0px">Place of Receipt by Shipper</p>
-                                                    <strong>&nbsp;</strong>
+                                                    <strong>{{supliersDetail.billingAddress[0].city}}</strong>
                                                 </td>
                                             </tr>
-                                            <tr style=" border-left:1px solid #e3e3e3;">
+                                            <tr style="border-left:1px solid #e3e3e3;">
                                                 <td width="400" style="vertical-align:top; height:60px; padding:5px" colspan="2">
                                                     <p style="margin-bottom:0px">Terms of Delivery</p>
                                                     <strong>&nbsp;</strong>
@@ -189,11 +189,11 @@
                             <table>
                                 <tr>
                                     <td width="200">Company's VAT TIN</td>
-                                    <td><strong>: {{company.VAT_TIN_NO}}</strong></td>
+                                    <td><strong>: {{company.TIN_NO}}</strong></td>
                                 </tr>
                                 <tr>
                                     <td>Company's CST TIN</td>
-                                    <td><strong>: {{company.CST_TIN_NO}}</strong></td>
+                                    <td><strong>: {{company.CST_NO}}</strong></td>
                                 </tr>
                                 <tr>
                                     <td>BUYER'S VAT TIN</td>

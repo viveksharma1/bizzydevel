@@ -14,8 +14,8 @@
                   .then(function (response) {
                       $scope.invoiceData = response.data;
                       fillCompanyInfo(response.data.compCode);
-                      getSupplierDetail(response.data.invoiceData.customerAccount, response.data.compCode);
-                      getSupplierDetail2(response.data.invoiceData.consigneeAccount, response.data.compCode);
+                      getSupplierDetail(response.data.invoiceData.customerAccountId);
+                      getSupplierDetail2(response.data.invoiceData.consigneeAccountId);
                       $scope.gTotal = $scope.invoiceData.amount;
                       $scope.roundOff = $scope.invoiceData.roundOff;
                   });
@@ -42,14 +42,14 @@
         });
     }
 
-    function getSupplierDetail(supplierName, companyId) {
-        $http.get(config.api + "suppliers" + "?filter[where][compCode]=" + companyId + "&filter[where][company]=" + supplierName).then(function (response) {
+    function getSupplierDetail(id) {
+        $http.get(config.api + "accounts" + "?filter[where][id]=" + id).then(function (response) {
             $scope.supliersDetail = response.data[0];
             console.log(response.data)
         });
     }
-    function getSupplierDetail2(supplierName, companyId) {
-        $http.get(config.api + "suppliers" + "?filter[where][compCode]=" + companyId + "&filter[where][company]=" + supplierName).then(function (response) {
+    function getSupplierDetail2(id) {
+        $http.get(config.api + "accounts" + "?filter[where][id]=" + id).then(function (response) {
             $scope.supliersDetail2 = response.data[0];
             console.log(response.data)
         });

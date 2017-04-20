@@ -116,11 +116,14 @@
                     </ui-select>
                 </div>
 
-                <div class="col-sm-3 padding">
+                <div ng-hide="true" class="col-sm-3 padding">
                     <h4 class="tabheading">Rs.</h4>
                     <input type="number" step="0.01" ng-model="totalPaidAmount"class="form-control" />
                 </div>
-
+                <div permission="usertype:O" class="col-sm-7 padding">
+                <label>Interest</label>
+                <input ng-model="isInterest" type="checkbox">
+                    </div>
 
             </div>
 
@@ -427,8 +430,8 @@
 
                         <tr ng-repeat="data in paymentData" class="cursor">
                             <td class="text-right" style="width:50px"><input ng-click="selectLineItem(data)" ng-model="data.select" type="checkbox" /></td>
-                            <td ng-click="openTransaction(data.id,data.type)">{{data.date | date }}</td>
-                            <td>{{data.duedate }}</td>
+                            <td ng-click="openTransaction(data.id,data.type)">{{data.date | date:'dd/MM/yyyy' }}</td>
+                            <td>{{data.duedate | date:'dd/MM/yyyy' }}</td>
                             <td>{{data.vochNo}}</td>
                             <td>{{data.type}}</td>
                             <td class="text-right">{{data.amount}}</td>

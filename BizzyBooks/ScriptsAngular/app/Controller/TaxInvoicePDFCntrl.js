@@ -22,7 +22,7 @@
                   .then(function (response) {
                       $scope.invoiceData = response.data;
                       fillCompanyInfo(response.data.compCode);
-                      getSupplierDetail(response.data.invoiceData.customerAccount, response.data.compCode);
+                      getSupplierDetail(response.data.invoiceData.customerAccountId);
                       $scope.gTotal=$scope.invoiceData.amount;
                       $scope.roundOff = $scope.invoiceData.roundOff;
                   });
@@ -37,8 +37,8 @@
         });
     }
 
-    function getSupplierDetail(supplierName,companyId) {
-        $http.get(config.api + "suppliers" + "?filter[where][compCode]=" + companyId + "&filter[where][company]=" + supplierName).then(function (response) {
+    function getSupplierDetail(id) {
+        $http.get(config.api + "accounts" + "?filter[where][id]=" + id).then(function (response) {
             $scope.supliersDetail = response.data[0];
             console.log(response.data)
         });

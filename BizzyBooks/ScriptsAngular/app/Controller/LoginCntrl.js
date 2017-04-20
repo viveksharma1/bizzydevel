@@ -49,7 +49,7 @@ myApp.controller('LoginCntrl', ['$state', '$http', '$rootScope', '$scope', 'conf
         }
     };
     $scope.errorpopup = function () {
-        if ($scope.role != "2") {
+        if ($scope.role && $scope.role != "2") {
             $scope.showCaptcha = true;
             $('#CaptchaDiv').show();
             Captcha();

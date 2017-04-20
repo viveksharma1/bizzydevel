@@ -299,7 +299,7 @@
                             <div class="col-sm-7" style="padding:0px">
                                 <h3 class="Subtitle">Comapny List</h3>
                                 <ul class="list-unstyled my" ng-repeat="list in CompanyList">
-                                    <li><a><span ng-click="changeCompany(list)">{{list.CompanyName}}</span> &nbsp; <i ng-click="editCompany(list);" class="fa fa-pencil-square text-warning"></i></a></li>
+                                    <li><a><span ng-click="changeCompany(list)">{{list.CompanyName}}</span> &nbsp; <i permission="usertype:UO"  ng-click="editCompany(list);" class="fa fa-pencil-square text-warning"></i></a></li>
                                 </ul>
 
                             </div>
@@ -356,6 +356,18 @@
                                         </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
+                                            <label>Fax No</label>
+                                            <input ng-model="companyInfo.FaxNo" type="text" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label>Email Id</label>
+                                            <input ng-model="companyInfo.EmailId" type="text" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
                                             <label>TIN No.</label>
                                             <input ng-model="companyInfo.TIN_NO" type="text" class="form-control" />
                                         </div>
@@ -376,6 +388,12 @@
                                             <input ng-model="companyInfo.PAN_NO" type="text" class="form-control" />
                                         </div>
                                     </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label>Excixe Reg. No.</label>
+                                            <input ng-model="companyInfo.exRegNo" type="text" class="form-control" />
+                                        </div>
+                                    </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -390,7 +408,12 @@
                                             <input ng-model="companyInfo.Division" type="text" class="form-control" />
                                         </div>
                                     </div>
-
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label>Range  &  Div. Address</label>
+                                            <input ng-model="companyInfo.rangeAddress" type="text" class="form-control" />
+                                        </div>
+                                    </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label>Commisionerate</label>
@@ -432,7 +455,7 @@
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <label>Address</label>
-                                           <textarea ng-model="companyInfo.companyAddress" class="form-control" style="height:100px"></textarea>
+                                           <textarea ng-model="companyInfo.CompanyAddress" class="form-control" style="height:100px"></textarea>
                                         </div>
                                     </div>
 
