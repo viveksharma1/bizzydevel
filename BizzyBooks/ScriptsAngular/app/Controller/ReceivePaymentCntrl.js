@@ -639,6 +639,9 @@
 
             var days = getDays(item);
             var dayCal = days - Number(item.invoiceData.paymentDays == undefined ? 0 : item.invoiceData.paymentDays);
+            if (localStorage.usertype == 'O') {
+                dayCal = dayCal < 0 ? 0 : dayCal;
+            }
             ret= Number((payAmount * (item.invoiceData.roi /100/30) * dayCal).toFixed(2));
             
         }

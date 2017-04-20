@@ -836,7 +836,7 @@
                     <thead>
                         <tr style="background:rgb(243, 245, 248)">
                             <th>
-                                <ui-select ui-tree-select ng-model="account.selected" id="countryCode"
+                                <ui-select ng-model="account.selected" id="countryCode"
                                            ui-select-focuser
                                            theme="selectize">
                                     <ui-select-match placeholder="ACCOUNT">
@@ -847,7 +847,7 @@
 
                                     </ui-select-match>
 
-                                    <ui-select-choices repeat="acc in taxAccounts  | filter: $select.search" refresh="refreshAccountTable($select)" refresh-delay="2">
+                                    <ui-select-choices repeat="acc in taxAccounts  | filter: $select.search" @*refresh="refreshAccountTable($select)" refresh-delay="2"*@>
 
                                         <div>
                                             <span ng-bind-html="acc.accountName | highlight: $select.search"></span>
