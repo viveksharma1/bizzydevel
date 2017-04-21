@@ -270,5 +270,9 @@ namespace Restaurant.Controllers
         {
             return View();
         }
+    public ActionResult stockBalanceView()
+        {
+            return View();
+}
     }
 }

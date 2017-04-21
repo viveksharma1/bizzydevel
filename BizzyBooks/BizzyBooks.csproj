@@ -423,6 +423,7 @@
     <Content Include="ScriptsAngular\app\Controller\InventoryCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\inventorystockCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\InvoiceCntrl.js" />
+    <Content Include="ScriptsAngular\app\Controller\stockBalanceViewCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\JournalEntryCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\HomeCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\LogisticsCntrl.js" />
@@ -545,6 +546,7 @@
     <Content Include="Views\Customer\StockBalanceInventory.cshtml" />
     <Content Include="Views\Customer\UserList.cshtml" />
     <Content Include="Views\Customer\RosemateVoucher.cshtml" />
+    <Content Include="Views\Customer\stockBalnceView.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

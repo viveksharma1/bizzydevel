@@ -477,6 +477,16 @@ var myApp = angular
             controller: "UserListCntrl",
             requiresAuthentication: true,
             permissions:"User.active"
+       });
+        $stateProvider.state("Customer.stockBalnceView", {
+            url: "/stockBalnceView/:voId",
+            templateUrl: "Customer/stockBalnceView",
+            controller: "stockBalnceViewCntrl",
+           
+            
+            params: {
+                voId: null,
+            }
         });
 
 
@@ -514,7 +524,7 @@ api: 'http://localhost:4000/api/'
 
 
  //login: 'http://bizzy-book-api.azurewebsites.net/',
-//api: 'http://bizzy-book-api.azurewebsites.net/api/',
+ //api: 'http://bizzy-book-api.azurewebsites.net/api/',
 });
 
 

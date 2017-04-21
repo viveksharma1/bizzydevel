@@ -3,7 +3,7 @@ var Id = "";
 var recalledBlocked = "";
 var TotalCount = "";
 var Skip;
-myApp.controller('inventorystockCntrl', ['$scope', '$http', '$timeout', '$rootScope', '$state', 'config', 'fileUpload', '$filter', function ($scope, $http, $timeout, $rootScope, $state, config, fileUpload, $filter) {
+myApp.controller('stockBalnceViewCntrl', ['$scope', '$http', '$timeout', '$rootScope', '$state', 'config', 'fileUpload', '$filter', function ($scope, $http, $timeout, $rootScope, $state, config, fileUpload, $filter) {
     $(".my a").click(function (e) {
         e.preventDefault();
     });
