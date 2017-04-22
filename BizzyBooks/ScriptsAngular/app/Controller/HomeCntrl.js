@@ -5,12 +5,26 @@ myApp.controller('HomeCntrl', ['$state', '$http', '$rootScope', '$scope', 'confi
     $(".my a").click(function (e) {
         e.preventDefault();
     });
+
+    $('#fdate').datepicker({
+        format: 'dd/mm/yyyy',
+        autoclose: true,
+    });
+   
+    
+   
+    $('#tdate').datepicker({
+        format: 'dd/mm/yyyy',
+        autoclose: true,
+    });
+    $scope.fdate = localStorage.fromDate
+    $scope.tdate = localStorage.toDate
     function initiateHome() {
         authService.fillAuthData();
         $scope.userInfo = $rootScope.authentication;
         //if ($scope.CompanyList == undefined) {
             if (localStorage.comobj != undefined) {
-                $scope.CompanyList = JSON.parse(localStorage.comobj);
+                $scope.CompanyList = JSON.parse(localStorage.comobj); 
                 if ($scope.CompanyList.length == 0) GetCompanyData();
                 else {
                     console.log($scope.CompanyList);
@@ -177,12 +191,30 @@ myApp.controller('HomeCntrl', ['$state', '$http', '$rootScope', '$scope', 'confi
                 showSuccessToast("Error! while creating company");
             });
         }
-        
-
-
     }
 
+    $scope.setPeriod = function (fdate,tdate) {
+        $rootScope.$broadcast('scanner-started', { fromDate: { fdate }, toDate: { tdate } });
+        $scope.fromDate = fdate;
+        $scope.toDate = tdate;
+
+   }
+
+    //localStorage.fromDate = moment().subtract(30, 'days').format('MM/DD/YYYY');
+    //localStorage.toDate = moment().format('MM/DD/YYYY'); moment()
+    $scope.fromDate = moment(localStorage.fromDate).format('DD/MM/YYYY');
+    $scope.toDate = moment(localStorage.toDate).format('DD/MM/YYYY')
+    
 }]);
+
+
+myApp.service('dateService', ['$rootScope',
+    function ($rootScope) {
+        console.log($rootScope.dateFilter);
+        return $rootScope.dateFilter
+    }
+])
+
 
 
 

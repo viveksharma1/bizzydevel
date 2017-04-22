@@ -184,7 +184,7 @@ namespace Restaurant
                   "~/ScriptsAngular/app/Controller/SalesInvoiceCntrl.js",
                   "~/ScriptsAngular/app/Controller/UserListCntrl.js", 
                   "~/ScriptsAngular/app/Controller/RosemateVoucherCntrl.js",
-                  "~/ScriptsAngular/app/Controller/stockBalnceViewCntrl.js"
+                  "~/ScriptsAngular/app/Controller/stockBalanceViewCntrl.js"
 
 
 

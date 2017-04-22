@@ -70,7 +70,7 @@
         $('.addrotate').removeClass("down");
         $('.addrotate').addClass("up");
     });
-
+   
 
     });
 </script>
@@ -226,7 +226,7 @@
 
                     <ul class="list-unstyled submenu my">
                         <li id="CompanyInfo" class="flytopbar"><a href=""><i class="fa fa-gear"></i> {{DefaultCompany.CompanyName}}</a></li>
-                        <li @*id="Changename"*@ id="Datefilter" class="flytopbar" style="width:422px"><a href=""><i class="fa fa-calendar"></i> 1/March/2017 to 15/March/2017 </a></li>
+                        <li @*id="Changename"*@ id="Datefilter" class="flytopbar" style="width:422px"><a href=""><i class="fa fa-calendar"></i> {{fromDate}} to {{toDate}} </a></li>
                     </ul>
 
 
@@ -483,8 +483,8 @@
                             <div class="col-sm-6 padding">
                                 <div class="form-group">
                                     <small>From</small>
-                                    <div class='input-group date' id='fromDate'>
-                                        <input type='text' class="form-control" ng-model="fromDate" id="fromDate" />
+                                    <div class='input-group date' id='fDate'>
+                                        <input type='text' class="form-control"  placeholder="dd/mm/yyyy" ng-model="fDate" id="fdate" />
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-calendar"></span>
                                         </span>
@@ -495,8 +495,8 @@
                             <div class="col-sm-6 padding">
                                 <div class="form-group">
                                     <small>To</small>
-                                    <div class='input-group date' id='toDate'>
-                                        <input type='text' class="form-control"  ng-model="toDate" id="toDate" />
+                                    <div class='input-group date' id='tDate'>
+                                        <input type='text' class="form-control"  placeholder="dd/mm/yyyy"  ng-model="tDate" id="tdate" />
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-calendar"></span>
                                         </span>
@@ -504,7 +504,7 @@
                                 </div>
                             </div>
                             <hr style="float:left; width:100%" />
-                            <button type="button" class="btn btn-sm btn-primary pull-right" ng-click="setPeriod(fromDate,toDate)">Search</button>
+                            <button type="button" class="btn btn-sm btn-primary pull-right" ng-click="setPeriod(fDate,tDate)">Search</button>
 
 
 

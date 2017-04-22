@@ -546,7 +546,7 @@
     <Content Include="Views\Customer\StockBalanceInventory.cshtml" />
     <Content Include="Views\Customer\UserList.cshtml" />
     <Content Include="Views\Customer\RosemateVoucher.cshtml" />
-    <Content Include="Views\Customer\stockBalnceView.cshtml" />
+    <Content Include="Views\Customer\stockBalanceView.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

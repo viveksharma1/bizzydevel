@@ -100,7 +100,10 @@ myApp.controller('LoginCntrl', ['$state', '$http', '$rootScope', '$scope', 'conf
     function removeSpaces (string) {
         return string.split(' ').join('');
     }
-    
+
+    var date = new Date();
+    localStorage.fromDate = moment().subtract(30, 'days').format('MM/DD/YYYY');
+    localStorage.toDate = moment().format('MM/DD/YYYY'); moment()
 }]);
 
 

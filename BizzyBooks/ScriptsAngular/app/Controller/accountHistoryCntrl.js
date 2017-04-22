@@ -37,6 +37,13 @@
         console.log($scope.debit);
        
     }
+
+
+    $http.get(config.api + "accounts" + "?filter[where][compCode]=" + localStorage.CompanyId + "&filter[where][accountName]=" + $stateParams.accountId).then(function (response) {
+        $scope.accountInfo = response.data;
+        console.log($scope.accountInfo)
+
+    });
     function getAllCompcode() {
         var companydata = JSON.parse(localStorage.comobj)
         var compcode = [] 
@@ -93,25 +100,47 @@
         var date = month + '/' + days + '/' + year;
         return date;
     }
-    if (localStorage["period"]) {
-
+    
+        $scope.$on('scanner-started', function (event, args) {
+            $scope.fdate = args.fromDate.fdate;
+            $scope.tDate = args.toDate.tdate;
+           
         $scope.closingBalance = Math.abs($stateParams.closingBalance)
         console.log($scope.closingBalance);
-        var toDate = $scope.dateFormat(localStorage["fromDate"])
-        var fromDate = $scope.dateFormat(localStorage["toDate"])
+        var toDate = $scope.dateFormat($scope.tDate)
+        var fromDate = $scope.dateFormat($scope.fdate)
+        localStorage.toDate = toDate
+        localStorage.fromDate = fromDate;
         $http.get(config.login + "getOpeningBalnce/" + $stateParams.accountId + "?compCode=" + localStorage.CompanyId + "&date=" + fromDate + "&todate=" + toDate).then(function (response) {
             console.log(response)
             $scope.openingBalance = Math.abs(response.data.openingBalance)
-            console.log($scope.openingBalance)
-                bindAccountName(response.data.ledgerData)
+            console.log('opening balance',$scope.openingBalance)
+            bindAccountName(response.data.ledgerData)
+            $http.get(config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + toDate + "&accountName=" + $stateParams.accountId).then(function (response) {
+                $scope.closingBalance = response.data.openingBalance;
+                console.log($scope.closingBalance);
+            });
                 
            
         });
-    }
-    else {
-        getLedgerData();
-       
-    }
+        });
+        
+        $scope.applyDateFilter = function () {
+            var toDate = localStorage.toDate
+            var fromDate = localStorage.fromDate
+            $scope.closingBalance = Math.abs($stateParams.closingBalance)
+            $http.get(config.login + "getOpeningBalnce/" + $stateParams.accountId + "?compCode=" + localStorage.CompanyId + "&date=" + fromDate + "&todate=" + toDate).then(function (response) {
+                console.log(response)
+                $scope.openingBalance = Math.abs(response.data.openingBalance)
+                console.log($scope.openingBalance)
+                bindAccountName(response.data.ledgerData)
+            });
+            $http.get(config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + toDate + "&accountName=" + $stateParams.accountId).then(function (response) {
+                $scope.closingBalance = response.data.openingBalance;
+                console.log($scope.closingBalance);
+            });
+        }
+        $scope.applyDateFilter();
     $scope.getAllCompanyLedger = function () {
         $http.get(config.api + "ledgers/" + "?filter[where][accountName]=" + $stateParams.accountId).then(function (response) {
             bindAccountName(response.data)
@@ -120,7 +149,7 @@
         });
 
     }
-    $scope.currentDate = moment().format();
+    $scope.currentDate = moment(localStorage.toDate).format('DD/MM/YYYY')
     $scope.accountId = $stateParams.accountId;
     $scope.accountName = localStorage[$stateParams.accountId]
     console.log($scope.accountName);

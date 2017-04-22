@@ -12,34 +12,11 @@
       
         </div>
 
-        @*<div class="pull-right col-sm-4" style="padding:0px">
-            <div class="col-sm-6 padding">
-                <h4 class="tabheading">From</h4>
-                <div class='input-group date' id="fromDate">
-                    <input type='text' class="form-control " ng-model="fromDate" id="fromDate" />
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                </div>
+        <div class="pull-right col-sm-4" style="padding:0px">
+            
+            
+
             </div>
-
-            <div class="col-sm-6 padding ">
-                <h4 class="tabheading">To</h4>
-                <div class='input-group date' id="toDate">
-                    <input type='text' class="form-control " ng-model="toDate" id="toDate" />
-                    <span class="input-group-addon">
-                        <i class="glyphicon glyphicon-calendar"></i>
-                    </span>
-                    
-                </div>
-                
-            </div>
-            <div class="col-sm-2 padding pull-left ">
-                <button ng-click="searchAccount()"><i class="fa fa-search" aria-hidden="true"></i></button>
-
-                </div>
-
-            </div>*@
          
            
    
@@ -70,7 +47,7 @@
                 <td style="text-align:right">{{data.credit- data.debit |number : fractionSize}}</td>
              
                 <td style="text-align:right; width:150px">
-                    <button type="button" class="editbtn"><a ui-sref="Customer.accountHistory({accountId:data.id,fromDate:fromDate,toDate:toDate,closingBalance:data.openingBalance})" style="font-weight:bold">Account History</a></button>
+                    <button type="button" class="editbtn"><a ui-sref="Customer.accountHistory({accountId:data.id,fromDate:fdate,toDate:tDate,closingBalance:accountInfo.openingBalance})" style="font-weight:bold">Account History</a></button>
                     <class class="linkseparator" style="margin-top:4px; margin-right:0px"></class>
                     <div class="btn-group editcaret">
                         <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>

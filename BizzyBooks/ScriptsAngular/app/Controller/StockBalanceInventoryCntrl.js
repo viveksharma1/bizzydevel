@@ -92,7 +92,7 @@
     //view Info
     $scope.viewInfo = function (Item) {
         if (Item != undefined) {
-            $state.go('Customer.stockBalnceView', { voId: Item.id });
+            $state.go('Customer.stockBalanceView', { voId: Item.id });
         }
     }
     $scope.currentItem = {};

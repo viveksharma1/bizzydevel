@@ -8,14 +8,14 @@
         $('#namechangeModal').modal('show');
     }
 
-    $('#Fromdate').datepicker({
+    $('#fdate').datepicker({
         format: 'dd/mm/yyyy',
         autoclose: true,
     });
 
-    $('#Todate').datepicker({
+    $('#tdate').datepicker({
         format: 'dd/mm/yyyy',
         autoclose: true,
     });
 
-    ;}]);
+}]);

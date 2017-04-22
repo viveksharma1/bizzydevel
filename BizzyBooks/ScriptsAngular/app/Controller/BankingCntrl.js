@@ -29,7 +29,8 @@
     }, cb);
 
     cb(start, end);
-
+  //  $('#reportrange span').html(moment().format('DD-MMM-YY' + ' - ' + 'DD-MMM-YY'));
+   // $('#reportrange').daterangepicker(optionSet1, cb);
 
 
     //Get the height of the first item

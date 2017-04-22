@@ -38,6 +38,7 @@ var myApp = angular
             url: "",
             templateUrl: "Customer/HomePage",
             requiresAuthentication: true,
+            controller: "HomePageCntrl",
             permissions: 'Home.active'
         });
 
@@ -478,12 +479,10 @@ var myApp = angular
             requiresAuthentication: true,
             permissions:"User.active"
        });
-        $stateProvider.state("Customer.stockBalnceView", {
-            url: "/stockBalnceView/:voId",
-            templateUrl: "Customer/stockBalnceView",
-            controller: "stockBalnceViewCntrl",
-           
-            
+        $stateProvider.state("Customer.stockBalanceView", {
+            url: "/stockBalanceView/:voId",
+            templateUrl: "Customer/stockBalanceView",
+            controller: "stockBalanceViewCntrl",
             params: {
                 voId: null,
             }

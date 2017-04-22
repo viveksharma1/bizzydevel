@@ -474,7 +474,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="cursor" ng-repeat="sales in Item.salesTransaction" ui-sref="Customer.GeneralInvoice({voId:sales.id})">
+                            <tr class="cursor" ng-repeat="sales in Item.salesTransaction" ui-sref="Customer.SalesInvoice({voId:sales.id})">
                                 <td>{{sales.date|date:'dd MMM yyyy HH:mm:a'}}</td>
                                 <td>{{sales.vochNo}}</td>
                                 <td>{{sales.saleQty}}</td>
