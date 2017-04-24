@@ -11,6 +11,12 @@
         $('body').fadeIn(700);
 
     });
+    $(function () {
+        $("body").tooltip({
+            selector: '[data-toggle="tooltip"]',
+            container: 'body'
+        });
+    })
     $.fn.datepicker.defaults.format = "dd/mm/yyyy";
 
     //$("tr").click(function () {
@@ -393,7 +399,14 @@
  
     $scope.accountTable = [];
     $scope.addAccount = function () {
-       
+        if ($scope.accounts.selected == undefined) {
+            showErrorToast("please select account");
+            return;
+        }
+        if (isNaN($scope.accountAmount) || $scope.accountAmount == null) {
+            showErrorToast("please enter amount");
+            return;
+        }
         var accountData = {
             accountName: $scope.accounts.selected.accountName,
             accountId: $scope.accounts.selected.id,
@@ -406,10 +419,10 @@
         } else {
             $scope.accountTable.push(accountData);
         }
-        $scope.selectedAccIndex=null
+       // $scope.selectedAccIndex=null
         //$scope.edit1 = false;
         $scope.accountAmount = null;
-        $scope.accounts = null;//{ selected: {} };//.selected.accountName = null
+        $scope.account = {};//{ selected: {} };//.selected.accountName = null
         $scope.accountTableSum();
     }
 
@@ -655,7 +668,7 @@
         console.log(type);
         
             $scope.saveItem({ name: data, type: type });
-            $scope.bindMasterData(type);
+           // $scope.bindMasterData(type);
            
             if ($(e.target).closest('.popover').length) {
                 $('.popover').each(function () {
@@ -1324,12 +1337,12 @@
     console.log($scope.description);
     $scope.remarks = {}
 
-    //$scope.idSelectedVote = null;
+    $scope.idSelectedVote = null;
     $scope.selectedItemIndex = null;
 
     $scope.edit = function (data, index) {       
         $scope.selectedItemIndex = index;
-        //$scope.index = index;
+        $scope.idSelectedVote = index;
         //$scope.edit1 = true;
         $scope.godown = { selected: { name: data.GODOWN } };
         $scope.description = { selected: { name: data.DESCRIPTION } };
@@ -1338,8 +1351,12 @@
         $scope.lineItemnetweight = data.NETWEIGHT
         $scope.lineItemBaseRate = data.BASERATE
         $scope.lineItemAmount = data.TOTALAMOUNT
+       
 
-
+        $scope.exciseAssessableValue = data.assesableValue
+        $scope.exciseDutyPerUnit = data.exciseDuty
+        $scope.exciseRate = data.dutyAmount
+        $scope.exciseSAD = data.SAD
 
     }
 
@@ -1355,10 +1372,10 @@
                 BASERATE: $scope.lineItemBaseRate,
                 TOTALAMOUNT: $scope.lineItemnetweight * $scope.lineItemBaseRate,
                 AMOUNTINR: $scope.lineItemnetweight * $scope.lineItemBaseRate * $scope.ExchangeRateINR,
-                assesableValue: '',
-                exciseDuty: '',
-                dutyAmount: '',
-                SAD: '',
+                assesableValue: $scope.exciseAssessableValue,
+                exciseDuty: $scope.exciseDutyPerUnit,
+                dutyAmount: $scope.exciseRate,
+                SAD: $scope.exciseSAD,
                 totalDutyAmt: ''
             }
         }
@@ -1371,10 +1388,10 @@
                 BASERATE: $scope.lineItemBaseRate,
                 TOTALAMOUNT: '',
                 AMOUNTINR: $scope.lineItemnetweight * $scope.lineItemBaseRate,
-                assesableValue: '',
-                exciseDuty: '',
-                dutyAmount: '',
-                SAD: '',
+                assesableValue: $scope.exciseAssessableValue,
+                exciseDuty: $scope.exciseDutyPerUnit,
+                dutyAmount: $scope.exciseRate,
+                SAD: $scope.exciseSAD,
                 totalDutyAmt: ''
             }
         }
@@ -1386,6 +1403,10 @@
             console.log($scope.billtable)
 
         }
+        $scope.exciseAssessableValue = ''
+        $scope.exciseDutyPerUnit = ''
+        $scope.exciseRate = ''
+        $scope.exciseSAD = ''
         $scope.manualTableSum();
        // $scope.totalAmountINR = $scope.manualTableSum() + $scope.accountTableSum();
 
@@ -1399,7 +1420,8 @@
     }
    $scope.saveItem = function (data) {
        console.log(data)
-        $http.post(config.login + "saveItem", data).then(function (response) {
+       $http.post(config.login + "saveItem", data).then(function (response) {
+           $scope.bindMasterData(data.type);
 
         });
     }
@@ -1566,7 +1588,7 @@
     $scope.MannualEntrybtn = function () {
         $('#MannualEntryModal').modal('show');
     }
-   
+    $("tr[id=popover]").popover({ placement: "top", trigger: "hover" });
     $("#myPopover").popover({
         //  title: '<h3 class="custom-title"><span class="glyphicon glyphicon-info-sign"></span> Popover Info</h3>',
         data:$scope.paymentLog,
@@ -1644,3 +1666,44 @@ myApp.directive('addItem', function ($compile, $templateCache) {
        
     };
 });
+
+
+
+//excise
+
+myApp.directive('exciseInfo', function ($compile, $templateCache) {
+    var getTemplate = function () {
+        //$templateCache.put('templateId.html', 'This is the content of the template');
+        //console.log($templateCache.get("addItem_template.html"));
+        return $templateCache.get("exciseInfo_template.html");
+    }
+    return {
+
+        restrict: "A",
+        transclude: true,
+        template: "<span ng-transclude></span>",
+        link: function (scope, element, attrs) {
+            var popOverContent;
+            if (true) {
+                //console.log(itemtype)
+                var html = getTemplate();
+                popOverContent = $compile(html)(scope);
+                var options = {
+                    content: popOverContent,
+                    placement: "top",
+                    html: true,
+                    title: scope.title,
+                };
+                $(element).popover(options);
+            }
+        },
+        scope: {
+            excisedata: '='
+           
+        }
+
+
+    };
+});
+
+

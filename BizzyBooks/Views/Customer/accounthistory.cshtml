@@ -37,7 +37,7 @@
     <table style="border:1px solid #e3e3e3; background-color:#FDFEFE; width:100%; height:auto;" class="table-bordered table-condensed " cellpadding="0" cellspacing="0">
         <tr>
             <td style="padding:10px; text-align:center">
-                <h1 style="border-bottom:3px solid #807C7B; font-size:20px;padding-left:100px; width:70%;font-weight:bold; padding-bottom:10px; text-transform:uppercase; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">{{accountName}}</h1>
+                <h1 style="border-bottom:3px solid #807C7B; font-size:20px;padding-left:100px; width:100%;font-weight:bold; padding-bottom:10px; text-transform:uppercase; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">{{accountName}}</h1>
                 <strong>Account History</strong>
                 <p style="font-size:12px; line-height:20px">
                     As Of <span ng-bind="currentDate | date :'dd/MM/yyyy'"></span>
@@ -93,7 +93,8 @@
                     <tfoot style="background:#f4f4f4">
                         <tr style="border-top:1px solid #ccc;">
                             <th style="padding:5px; text-align:right; font-weight:normal" colspan="4">Opening Balance</th>
-                            <th style="text-align:right;  padding:5px">{{openingBalance |number : fractionSize}}</th>
+                            <th style="text-align:right;  padding:5px" >{{accountData.openingBalance + openingBalance |number : fractionSize}}</th>
+                            
                             <th style="text-align:right;  padding:5px">{{creditOpening}}</th>
 
                         </tr>
@@ -106,7 +107,8 @@
                         <tr style="border-top:1px solid #ccc">
                             <th style="padding:5px; text-align:right" colspan="4">Closing Balance</th>
                             <th style="text-align:right;  padding:5px">&nbsp;</th>
-                            <th style="text-align:right;  padding:5px">{{closingBalance |number : fractionSize}}</th>
+                            <th style="text-align:right;  padding:5px">{{accountData.openingBalance + closingBalance |number : fractionSize}}</th>
+                           
 
                         </tr>
                     </tfoot>
