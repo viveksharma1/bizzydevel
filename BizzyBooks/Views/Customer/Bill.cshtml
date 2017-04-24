@@ -8,6 +8,15 @@
         display: none;
     }
 </style>
+<script type="text/ng-template" id="exciseInfo_template.html">
+    <span >
+        <label style="color:#73A91B"> Assesable Value:</label> <b> {{excisedata.assesableValue}}</b><br>
+        <label style="color:#73A91B"> Excise Duty: </label><b> {{excisedata.exciseDuty}}</b><br>
+        <label style="color:#73A91B">  Duty Amount: </label> <b> {{excisedata.dutyAmount}} </b> <br>
+        <label style="color:#73A91B"> SAD:</label><b>{{excisedata.SAD}}</b>
+</span>
+
+</script>
 <script type="text/ng-template" id="addItem_template.html">
     <div>{{itemtype}}
         <input type='text' style="width:240px;background:#EEF0E8;color:black;border:3px"  ng-model="item" class="form-control focus " ng-keyup="$event.keyCode == 13 ? $parent.getNewData(itemtype,item,$event) : null"id="item"  />
@@ -441,7 +450,7 @@
                 <button ng-click="MannualEntrybtn()" class="btn  btn-sm"style="font-size:12px;"> Mannual Entry</button>
                 <button ng-click="currencyRate()" id ="curr"  class="btn  btn-sm" style="font-size:12px;"> Currency Rate</button>
                 <button ng-click="Custombtn()" id ="custom"  class="btn  btn-sm">Custom</button>
-                <button  class="btn  btn-sm" ng-click="ExciseDutyModalbtn()"> Excise Duty</button>
+                @*<button  class="btn  btn-sm" ng-click="ExciseDutyModalbtn()"> Excise Duty</button>*@
                 <button ng-click="totalExpense()"  class="btn  btn-sm"> Expense Detail</button>
 
 
@@ -1110,30 +1119,27 @@
                                 <tr>
 
                                     <td><label style="margin-top:-10px; float: left;">Excise Rate (%)</label></td>
-                                    <td><input type="text"  ng-model="exciseRate" class="form-control" style="margin-bottom:15px" /></td>
+                                    <td><input type="text"  tab-index = 3 ng-model="exciseRate" class="form-control" style="margin-bottom:15px" /></td>
 
                                 </tr>
                                 <tr>
                                     <td><label style="margin-top: -10px;float: left;">Duty Per Unit</label></td>
-                                    <td><input type="text" ng-model="exciseDutyPerUnit" class="form-control" style="margin-bottom:15px" /></td>
+                                    <td><input type="text" tab-index = 4 ng-model="exciseDutyPerUnit" class="form-control" style="margin-bottom:15px" /></td>
 
                                 </tr>
                                 <tr>
                                     <td><label style="margin-top: -10px;float: left;">SAD (4%) Per Unit</label></td>
-                                    <td><input type="text" ng-model="exciseSAD" class="form-control" style="margin-bottom:15px" /></td>
+                                    <td><input type="text" tab-index = 5 ng-model="exciseSAD" class="form-control" style="margin-bottom:15px" /></td>
 
                                 </tr>
                                 <tr>
-                                    <td><label style="margin-top: -10px;float: left;">Assessable Value</label></td>
-                                    <td><input type="text" ng-model="exciseAssessableValue" class="form-control" style="margin-bottom:15px" /></td>
+                                    <td><label tab-index = 6 style="margin-top: -10px;float:  left;">Assessable Value</label></td>
+                                    <td><input tab-index = 7 type="text" ng-model="exciseAssessableValue" class="form-control" style="margin-bottom:15px" /></td>
 
                                 </tr>
                             </table>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" ng-click="saveBill()"
-                                    class="btn btn-primary">Submit</button>
-                        </div>
+                        
                     </div>
 
                 </div>
@@ -1644,7 +1650,7 @@
 
         <div class="collapse in" id="ItemDetail3" ng-init="role = admin">
             <create-account value="myValue"> </create-account>
-            <table class="table-bordered table-condensed tab tablepopover" fixed-header id="ItemTable" style="width:98%; margin-left:10px;margin-right:10px; height:180px">
+            <table class="table-bordered table-condensed tab tablepopover table-hover selectTable" fixed-header id="ItemTable" style="width:98%; margin-left:10px;margin-right:10px; height:180px">
                 <thead>
                    
                     <tr style="background:rgb(243, 245, 248)">
@@ -1719,8 +1725,9 @@
                                    ng-model="lineItemBaseRate"    step="0.01" placeholder="BASE RATE" class="form-control text-right" style="margin-top:18px" />
                         </th>
                         <th>&nbsp;</th>
+                        <th style="text-align:center"><button class="btn  btn-sm"style="margin-top:18px" ng-click="ExciseDutyModalbtn()"> Excise Duty</button></thstyle="text-align:center">
+                        <th style="text-align:center"><button ng-click="addBillLineItem()" class="btn  btn-sm" style="margin-top:18px" >Add</button></th>
                         <th>&nbsp;</th>
-                        <th style="text-align:center"><button ng-click="addBillLineItem()" class="btn btn-primary btn-sm" style="margin-top:18px" >Add</button></th>
                     </tr>
                     <tr >
                         <th>GODOWN</th>
@@ -1730,24 +1737,33 @@
                         <th style="text-align:right" width="120">BASE RATE</th>                     
                         <th   style="text-align:right" width="100">AMOUNT($)</th>
                       
-                        <th  style="text-align:right" width="100">AMOUNT(&#8377;)</th>                     
-                        <th>&nbsp;</th>
+                        <th  style="text-align:right" width="100">AMOUNT(&#8377;)</th>  
+                        <th> Excise </th>                   
+                        <th >&nbsp;</th>
                     </tr>
 
                    
                 </thead>
                 <tbody>
-                    <tr ng-repeat="item in billtable track by $index" class="cursor"ng-click="edit(item,$index)" ng-class="{selected: $index === idSelectedVote}">
+                    <tr ng-repeat="item in billtable track by $index" class="cursor" ng-click="edit(item,$index)"  ng-class="{selected: $index === idSelectedVote}" >
                         <td class="Count" >{{item.GODOWN}}</td>
                         <td class="Count" >{{item.DESCRIPTION}}</td>
                         <td class="Count">{{item.RRMARKS}}</td>
                         <td class="Count" style="text-align:right">{{item.NETWEIGHT}}</td>
-                        <td class="Count" style="text-align:right">{{item.BASERATE |number : 3}}</td>                       
+                        <td  style="text-align:right">{{item.BASERATE |number : 3}}</td>                       
                         <td  class="Count" style="text-align:right">{{item.TOTALAMOUNT |number : 2}}</td> 
                                                                   
-                        <td class="Count" style="text-align:right">{{item.AMOUNTINR |number : 2}}</td>                     
-                        <td class="text-center Count" value="0.00"><a class="edit" title="Edit"> <i class="fa fa-times-circle cursor RemoveTR" style="font-size:16px" ng-click="remove($index)"></i></a></td>
+                        <td class="Count" style="text-align:center">{{item.AMOUNTINR |number : 2}}</td>                     
+                      
+                        <td class="Count" style="text-align:center"><li style="margin-top:1Px"  excise-Info excisedata="item">Excise</li></td>                
+                          <td class="text-center Count" ><a class="edit" title="Edit"> <i class="fa fa-times-circle cursor RemoveTR" style="font-size:11px" ng-click="remove($index)"></i></a></td>     
+                        
                     </tr>
+                    
+                      
+                   
+
+                    
 
                    
                 </tbody>

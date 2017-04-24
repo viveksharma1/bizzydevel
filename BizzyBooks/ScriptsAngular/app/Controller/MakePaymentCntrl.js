@@ -104,8 +104,8 @@
         return date;
     }
     $scope.getVoucherCount = function () {
-        $http.get(config.api + "voucherTransactions/count" + "?[whrer][type]=Payment").then(function (response) {
-            $scope.paymentNo = response.data.count
+        $http.get(config.api + "voucherTransactions/count" + "?[where][type]=Payment").then(function (response) {
+            $scope.paymentNo = response.data.count + 1
            
         });
     }

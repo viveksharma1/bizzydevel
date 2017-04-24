@@ -5,7 +5,7 @@
     });
     $.fn.datepicker.defaults.format = "dd/mm/yyyy";
 
-
+    $scope.userType = localStorage.usertype
     $('#fromDate').datepicker({
         format: 'dd/mm/yyyy',
         autoclose: true,
@@ -110,6 +110,29 @@
             });
         }
     
+    "get account Data with opening balance"
+
+    function getAccountData(data) {
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].openingBalanceVisible == true && localStorage.usertype == 'UO') {
+                data[i].balance = data[i].openingBalance + data[i].credit - data[i].debit
+            }
+            else if ((data.openingBalanceVisible == false || data.openingBalanceVisible == undefined) && localStorage.usertype == 'UO') {
+                data[i].balance = data[i].credit - data[i].debit
+            }
+            else {
+                if (data[i].openingBalance && data[i].balanceType == 'credit') {
+                    data[i].balance = data[i].openingBalance + data[i].credit - data[i].debit
+                } else if (data[i].openingBalance && data[i].balanceType == 'debit') {
+                    data[i].balance = data[i].openingBalance + data[i].credit - data[i].debit
+                }
+                else if (data[i].balanceType == 'debit') {
+                    data[i].balance = data[i].debit - data[i].credit
+                }
+            }
+        }
+        return data;
+    }
 
     $scope.$on('scanner-started', function (event, args) {
         $scope.fdate = args.fromDate.fdate;
@@ -122,13 +145,14 @@
 
 
         $http.get(config.login + "dateWiseAccountDetail/" + localStorage.CompanyId + "?date=" + $scope.toDate).then(function (response) {
-            $scope.account = response.data;
+            $scope.account = getAccountData(response.data);
             console.log($scope.account);
         });
     });
         
     $http.get(config.login + "dateWiseAccountDetail/" + localStorage.CompanyId + "?date=" + localStorage.toDate).then(function (response) {
-        $scope.account = response.data;
+        //$scope.account = response.data;
+        $scope.account = getAccountData(response.data);
         console.log($scope.account);
     });
     //console.log(dateService)

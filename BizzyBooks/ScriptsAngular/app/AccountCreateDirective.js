@@ -113,7 +113,16 @@
                     var isUo = localStorage.usertype == 'UO' ? true : false;
                     console.log($scope.groupMasters);
                     console.log($scope.checkboxModel.value1);
+                   
                     if ($scope.isAccount) {
+                        var OBalance
+                        console.log($scope.OBalance)
+                        if (!$scope.OBalance){
+                            var OBalance = false
+                        }
+                         else{
+                            OBalance = true
+                          }
                         var accountData = {
                             compCode: [localStorage.CompanyId],
                             accountName: $scope.accountName.toUpperCase(),
@@ -124,6 +133,7 @@
                             debit: 0,
                             rate: $scope.rate,
                             isUo: isUo,
+                            openingBalanceVisible: OBalance,
                             rate: Number($scope.rate),
                             openingBalance: $scope.openingBalance,
                             balanceType: $scope.balanceType,
@@ -131,6 +141,7 @@
                             email: $scope.email,
                             phone: $scope.phone,
                             mobile: $scope.mobile,
+                           
                             billingAddress: [
                         {
                             street: $scope.street,
