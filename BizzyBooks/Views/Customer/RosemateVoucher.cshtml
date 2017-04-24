@@ -20,7 +20,7 @@
         </label>
     </div>
     <!-- addInventryModal -->
-    <div id="addInventryModal7" class="modal fade" role="dialog">
+    @*<div id="addInventryModal7" class="modal fade" role="dialog">
         <div class="modal-admin">
 
             <!-- Modal content-->
@@ -66,7 +66,7 @@
             </div>
 
         </div>
-    </div>
+    </div>*@
 
 
 
@@ -77,13 +77,13 @@
             <div class="col-sm-6" style="padding:0px">
                 <div class="col-sm-4 padding">
                     <h4 class="tabheading font_11">No.</h4>
-                    <input type='text' class="form-control" />
+                    <input type='text' ng-model="paymentNo" class="form-control" disabled />
                 </div>
                 <div class="col-sm-4 padding">
                     <h4 class="tabheading font_11">Date</h4>
 
-                    <div class='input-group date' id='Date'>
-                        <input type='text' class="form-control" placeholder="dd/mm/yyyy" />
+                    <div class='input-group date'>
+                        <input type='text' ng-model="paymentDate"  id="paymentDate" class="form-control" placeholder="dd/mm/yyyy" />
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
@@ -96,19 +96,19 @@
 
                 <div class="col-sm-4 padding pull-right">
                     <h4 class="tabheading font_11">Opening Balance</h4>
-                    <input type='text' class="form-control" />
+                    <input type='text' class="form-control" disabled />
                 </div>
                 <div class="col-sm-6 padding pull-right">
                     <h4 class="tabheading font_11">Cash</h4>
 
-                    <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
+                    <ui-select ui-tree-select ng-model="cashAccount.selected" id="countryCode"
                                ui-select-focuser
                                theme="selectize">
-                        <ui-select-match placeholder="Select Cash">{{ $select.selected.company }}</ui-select-match>
+                        <ui-select-match placeholder="Select Cash">{{ $select.selected.accountName }}</ui-select-match>
 
-                        <ui-select-choices repeat="person in supliers  | filter: $select.search">
+                        <ui-select-choices repeat="person in bankAccounts  | filter: $select.search">
                             <div>
-                                <span ng-model="supplier1" ng-bind-html="person.company | highlight: $select.search"></span>
+                                <span  ng-bind-html="person.accountName | highlight: $select.search"></span>
                             </div>
 
 
@@ -130,28 +130,26 @@
                         <thead>
                             <tr>
                                 <th class="Rosemate-table" width="100">
-                                    <select class="form-control">
-                                        <option>Company Code</option>
-                                        <option>ABC</option>
-                                        <option>EXY</option>
+                                    <select class="form-control" ng-model="selectedCompany1">
+                                        <option ng-repeat="company in CompanyList" value="{{company.CompanyId}}">{{company.CompanyName}}</option>
                                     </select>
                                 </th>
                                 <th class="Rosemate-table">
-                                    <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode" style="height:30px"
+                                    <ui-select ui-tree-select ng-model="saleParty.selected" id="countryCode" style="height:30px"
                                                ui-select-focuser
                                                theme="selectize">
-                                        <ui-select-match placeholder="Select Account">{{ $select.selected.company }}</ui-select-match>
+                                        <ui-select-match placeholder="Select Account">{{ $select.selected.accountName }}</ui-select-match>
 
-                                        <ui-select-choices repeat="person in supliers  | filter: $select.search">
+                                        <ui-select-choices repeat="person in salepartyAccounts  | filter: $select.search">
                                             <div>
-                                                <span ng-model="supplier1" ng-bind-html="person.company | highlight: $select.search"></span>
+                                                <span  ng-bind-html="person.accountName | highlight: $select.search"></span>
                                             </div>
 
 
                                         </ui-select-choices>
                                     </ui-select>
                                 </th>
-                                <th class="Rosemate-table" width="100"><input type="text" class="form-control text-right" placeholder="Amount" /></th>
+                                <th class="Rosemate-table" width="100"><input type="number" step="0.01" ng-model="amtSale" class="form-control text-right" placeholder="Amount" /></th>
                                 <th class="Rosemate-table text-right" width="155">
                                     <button type="button" class="btn-sm btn-warning btn" style="width:68px">Reciept</button>
                                     <button type="button" class="btn-sm btn-primary btn" style="width:68px">Add</button>
@@ -215,28 +213,29 @@
                         <thead>
                             <tr>
                                 <th class="Rosemate-table" width="100">
-                                    <select class="form-control">
-                                        <option>Company Code</option>
+                                    <select class="form-control" ng-model="selectedCompany2">
+                                        <option ng-repeat="company in CompanyList" value="{{company.CompanyId}}">{{company.CompanyName}}</option>
+                                        @*<option>Company Code</option>
                                         <option>ABC</option>
-                                        <option>EXY</option>
+                                        <option>EXY</option>*@
                                     </select>
                                 </th>
                                 <th class="Rosemate-table">
-                                    <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode" style="height:30px"
+                                    <ui-select ui-tree-select ng-model="purPartyAccount.selected" id="countryCode" style="height:30px"
                                                ui-select-focuser
                                                theme="selectize">
-                                        <ui-select-match placeholder="Select Account">{{ $select.selected.company }}</ui-select-match>
+                                        <ui-select-match placeholder="Select Account">{{ $select.selected.accountName }}</ui-select-match>
 
-                                        <ui-select-choices repeat="person in supliers  | filter: $select.search">
+                                        <ui-select-choices repeat="person in purPartyAccounts  | filter: $select.search">
                                             <div>
-                                                <span ng-model="supplier1" ng-bind-html="person.company | highlight: $select.search"></span>
+                                                <span  ng-bind-html="person.accountName | highlight: $select.search"></span>
                                             </div>
 
 
                                         </ui-select-choices>
                                     </ui-select>
                                 </th>
-                                <th class="Rosemate-table" width="100"><input type="text" class="form-control text-right" placeholder="Amount" /></th>
+                                <th class="Rosemate-table" width="100"><input type="number" step="0.01" ng-model="amtPurchase" class="form-control text-right" placeholder="Amount" /></th>
                                 <th class="Rosemate-table text-right" width="155">
                                     <button type="button" class="btn-sm btn-warning btn" style="width:68px">Payment</button>
                                     <button type="button" class="btn-sm btn-primary btn" style="width:68px">Add</button>
