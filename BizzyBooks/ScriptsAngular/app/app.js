@@ -525,7 +525,7 @@ login: 'http://localhost:4000/',
 api: 'http://localhost:4000/api/'
 
 
- //login: 'http://bizzy-book-api.azurewebsites.net/',
+//login: 'http://bizzy-book-api.azurewebsites.net/',
  //api: 'http://bizzy-book-api.azurewebsites.net/api/',
 });
 
@@ -1042,10 +1042,10 @@ myApp.run(['$templateCache', function ($templateCache) {
     $templateCache.put('selectize/choices.tpl.html', [
       '<div ng-show="$select.open"',
       '  class="ui-select-choices group-tree selectize-dropdown single">',
-      '  <div  class="ui-select-breadcrumbs cursor" tabindex="2" ng-click="add($select.type,$select.search);"ng-show="$select.addnew==1" >',
+      '  <div  class="ui-select-breadcrumbs cursor"  ng-click="add($select.type,$select.search);"ng-show="$select.addnew==1" >',
       '    <span   class="ui-breadcrumb"',
      
-      '       <span><label class="badge cursor" aria-hidden="false"><i class="fa fa-plus"></i> Add</label> <span class="pull-right text-warning">{{$select.search }}</span></span>',
+      '       <span><label class="badge cursor" style="color:white"tabindex="2"ng-keyup="$event.keyCode == 13 ? add($select.type,$select.search) : null"aria-hidden="false"><i class="fa fa-plus"></i> Add</label> <span class="pull-right text-warning">{{$select.search }}</span></span>',
       '    </span>',
       '  </div>',
       '  <div class="ui-select-choices-content selectize-dropdown-content">',
