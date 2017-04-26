@@ -240,6 +240,10 @@
 
             $state.go('Customer.BadlaVoucher', { voId: id });
         }
+        if (voType == 'Rosemate') {
+
+            $state.go('Customer.RosemateVoucher', { voId: id });
+        }
 
 
 

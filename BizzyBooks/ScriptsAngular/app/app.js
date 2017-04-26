@@ -372,9 +372,12 @@ var myApp = angular
             }
         });
           $stateProvider.state("Customer.RosemateVoucher", {
-              url: "/RosemateVoucher",
+              url: "/RosemateVoucher/:voId",
               templateUrl: "Customer/RosemateVoucher",
-              controller: "RosemateVoucherCntrl"
+              controller: "RosemateVoucherCntrl",
+              params: {
+                  voId: null,
+              }
 
           });
 
