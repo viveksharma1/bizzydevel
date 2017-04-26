@@ -1354,12 +1354,22 @@
        
 
         $scope.exciseAssessableValue = data.assesableValue
-        $scope.exciseDutyPerUnit = data.exciseDuty
-        $scope.exciseRate = data.dutyAmount
-        $scope.exciseSAD = data.SAD
-
+        $scope.exciseDutyPerUnit = data.exciseDuty / data.NETWEIGHT
+        $scope.exciseDutyAmount = data.dutyAmount
+        $scope.sadAmount = data.SAD
+        $scope.exciseRate = data.exciseRate
+        $scope.sadRate = data.sadRate
+        $scope.sadPerUnit = Number((data.SAD / data.NETWEIGHT).toFixed(2));
     }
-
+    $scope.exciseCalculate = function () {
+        $scope.exciseDutyAmount = Number(((($scope.lineItemnetweight * $scope.lineItemBaseRate) * $scope.exciseRate) / 100).toFixed(2));
+        $scope.exciseDutyPerUnit = ($scope.exciseDutyAmount / $scope.lineItemnetweight).toFixed(2);
+        $scope.exciseAssessableValue = (Number($scope.lineItemnetweight * $scope.lineItemBaseRate)).toFixed(2);
+    }
+    $scope.sadCalculate = function () {
+        $scope.sadAmount = (($scope.lineItemnetweight * $scope.lineItemBaseRate) * $scope.sadRate) / 100;
+        $scope.sadPerUnit = ($scope.sadAmount / $scope.lineItemnetweight).toFixed(2);
+    }
     $scope.remarks.selected = { name: '' };
     $scope.addBillLineItem = function () {
         $scope.GODOWN.push({ type: "GODOWN", name: $scope.newitem });
@@ -1373,9 +1383,9 @@
                 TOTALAMOUNT: $scope.lineItemnetweight * $scope.lineItemBaseRate,
                 AMOUNTINR: $scope.lineItemnetweight * $scope.lineItemBaseRate * $scope.ExchangeRateINR,
                 assesableValue: $scope.exciseAssessableValue,
-                exciseDuty: $scope.exciseDutyPerUnit,
-                dutyAmount: $scope.exciseRate,
-                SAD: $scope.exciseSAD,
+                exciseDuty: $scope.exciseDutyAmount,
+                dutyAmount: $scope.exciseDutyAmount,
+                SAD: $scope.sadAmount,
                 totalDutyAmt: ''
             }
         }
@@ -1389,10 +1399,12 @@
                 TOTALAMOUNT: '',
                 AMOUNTINR: $scope.lineItemnetweight * $scope.lineItemBaseRate,
                 assesableValue: $scope.exciseAssessableValue,
-                exciseDuty: $scope.exciseDutyPerUnit,
-                dutyAmount: $scope.exciseRate,
-                SAD: $scope.exciseSAD,
-                totalDutyAmt: ''
+                exciseDuty: $scope.exciseDutyAmount,
+                dutyAmount: $scope.exciseDutyAmount,
+                SAD: $scope.sadAmount,
+                totalDutyAmt: '',
+                exciseRate: $scope.exciseRate,
+                sadRate:$scope.sadRate
             }
         }
         if ($scope.selectedItemIndex!=null) {
@@ -1522,7 +1534,22 @@
         $scope.REMARKS = response.data
            
     });
+    
+    //delete item 
+    $scope.deleteItem = function (id, type, name, index) {
+        $http.delete(config.api + "masters/" + id).then(function (response) {
+            $scope.REMARKS = response.data
+        });
+        if (type == "GODOWN") {
+            delete $scope.GODOWN[index].name
+        } else if (type == "REMARKS") {
+            delete $scope.REMARKS[index].name
+        } else if (type == "DESCRIPTION") {
+            delete $scope.DESCRIPTION[index].name
+        }
 
+
+    }
     $scope.bindSupplierDetail = function (data) {
 
         $scope.email = data.email

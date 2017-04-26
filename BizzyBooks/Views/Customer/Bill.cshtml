@@ -11,9 +11,10 @@
 <script type="text/ng-template" id="exciseInfo_template.html">
     <span >
         <label style="color:#73A91B"> Assesable Value:</label> <b> {{excisedata.assesableValue}}</b><br>
-        <label style="color:#73A91B"> Excise Duty: </label><b> {{excisedata.exciseDuty}}</b><br>
-        <label style="color:#73A91B">  Duty Amount: </label> <b> {{excisedata.dutyAmount}} </b> <br>
-        <label style="color:#73A91B"> SAD:</label><b>{{excisedata.SAD}}</b>
+        <label style="color:#73A91B"> Excise Duty Amount: </label><b> {{excisedata.dutyAmount}}</b> ({{excisedata.exciseRate}} <b>%</b>)<br>
+        <label style="color:#73A91B"> Excise Duty/Unit: </label> <b> {{excisedata.exciseDuty /excisedata.NETWEIGHT |number : fractionSize:2}} </b> <br>
+        <label style="color:#73A91B"> SAD Amount:</label><b>{{excisedata.SAD}}</b><br>
+        <label style="color:#73A91B"> SAD /Unit:</label><b>{{excisedata.SAD/excisedata.NETWEIGHT |number : fractionSize:2}}</b>
 </span>
 
 </script>
@@ -231,7 +232,7 @@
                 <h4 class="tabheading font_11">Supplier @*<span class="pull-right text-primary"><i class="fa fa-rupee"></i> 2,30,000</span></h4>*@
                 <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
                            ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';" on-select="bindSupplierDetail($select.selected)"
-                           theme="selectize">
+                           theme="selectize" >
                     <ui-select-match placeholder="Select Suppliers">{{ $select.selected.accountName }}</ui-select-match>
 
                     <ui-select-choices repeat="person in supliers  | filter: $select.search">
@@ -284,7 +285,7 @@
                     <div class='input-group date' id="billDate">
                         <input type='text' class="form-control" ng-model="billDate " id='billDate'  />
                         <span class="input-group-addon ">
-                            <span class="glyphicon glyphicon-calendar"></span>
+                            <span class="glyphicon glyphicon-calendar" style="color:forestgreen"></span>
                         </span>
                     </div>
 
@@ -292,7 +293,7 @@
                     <div class='input-group date' id="billDueDate">
                         <input type='text' class="form-control" ng-model="billDueDate" id='DueDate' />
                         <span class="input-group-addon ">
-                            <span class="glyphicon glyphicon-calendar"></span>
+                            <span class="glyphicon glyphicon-calendar" style="color:forestgreen"></span>
                         </span>
                     </div>
 
@@ -310,7 +311,7 @@
                     <div class='input-group date' id='actualDate'>
                         <input type='text' class="form-control" ng-model="actualDate"  />
                         <span class="input-group-addon datepicker">
-                            <span class="glyphicon glyphicon-calendar"></span>
+                            <span class="glyphicon glyphicon-calendar" style="color:forestgreen"></span>
                         </span>
                     </div>
 
@@ -959,6 +960,7 @@
 
                                             <div>
                                                 <span ng-bind-html="person.name | highlight: $select.search"></span>
+                                                <span class="pull-right" style="margin:6px 5px 0px 5px"> <i class="fa fa-trash-o"  style="color:red" aria-hidden="true"></i></span>
                                             </div>
                                         </ui-select-choices>
                                     </ui-select>
@@ -1116,20 +1118,32 @@
                         </div>
                         <div class="modal-body">
                             <table>
+                                <thead>
+                                    <tr>
+                                        <th>&nbsp;</th>
+                                        <th>&nbsp;</th><th>Amount</th>
+                                        <th>Per Unit </th>
+                                    </tr>
+                                </thead>
                                 <tr>
 
-                                    <td><label style="margin-top:-10px; float: left;">Excise Rate (%)</label></td>
-                                    <td><input type="text"  tab-index = 3 ng-model="exciseRate" class="form-control" style="margin-bottom:15px" /></td>
+                                    <td><label style="margin-top:-10px; float: left;">Excise Rate</label></td>
+                                    <td><input type="text"  tab-index = 3 ng-model="exciseRate"ng-blur="exciseCalculate()" class="form-control" style="margin-bottom:15px" /></td>
+                                    <td><input type="text" tab-index=3 ng-model="exciseDutyAmount" class="form-control" style="margin-bottom:15px" /></td>
+                                    <td><input type="text" tab-index=3 ng-model="exciseDutyPerUnit" class="form-control" style="margin-bottom:15px" /></td>
 
                                 </tr>
-                                <tr>
+                                @*<tr>
                                     <td><label style="margin-top: -10px;float: left;">Duty Per Unit</label></td>
                                     <td><input type="text" tab-index = 4 ng-model="exciseDutyPerUnit" class="form-control" style="margin-bottom:15px" /></td>
 
-                                </tr>
+                                </tr>*@
                                 <tr>
                                     <td><label style="margin-top: -10px;float: left;">SAD (4%) Per Unit</label></td>
-                                    <td><input type="text" tab-index = 5 ng-model="exciseSAD" class="form-control" style="margin-bottom:15px" /></td>
+                                    <td><input type="text" tab-index = 5 ng-model="sadRate" ng-blur="sadCalculate()" class="form-control" style="margin-bottom:15px" /></td>
+                                    <td><input type="text" tab-index=3 ng-model="sadAmount" class="form-control" style="margin-bottom:15px" /></td>
+                                   
+                                    <td><input type="text" tab-index=3 ng-model="sadPerUnit" class="form-control" style="margin-bottom:15px" /></td>
 
                                 </tr>
                                 <tr>
@@ -1647,7 +1661,7 @@
 
 
 
-
+        @* manual item detail table*@
         <div class="collapse in" id="ItemDetail3" ng-init="role = admin">
             <create-account value="myValue"> </create-account>
             <table class="table-bordered table-condensed tab tablepopover table-hover selectTable" fixed-header id="ItemTable" style="width:98%; margin-left:10px;margin-right:10px; height:180px">
@@ -1673,6 +1687,7 @@
 
                                     <div>
                                         <span ng-bind-html="person.name | highlight: $select.search"></span>
+                                        <span class="pull-right" style="margin:6px 5px 0px 5px"> <i class="fa fa-trash-o" style="color:red" aria-hidden="true" ng-click="deleteItem(person.id,person.type,person.name,$index)"></i></span>
                                     </div>
                                 </ui-select-choices>
                             </ui-select>
@@ -1695,6 +1710,7 @@
                                 <ui-select-choices repeat="person.name as person in DESCRIPTION  | filter: $select.search" @*refresh="refreshResults($select,'DESCRIPTION')" refresh-delay="2"*@>
                                     <div>
                                         <span ng-bind-html="person.name | highlight: $select.search"></span>
+                                        <span class="pull-right" style="margin:6px 5px 0px 5px"> <i class="fa fa-trash-o" style="color:red" aria-hidden="true" ng-click="deleteItem(person.id,person.type,person.name,$index)"></i></span>
                                     </div>
                                 </ui-select-choices>
                             </ui-select>
@@ -1714,6 +1730,7 @@
                                 <ui-select-choices repeat="person.name as person in REMARKS  | filter: $select.search" @*refresh="refreshResults($select,'RRMARKS')" refresh-delay="2"*@>
                                     <div>
                                         <span ng-bind-html="person.name | highlight: $select.search"></span>
+                                        <span class="pull-right" style="margin:6px 5px 0px 5px"> <i class="fa fa-trash-o" style="color:red" aria-hidden="true" ng-click="deleteItem(person.id,person.type,person.name,$index)"></i></span>
                                     </div>
                                 </ui-select-choices>
                             </ui-select>
