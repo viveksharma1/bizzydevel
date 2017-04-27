@@ -123,46 +123,48 @@
                             </ui-select>
                         </th>
                         <th style="vertical-align:middle; padding:5px">
+                            <input type="text" class="form-control" placeholder="Description" />
+                        </th>
+                        <th style="vertical-align:middle; padding:5px">
                             <input type="text" class="form-control text-right" placeholder="Debits" />
                         </th>
                         <th style="vertical-align:middle; padding:5px">
                             <input type="text" class="form-control text-right" placeholder="Credits" />
                         </th>
-                        <th style="vertical-align:middle; padding:5px">
-                            <input type="text" class="form-control" placeholder="Description" />
-                        </th>
-                        <th style="vertical-align:middle; padding:5px">
-                            <input type="text" class="form-control" placeholder="Name" />
-                        </th>
+
                         <th style="text-align:center"><button type="button" class="btn btn-sm btn-primary">Add</button></th>
                     </tr>
                     <tr>
                         <th style="color:#000;">Account</th>
-                        <th style="text-align:right; color:#000;">Debits</th>
-                        <th style="text-align:right; color:#000;">Credits</th>
                         <th style="color:#000;">Description</th>
-                        <th style="color:#000;">Name</th>
+                        <th style="text-align:right; color:#000; width:150px">Debits</th>
+                        <th style="text-align:right; color:#000; width:150px">Credits</th>
                         <th>&nbsp;</th>
 
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
+                        <td>CLEARING & FORWARDING EXP.</td>
+                        <td>C.R. S.S. COILS3</td>
+                        <td style="text-align:right">666,266.00</td>
                         <td style="text-align:right">&nbsp;</td>
+                        <td class="text-center Count" value="0.00"><a class="edit" title="Edit"> <i class="fa fa-times-circle cursor RemoveTR" style="font-size:16px"></i></a></td>
+                    </tr>
+                    <tr>
+                        <td>CLEARING & FORWARDING EXP.</td>
+                        <td>C.R. S.S. COILS3</td>
                         <td style="text-align:right">&nbsp;</td>
+                        <td style="text-align:right">666,266.00</td>
                         <td class="text-center Count" value="0.00"><a class="edit" title="Edit"> <i class="fa fa-times-circle cursor RemoveTR" style="font-size:16px"></i></a></td>
                     </tr>
                 </tbody>
                 <tfoot>
                     <tr style="background:#F0EEEE">
-                        <th style="color:#000;">Account</th>
-                        <th style="text-align:right; color:#000;">Debits</th>
-                        <th style="text-align:right; color:#000;">Credits</th>
-                        <th style="color:#000;">Description</th>
-                        <th style="color:#000;">Name</th>
+                        <th style="color:#000;">&nbsp;</th>
+                        <th style="color:#000; text-align:right">Total Balance</th>
+                        <th style="text-align:right; color:#000;">666,266.00</th>
+                        <th style="text-align:right; color:#000;">666,266.00</th>
                         <th>&nbsp;</th>
                     </tr>
                 </tfoot>
@@ -196,20 +198,20 @@
         <div class="col-sm-12" style="margin-bottom:20px">
             @*<div class="col-sm-4 padding">
 
-                <div class="form-group">
-                    <h4 class="tabheading">Attachments</h4>
-                    <div class="attachmets">
-                        <input type="file" id="uploadBtn" multiple="multiple" name="browsefile">
-                        <div>
-                            <i class="fa fa-plus"></i>
-                            <p>Add file</p>
+                    <div class="form-group">
+                        <h4 class="tabheading">Attachments</h4>
+                        <div class="attachmets">
+                            <input type="file" id="uploadBtn" multiple="multiple" name="browsefile">
+                            <div>
+                                <i class="fa fa-plus"></i>
+                                <p>Add file</p>
+                            </div>
                         </div>
+
+
                     </div>
-
-
                 </div>
-            </div>
-            <div id="upload_prev" class="upload_prev"></div>*@
+                <div id="upload_prev" class="upload_prev"></div>*@
 
 
 
@@ -232,10 +234,10 @@
                         @*<div class="attachmets">*@
                         @*<input type="file" id="uploadBtn" multiple="multiple" name="browsefile">*@
                         @*<div id="uploadAttchments">
-                                <i class="fa fa-plus"></i>
-                                <p>Add file</p>
-                            </div>
-                        </div>*@
+                                    <i class="fa fa-plus"></i>
+                                    <p>Add file</p>
+                                </div>
+                            </div>*@
                         <div class="col-sm-5 padding5">
                             <input type="text" class="form-control" id="NameInput" placeholder="Title" />
                         </div>
