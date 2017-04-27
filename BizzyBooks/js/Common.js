@@ -83,6 +83,7 @@ function showStickyErrorToast(message) {
     });
 }
 
+    
 $('html').on('mouseup', function (e) {
     if (!$(e.target).closest('.popover').length) {
         $('.popover').each(function () {
@@ -113,3 +114,17 @@ $('#reportrange').daterangepicker({
 
 cb(start, end);
 });
+function setDate(inputDateId, val, inputTimeId) {
+    $('#' + inputDateId).datepicker('setDate',val? new Date(val):new Date());
+    if (inputTimeId)
+        $('#' + inputTimeId).timepicker('setTime', val ? new Date(val) : new Date());
+
+
+}
+function getDate(inputDateId, inputTimeId) {
+    var ret = $('#' + inputDateId).datepicker('getDate');
+    if (inputTimeId)
+        ret = $('#' + inputTimeId).timepicker('getTime', ret);
+    return ret;
+
+}
