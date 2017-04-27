@@ -27,6 +27,7 @@
                     $scope.groupMaster = response.data;
 
                 });
+                
 
                 $scope.createAccountBtn = function () {
                     $scope.isDisabled = false;
@@ -44,6 +45,10 @@
                         }
                         if ($scope.value.id) {
                             $scope.accountId = $scope.value.id
+                            $http.get(config.login + "getAccountOpeningBalnce/" + localStorage.CompanyId + "?accountId=" + $scope.accountId + "&role=O").then(function (response) {
+                                $scope.openingBalance = Number(response.data.balance);
+
+                            });
                             console.log($scope.value);
 
                             $scope.accountName = $scope.value.accountName;
@@ -85,7 +90,7 @@
                             }
                             $scope.credit = $scope.value.credit;
                             $scope.debit = $scope.value.debit;
-                            $scope.openingBalance = $scope.value.openingBalance;
+                            //$scope.openingBalance = $scope.value.openingBalance;
                         }
                     }
                     else {
