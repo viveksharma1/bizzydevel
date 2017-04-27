@@ -26,7 +26,7 @@
 
                                     <ui-select-match placeholder="Choose Group">{{$select.selected.name}}</ui-select-match>
                                     <ui-select-choices repeat="person in groupMaster  | filter: $select.search">
-                                        <div ng-init="balanceType = $select.selected.balanceType">
+                                        <div >
                                             <span style="color:black" ng-model="supplier1" ng-bind-html="person.name | highlight: $select.search">{{person.type}}</span>
                                             <span style="color:forestgreen">({{person.type}})</span>
 

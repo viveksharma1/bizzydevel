@@ -327,14 +327,12 @@ var myApp = angular
         });
 
         $stateProvider.state("Customer.accountHistory", {
-            url: "/accountHistory/:accountId/:fromDate/:toDate/:closingBalance",
+            url: "/accountHistory/:accountId/:balanceType",
             templateUrl: "Customer/accountHistory",
             controller: "accountHistoryCntrl",
             params: {
                 accountId: null,
-                fromDate: null,
-                toDate: null,
-                closingBalance:null
+                balanceType:null
             }
         });
         // new controller

@@ -93,7 +93,7 @@
                     <tfoot style="background:#f4f4f4">
                         <tr style="border-top:1px solid #ccc;">
                             <th style="padding:5px; text-align:right; font-weight:normal" colspan="4">Opening Balance</th>
-                            <th style="text-align:right;  padding:5px" >{{accountData.openingBalance + openingBalance |number : fractionSize}}</th>
+                            <th style="text-align:right;  padding:5px" >{{openingBalance |number : fractionSize}}</th>
                             
                             <th style="text-align:right;  padding:5px">{{creditOpening}}</th>
 
@@ -107,7 +107,7 @@
                         <tr style="border-top:1px solid #ccc">
                             <th style="padding:5px; text-align:right" colspan="4">Closing Balance</th>
                             <th style="text-align:right;  padding:5px">&nbsp;</th>
-                            <th style="text-align:right;  padding:5px">{{accountData.openingBalance + closingBalance |number : fractionSize}}</th>
+                            <th style="text-align:right;  padding:5px">{{closingBalance |number : fractionSize}}</th>
                            
 
                         </tr>

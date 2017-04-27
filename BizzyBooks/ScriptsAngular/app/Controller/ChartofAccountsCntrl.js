@@ -121,13 +121,10 @@
                 data[i].balance = data[i].credit - data[i].debit
             }
             else {
-                if (data[i].openingBalance && data[i].balanceType == 'credit') {
-                    data[i].balance = data[i].openingBalance + data[i].credit - data[i].debit
-                } else if (data[i].openingBalance && data[i].balanceType == 'debit') {
-                    data[i].balance = data[i].openingBalance + data[i].credit - data[i].debit
-                }
-                else if (data[i].balanceType == 'debit') {
-                    data[i].balance = data[i].debit - data[i].credit
+                if ( data[i].balanceType == 'credit') {
+                    data[i].balance = data[i].credit - data[i].debit
+                } else if (data[i].balanceType == 'debit') {
+                    data[i].balance =  data[i].credit - data[i].debit
                 }
             }
         }
