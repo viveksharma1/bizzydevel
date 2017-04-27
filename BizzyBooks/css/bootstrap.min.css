@@ -9061,3 +9061,4 @@ main {
     line-height: 20px;
     -webkit-font-smoothing: antialiased; font-size:16px; text-align:right
 }
+#UploadOpeningStock .modal-dialog{width:30%;}

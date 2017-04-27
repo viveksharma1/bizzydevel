@@ -36,7 +36,7 @@
                 <strong class="heading">Balance Inventory</strong>
 
                 <div class="btn-group pull-right">
-                    <button type="button" class="btn btn-primary btn-sm"><a href="#/Customer/GRNEntry" style="color:#fff"> GRN Entry</a></button>
+                    <button type="button" class="btn btn-primary btn-sm"><a href="" ng-click="UploadOpeningStock()" style="color:#fff">Opening Stock GRN Entry</a></button>
                     <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="caret" style="border-top-color:#fff !important"></span>
                     </button>
@@ -47,7 +47,54 @@
                 </div>
             </div>
 
+            <!-- Modal -->
+            <div id="UploadOpeningStock" class="modal fade" role="dialog">
+                <div class="modal-dialog" style="margin-top:100px">
 
+                    <!-- Modal content-->
+                    <div class="modal-content" style="float:left; width:100%">
+                        <div class="modal-header" style="float:left; width:100%">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Opening Stock GRN Entry</h4>
+                        </div>
+                        <div class="modal-body" style="float:left; width:100%;min-height:100px">
+                            <div class="form-group">
+
+
+                                <div class="col-sm-10 padding5">
+                                    <input type="file" class="filestyle" id="uploadBtn" data-buttonName="btn-info">
+                                </div>
+
+                                <div class="col-sm-2 padding5">
+                                    <button type="button" class="btn btn-sm btn-primary Attechmentdetail" style="width:100%">Add</button>
+                                </div>
+
+
+                                <div style="float:left; width:100%; padding:10px 10px; border-bottom:1px dotted #ccc;" class="filenameDiv">
+
+
+                                    <div class="col-sm-10 padding5 cursor" style="word-break:break-all">
+                                        <a id="type" class="cursor"></a>
+                                    </div>
+
+                                    <div class="col-sm-2">
+                                        <i class="fa fa-times pull-right text-danger" id="removeattachment"></i>
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer" style="float:left; width:100%">
+                            <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary btn-sm">Save</button>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
 
         <div class="col-sm-12" style="padding:20px 0px">
@@ -79,17 +126,17 @@
 
                     <div class="col-sm-12 filterBox">
                         <h3>Search Filter</h3>
-                             <div class="form-group">
-                                <h4 class="tabheading font_11">Status</h4>
-                                <select class="form-control">
-                                    <option>Select</option>
-                                    <option>Sale</option>
-                                    <option>Return</option>
-                                    <option>Delivered</option>
-                                    <option>Open</option>
-                                    <option>Process</option>
-                                </select>
-                            </div>
+                        <div class="form-group">
+                            <h4 class="tabheading font_11">Status</h4>
+                            <select class="form-control">
+                                <option>Select</option>
+                                <option>Sale</option>
+                                <option>Return</option>
+                                <option>Delivered</option>
+                                <option>Open</option>
+                                <option>Process</option>
+                            </select>
+                        </div>
                         <div class="form-group">
                             <h4 class="tabheading font_11">Invoice No</h4>
                             <ui-select ng-model="invoiceno.selected" id="spInvoiceNo"
@@ -102,7 +149,7 @@
                                         <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
                                     </span>
                                 </ui-select-match>
-                                
+
                                 <ui-select-choices repeat="invoice in ItemList  | unique:'_id.no'|filter: $select.search">
                                     <div>
                                         <span style="color:forestgreen">{{invoice._id.no}}</span>
@@ -112,7 +159,7 @@
                                 </ui-select-choices>
                             </ui-select>
                         </div>
-                        
+
 
                         <div class="form-group">
                             <h4 class="tabheading font_11">Description</h4>
@@ -164,10 +211,10 @@
                                        ui-select-focuser
                                        theme="selectize">
                                 <ui-select-match allow-clear="true" placeholder="">
-                                <span class="selectuiTable" style="width:100% !important">
-                                <span>{{ $select.selected._id.RRMARKS}}</span>
-                                    <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
-                                </span>
+                                    <span class="selectuiTable" style="width:100% !important">
+                                        <span>{{ $select.selected._id.RRMARKS}}</span>
+                                        <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
+                                    </span>
                                 </ui-select-match>
 
                                 <ui-select-choices repeat="invoice in ItemList  | unique:'_id.RRMARKS'|filter: $select.search">
@@ -226,7 +273,7 @@
                                     <td> {{item.assesableValue/item.NETWEIGHT |number : fractionSize}}</td>
                                     <td> {{item.exciseDuty/item.NETWEIGHT |number : fractionSize}}</td>
                                     <td> {{item.SAD/item.NETWEIGHT |number : fractionSize}}</td>
-                                  
+
                                     <td> {{item.NETWEIGHT |number : fractionSize}}</td>
                                     <td> {{item.NETWEIGHT - item.BALANCE |number : fractionSize}}</td>
                                     <td style="text-align:right;">
@@ -244,35 +291,35 @@
                                         </div>
                                     </td>
                                     @*<td>
-                                        <button type="button" class="editbtn" ng-click="GRNDetail(item)">Detail</button>
-                                        <class class="linkseparator" style="margin-top:4px; margin-right:0px">|</class>
-                                        <div class="btn-group editcaret">
-                                            <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>
-                                            <ul class="dropdown-menu editdrpdwn" role="menu" style="top:18px">
-                                                <li><a href="#/Customer/Invoice">Invoice</a></li>
+                                            <button type="button" class="editbtn" ng-click="GRNDetail(item)">Detail</button>
+                                            <class class="linkseparator" style="margin-top:4px; margin-right:0px">|</class>
+                                            <div class="btn-group editcaret">
+                                                <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>
+                                                <ul class="dropdown-menu editdrpdwn" role="menu" style="top:18px">
+                                                    <li><a href="#/Customer/Invoice">Invoice</a></li>
 
-                                            </ul>
+                                                </ul>
 
-                                        </div>
-                                    </td>*@
+                                            </div>
+                                        </td>*@
                                 </tr>
                             </tbody>
                         </table>
                         @*<div class="pagination-div" style="float:left; width:100%; margin-top:10px;">
-                            <ul class="pagination pull-right" style="margin-top:0px">
-                                <li ng-class="DisablePrevPage()">
-                                    <a href="" ng-click="prevPage()"> Prev</a>
-                                </li>
-                                <li ng-repeat="n in range(ItemList.length)"
-                                    ng-class="{active: n == currentPage}"
-                                    ng-click="setPage(n)">
-                                    <a href="">{{n+1}}</a>
-                                </li>
-                                <li ng-class="DisableNextPage()">
-                                    <a href="" ng-click="nextPage()">Next </a>
-                                </li>
-                            </ul>
-                        </div>*@
+                                <ul class="pagination pull-right" style="margin-top:0px">
+                                    <li ng-class="DisablePrevPage()">
+                                        <a href="" ng-click="prevPage()"> Prev</a>
+                                    </li>
+                                    <li ng-repeat="n in range(ItemList.length)"
+                                        ng-class="{active: n == currentPage}"
+                                        ng-click="setPage(n)">
+                                        <a href="">{{n+1}}</a>
+                                    </li>
+                                    <li ng-class="DisableNextPage()">
+                                        <a href="" ng-click="nextPage()">Next </a>
+                                    </li>
+                                </ul>
+                            </div>*@
                         <!-- ChangeStatusModal -->
                         <div id="ChangeStatusModal" class="modal fade" role="dialog">
                             <div class="modal-dialog modal-sm" style="margin-top:100px">
@@ -367,7 +414,7 @@
                         </div>
 
                     </div>
-                
+
                 </div>
             </div>
         </div>
@@ -482,31 +529,31 @@
                     </div>
 
                     @*
-                                    <ul class="list-unstyled GRNInvoice" ng-repeat="item in taxData">
-                                        <li>
-                                            <label>{{item.accountName}}  <i class="fa fa-minus"></i></label>
-                                            <span>{{item.credit}}</span>
-                                        </li>
+                                        <ul class="list-unstyled GRNInvoice" ng-repeat="item in taxData">
+                                            <li>
+                                                <label>{{item.accountName}}  <i class="fa fa-minus"></i></label>
+                                                <span>{{item.credit}}</span>
+                                            </li>
 
 
-                                    </ul>
+                                        </ul>
 
-                    <h3 class="GRNHeading">Account <small>(Laibility)</small> <span class="badge">20/08/2016</span></h3>
-                    <ul class="list-unstyled GRNInvoice">
-                        <li>
-                            <label>Vat <i class="fa fa-minus"></i></label>
-                            <span>&nbsp;</span>
-                        </li>
-                        <li>
-                            <label>Tax <i class="fa fa-minus"></i></label>
-                            <span>&nbsp;</span>
-                        </li>
-                        <li>
-                            <label>O Tax <i class="fa fa-minus"></i></label>
-                            <span>&nbsp;</span>
-                        </li>
+                        <h3 class="GRNHeading">Account <small>(Laibility)</small> <span class="badge">20/08/2016</span></h3>
+                        <ul class="list-unstyled GRNInvoice">
+                            <li>
+                                <label>Vat <i class="fa fa-minus"></i></label>
+                                <span>&nbsp;</span>
+                            </li>
+                            <li>
+                                <label>Tax <i class="fa fa-minus"></i></label>
+                                <span>&nbsp;</span>
+                            </li>
+                            <li>
+                                <label>O Tax <i class="fa fa-minus"></i></label>
+                                <span>&nbsp;</span>
+                            </li>
 
-                    </ul>
+                        </ul>
                     *@
 
                 </div>
@@ -618,7 +665,7 @@
 
         </div>
 
-        
+
 
 
 
