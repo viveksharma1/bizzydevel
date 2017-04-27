@@ -9,6 +9,10 @@
         window.history.back();
     }
 
+    $scope.UploadOpeningStock = function () {
+        $('#UploadOpeningStock').modal('show');
+    }
+
     $scope.clear = function ($event, $select) {
         $event.stopPropagation();
         //to allow empty field, in order to force a selection remove the following line
@@ -240,5 +244,22 @@
         //TODO: remove when api will be working
        // $scope.closeAddjustmentBox();
     }
+
+
+    $('.filenameDiv').hide();
+    $('.attechmentDescription').hide();
+    $('.Attechmentdetail').click(function () {
+        $('.filenameDiv').show();
+        $("#type").append($("#uploadBtn").val());
+
+    });
+
+    $('#removeattachment').click(function () {
+        $('.filenameDiv').hide();
+    });
+
+    $(":file").filestyle({ buttonName: "btn-sm btn-info" });
+
+
 
 }]);
