@@ -9,6 +9,7 @@
     $scope.goBack = function () {
         window.history.back();
     },
+    $(":file").filestyle({ buttonName: "btn-sm btn-info" });
     $scope.popuclose = function () {
          $('#form-popoverPopup').hide();
      }
@@ -80,23 +81,26 @@
     $scope.bankAccount = {}
     $scope.partyAccount = {}
     $scope.badlaAccount = {}
+    $scope.badlaDate = 'badlaDate';
+    $scope.paymentdate = 'paymentdate';
+    $scope.oldAttachment = null;
     $('#paymentdate').datepicker().on('changeDate', function (ev) {
         $('.datepicker').hide();
     });
     $('#badlaDate').datepicker().on('changeDate', function (ev) {
         $('.datepicker').hide();
     });
-    $scope.paymentdate = $filter('date')(new Date(), 'dd/MM/yyyy');
-    $scope.badlaDate = $filter('date')(new Date(), 'dd/MM/yyyy');
-    $scope.dateFormat = function (date) {
-        var res = date.split("/");
-        console.log(res);
-        var month = res[1];
-        var days = res[0]
-        var year = res[2]
-        var date = month + '/' + days + '/' + year;
-        return date;
-    }
+    //$scope.paymentdate = $filter('date')(new Date(), 'dd/MM/yyyy');
+    //$scope.badlaDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+    //$scope.dateFormat = function (date) {
+    //    var res = date.split("/");
+    //    console.log(res);
+    //    var month = res[1];
+    //    var days = res[0]
+    //    var year = res[2]
+    //    var date = month + '/' + days + '/' + year;
+    //    return date;
+    //}
     $scope.getSupplier = function () {
         $http.get(config.login + "getPartytAccount/" + localStorage.CompanyId).then(function (response) {
             $scope.partyAccounts = response.data
@@ -126,7 +130,11 @@
     if ($stateParams.voId) {
         $scope.editMode = true;
         getPaymentdata($stateParams.voId);
-    } else $scope.editMode = false;
+    } else {
+        $scope.editMode = false;
+        setDate($scope.paymentdate);
+        setDate($scope.badlaDate);
+    }
     ///else {
     $scope.$watch('partyAccount.selected', function () {
         if ($scope.partyAccount.selected && $scope.partyAccount.selected.id) {
@@ -176,7 +184,7 @@
         if ($scope.editMode) {
             if (callback) callback();
         } else {
-            $http.get(config.api + "voucherTransactions/count" + "?[whrer][type]= Receive Payment").then(function (response) {
+            $http.get(config.api + "voucherTransactions/count" + "?[where][type]=Receive Payment").then(function (response) {
                 $scope.paymentNo = response.data.count + 1;
                 console.log(response);
                 if (callback) callback();
@@ -185,6 +193,8 @@
     }
     
     $scope.receivePayment = function () {
+        var paymentDate = getDate($scope.paymentdate);
+        var badlaDate = getDate($scope.badlaDate);
         if ($scope.partyAccount.selected==undefined || $scope.partyAccount.selected == null) {
             showErrorToast("Please select party account");
             return;
@@ -202,6 +212,17 @@
             showErrorToast("Please select only one invoice while selecting badla");
             return;
         }
+        var pendingUploads = uploader.getNotUploadedItems();
+        if (pendingUploads.length > 0) {
+            showErrorToast("Please review attachments some of them are not uploaed to server.");
+            return;
+        }
+
+        var queue = uploader.queue;
+        var attachements = [];
+        angular.forEach(queue, function (fileItem) {
+            attachements.push({ title: fileItem.title, cdnPath: fileItem.cdnPath, file: fileItem.file })
+        });
         calculateTotal(true);
         getVoucherCount(function () {
             var badla = undefined;
@@ -209,7 +230,7 @@
                 badla = {
                     amount: $scope.badlaAmount,
                     partyAccountId: $scope.badlaAccount.selected.id,
-                    date: $scope.dateFormat($scope.badlaDate),
+                    date:badlaDate,// $scope.dateFormat($scope.badlaDate),
                     conditons: {
                         dayTotal: $scope.totaldays,
                         dayInterest: $scope.dayInterest,
@@ -223,7 +244,7 @@
                 compCode: localStorage.CompanyId,
                 type: "Receive Payment",
                 role: localStorage['usertype'],
-                date: $scope.dateFormat($scope.paymentdate),
+                date: paymentDate,// $scope.dateFormat($scope.paymentdate),
                 amount: $scope.totalPaidAmount,
                 vochNo: $scope.paymentNo,
                 state: "PAID",
@@ -237,7 +258,8 @@
                     exchangeRate: $scope.exchangeRate,
                     remarks: $scope.customReamarks,
                     billDetail: $scope.itemChecked,
-                    badla: badla
+                    badla: badla,
+                    attachements:attachements
                 }
             };
             if ($scope.chkBadla) {
@@ -281,12 +303,14 @@
         }
     }
     function saveBadlaVoucher() {
-        var  badlaDueDate = moment($scope.badlaDate, "DD/MM/YYYY").add(Number($scope.dayTotal), 'days').format('DD/MM/YYYY');
+        var badlaDate = getDate($scope.badlaDate);
+        var badlaDueDate = moment(billDate).add(Number($scope.dayTotal), 'days');
+        ///var  badlaDueDate = moment($scope.badlaDate, "DD/MM/YYYY").add(Number($scope.dayTotal), 'days').format('DD/MM/YYYY');
     var data = {
                 compCode: localStorage.CompanyId,
                 type: "Badla Voucher",
                 role: localStorage['usertype'],
-                date: $scope.dateFormat($scope.badlaDate),
+                date: badlaDate,
                 duedate:badlaDueDate,
                 amount: $scope.badlaAmount,
                 vochNo: $scope.paymentNo+1,
@@ -339,14 +363,19 @@
                         $scope.bankAccount = { selected: { accountName: localStorage[response.data.vo_payment.bankAccountId], id:response.data.vo_payment.bankAccountId } };
                         console.log(response.data.vo_payment.bankAccount);
                         $scope.partyAccount = { selected: { accountName: localStorage[response.data.vo_payment.partyAccountId],id: response.data.vo_payment.partyAccountId } };
-                        $scope.paymentdate = $filter('date')(response.data.date, 'dd/MM/yyyy');
+                        setDate($scope.paymentdate, response.data.date);
+                        //$scope.paymentdate = $filter('date')(response.data.date, 'dd/MM/yyyy');
                         //fill badla info if exists
-
+                        $scope.attachements = response.data.vo_payment.attachements;
+                        bindAttachments(response.data.vo_payment.attachements, function () {
+                            $scope.oldAttachment = null;
+                        });
                         var badlaInfo = response.data.vo_payment.badla;
                         if(badlaInfo)
                         {
                             $scope.chkBadla = true;
-                            $scope.badlaDate = $filter('date')(badlaInfo.data, 'dd/MM/yyyy');
+                            setDate($scope.badlaDate, badlaInfo.data);
+                            //$scope.badlaDate = $filter('date')(badlaInfo.data, 'dd/MM/yyyy');
                             $scope.badlaAccount = { selected: { id: badlaInfo.partyAccountId } };
                             $scope.badlaAmount = badlaInfo.amount;
                             $scope.dayTotal = badlaInfo.conditons.dayTotal;
@@ -367,42 +396,63 @@
 
 
     }
-    var Promise = window.Promise;
-    if (!Promise) {
-        Promise = JSZip.external.Promise;
-    }
-    /**
-     * Fetch the content and return the associated promise.
-     * @param {String} url the url of the content to fetch.
-     * @return {Promise} the promise containing the data.
-     */
-    function urlToPromise(url) {
-        return new Promise(function (resolve, reject) {
-            var req = new XMLHttpRequest();
-            req.open('get', url);
-            req.responseType = "arraybuffer";
-            req.onreadystatechange = function () {
-                if (req.readyState == 4 && req.status == 200) {
-                    try {
-                        resolve(req.response);// JSZipUtils._getBinaryFromXHR(xhr);
-                    } catch (e) {
-                        reject(new Error(e));
-                    }
-                }
-            };
-            req.send();
-        });
-    }
+    //var Promise = window.Promise;
+    //if (!Promise) {
+    //    Promise = JSZip.external.Promise;
+    //}
+    ///**
+    // * Fetch the content and return the associated promise.
+    // * @param {String} url the url of the content to fetch.
+    // * @return {Promise} the promise containing the data.
+    // */
+    //function urlToPromise(url) {
+    //    return new Promise(function (resolve, reject) {
+    //        var req = new XMLHttpRequest();
+    //        req.open('get', url);
+    //        req.responseType = "arraybuffer";
+    //        req.onreadystatechange = function () {
+    //            if (req.readyState == 4 && req.status == 200) {
+    //                try {
+    //                    resolve(req.response);// JSZipUtils._getBinaryFromXHR(xhr);
+    //                } catch (e) {
+    //                    reject(new Error(e));
+    //                }
+    //            }
+    //        };
+    //        req.send();
+    //    });
+    //}
 
     //if (!JSZip.support.blob) {
     //    showError("This demo works only with a recent browser !");
     //    return;
     //}
+    
+    function bindAttachments(attachments, callback) {
+
+        if (attachments) {
+            angular.forEach(attachments, function (item) {
+                $scope.oldAttachment = item;
+                //var file = item;
+                //file.file = { name: item.name, type: item.fileType, size: item.fileSize };
+                //var files = uploader.isHTML5 ? this.element[0].files : this.element[0];
+                //var options = uploader.getOptions();
+                //var filters = uploader.getFilters();
+                //file.file.isOld = true;
+                //if (!this.uploader.isHTML5) this.destroy();
+                item.file.isOld = true;
+                uploader.addToQueue(item.file);
+                //uploader.addToQueue(item);
+            });
+        }
+        if (callback)
+            callback();
+    }
     $scope.downloadAttachments = function () {
         var zip = new JSZip();
         angular.forEach($scope.attachements, function (item) {
             var path = item.cdnPath.substring(item.cdnPath.lastIndexOf('/') + 1);
-            var url = "http://localhost:4000/getfile?path=" + path;
+            var url = config.login + "getfile?path=" + path;
             var filename = item.file.name.replace(/.*\//g, "");
             zip.file(filename, urlToPromise(url), { binary: true });
         });
@@ -618,7 +668,8 @@
     function clearBadlaBox() {
         $scope.badlaAmount = null;
         $scope.badlaAccount = { seleced: {} };//badlaAmount
-        $scope.badlaDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+        setDate($scope.badlaDate);
+        //$scope.badlaDate = $filter('date')(new Date(), 'dd/MM/yyyy');
         $scope.dayTotal = null;
         $scope.dayInterest = null;
         $scope.dayDiff = null;

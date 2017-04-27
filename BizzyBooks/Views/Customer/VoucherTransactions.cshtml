@@ -65,7 +65,7 @@
         </thead>
         <tbody>
             <tr ng-repeat="data in voucherTransaction  | filter:search" class="cursor" ng-click="openTransaction(data.id,data.type)">
-                <td><div class="datelink cursor text-primary padding">{{data.date | date:'dd/MM/yyyy'}}</div></td>
+                <td><div class="datelink cursor text-primary padding">{{data.date |date:'dd/MM/yyyy'}}</div></td>
                 <td>{{data.type}}</td>
                 <td>{{data.vochNo}}</td>
                 <td style="text-align:right">{{data.amount}}</td>

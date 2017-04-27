@@ -907,7 +907,11 @@ myApp.run(['authService', '$location', '$rootScope', 'localStorageService','$sta
 //      }
 //  }
 //]);
-
+myApp.filter("asDate", function () {
+      return function (input) {
+          return new Date(input);
+      }
+  });
 myApp.filter('words', function () {
     function isInt(n) {
         return Number(n) === n && n % 1 === 0;
