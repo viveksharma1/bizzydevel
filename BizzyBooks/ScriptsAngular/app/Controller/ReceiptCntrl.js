@@ -1,7 +1,7 @@
-﻿myApp.controller('ReceivePaymentCntrl', ['$scope', '$http', '$timeout', '$rootScope', '$state', '$stateParams', 'config', '$filter', 'FileUploader', function ($scope, $http, $timeout, $rootScope, $state, $stateParams, config, $filter,FileUploader) {
+﻿myApp.controller('ReceiptCntrl', ['$scope', '$http', '$timeout', '$rootScope', '$state', '$stateParams', 'config', '$filter', 'FileUploader', function ($scope, $http, $timeout, $rootScope, $state, $stateParams, config, $filter,FileUploader) {
 
     $.fn.datepicker.defaults.format = "dd/mm/yyyy";
-    localStorage["type1"] = "PAYMENT"
+    //localStorage["type1"] = "PAYMENT"
     $(".my a").click(function (e) {
         e.preventDefault();
     });
@@ -10,37 +10,28 @@
         window.history.back();
     },
     $(":file").filestyle({ buttonName: "btn-sm btn-info" });
-    $scope.popuclose = function () {
-         $('#form-popoverPopup').hide();
-     }
-    $scope.popuclose = function () {
-        $('#form-popoverPopup').hide();
+    $scope.Accountbtn = function (id,type) {
+        if (type) {
+            console.log(id);
+            $('#formaccount').modal('show');
+            if (id != undefined) {
+                $http.get(config.api + "accounts/" + id).then(function (response) {
+                    console.log(response);
+                    $scope.myValue = response.data;
+                    $scope.isAccount = false
+                });
+            }
+            else {
+                $scope.myValue = null;
+            }
+        }
+        //$('#formaccount').modal('show');
+    };
+    $scope.add = function (type, value) {
+        $('#formaccount').modal('show');
+        $scope.myValue = { accountName: value };
     }
-    $scope.add = function () {
-        $('#form-popoverPopup').show();
-    };
-    $scope.Accountbtn = function () {
-        $('#AccountModal').modal('show');
-    };
-    $('.parentaccount > li').click(function () {
-        var $toggle = $(this).parent().siblings('.dropdown-toggle');
-        $toggle.html("" + $(this).text() + "<i class=\"fa fa-sort pull-right\" style=\"margin-top:3px\"></i>")
-    });
-
-    $('.parentaccount li a').click(function () {
-        $(this).addClass('select').siblings().removeClass('select');
-    });
-
-    //$('#asofdate').datepicker({
-    //    autoclose: true,
-    //    format: 'dd/mm/yyyy'
-    //});
-    $scope.Accountbtn = function () {
-        $('#formaccount').modal('show');
-    };
-    $scope.add3 = function () {
-        $('#formaccount').modal('show');
-    };
+    
     var uploader = $scope.uploader = new FileUploader({
         url: config.login + "upload"
     });
@@ -127,6 +118,8 @@
     $scope.paidData = [];
     $scope.isInterest = localStorage.usertype == 'UO' ? true : false;
     $scope.itemChecked = [];
+    var type = $stateParams.type;
+    console.log(type);
     if ($stateParams.voId) {
         $scope.editMode = true;
         getPaymentdata($stateParams.voId);
@@ -184,9 +177,9 @@
         if ($scope.editMode) {
             if (callback) callback();
         } else {
-            $http.get(config.api + "voucherTransactions/count" + "?[where][type]=Receive Payment").then(function (response) {
+            $http.get(config.api + "voucherTransactions/count" + "?[where][type]="+type).then(function (response) {
                 $scope.paymentNo = response.data.count + 1;
-                console.log(response);
+                //console.log(response);
                 if (callback) callback();
             });
         }
@@ -242,21 +235,19 @@
                 }
             var data = {
                 compCode: localStorage.CompanyId,
-                type: "Receive Payment",
+                type: type,
                 role: localStorage['usertype'],
                 date: paymentDate,// $scope.dateFormat($scope.paymentdate),
                 amount: $scope.totalPaidAmount,
                 vochNo: $scope.paymentNo,
                 state: "PAID",
-                remark: $scope.paymentRemarks,
+                remark: $scope.remarks,
                 vo_payment: {
                     bankAccountId: $scope.bankAccount.selected.id,
                     partyAccountId: $scope.partyAccount.selected.id,
                     paymentAmount: $scope.totalInvoiceAmount,
                     balanceAmtReceipt: $scope.balanceAmtReceipt,
-                    currency: $scope.currency,
-                    exchangeRate: $scope.exchangeRate,
-                    remarks: $scope.customReamarks,
+                    remarks: $scope.remarks,
                     billDetail: $scope.itemChecked,
                     badla: badla,
                     attachements:attachements
@@ -267,7 +258,7 @@
                 saveBadlaVoucher();
             }
             else {
-                $http.post(config.login + 'receivePayment?id=' + $stateParams.voId, data)
+                $http.post(config.login + 'receipt?id=' + $stateParams.voId, data)
                          .then(function (response) {
                              showSuccessToast("Payment Received.");
                              $state.reload();
@@ -316,7 +307,7 @@
                 vochNo: $scope.paymentNo+1,
                 balance:$scope.badlaAmount,
                 state: "OPEN",
-                remark: $scope.paymentRemarks,
+                remark: $scope.remarks,
                 customerId:$scope.badlaAccount.selected.id,
                 vo_badla: {
                     billDetail: $scope.itemChecked,
@@ -324,9 +315,7 @@
                     partyAccountName: $scope.partyAccount.selected.accountName,
                     badlaAccountId: $scope.badlaAccount.selected.id,
                     paymentAmount: $scope.badlaAmount,
-                    currency: $scope.currency,
-                    exchangeRate: $scope.exchangeRate,
-                    remarks: $scope.customReamarks,
+                    remarks: $scope.remarks,
                     conditons: {
                         dayTotal: $scope.dayTotal,
                         dayInterest: $scope.dayInterest,
@@ -389,13 +378,7 @@
                         calculateTotal(false);
                     });
     }
-    $scope.add = function (type, value) {
-        $('#formaccount').modal('show');
-        $scope.myValue = { accountName: value };
-        $scope.getSupplier();
-
-
-    }
+    
     //var Promise = window.Promise;
     //if (!Promise) {
     //    Promise = JSZip.external.Promise;

@@ -220,7 +220,7 @@
         }
         if (voType == 'Payment') {
 
-            $state.go('Customer.MakePayment', { voId: id });
+            $state.go('Customer.Payment', { voId: id });
         }
         if (voType == 'General Invoice') {
 
@@ -230,9 +230,9 @@
 
             $state.go('Customer.SalesInvoice', { voId: id });
         }
-        if (voType == 'Receive Payment') {
+        if (voType == 'Receipt') {
 
-            $state.go('Customer.ReceivePayment', { voId: id });
+            $state.go('Customer.Receipt', { voId: id });
         }
        
 

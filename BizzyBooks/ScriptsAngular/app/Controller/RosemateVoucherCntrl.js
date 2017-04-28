@@ -27,13 +27,34 @@
     $scope.paymentDate = 'paymentDate';
     $scope.purInfo.openingBalance = 0;
     $scope.oldAttachment = null;
+    var type = $stateParams.type;
     var cashAccountWatcher;
     $('#paymentDate').datepicker({
         format: 'dd/mm/yyyy',
         autoclose: true,
         setDate:new Date()
     });//.datepicker('setDate',new Date());
-    
+    $scope.add = function (type, value) {
+        $('#formaccount').modal('show');
+        $scope.myValue = { accountName: value };
+        //$scope.getSupplier();
+    }
+    $scope.Accountbtn = function (id, type) {
+        if (type) {
+            console.log(id);
+            $('#formaccount').modal('show');
+            if (id != undefined) {
+                $http.get(config.api + "accounts/" + id).then(function (response) {
+                    console.log(response);
+                    $scope.myValue = response.data;
+                    $scope.isAccount = false
+                });
+            }
+            else {
+                $scope.myValue = null;
+            }
+        }
+    };
     //$('#paymentdate').datepicker().on('changeDate', function (ev) {
     //    $('.datepicker').hide();
     //});
@@ -96,27 +117,7 @@
                     });
     }
     
-    $scope.add = function (type, value) {
-        $('#formaccount').modal('show');
-        $scope.myValue = { accountName: value };
-        //$scope.getSupplier();
-    }
-    $scope.Accountbtn = function (id, type) {
-        if (type) {
-            console.log(id);
-            $('#formaccount').modal('show');
-            if (id != undefined) {
-                $http.get(config.api + "accounts/" + id).then(function (response) {
-                    console.log(response);
-                    $scope.myValue = response.data;
-                    $scope.isAccount = false
-                });
-            }
-            else {
-                $scope.myValue = null;
-            }
-        }
-    };
+    
 
         function bindAttachments(attachments, callback) {
 
@@ -163,7 +164,7 @@
         if ($scope.editMode) {
             if (callback) callback();
         } else {
-            $http.get(config.api + "voucherTransactions/count" + "?[where][type]=Rosemate").then(function (response) {
+            $http.get(config.api + "voucherTransactions/count" + "?[where][type]="+type).then(function (response) {
                 $scope.paymentNo = response.data.count + 1;
                 console.log(response);
                 if (callback) callback();
@@ -179,7 +180,7 @@
     }
 
     function bindPurchasePartyAccount() {
-        $http.get(config.login + "getPartytAccount/" + localStorage.CompanyId).then(function (response) {
+        $http.get(config.login + "getSupplierAccount/" + localStorage.CompanyId).then(function (response) {
             $scope.purPartyAccounts = response.data
             //console.log($scope.partyAccounts);
         });
@@ -332,7 +333,7 @@
             var paymentdate = getDate($scope.paymentDate);
             var data = {
                 compCode: localStorage.CompanyId,
-                type: "Rosemate",
+                type: type,
                 role: localStorage['usertype'],
                 date: paymentdate,
                 vochNo: $scope.paymentNo,

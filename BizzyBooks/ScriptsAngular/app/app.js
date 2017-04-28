@@ -150,11 +150,12 @@ var myApp = angular
 
         });
 
-        $stateProvider.state("Customer.ReceivePayment", {
-            url: "/ReceivePayment/:voId",
-            templateUrl: "Customer/ReceivePayment",
-            controller: "ReceivePaymentCntrl",
+        $stateProvider.state("Customer.Receipt", {
+            url: "/Receipt/:voId",
+            templateUrl: "Customer/Receipt",
+            controller: "ReceiptCntrl",
             params: {
+                type:'Receipt',
                 voId: null
             }
 
@@ -189,6 +190,7 @@ var myApp = angular
             templateUrl: "Customer/Bill",
             controller: "BillCntrl",
             params: {
+                type:"Purchase Invoice",
                 billNo: null,
                 suppliers: null
 
@@ -264,11 +266,12 @@ var myApp = angular
             }
 
         });
-        $stateProvider.state("Customer.MakePayment", {
-            url: "/MakePayment/:voId",
-            templateUrl: "Customer/MakePayment",
-            controller: "MakePaymentCntrl",
+        $stateProvider.state("Customer.Payment", {
+            url: "/Payment/:voId",
+            templateUrl: "Customer/Payment",
+            controller: "PaymentCntrl",
             params: {
+                type:'Payment',
                 poNo: null,
                 suppliers: null,
                 Code: null,
@@ -376,6 +379,7 @@ var myApp = angular
               templateUrl: "Customer/RosemateVoucher",
               controller: "RosemateVoucherCntrl",
               params: {
+                  type:'Rosemate',
                   voId: null,
               }
 
@@ -527,13 +531,13 @@ var myApp = angular
 
 myApp.value('config', {
 
-//login: 'http://localhost:4000/',
+login: 'http://localhost:4000/',
 
-//api: 'http://localhost:4000/api/'
+api: 'http://localhost:4000/api/'
    
 
-login: 'http://bizzy-book-api.azurewebsites.net/',
- api: 'http://bizzy-book-api.azurewebsites.net/api/',
+//login: 'http://bizzy-book-api.azurewebsites.net/',
+// api: 'http://bizzy-book-api.azurewebsites.net/api/',
 });
 
 
