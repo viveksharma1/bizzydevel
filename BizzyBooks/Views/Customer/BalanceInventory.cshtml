@@ -31,12 +31,24 @@
                     <li><a ng-click="showAddjustmentBox(itemChecked,true)" class="cursor">Adjustment</a></li>
                 </ul>
             </div>
+            <span id="fileUpload" class="pull-right">
+                <label class="btn btn-default btn-sm" style="height:30px;width:150px">
+                    Choose file
+                    <input type="file" id="imageUpload" file-model="myFile"
+                           style="display: none">
 
-            <div class="pull-right" style="margin-top:10px; margin-right:10px">
-                <i class="fa fa-print tableicon" title="Print list"></i>
-                <i class="fa fa-clipboard tableicon" title="Export to excel"></i>
-                <i class="fa fa-gear tableicon" title="Settingd"></i>
-            </div>
+                </label>
+                <button ng-click="uploadFile()" ng-hide="saving"id="fileUpload1"
+                        class="btn btn-primary btn-sm">
+                    <i class="fa fa-upload"></i>
+                </button>
+                <button ng-click="uploadFile()" ng-show="saving"id="fileUpload1"
+                        class="btn btn-primary btn-sm">
+                    <i class="fa fa-spin fa-spinner"></i>
+                </button>
+               
+            </span>
+            
             <div class="col-sm-12 padding" style="padding:10px 0px !important">
                 <div class="col-sm-2 padding  ">
 
