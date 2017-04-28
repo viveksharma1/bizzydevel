@@ -488,7 +488,14 @@ var myApp = angular
                 voId: null,
             }
         });
+      
 
+        $stateProvider.state("Customer.ContraEntry", {
+            url: "/ContraEntry",
+            templateUrl: "Customer/ContraEntry",
+            controller: "ContraEntryCntrl"
+
+        });
 
         // Specify HTML5 mode (using the History APIs) or HashBang syntax.
         //$locationProvider.html5Mode(false).hashPrefix('!');
@@ -518,13 +525,13 @@ var myApp = angular
 
 myApp.value('config', {
 
-login: 'http://localhost:4000/',
+//login: 'http://localhost:4000/',
 
-api: 'http://localhost:4000/api/'
+//api: 'http://localhost:4000/api/'
    
 
-//login: 'http://bizzy-book-api.azurewebsites.net/',
- //api: 'http://bizzy-book-api.azurewebsites.net/api/',
+login: 'http://bizzy-book-api.azurewebsites.net/',
+ api: 'http://bizzy-book-api.azurewebsites.net/api/',
 });
 
 

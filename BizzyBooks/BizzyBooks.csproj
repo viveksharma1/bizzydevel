@@ -405,6 +405,7 @@
     <Content Include="ScriptsAngular\app\Controller\BankingCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\BillCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\ChartofAccountsCntrl.js" />
+    <Content Include="ScriptsAngular\app\Controller\ContraEntryCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\CreateInventoryCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\CustomerCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\CustomerdetailCntrl.js" />
@@ -547,6 +548,7 @@
     <Content Include="Views\Customer\UserList.cshtml" />
     <Content Include="Views\Customer\RosemateVoucher.cshtml" />
     <Content Include="Views\Customer\stockBalanceView.cshtml" />
+    <Content Include="Views\Customer\ContraEntry.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
