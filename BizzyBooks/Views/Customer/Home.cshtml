@@ -80,11 +80,12 @@
     <div id="sidebar-wrapper">
         @*<em ng-switch-when="3">*@
             <ul class="sidebar-nav">
-                <li class="sidebar-brand">
+                @*<li class="sidebar-brand">
                     <a href="#" class="logo">
-                        @*<i class="fa fa-compass"></i> @*Account <span>Books</span>*@
+                         Account <span> Books </span>
                     </a>
-                </li>
+                </li>*@
+                <h3>Account  Books </h3> 
                 <li permission="Home.active">
                     <a ui-sref=".HomePage"><i class="fa fa-home" style="color:#223839"></i> Home</a>
                 </li>
@@ -106,7 +107,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="" class="sub-menu"><i class="fa fa-money style="color:#223839""></i> Inventory</a>
+                    <a href="" class="sub-menu"><i class="fa fa-archive" style="color:#223839"></i> Inventory</a>
                     <ul class="list-unstyled">
                         @*<li><a ui-sref=".Inventory" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Stock Line </a></li>
                         <li><a ui-sref=".inventorystock" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Stock </a></li>

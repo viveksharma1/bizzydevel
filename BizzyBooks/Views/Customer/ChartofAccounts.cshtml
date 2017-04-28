@@ -56,18 +56,18 @@
                 <th>GROUP</th>
                 
                 <th style="text-align:right">BALANCE</th>              
-                <th style="text-align:center">ACTION</th>
+                <th style="text-align:right">ACTION</th>
             </tr>
         </thead>
         <tbody>
             <tr ng-repeat="data in account |filter:search">
                 <td>{{data.accountName}}</td>
-                <td>{{data.Under}} <span style="color:darkblue">({{data.type}})</span></td>
+                <td>{{data.Under}} <span style="color:forestgreen">({{data.type}})</span></td>
              
-                <td style="text-align:right" >{{data.balance}}</td>
+                <td style="text-align:right" ><b>{{data.balance}}</b></td>
                
                 <td style="text-align:right; width:150px">
-                    <button type="button" class="editbtn"><a ui-sref="Customer.accountHistory({accountId:data.id,balanceType:data.balanceType})" style="font-weight:bold">Account History</a></button>
+                    <button type="button" class="editbtn"><a ui-sref="Customer.accountHistory({accountId:data.id,balanceType:data.balanceType})" style="font-weight:bold;color:#228D95">Account History</a></button>
                     <class class="linkseparator" style="margin-top:4px; margin-right:0px"></class>
                     <div class="btn-group editcaret">
                         <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>
