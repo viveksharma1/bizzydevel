@@ -45,7 +45,7 @@
                         }
                         if ($scope.value.id) {
                             $scope.accountId = $scope.value.id
-                            $http.get(config.login + "getAccountOpeningBalnce/" + localStorage.CompanyId + "?accountId=" + $scope.accountId + "&role=O").then(function (response) {
+                            $http.get(config.login + "getAccountOpeningBalnce/" + localStorage.CompanyId + "?accountId=" + $scope.accountId + "&role=" + localStorage.usertype).then(function (response) {
                                 $scope.openingBalance = Number(response.data.balance);
 
                             });

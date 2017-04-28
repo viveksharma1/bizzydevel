@@ -146,13 +146,39 @@
             console.log($scope.account);
         });
     });
-        
-    $http.get(config.login + "dateWiseAccountDetail/" + localStorage.CompanyId + "?date=" + localStorage.toDate).then(function (response) {
-        //$scope.account = response.data;
-        $scope.account = getAccountData(response.data);
-        console.log($scope.account);
-    });
-    //console.log(dateService)
+    $scope.getAccountList = function () {
+        $http.get(config.login + "dateWiseAccountDetail/" + localStorage.CompanyId + "?date=" + localStorage.toDate).then(function (response) {
+            //$scope.account = response.data;
+            $scope.account = getAccountData(response.data);
+            console.log($scope.account);
+        });
+    }
+    $scope.getAccountList();
+    
+
+    // delete account 
+
+     $scope.deleteAccountPopup = function (id) {
+         $scope.accountId = id
+         console.log($scope.accountId)
+         $("#accountAlert").modal("show");
+         
+     }
+
+        $scope.deleteAccount = function (id) {
+            $http.post(config.login + "deleteAccount/" + $scope.accountId).then(function (response) {
+                if (response.data.status == 'success') {
+                    showSuccessToast("Account deleted Succesfully");
+                    $scope.getAccountList();
+                }
+                else {
+                    showSuccessToast("some internal problem");
+                }
+            });
+
+
+        }
+
     
    
 }]);
