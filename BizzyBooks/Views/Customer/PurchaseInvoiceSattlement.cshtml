@@ -31,7 +31,7 @@
     <div class="flexheader lightblue  ">
         <label style="float:left;padding:15px ">
 
-            <strong><span style="font-size:20px;  color:#585655">Purchase Invoice Sattlement</span></strong>
+            <strong><span style="font-size:20px;  color:#585655">Purchase Settlement</span></strong>
         </label>
 
         <label style="float:right;padding:15px">
@@ -56,48 +56,60 @@
     </div>
     <div class="flexcontainer">
         <div class="lightblue bluebrdr content" style="padding:10px 10px; margin-bottom:10px">
+            <div class="col-sm-12" style="padding:0px">
+                <div class="col-sm-1 padding">
 
-            <div class="col-sm-4 padding">
+                    <h4 class="tabheading font_11">Invoice No.</h4>
+                    <input type="text" class="form-control" ng-model="expenseNo" style="width:100px" />
 
-                <h4 class="tabheading font_11">Supplier Name</h4>
-                <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
-                           ui-select-focuser
-                           theme="selectize">
-                    <ui-select-match placeholder="Select Suppliers">{{ $select.selected.company }}</ui-select-match>
-
-                    <ui-select-choices repeat="person in supliers  | filter: $select.search">
-                        <div>
-                            <span ng-model="supplier1" ng-bind-html="person.company | highlight: $select.search"></span>
-                        </div>
-
-
-                    </ui-select-choices>
-                </ui-select>
-
-            </div>
-
-
-            <div class="col-sm-2 padding">
-
-                <h4 class="tabheading font_11">Invoice Date</h4>
-                <div class='input-group'>
-                    <input type='text' class="form-control" id='InvoiceDate' />
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
                 </div>
 
+                <div class="col-sm-3 padding">
+
+                    <h4 class="tabheading font_11">Supplier</h4>
+                    <input type="text" class="form-control" disabled />
+
+                </div>
+
+
+                <div class="col-sm-1 padding">
+
+                    <h4 class="tabheading font_11">Invoice Dt.</h4>
+                    <input type="text" class="form-control" disabled />
+
+                </div>
+
+                <div class="col-sm-1 padding">
+
+                    <h4 class="tabheading font_11">Total Qty</h4>
+                    <input type="text" class="form-control" disabled />
+
+                </div>
+
+                <div class="col-sm-1 padding">
+
+                    <h4 class="tabheading font_11">Total Amount</h4>
+                    <input type="text" class="form-control" disabled />
+
+                </div>
             </div>
-            <div class="col-sm-2 padding">
 
-                <h4 class="tabheading font_11">Invoice No.</h4>
-                <input type="text" class="form-control" ng-model="expenseNo" style="width:100px" />
+            <div class="col-sm-1 padding">
+
+                <h4 class="tabheading font_11">VAT Amount</h4>
+                <input type="text" class="form-control" />
 
             </div>
 
+            <div class="col-sm-1 padding">
+
+                <h4 class="tabheading font_11">Excise Amount</h4>
+                <input type="text" class="form-control" />
+
+            </div>
 
             <div class="col-sm-4 padding text-right pull-right" style="margin-top:10px">
-                 <h4 class="tabheading" style="float:right; width:100%; margin-top:0px !important">P. Sattlement No.</h4>
+                 <h4 class="tabheading" style="float:right; width:100%; margin-top:0px !important">Ref. No.</h4>
                 <input type="text" class="form-control pull-right" ng-model="expenseNo" disabled style="width:100px" />
             </div>
 
@@ -105,101 +117,80 @@
             
 
             
-            <div id="form-popoverPopup" class="popupbox">
-                <div class="dijitDialogTitle">
-                    New Suppliers
-                    <i class="fa fa-times-circle cursor pull-right" title="close" ng-click="popuclose()"></i>
-                </div>
-                <div class="form-content">
-                    <div class="form-group">
-                        <label><span class="red">*</span>Suppliers Name</label>
-                        <input type="text" ng-model="suppliersName" class="form-control" />
-                    </div>
-                    <div class="form-group">
-                        <label><span class="red">*</span>Email</label>
-                        <input type="text" ng-model="email1" class="form-control" />
-                    </div>
-                    <div class="form-group">
-                        <label><span class="red">*</span>Mobile No.</label>
-                        <input type="text" ng-model="mobile" class="form-control" />
-                    </div>
-
-
-
-                    <div class="form-footer">
-                        <button type="button" class="btn btn-sm btn-default" ng-click="saveSuppliers()">Save</button>
-                    </div>
-                </div>
-            </div>
+            
 
 
 
 
         </div>
-        <div class="col-lg-12">
-            <div class="col-sm-3">
-                <label>Qty</label>
-                <input type="text" class="form-control" />
+        <div class="col-sm-6">
+            <div class="Settelmentbox">
+                <h3><input type="radio"  name="deduction" class="Settelment_Radio" /> Interest Deduction</h3>
+                <hr />
+                <div class="col-sm-6">
+                    <h4 class="tabheading font_11">Interest</h4>
+                    <input type="text" class="form-control" />
+                </div>
+                <div class="col-sm-6">
+                    <h4 class="tabheading font_11">Interest Amount</h4>
+                    <input type="text" class="form-control" />
+                </div>
             </div>
+        </div>
 
-            <div class="col-sm-3">
-                <label>Total Amt.</label>
-                <input type="text" class="form-control text-right" />
+        <div class="col-sm-6">
+            <div class="Settelmentbox">
+                <h3><input type="radio" name="deduction" class="Settelment_Radio" /> Ded/Kg</h3>
+                <hr />
+                <div class="col-sm-4">
+                    <h4 class="tabheading font_11">Vat ded/kg</h4>
+                    <input type="text" class="form-control" />
+                </div>
+                <div class="col-sm-4">
+                    <h4 class="tabheading font_11">Excise ded/kg</h4>
+                    <input type="text" class="form-control" />
+                </div>
+
+                <div class="col-sm-4">
+                    <h4 class="tabheading font_11">Total ded/kg</h4>
+                    <input type="text" class="form-control" />
+                </div>
             </div>
+        </div>
 
-            <div class="col-sm-3">
-                <label>VAT</label>
-                <input type="text" class="form-control text-right" />
-            </div>
+        <div class="col-sm-12">
+            <div class="Settelmentbox">
+                <h3>Total Deduction Amount</h3>
+                <hr />
+                <div class="col-sm-2">
+                    <h4 class="tabheading font_11">VAT Amount</h4>
+                    <input type="text" class="form-control" />
+                </div>
+                <div class="col-sm-4">
+                    <h4 class="tabheading font_11">VAT Account</h4>
+                    <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
+                               ui-select-focuser
+                               theme="selectize">
+                        <ui-select-match placeholder="Select Suppliers">{{ $select.selected.company }}</ui-select-match>
 
-            <div class="col-sm-3">
-                <label>Excise</label>
-                <input type="text" class="form-control text-right" />
-            </div>
+                        <ui-select-choices repeat="person in supliers  | filter: $select.search">
+                            <div>
+                                <span ng-model="supplier1" ng-bind-html="person.company | highlight: $select.search"></span>
+                            </div>
 
 
-            <hr style="float:left; width:100%; margin:10px 0px" />
-
-            <div style="float:left; margin-bottom:10px; width:100%">
-                <div class="col-sm-3">
-                    <label>OInterest</label>
-                    <input type="text" class="form-control text-right" />
+                        </ui-select-choices>
+                    </ui-select>
                 </div>
 
                 <div class="col-sm-3">
-                    <label>T. Deduction</label>
-                    <input type="text" class="form-control text-right" />
+                    <h4 class="tabheading font_11">Excise Amount</h4>
+                    <input type="text" class="form-control" />
                 </div>
-
-
                 <div class="col-sm-3">
-                    <label>Vat</label>
-                    <input type="text" class="form-control text-right" />
+                    <h4 class="tabheading font_11">OT Tax Amount</h4>
+                    <input type="text" class="form-control" />
                 </div>
-
-                <div class="col-sm-3">
-                    <label>O Tax</label>
-                    <input type="text" class="form-control text-right" />
-                </div>
-            </div>
-            <div class="col-sm-3">
-                <label>O VAT (ded/kg)</label>
-                <input type="text" class="form-control text-right" />
-            </div>
-
-            <div class="col-sm-3">
-                <label>Excise (ded/kg)</label>
-                <input type="text" class="form-control text-right" />
-            </div>
-
-            <div class="col-sm-3">
-                <label>Vat</label>
-                <input type="text" class="form-control text-right" />
-            </div>
-
-            <div class="col-sm-3">
-                <label>O Tax</label>
-                <input type="text" class="form-control text-right" />
             </div>
         </div>
     </div>
