@@ -402,6 +402,7 @@
     <Content Include="ScriptsAngular\app\Controller\BadlaVoucherCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\BalanceInventoryCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\BalanceInventoryViewInfoCntrl.js" />
+    <Content Include="ScriptsAngular\app\Controller\BalanceSheetCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\BankingCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\BillCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\ChartofAccountsCntrl.js" />
@@ -424,6 +425,7 @@
     <Content Include="ScriptsAngular\app\Controller\InventoryCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\inventorystockCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\InvoiceCntrl.js" />
+    <Content Include="ScriptsAngular\app\Controller\ProfitLossAccountCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\stockBalanceViewCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\JournalEntryCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\HomeCntrl.js" />
@@ -549,6 +551,8 @@
     <Content Include="Views\Customer\RosemateVoucher.cshtml" />
     <Content Include="Views\Customer\stockBalanceView.cshtml" />
     <Content Include="Views\Customer\ContraEntry.cshtml" />
+    <Content Include="Views\Customer\BalanceSheet.cshtml" />
+    <Content Include="Views\Customer\ProfitLossAccount.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

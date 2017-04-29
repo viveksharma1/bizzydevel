@@ -275,6 +275,16 @@ namespace Restaurant.Controllers
         {
             return View();
         }
+
+        public ActionResult BalanceSheet()
+        {
+            return View();
+        }
+        public ActionResult ProfitLossAccount()
+        {
+            return View();
+        }
+
         public ActionResult stockBalanceView()
         {
             return View();
