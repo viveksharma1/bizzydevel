@@ -399,11 +399,14 @@ var myApp = angular
         });
 
         $stateProvider.state("Customer.PurchaseInvoiceSattlement", {
-            url: "/PurchaseInvoiceSattlement",
+            url: "/PurchaseInvoiceSattlement/:voId",
             templateUrl: "Customer/PurchaseInvoiceSattlement",
             controller: "PurchaseInvoiceSattlementCntrl",
             requiresAuthentication: true,
-            permissions:'Float.add.Suppliers.Purchase Invoice.active'
+            permissions: 'Float.add.Suppliers.Purchase Invoice.active',
+            params: {
+                voId: null
+            }
         });
 
         $stateProvider.state("Customer.BalanceInventoryViewInfo", {
@@ -446,6 +449,7 @@ var myApp = angular
             controller: "SattlementTransactionsCntrl",
             requiresAuthentication: true,
             permissions: 'Transaction.Settlement.active'
+           
 
         });
 

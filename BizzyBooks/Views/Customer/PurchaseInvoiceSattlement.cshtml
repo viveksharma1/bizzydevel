@@ -3,7 +3,16 @@
     ViewBag.Title = "PurchaseInvoiceSattlement";
     Layout = null;
 }
+<script type="text/ng-template" id="billInfo_template.html">
+    <span>
+       
+        <label style="color:#73A91B" ng-repeat="data in billdata.accountData">{{data.accountName}} <b style="color:#000" > {{data.amount}}</b> </label> <br>
+       
+        
+      
+    </span>
 
+</script>
 
 <script type="text/ng-template" id="/ui-tree-select.html">
     <ui-select ng-model="model.$selected"
@@ -60,14 +69,14 @@
                 <div class="col-sm-1 padding">
 
                     <h4 class="tabheading font_11">Invoice No.</h4>
-                    <input type="text" class="form-control" ng-model="expenseNo" style="width:100px" />
+                    <input type="text" class="form-control" ng-blur="getInvoice(invoiceNo)" ng-model="invoiceNo" style="width:100px" />
 
                 </div>
 
                 <div class="col-sm-3 padding">
 
                     <h4 class="tabheading font_11">Supplier</h4>
-                    <input type="text" class="form-control" disabled />
+                    <input type="text" class="form-control" ng-model="supplierName" disabled/>
 
                 </div>
 
@@ -75,21 +84,25 @@
                 <div class="col-sm-1 padding">
 
                     <h4 class="tabheading font_11">Invoice Dt.</h4>
-                    <input type="text" class="form-control" disabled />
+                    <input type="text" class="form-control" ng-model="settlementData.date"disabled />
 
                 </div>
 
                 <div class="col-sm-1 padding">
 
                     <h4 class="tabheading font_11">Total Qty</h4>
-                    <input type="text" class="form-control" disabled />
+                    <input type="text" class="form-control" ng-model="settlementData.totalQty" disabled />
 
                 </div>
 
                 <div class="col-sm-1 padding">
 
                     <h4 class="tabheading font_11">Total Amount</h4>
-                    <input type="text" class="form-control" disabled />
+                    <input type="text" class="form-control" ng-model="settlementData.totalAmount" disabled />
+
+                </div>
+                <div class="col-sm-1 padding">
+                    <button type="button" class="btn btn-sm btn-primary" bill-Info billdata ="settlementData" exciseData="settlementData">view</button>
 
                 </div>
             </div>
@@ -97,20 +110,20 @@
             <div class="col-sm-1 padding">
 
                 <h4 class="tabheading font_11">VAT Amount</h4>
-                <input type="text" class="form-control" />
+                <input type="text" class="form-control" ng-model="settlementData.vatAmount" />
 
             </div>
 
             <div class="col-sm-1 padding">
 
                 <h4 class="tabheading font_11">Excise Amount</h4>
-                <input type="text" class="form-control" />
+                <input type="text" class="form-control" ng-model="settlementData.exciseAmount" />
 
             </div>
 
             <div class="col-sm-4 padding text-right pull-right" style="margin-top:10px">
                  <h4 class="tabheading" style="float:right; width:100%; margin-top:0px !important">Ref. No.</h4>
-                <input type="text" class="form-control pull-right" ng-model="expenseNo" disabled style="width:100px" />
+                <input type="text" class="form-control pull-right"  ng-model="settlementData.refNo" disabled style="width:100px" />
             </div>
 
 
@@ -129,11 +142,11 @@
                 <hr />
                 <div class="col-sm-6">
                     <h4 class="tabheading font_11">Interest</h4>
-                    <input type="text" class="form-control" />
+                    <input type="text" class="form-control"  ng-blur= "calculateinterest(settlementData.interest,settlementData.totalAmount)" ng-model="settlementData.interest"/>
                 </div>
                 <div class="col-sm-6">
                     <h4 class="tabheading font_11">Interest Amount</h4>
-                    <input type="text" class="form-control" />
+                    <input type="text" class="form-control" ng-model="settlementData.interestAmount" />
                 </div>
             </div>
         </div>
@@ -144,16 +157,16 @@
                 <hr />
                 <div class="col-sm-4">
                     <h4 class="tabheading font_11">Vat ded/kg</h4>
-                    <input type="text" class="form-control" />
+                    <input type="text" class="form-control" ng-model="settlementData.vatPerKg"/>
                 </div>
                 <div class="col-sm-4">
                     <h4 class="tabheading font_11">Excise ded/kg</h4>
-                    <input type="text" class="form-control" />
+                    <input type="text" class="form-control" ng-model="settlementData.excisePerKg"/>
                 </div>
 
                 <div class="col-sm-4">
                     <h4 class="tabheading font_11">Total ded/kg</h4>
-                    <input type="text" class="form-control" />
+                    <input type="text" class="form-control" ng-model="settlementData.totalDedPerKg"/>
                 </div>
             </div>
         </div>
@@ -164,18 +177,20 @@
                 <hr />
                 <div class="col-sm-2">
                     <h4 class="tabheading font_11">VAT Amount</h4>
-                    <input type="text" class="form-control" />
+                    <input type="text" class="form-control" ng-model="settlementData.totalDedvatAmount"/>
                 </div>
                 <div class="col-sm-4">
                     <h4 class="tabheading font_11">VAT Account</h4>
-                    <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
-                               ui-select-focuser
+                    <create-account value="myValue"> </create-account>
+                    <ui-select ui-tree-select ng-model="settlementData.selected" id="countryCode"
+                               ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';" 
                                theme="selectize">
-                        <ui-select-match placeholder="Select Suppliers">{{ $select.selected.company }}</ui-select-match>
+                        <ui-select-match placeholder="Select Suppliers">{{ $select.selected.accountName }}</ui-select-match>
 
-                        <ui-select-choices repeat="person in supliers  | filter: $select.search">
+                        <ui-select-choices repeat="person in account  | filter: $select.search">
                             <div>
-                                <span ng-model="supplier1" ng-bind-html="person.company | highlight: $select.search"></span>
+                                <span ng-bind-html="person.accountName | highlight: $select.search"></span>
+
                             </div>
 
 
@@ -185,11 +200,24 @@
 
                 <div class="col-sm-3">
                     <h4 class="tabheading font_11">Excise Amount</h4>
-                    <input type="text" class="form-control" />
+                    <input type="text" class="form-control" ng-model="settlementData.totalDedExciseAmount"/>
                 </div>
                 <div class="col-sm-3">
-                    <h4 class="tabheading font_11">OT Tax Amount</h4>
-                    <input type="text" class="form-control" />
+                    <h4 class="tabheading font_11">OT Tax Account</h4>
+                    <ui-select ui-tree-select ng-model="otaxAccount.selected" id="countryCode"
+                               ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';"
+                               theme="selectize">
+                        <ui-select-match placeholder="Select Suppliers">{{ $select.selected.accountName }}</ui-select-match>
+
+                        <ui-select-choices repeat="person in account  | filter: $select.search">
+                            <div>
+                                <span ng-bind-html="person.accountName | highlight: $select.search"></span>
+
+                            </div>
+
+
+                        </ui-select-choices>
+                    </ui-select>
                 </div>
             </div>
         </div>
@@ -203,7 +231,7 @@
         </span>
 
         <div class="pull-right">
-            <button type="button" class="btn btn-sm btn-primary" ng-click="makePayment(paymentAmount-amount)">Save</button>
+            <button type="button" class="btn btn-sm btn-primary" ng-click="saveSettlement()">Save</button>
             <div class="btn-group dropup">
                 @*
                     <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:25px">
