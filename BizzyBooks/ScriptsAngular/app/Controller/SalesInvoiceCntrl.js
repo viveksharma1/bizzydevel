@@ -43,7 +43,7 @@
     $scope.add = function (type, value) {
         $('#formaccount').modal('show');
         $scope.myValue = { accountName: value };
-        $scope.getSupplier();
+        //$scope.getSupplier();
 
 
     }
@@ -71,6 +71,8 @@
     });
 
     $(":file").filestyle({ buttonName: "btn-sm btn-info" });
+
+    var type = $stateParams.type;
 
     var uploader = $scope.uploader = new FileUploader({
         url: config.login + "upload"
@@ -427,7 +429,7 @@
             days = $scope.paymentDays;
         var billDate = getDate($scope.billDate);
         if (billDate)
-            setDate($scope.billDueDate,moment(getDate($scope.billDate)).add(days, 'days'));
+            setDate($scope.billDueDate, moment(billDate).add(days, 'days'));
     }
 
     $scope.supliers = [];
@@ -988,7 +990,7 @@
         
         var data = {
             compCode: localStorage.CompanyId,
-            type: "Sales Invoice",
+            type: type,
             role: localStorage.usertype,
             date: billDate,
             duedate: billDueDate,
@@ -1076,32 +1078,7 @@
             }
         }
     };
-    var Promise = window.Promise;
-    if (!Promise) {
-        Promise = JSZip.external.Promise;
-    }
-    /**
-     * Fetch the content and return the associated promise.
-     * @param {String} url the url of the content to fetch.
-     * @return {Promise} the promise containing the data.
-     */
-    function urlToPromise(url) {
-        return new Promise(function (resolve, reject) {
-            var req = new XMLHttpRequest();
-            req.open('get', url);
-            req.responseType = "arraybuffer";
-            req.onreadystatechange = function () {
-                if (req.readyState == 4 && req.status ==200) {
-                    try {
-                        resolve(req.response);// JSZipUtils._getBinaryFromXHR(xhr);
-                    } catch (e) {
-                        reject(new Error(e));
-                    }
-                }
-            };
-            req.send();
-        });
-    }
+    
 
     //if (!JSZip.support.blob) {
     //    showError("This demo works only with a recent browser !");
@@ -1111,7 +1088,7 @@
         var zip = new JSZip();
         angular.forEach($scope.attachements, function (item) {
             var path = item.cdnPath.substring(item.cdnPath.lastIndexOf('/') + 1);
-            var url = "http://localhost:4000/getfile?path=" + path;
+            var url = config.login+ "getfile?path=" + path;
             var filename = item.file.name.replace(/.*\//g, "");
             zip.file(filename, urlToPromise(url), { binary: true });
         });

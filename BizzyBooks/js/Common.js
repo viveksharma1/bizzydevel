@@ -128,3 +128,29 @@ function getDate(inputDateId, inputTimeId) {
     return ret;
 
 }
+var Promise = window.Promise;
+if (!Promise) {
+    Promise = JSZip.external.Promise;
+}
+/**
+ * Fetch the content and return the associated promise.
+ * @param {String} url the url of the content to fetch.
+ * @return {Promise} the promise containing the data.
+ */
+function urlToPromise(url) {
+    return new Promise(function (resolve, reject) {
+        var req = new XMLHttpRequest();
+        req.open('get', url);
+        req.responseType = "arraybuffer";
+        req.onreadystatechange = function () {
+            if (req.readyState == 4 && req.status == 200) {
+                try {
+                    resolve(req.response);// JSZipUtils._getBinaryFromXHR(xhr);
+                } catch (e) {
+                    reject(new Error(e));
+                }
+            }
+        };
+        req.send();
+    });
+}

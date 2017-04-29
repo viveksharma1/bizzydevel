@@ -26,64 +26,14 @@
     $scope.purInfo.payments = [];
     $scope.paymentDate = 'paymentDate';
     $scope.purInfo.openingBalance = 0;
+    $scope.oldAttachment = null;
+    var type = $stateParams.type;
+    var cashAccountWatcher;
     $('#paymentDate').datepicker({
         format: 'dd/mm/yyyy',
         autoclose: true,
         setDate:new Date()
     });//.datepicker('setDate',new Date());
-    
-    //$('#paymentdate').datepicker().on('changeDate', function (ev) {
-    //    $('.datepicker').hide();
-    //});
-    //$scope.paymentdate = $filter('date')(new Date(), 'dd/MM/yyyy');
-    
-    if ($stateParams.voId) {
-        $scope.editMode = true;
-        getPaymentdata($stateParams.voId);
-    } else {
-        setDate($scope.paymentDate);
-        $scope.editMode = false;
-        getAccount();
-        bindCompanyList();
-        getVoucherCount();
-        bindSalesPartyAccount();
-        bindPurchasePartyAccount();
-        $scope.$watch('purInfo.cashAccount.selected', function () {
-            if ($scope.purInfo.cashAccount && $scope.purInfo.cashAccount.selected) {
-                if (!$scope.bindingEdit) {
-                    $scope.purInfo.payments = [];
-                    $scope.purInfo.receipts = [];
-                    //$http.get(config.login + "getPaymentAccount/" + $scope.purInfo.cashAccount.selected.id).then(function (response) {
-                    //    $scope.bankAccounts = response.data
-                    //    console.log($scope.bankAccounts);
-                    //});
-                }
-            }
-        });
-        //$scope.selectedCompany1 = $scope.$parent.$parent.DefaultCompany;
-       // $scope.selectedCompany2 = $scope.$parent.$parent.DefaultCompany;
-
-
-    }
-    function getPaymentdata(id) {
-        $http.get(config.api + 'voucherTransactions/' + id)
-                    .then(function (response) {
-                        $scope.bindingEdit = true;
-                        console.log(response);
-                        $scope.paymentNo=response.data.vochNo;
-                        setDate($scope.paymentDate, response.data.date);
-                        $scope.purInfo = {
-                            cashAccount: { selected: { accountName: localStorage[response.data.vo_rosemate.bankAccountId],id: response.data.vo_rosemate.bankAccountId }},
-                            openingBalance: response.data.vo_rosemate.openingBalance,
-                            receipts: response.data.vo_rosemate.receipts,
-                            payments: response.data.vo_rosemate.payments,
-                            narration: response.data.vo_rosemate.narration
-                        }
-                        $scope.bindingEdit = false;
-
-                    });
-    }
-    
     $scope.add = function (type, value) {
         $('#formaccount').modal('show');
         $scope.myValue = { accountName: value };
@@ -105,12 +55,95 @@
             }
         }
     };
+    //$('#paymentdate').datepicker().on('changeDate', function (ev) {
+    //    $('.datepicker').hide();
+    //});
+    //$scope.paymentdate = $filter('date')(new Date(), 'dd/MM/yyyy');
+    
+    if ($stateParams.voId) {
+        if (cashAccountWatcher) cashAccountWatcher();
+        $scope.editMode = true;
+        getPaymentdata($stateParams.voId);
+    } else {
+        setDate($scope.paymentDate);
+        $scope.editMode = false;
+        getVoucherCount();
+        
+        //$scope.$watch('purInfo.cashAccount.selected', function () {
+        //    if ($scope.purInfo.cashAccount && $scope.purInfo.cashAccount.selected) {
+        //        if (!$scope.bindingEdit) {
+        //            $scope.purInfo.payments = [];
+        //            $scope.purInfo.receipts = [];
+        //            //$http.get(config.login + "getPaymentAccount/" + $scope.purInfo.cashAccount.selected.id).then(function (response) {
+        //            //    $scope.bankAccounts = response.data
+        //            //    console.log($scope.bankAccounts);
+        //            //});
+        //        }
+        //    }
+        //});
+        //$scope.selectedCompany1 = $scope.$parent.$parent.DefaultCompany;
+       // $scope.selectedCompany2 = $scope.$parent.$parent.DefaultCompany;
 
+
+    }
+    initwatch();
+    getAccount();
+    bindCompanyList();
+    bindSalesPartyAccount();
+    bindPurchasePartyAccount();
+    var eCashAccountId;
+    function getPaymentdata(id) {
+        $http.get(config.api + 'voucherTransactions/' + id)
+                    .then(function (response) {
+                        $scope.bindingEdit = true;
+                        console.log(response);
+                        $scope.paymentNo=response.data.vochNo;
+                        setDate($scope.paymentDate, response.data.date);
+                        eCashAccountId = response.data.vo_rosemate.bankAccountId;
+                        $scope.purInfo = {
+                            cashAccount: { selected: { accountName: localStorage[response.data.vo_rosemate.bankAccountId],id: response.data.vo_rosemate.bankAccountId }},
+                            openingBalance: response.data.vo_rosemate.openingBalance,
+                            receipts: response.data.vo_rosemate.receipts,
+                            payments: response.data.vo_rosemate.payments,
+                            narration: response.data.vo_rosemate.narration
+                        }
+                        //$scope.narration = response.data.vo_rosemate.narration;
+                        $scope.attachements = response.data.vo_rosemate.attachements;
+                        bindAttachments(response.data.vo_rosemate.attachements, function () {
+                            $scope.oldAttachment = null;
+                        });
+                        $scope.bindingEdit = false;
+
+                    });
+    }
+    
+    
+
+        function bindAttachments(attachments, callback) {
+
+        if (attachments) {
+            angular.forEach(attachments, function (item) {
+                $scope.oldAttachment = item;
+                //var file = item;
+                //file.file = { name: item.name, type: item.fileType, size: item.fileSize };
+                //var files = uploader.isHTML5 ? this.element[0].files : this.element[0];
+                //var options = uploader.getOptions();
+                //var filters = uploader.getFilters();
+                //file.file.isOld = true;
+                //if (!this.uploader.isHTML5) this.destroy();
+                item.file.isOld = true;
+                uploader.addToQueue(item.file);
+                //uploader.addToQueue(item);
+            });
+        }
+        if (callback)
+            callback();
+    }
     //Bind Cash Accounts
     function getAccount () {
         $http.get(config.login + "getPaymentAccount/" + localStorage.CompanyId).then(function (response) {
             $scope.bankAccounts = response.data
-            console.log($scope.bankAccounts);
+            //console.log($scope.bankAccounts);
         });
     }
     
@@ -118,8 +151,8 @@
     function bindCompanyList() {
         if (localStorage.comobj != undefined) {
             $scope.CompanyList = JSON.parse(localStorage.comobj);
-            $scope.purInfo.selectedCompany1 = getCompany(localStorage.CompanyId);
-            $scope.purInfo.selectedCompany2 = getCompany(localStorage.CompanyId);
+            $scope.selectedCompany1 = getCompany(localStorage.CompanyId);
+            $scope.selectedCompany2 = getCompany(localStorage.CompanyId);
             //$scope.purInfo.selectedCompany1 = JSON.parse(localStorage.DefaultCompany);
 
             //$scope.purInfo.selectedCompany2 = localStorage.CompanyId;
@@ -131,7 +164,7 @@
         if ($scope.editMode) {
             if (callback) callback();
         } else {
-            $http.get(config.api + "voucherTransactions/count" + "?[whrer][type]= Receive Payment").then(function (response) {
+            $http.get(config.api + "voucherTransactions/count" + "?[where][type]="+type).then(function (response) {
                 $scope.paymentNo = response.data.count + 1;
                 console.log(response);
                 if (callback) callback();
@@ -142,14 +175,14 @@
     function bindSalesPartyAccount() {
         $http.get(config.login + "getPartytAccount/" + localStorage.CompanyId).then(function (response) {
             $scope.salepartyAccounts = response.data
-            console.log($scope.partyAccounts);
+            //console.log($scope.partyAccounts);
         });
     }
 
     function bindPurchasePartyAccount() {
-        $http.get(config.login + "getPartytAccount/" + localStorage.CompanyId).then(function (response) {
+        $http.get(config.login + "getSupplierAccount/" + localStorage.CompanyId).then(function (response) {
             $scope.purPartyAccounts = response.data
-            console.log($scope.partyAccounts);
+            //console.log($scope.partyAccounts);
         });
     }
     function getCompany(Id){
@@ -206,7 +239,7 @@
             showErrorToast("Please Select Cash Account");
             return;
         }
-        if ($scope.purInfo.selectedCompany2 == undefined || $scope.purInfo.selectedCompany2 == null) {
+        if ($scope.selectedCompany2 == undefined || $scope.selectedCompany2 == null) {
             showErrorToast("Please Select Company");
             return;
         }
@@ -227,7 +260,7 @@
             amount: $scope.purInfo.amtPurchase,
             state: "PAID",
             vo_payment: {
-                companyName:$scope.purInfo.selectedCompany2.CompanyName,
+                companyName:$scope.selectedCompany2.CompanyName,
                 bankAccountId: $scope.purInfo.cashAccount.selected.id,
                 partyAccountId: $scope.purInfo.purPartyAccount.selected.id,
                 partyAccountName: $scope.purInfo.purPartyAccount.selected.accountName,
@@ -246,7 +279,7 @@
             showErrorToast("Please Select Cash Account");
             return;
         }
-        if ($scope.purInfo.selectedCompany1 == undefined || $scope.purInfo.selectedCompany1 == null) {
+        if ($scope.selectedCompany1 == undefined || $scope.selectedCompany1 == null) {
             showErrorToast("Please Select Company");
             return;
         }
@@ -267,7 +300,7 @@
             amount: $scope.purInfo.amtSale,
             state: "PAID",
             vo_payment: {
-                companyName: $scope.purInfo.selectedCompany1.CompanyName,
+                companyName: $scope.selectedCompany1.CompanyName,
                 bankAccountId: $scope.purInfo.cashAccount.selected.id,
                 partyAccountId: $scope.purInfo.salePartyAccount.selected.id,
                 partyAccountName: $scope.purInfo.salePartyAccount.selected.accountName,
@@ -282,11 +315,25 @@
 
     }
     $scope.saveRosemate = function () {
-        if ($scope.purInfo.receipts.length > 0) {
+        if ($scope.purInfo.receipts.length == 0 && $scope.purInfo.payments.length == 0) {
+            showErrorToast("Please add receipts or payments.");
+            return;
+        }
+        var pendingUploads=uploader.getNotUploadedItems();
+        if (pendingUploads.length > 0) {
+            showErrorToast("Please review attachments some of them are not uploaed to server.");
+            return;
+        }
+
+        var queue = uploader.queue;
+        var attachements = [];
+        angular.forEach(queue, function (fileItem) {
+            attachements.push({ title: fileItem.title, cdnPath:fileItem.cdnPath,file:fileItem.file})
+        });
             var paymentdate = getDate($scope.paymentDate);
             var data = {
                 compCode: localStorage.CompanyId,
-                type: "Rosemate",
+                type: type,
                 role: localStorage['usertype'],
                 date: paymentdate,
                 vochNo: $scope.paymentNo,
@@ -297,7 +344,8 @@
                     receipts: $scope.purInfo.receipts,
                     payments: $scope.purInfo.payments,
                     openingBalance: $scope.purInfo.openingBalance,
-                    narration:$scope.purInfo.narration
+                    narration: $scope.purInfo.narration,
+                    attachements:attachements
                 }
             };
             $http.post(config.login + 'saveRosemate?id=' + $stateParams.voId, data)
@@ -306,7 +354,7 @@
                                  $state.reload();
 
                              });
-        }
+        
     }
 
     //File Upload code
@@ -345,6 +393,45 @@
         console.info('onSuccessItem', fileItem, response, status, headers);
         fileItem.cdnPath = response.name;
     };
-    
+    function initwatch() {
+            $scope.$watch('purInfo.cashAccount.selected',function(){
+                if ($scope.purInfo.cashAccount && $scope.purInfo.cashAccount.selected) {
+                    if ($scope.purInfo.cashAccount.selected.id !== eCashAccountId) {
+                        $scope.purInfo.payments = [];
+                        $scope.purInfo.receipts = [];
+                    }
+                    //$http.get(config.login + "getPaymentAccount/" + $scope.purInfo.cashAccount.selected.id).then(function (response) {
+                    //    $scope.bankAccounts = response.data
+                    //    console.log($scope.bankAccounts);
+                    //});
+                
+                
+            }
+        });
+    }
+    $scope.downloadAttachments = function () {
+        var zip = new JSZip();
+        angular.forEach($scope.attachements, function (item) {
+            var path = item.cdnPath.substring(item.cdnPath.lastIndexOf('/') + 1);
+            var url = config.login + "getfile?path=" + path;
+            var filename = item.file.name.replace(/.*\//g, "");
+            zip.file(filename, urlToPromise(url), { binary: true });
+        });
+        zip.generateAsync({ type: "blob" }, function updateCallback(metadata) {
+            var msg = "progression : " + metadata.percent.toFixed(2) + " %";
+            if (metadata.currentFile) {
+                msg += ", current file = " + metadata.currentFile;
+            }
+            console.log(msg);
+        })
+        .then(function callback(blob) {
+            // see FileSaver.js
+            saveAs(blob, $stateParams.voId + ".zip");
+        }, function (e) {
+        });
 
+        return false;
+    };
+    //$timeout(initwatch, 2000);
+    //;
 }]);

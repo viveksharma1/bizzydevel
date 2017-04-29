@@ -4,29 +4,29 @@
     Layout = null;
 }
 
-<script type="text/ng-template" id="/ui-tree-select.html">
-    <ui-select ng-model="model.$selected"
-               ui-select-focuser
-               theme="selectize">
-        <ui-select-match placeholder="Select a group">
-            {{ $select.selected.title }}
-        </ui-select-match>
-        <ui-select-choices repeat="group in groups | filter: $select.search">
-            <div>
-                <span ng-bind-html="group.title | highlight: $select.search"></span>
-                <!--<span ng-bind-html="'('+group.size+' users)'"></span>
-                <a href
-                  ng-show="group.parent"
-                  class="goto-child-group"
-                  ng-click="loadChildGroupsOf(group, $select)">
-                  <i class="fa fa-angle-right"></i>
-                </a>-->
-            </div>
-        </ui-select-choices>
-    </ui-select>
-</script>
-
-<div class="FlexPopup" style="display:block" ng-init="model = {}">
+@*<script type="text/ng-template" id="/ui-tree-select.html">
+        <ui-select ng-model="model.$selected"
+                   ui-select-focuser
+                   theme="selectize">
+            <ui-select-match placeholder="Select a group">
+                {{ $select.selected.title }}
+            </ui-select-match>
+            <ui-select-choices repeat="group in groups | filter: $select.search">
+                <div>
+                    <span ng-bind-html="group.title | highlight: $select.search"></span>
+                    <!--<span ng-bind-html="'('+group.size+' users)'"></span>
+                    <a href
+                      ng-show="group.parent"
+                      class="goto-child-group"
+                      ng-click="loadChildGroupsOf(group, $select)">
+                      <i class="fa fa-angle-right"></i>
+                    </a>-->
+                </div>
+            </ui-select-choices>
+        </ui-select>
+    </script>
+*@
+<div class="FlexPopup" style="display:block" >
     <div class="flexheader lightblue  ">
         <label style="float:left;padding:15px ">
 
@@ -65,8 +65,8 @@
                 <div class="col-sm-4 padding">
                     <h4 class="tabheading">Receipt Date</h4>
 
-                    <div class='input-group date' id='paymentdate'>
-                        <input type='text' class="form-control" ng-model="paymentdate" id='paymentdate' />
+                    <div class='input-group date' >
+                        <input type='text' class="form-control" ng-init="paymentdate='paymentdate'" id='paymentdate' />
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
@@ -144,7 +144,7 @@
                 <div class="col-sm-7 padding5">
                     <label>Badla Party</label>
                     <ui-select ng-disabled="itemChecked.length!=1" ui-tree-select ng-model="badlaAccount.selected" id="countryCode"
-                               ui-select-focuser
+                               ui-select-focuser ng-init="$select.addnew=1;$select.type='badla';"
                                theme="selectize">
                         <ui-select-match placeholder="Select Badla Party">{{ $select.selected.accountName }}</ui-select-match>
 
@@ -160,7 +160,7 @@
                 <div class="col-sm-5 padding5">
                     <label>Date of Badla</label>
                     <div class='input-group'>
-                        <input ng-disabled="itemChecked.length!=1" ng-model="badlaDate" type='text' class="form-control" id='badlaDate' />
+                        <input ng-disabled="itemChecked.length!=1" ng-init="badlaDate='badlaDate'" type='text' class="form-control" id='badlaDate' />
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
@@ -276,140 +276,7 @@
                 </div>*@
 
 
-            <div style="float:left; width:100%">
-                @*<div class="col-sm-2 padding5">
-                        <h4 class="tabheading" ng-click="Accountbtn()">Mailing address</h4>
-                        <textarea class="form-control" style="height:80px"></textarea>
-                    </div>*@
-                @*Account*@
-                <div class="modal fade" id="formaccount">
-                    <div class="modal-dialog">
-                        <div class="modal-content content">
-                            <div class="modal-header popupheader content" style="padding:10px 20px">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                                <h4 class="modal-title">Account</h4>
-                            </div>
-                            <div class="modal-body content" style="padding:10px 20px">
-                                <div class="col-sm-6 paddinright">
-
-                                    <div class="col-sm-12 form-group padding5">
-                                        <label>Account Type</label>
-                                        <select class="form-control" ng-model="accountType">
-                                            <option>Bank</option>
-                                            <option>Credit Card</option>
-
-
-                                        </select>
-                                    </div>
-                                    <div class="col-sm-12 form-group padding5">
-                                        <label><span class="red">*</span>Group</label>
-                                        <select class="form-control" multiple style="height:120px; width:75%" ng-model="accountgroup">
-                                            <option>Sundry Creditor</option>
-                                            <option>Sundry Debitor</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="col-sm-12 form-group padding5" style="margin-top:10px">
-                                        <div class="form-control" style="height:200px; overflow-y:scroll; background:#f4f4f4; font-size:14px">
-                                            <p><strong>Credit card</strong> accounts track the balance due on your business credit cards.</p>
-
-                                            <p>Create one <strong>Credit card</strong> account for each credit card account your business uses.</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-
-                                <div class="col-sm-6">
-
-                                    <div class="col-sm-12 form-group padding5">
-                                        <label><span class="red">*</span>Name</label>
-                                        <input ng-model="accountName" type="text" class="form-control" />
-                                    </div>
-                                    <div class="col-sm-12 form-group padding5">
-                                        <label>Description</label>
-                                        <input ng-model="description" type="text" class="form-control" />
-                                    </div>
-                                    <div class="col-sm-12 form-group padding5" style="margin:20px 0px;">
-                                        <label><input type="checkbox" /> Is sub-account </label>
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" style="width:280px; color:#000 !important; text-align:left;">
-                                                Enter parent account
-                                                <i class="fa fa-sort pull-right" style="margin-top:3px"></i>
-                                            </button>
-
-                                            <ul class="dropdown-menu my parentaccount" style="width:310px; height:300px; overflow-y:auto">
-                                                <li class="panelSearch">
-                                                    <input type="text" class="form-control" placeholder="Enter parent account" id="SearchFilter" />
-                                                </li>
-                                                <li style="margin-top:50px;"><a href="#">Cash on hold <em>Bank</em></a></li>
-                                                <li><a href="#">Inventory Asset <em>Current Assets</em></a></li>
-                                                <li><a href="#">TDS Receivable <em>Current Assets</em></a></li>
-                                                <li><a href="#">Undeposited Funds <em>Current Assets</em></a></li>
-                                                <li><a href="#">Uncategorised Asset <em>Current Assets</em></a></li>
-                                                <li><a href="#">TDS Payable <em>Current Liabilities</em></a></li>
-                                                <li><a href="#">Accounts Payable (Creditors) <em>Creditors</em></a></li>
-                                                <li><a href="#">Opening Balance Equity <em>Equity</em></a></li>
-                                                <li><a href="#">Retained Earnings <em>Equity</em></a></li>
-                                                <li><a href="#">Billable Expense Income <em>Income</em></a></li>
-                                                <li><a href="#">Discounts given <em>Income</em></a></li>
-                                                <li><a href="#">Sales of Product Income <em>Income</em></a></li>
-                                                <li><a href="#">Services <em>Income</em></a></li>
-                                                <li><a href="#">Uncategorised Income <em>Income</em></a></li>
-                                                <li><a href="#">Cost of sales <em>Cost of Goods Sold</em></a></li>
-                                                <li><a href="#">Inventory Shrinkage <em>Cost of Goods Sold</em></a></li>
-                                                <li><a href="#">Purchases <em>Expenses</em></a></li>
-                                                <li><a href="#">Unapplied Cash Bill Payment Expense <em>Expenses</em></a></li>
-                                                <li><a href="#">Uncategorised Expense <em>Expenses</em></a></li>
-                                                <li><a href="#">Other Expense <em>Other Expenses</em></a></li>
-                                            </ul>
-
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-4 form-group padding5">
-                                        <label>Balance</label>
-                                        <input ng-model="balance" type="text" class="form-control" />
-                                    </div>
-
-                                    <div class="col-sm-4 form-group padding5">
-                                        <label>as of</label>
-                                        <input type="text" class="form-control" id="asofdate" placeholder="dd/mm/yyy" />
-                                    </div>
-
-                                </div>
-
-
-
-                            </div>
-                            <div class="modal-footer content">
-                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" ng-click="createAccount()">Save changes</button>
-                            </div>
-                        </div><!-- /.modal-content -->
-                    </div><!-- /.modal-dialog -->
-                </div>
-
-
-
-                @*<div class="col-sm-2 padding5">
-                        <h4 class="tabheading">Payment date</h4>
-                        <div class='input-group'>
-                            <input type='text' class="form-control" id="PaymentdateCheque" />
-                            <span class="input-group-addon">
-                                <span class="glyphicon glyphicon-calendar"></span>
-                            </span>
-                        </div>
-                    </div>*@
-
-
-
-
-
-
-            </div>
+            
         </div>
         <div class="col-sm-12" style="padding-top:10px;" id="Outstandingdiv">
             <h4 data-toggle="collapse" data-target="#AccountDetail" class="cursor"><i class="fa fa-caret-right"></i> Outstanding Transactions details</h4>
@@ -443,7 +310,7 @@
                             <td class="text-right">{{data.amount}}</td>
                             <td class="text-right">{{data.interest}}</td>
                             <td class="text-right">{{data.balance}}</td>
-                            <td class="text-right"><input type="text" ng-change="amountChange(data,data.amountPaid,'{{data.amountPaid}}');" @*ng-blur="payBill(data.amount,data.balance,$index,data.amountPaid,data.id)"*@ ng-model="data.amountPaid" class="form-control" /></td>
+                            <td class="text-right"><input type="number" step="0.01" ng-change="amountChange(data,data.amountPaid,'{{data.amountPaid}}');" @*ng-blur="payBill(data.amount,data.balance,$index,data.amountPaid,data.id)"*@ ng-model="data.amountPaid" class="form-control" /></td>
                         </tr>
 
 
@@ -474,8 +341,8 @@
             <div class="col-sm-3 padding">
 
                 <div class="form-group">
-                    <h4 class="tabheading">Remarks{{data.paymentAmount |number : fractionSize}}</h4>
-                    <textarea class="form-control" style="height:80px"></textarea>
+                    <h4 class="tabheading">Remarks</h4>
+                    <textarea ng-model="remarks" class="form-control" style="height:80px"></textarea>
                 </div>
             </div>
             <span class="pull-right" style="width:350px">
@@ -524,7 +391,7 @@
                     <div class="form-group">
                         <h4 style="margin-top: 15px; margin-bottom:10px;">
                             <i class="fa fa-caret-right"></i> Attachments
-                            <small class="text-primary cursor dwn">(<i class="fa fa-download"></i> Download all files)</small>
+                            <small ng-show="editMode" ng-click="downloadAttachments();"  class="text-primary cursor dwn">(<i class="fa fa-download"></i> Download all files)</small>
                         </h4>
                         <div class="col-sm-5 padding5">
                             <input type="text" class="form-control" ng-model="filename" placeholder="Title" />
@@ -595,44 +462,6 @@
                                 <span class="glyphicon glyphicon-trash"></span> Remove all
                             </button>
                         </div>
-
-                        @*<div class="attachmets">*@
-                        @*<input type="file" id="uploadBtn" multiple="multiple" name="browsefile">*@
-                        @*<div id="uploadAttchments">
-                                    <i class="fa fa-plus"></i>
-                                    <p>Add file</p>
-                                </div>
-                            </div>*@
-                        @*<div class="col-sm-5 padding5">
-                            <input type="text" class="form-control" id="NameInput" placeholder="Title" />
-                        </div>
-                        <div class="col-sm-5 padding5">
-                            <input type="file" class="filestyle" id="uploadBtn" data-buttonName="btn-info">
-                        </div>
-
-                        <div class="col-sm-2 padding5">
-                            <button type="button" class="btn btn-sm btn-primary Attechmentdetail" style="width:100%">Add</button>
-                        </div>
-
-
-                        <div style="float:left; width:100%; padding:10px 10px; border-bottom:1px dotted #ccc;" class="filenameDiv">
-
-
-                            <div class="col-sm-5 padding5" style="word-break:break-all">
-                                <strong id="name"></strong>
-                            </div>
-
-                            <div class="col-sm-5 padding5 cursor" style="word-break:break-all">
-                                <a id="type" class="cursor"></a>
-                            </div>
-
-                            <div class="col-sm-2">
-                                <i class="fa fa-times pull-right text-danger" id="removeattachment"></i>
-                            </div>
-
-
-
-                        </div>*@
                     </div>
                 </div>
             </div>

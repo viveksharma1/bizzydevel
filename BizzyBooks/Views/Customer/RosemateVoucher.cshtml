@@ -101,12 +101,12 @@
                 <div class="col-sm-6 padding pull-right">
                     <h4 class="tabheading font_11">Cash</h4>
 
-                    <ui-select ui-tree-select ng-model="purInfo.cashAccount.selected" id="countryCode"
+                    <ui-select ui-tree-select  ng-model="purInfo.cashAccount.selected" id="countryCode"
                                ui-select-focuser ng-init="$select.addnew=1;$select.type='cashAccount'"
                                theme="selectize">
-                        <ui-select-match placeholder="Select Cash">{{ $select.selected.accountName }}</ui-select-match>
+                        <ui-select-match class="selectuiTable" placeholder="Select Cash">{{ $select.selected.accountName }}</ui-select-match>
 
-                        <ui-select-choices repeat="person in bankAccounts  | filter: $select.search">
+                        <ui-select-choices class="selectuiTable" repeat="person in bankAccounts  | filter: $select.search">
                             <div>
                                 <span  ng-bind-html="person.accountName | highlight: $select.search"></span>
                             </div>
@@ -122,7 +122,6 @@
 
         </div>
 
-        @*<p>{{purInfo.selectedCompany1}}</p>*@
         <table style="width:100%; border-top:1px solid #e3e3e3;">
             <tr>
                 <td width="50%" style="border-right:1px solid #e3e3e3; vertical-align:top">
@@ -131,7 +130,7 @@
                             <thead>
                                 <tr>
                                     <th class="Rosemate-table" width="150">
-                                        <select class="form-control" ng-model="purInfo.selectedCompany1" ng-options="item.CompanyName for item in CompanyList"></select>
+                                        <select class="form-control" ng-model="selectedCompany1" ng-options="item.CompanyName for item in CompanyList"></select>
                                         @*<select class="form-control" ng-model="purInfo.selectedCompany1">
                                 <ng-options></ng-options>
                                 <option ng-repeat="company in CompanyList" value="{{company.CompanyId}}">{{company.CompanyName}}</option>
@@ -210,11 +209,11 @@
                             <thead>
                                 <tr>
                                     <th class="Rosemate-table" width="150">
-                                        <select class="form-control" ng-model="purInfo.selectedCompany2" ng-options="item.CompanyName for item in CompanyList"></select>
+                                        <select class="form-control" ng-model="selectedCompany2" ng-options="item.CompanyName for item in CompanyList"></select>
 
                                     </th>
                                     <th class="Rosemate-table">
-                                        <ui-select ui-tree-select ng-model="purInfo.purPartyAccount.selected" id="countryCode" style="height:30px"
+                                        <ui-select  ui-tree-select ng-model="purInfo.purPartyAccount.selected" id="countryCode" style="height:30px"
                                                    ui-select-focuser ng-init="$select.addnew=1;$select.type='purchaseAccount';"
                                                    theme="selectize">
                                             <ui-select-match class="selectuiTable" placeholder="Select Purchase Account">{{ $select.selected.accountName }}</ui-select-match>
@@ -288,12 +287,12 @@
 
 
 
-                        <ul ng-repeat="data in datapath">
+                        @*<ul ng-repeat="data in datapath">
                             <li>
                                 <span> <a href="" style="font-size:medium" class="pointer fa fa-file-pdf-o" aria-hidden="true"> <b ng-click="getfile(data)">{{data.replace("server/boot/uploads/"+ billNo,'')}}</b></a></span>
                                 <i class="fa fa-times" aria-hidden="true" ng-click="deletefile(data,$index)"></i>
                             </li>
-                        </ul>
+                        </ul>*@
 
                         <div class="col-sm-12" style="padding:0px">
 
