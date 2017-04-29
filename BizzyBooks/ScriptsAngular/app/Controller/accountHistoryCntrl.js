@@ -241,6 +241,10 @@
 
             $state.go('Customer.RosemateVoucher', { voId: id });
         }
+        if (voType == 'Purchase Settelment') {
+
+            $state.go('Customer.PurchaseInvoiceSattlement', { voId: id });
+        }
 
 
 

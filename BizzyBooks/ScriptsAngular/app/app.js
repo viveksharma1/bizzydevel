@@ -505,6 +505,20 @@ var myApp = angular
 
         });
 
+        $stateProvider.state("Customer.BalanceSheet", {
+            url: "/BalanceSheet",
+            templateUrl: "Customer/BalanceSheet",
+            controller: "BalanceSheetCntrl"
+
+        });
+
+        $stateProvider.state("Customer.ProfitLossAccount", {
+            url: "/ProfitLossAccount",
+            templateUrl: "Customer/ProfitLossAccount",
+            controller: "ProfitLossAccountCntrl"
+
+        });
+
         // Specify HTML5 mode (using the History APIs) or HashBang syntax.
         //$locationProvider.html5Mode(false).hashPrefix('!');
         //$locationProvider.html5Mode(true);
