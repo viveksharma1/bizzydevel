@@ -144,7 +144,7 @@
                 <div class="col-sm-7 padding5">
                     <label>Badla Party</label>
                     <ui-select ng-disabled="itemChecked.length!=1" ui-tree-select ng-model="badlaAccount.selected" id="countryCode"
-                               ui-select-focuser
+                               ui-select-focuser ng-init="$select.addnew=1;$select.type='badla';"
                                theme="selectize">
                         <ui-select-match placeholder="Select Badla Party">{{ $select.selected.accountName }}</ui-select-match>
 
@@ -310,7 +310,7 @@
                             <td class="text-right">{{data.amount}}</td>
                             <td class="text-right">{{data.interest}}</td>
                             <td class="text-right">{{data.balance}}</td>
-                            <td class="text-right"><input type="text" ng-change="amountChange(data,data.amountPaid,'{{data.amountPaid}}');" @*ng-blur="payBill(data.amount,data.balance,$index,data.amountPaid,data.id)"*@ ng-model="data.amountPaid" class="form-control" /></td>
+                            <td class="text-right"><input type="number" step="0.01" ng-change="amountChange(data,data.amountPaid,'{{data.amountPaid}}');" @*ng-blur="payBill(data.amount,data.balance,$index,data.amountPaid,data.id)"*@ ng-model="data.amountPaid" class="form-control" /></td>
                         </tr>
 
 
@@ -341,8 +341,8 @@
             <div class="col-sm-3 padding">
 
                 <div class="form-group">
-                    <h4 class="tabheading">Remarks{{data.paymentAmount |number : fractionSize}}</h4>
-                    <textarea class="form-control" style="height:80px"></textarea>
+                    <h4 class="tabheading">Remarks</h4>
+                    <textarea ng-model="remarks" class="form-control" style="height:80px"></textarea>
                 </div>
             </div>
             <span class="pull-right" style="width:350px">
@@ -462,44 +462,6 @@
                                 <span class="glyphicon glyphicon-trash"></span> Remove all
                             </button>
                         </div>
-
-                        @*<div class="attachmets">*@
-                        @*<input type="file" id="uploadBtn" multiple="multiple" name="browsefile">*@
-                        @*<div id="uploadAttchments">
-                                    <i class="fa fa-plus"></i>
-                                    <p>Add file</p>
-                                </div>
-                            </div>*@
-                        @*<div class="col-sm-5 padding5">
-                            <input type="text" class="form-control" id="NameInput" placeholder="Title" />
-                        </div>
-                        <div class="col-sm-5 padding5">
-                            <input type="file" class="filestyle" id="uploadBtn" data-buttonName="btn-info">
-                        </div>
-
-                        <div class="col-sm-2 padding5">
-                            <button type="button" class="btn btn-sm btn-primary Attechmentdetail" style="width:100%">Add</button>
-                        </div>
-
-
-                        <div style="float:left; width:100%; padding:10px 10px; border-bottom:1px dotted #ccc;" class="filenameDiv">
-
-
-                            <div class="col-sm-5 padding5" style="word-break:break-all">
-                                <strong id="name"></strong>
-                            </div>
-
-                            <div class="col-sm-5 padding5 cursor" style="word-break:break-all">
-                                <a id="type" class="cursor"></a>
-                            </div>
-
-                            <div class="col-sm-2">
-                                <i class="fa fa-times pull-right text-danger" id="removeattachment"></i>
-                            </div>
-
-
-
-                        </div>*@
                     </div>
                 </div>
             </div>

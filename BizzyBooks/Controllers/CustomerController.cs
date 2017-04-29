@@ -82,7 +82,7 @@ namespace Restaurant.Controllers
         }
 
 
-        public ActionResult ReceivePayment()
+        public ActionResult Receipt()
         {
             return View();
         }
@@ -110,7 +110,7 @@ namespace Restaurant.Controllers
             return View();
         }
 
-        public ActionResult MakePayment()
+        public ActionResult Payment()
         {
             return View();
         }

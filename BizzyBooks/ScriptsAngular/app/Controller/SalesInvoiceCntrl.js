@@ -43,7 +43,7 @@
     $scope.add = function (type, value) {
         $('#formaccount').modal('show');
         $scope.myValue = { accountName: value };
-        $scope.getSupplier();
+        //$scope.getSupplier();
 
 
     }
@@ -71,6 +71,8 @@
     });
 
     $(":file").filestyle({ buttonName: "btn-sm btn-info" });
+
+    var type = $stateParams.type;
 
     var uploader = $scope.uploader = new FileUploader({
         url: config.login + "upload"
@@ -988,7 +990,7 @@
         
         var data = {
             compCode: localStorage.CompanyId,
-            type: "Sales Invoice",
+            type: type,
             role: localStorage.usertype,
             date: billDate,
             duedate: billDueDate,

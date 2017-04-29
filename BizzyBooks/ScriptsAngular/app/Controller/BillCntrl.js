@@ -23,7 +23,7 @@
     //   $(this).addClass("selected").siblings().removeClass("selected");
     //});
 
-   
+    var type = $stateParams.type;
     localStorage["type1"] = "BILL"
 
     $(".my a").click(function (e) {
@@ -751,7 +751,7 @@
             }
         }
         var data = {
-            type: "PURCHASE INVOICE",
+            type: type,
             state: "OPEN",
             date: date,
             amount: $scope.totalAmountINR.toFixed(2),

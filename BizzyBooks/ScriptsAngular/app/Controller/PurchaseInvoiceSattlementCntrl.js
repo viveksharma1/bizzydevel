@@ -44,28 +44,42 @@
     }
     getAccount();
     $scope.otaxAccount = {}
+    $scope.vatAccount = {}
 
 
     if ($stateParams.voId) {
         $http.get(config.api + "voucherTransactions/" + $stateParams.voId).then(function (response) {
             $scope.settlementData = response.data
-
+            console.log($scope.settlementData)
+            $scope.supplierName = localStorage[$scope.settlementData.supplier];
+            $scope.supplierName = localStorage[$scope.settlementData.supplier];
+            $scope.vatAccount.selected = $scope.settlementData.vatAccount
+            $scope.vatAccount = { selected: { accountName: localStorage[$scope.settlementData.vatAccount], id: $scope.settlementData.vatAccount } };
+            $scope.otaxAccount = { selected: { accountName: localStorage[$scope.settlementData.otaxAccount], id: $scope.settlementData.otaxAccount } };
         });
-
+    }
+    else {
+        $stateParams.voId = null
     }
     $scope.saveSettlement = function () {
         var amount = $scope.settlementData.vatAmount > $scope.settlementData.interestAmount ? $scope.settlementData.vatAmount : $scope.settlementData.interestAmount
         $scope.settlementData.ledgerDataFirst = { amount: amount, accountId: $scope.settlementData.supplier }
-        $scope.settlementData.ledgerDataSecond = { amount: $scope.settlementData.totalDedvatAmount, accountId: $scope.settlementData.selected.id }
+        $scope.settlementData.ledgerDataSecond = { amount: $scope.settlementData.totalDedvatAmount, accountId: $scope.vatAccount.selected.id }
         $scope.settlementData.ledgerDataThird = { amount: $scope.settlementData.totalDedExciseAmount, accountId: $scope.otaxAccount.selected.id }
         $scope.settlementData.refNo = 1;
         $scope.settlementData.compCode = localStorage.CompanyId
         $scope.settlementData.invoiceNo = $scope.invoiceNo
+        $scope.settlementData.vatAccount = $scope.vatAccount.selected.id
+        $scope.settlementData.type = "Purchase settlement"
+        $scope.settlementData.otaxAccount = $scope.otaxAccount.selected.id
+
+        delete $scope.settlementData._id;
         
-        $http.post(config.login + "purchaseSettelment", $scope.settlementData).then(function (response) {
+        $http.post(config.login + "purchaseSettelment/" + $stateParams.voId, $scope.settlementData).then(function (response) {
             if (response.data) {
-                $stateParams.voId = response.data
-                $state.go('Customer.PurchaseInvoiceSattlement', { voId: response.data });
+                $stateParams.voId = response.data.id
+                console.log(response.data);
+                $state.go('Customer.PurchaseInvoiceSattlement', { voId: response.data.id });
 
             }
             
