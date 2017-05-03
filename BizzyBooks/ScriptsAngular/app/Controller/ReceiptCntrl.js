@@ -7,7 +7,7 @@
     });
 
     $scope.goBack = function (retain) {
-        if ($rootScope.$previousState.name.length == 0) {
+        if ($rootScope.$previousState.name.length == 0 || $rootScope.$previousState==$state.current) {
             window.history.back();
         }else
             $state.go($rootScope.$previousState);
@@ -168,25 +168,25 @@
     //$scope.getBadlaAccount();
     $scope.getSupplier();
     if($scope.mode!="edit") getVoucherCount();
-    $scope.openTransaction = function (id, voType) {
+    //$scope.openTransaction = function (id, voType) {
 
-        if (voType == 'BILL') {
+    //    if (voType == 'BILL') {
 
-            $state.go('Customer.Bill', { billNo: id });
-        }
-        if (voType == 'Expense') {
+    //        $state.go('Customer.Bill', { billNo: id });
+    //    }
+    //    if (voType == 'Expense') {
 
-            $state.go('Customer.Expense', { expenceId: id });
-        }
-        if (voType == 'Sales Invoice') {
+    //        $state.go('Customer.Expense', { expenceId: id });
+    //    }
+    //    if (voType == 'Sales Invoice') {
 
-            $state.go('Customer.SalesInvoice', { voId: id });
-        }
-        if (voType == 'General Invoice') {
+    //        $state.go('Customer.SalesInvoice', { voId: id });
+    //    }
+    //    if (voType == 'General Invoice') {
 
-            $state.go('Customer.GeneralInvoice', { voId: id });
-        }
-    }
+    //        $state.go('Customer.GeneralInvoice', { voId: id });
+    //    }
+    //}
     $scope.totalInvoiceAmount = 0;
 
     function getVoucherCount(callback) {
@@ -235,11 +235,11 @@
         calculateTotal(true);
         getVoucherCount(function () {
             var badla = undefined;
-            if ($scope.chkBadla)
+            if ($scope.chkBadla) {
                 badla = {
                     amount: $scope.badlaAmount,
                     partyAccountId: $scope.badlaAccount.selected.id,
-                    date:badlaDate,// $scope.dateFormat($scope.badlaDate),
+                    date: badlaDate,// $scope.dateFormat($scope.badlaDate),
                     conditons: {
                         dayTotal: $scope.totaldays,
                         dayInterest: $scope.dayInterest,
@@ -249,6 +249,7 @@
                         perDiff: $scope.perDiff
                     }
                 }
+            }
             var data = {
                 compCode: localStorage.CompanyId,
                 type: type,
@@ -267,13 +268,14 @@
                     billDetail: $scope.itemChecked,
                     badla: badla,
                     attachements:attachements
-                }
+                },
+                vo_badla:getBadlaVoucherInfo()
             };
-            if ($scope.chkBadla) {
-                datas.push(data);
-                saveBadlaVoucher();
-            }
-            else {
+            //if ($scope.chkBadla) {
+            //    datas.push(data);
+            //    pushBadlaVoucherInfo();
+            //}
+            //else {
                 if (sharedFactory.info != null) {
                     data.compCode = sharedFactory.info.selectedCompany1.CompanyId;
                     data.vo_payment.companyName = sharedFactory.info.selectedCompany1.CompanyName;// localStorage[data.compCode];
@@ -293,7 +295,7 @@
 
                              });
                 }
-            }
+            //}
             
 
 
@@ -322,22 +324,23 @@
             $scope.totalInvoiceAmount = 0;
         }
     }
-    function saveBadlaVoucher() {
-        var badlaDate = getDate($scope.badlaDate);
-        var badlaDueDate = moment(badlaDate).add(Number($scope.dayTotal), 'days');
-        ///var  badlaDueDate = moment($scope.badlaDate, "DD/MM/YYYY").add(Number($scope.dayTotal), 'days').format('DD/MM/YYYY');
-    var data = {
+    function getBadlaVoucherInfo() {
+        if ($scope.chkBadla) {
+            var badlaDate = getDate($scope.badlaDate);
+            var badlaDueDate = moment(badlaDate).add(Number($scope.dayTotal), 'days');
+            ///var  badlaDueDate = moment($scope.badlaDate, "DD/MM/YYYY").add(Number($scope.dayTotal), 'days').format('DD/MM/YYYY');
+            var data = {
                 compCode: localStorage.CompanyId,
                 type: "Badla Voucher",
                 role: localStorage['usertype'],
                 date: badlaDate,
-                duedate:badlaDueDate,
+                duedate: badlaDueDate,
                 amount: $scope.badlaAmount,
-                vochNo: $scope.paymentNo+1,
-                balance:$scope.badlaAmount,
+                //vochNo: $scope.paymentNo + 1,
+                balance: $scope.badlaAmount,
                 state: "OPEN",
                 remark: $scope.remarks,
-                customerId:$scope.badlaAccount.selected.id,
+                customerId: $scope.badlaAccount.selected.id,
                 vo_badla: {
                     billDetail: $scope.itemChecked,
                     partyAccountId: $scope.partyAccount.selected.id,
@@ -355,14 +358,15 @@
                     }
                 }
             };
-            
-    datas.push(data);
-    $http.post(config.login + 'saveBadlaVoucher?id=' + $stateParams.voId, datas)
-                 .then(function (response) {
-                     showSuccessToast("Payment Received.");
-                     $state.reload();
+            return data;
+        }
+    //datas.push(data);
+    //$http.post(config.login + 'saveBadlaVoucher?id=' + $stateParams.voId, datas)
+    //             .then(function (response) {
+    //                 showSuccessToast("Payment Received.");
+    //                 $state.reload();
 
-                 });
+    //             });
     }
     function checkPaymentBills() {
         Array.prototype.push.apply($scope.paymentData, $scope.itemChecked);
