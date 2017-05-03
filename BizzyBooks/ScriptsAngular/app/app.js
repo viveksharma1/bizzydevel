@@ -544,10 +544,11 @@ var myApp = angular
 
 
 myApp.value('config', {
+    login: '',
+    api:''
+//login: 'http://localhost:4000/',
 
-login: 'http://localhost:4000/',
-
-api: 'http://localhost:4000/api/'
+//api: 'http://localhost:4000/api/'
    
 
 //login: 'http://bizzy-book-api.azurewebsites.net/',
@@ -569,7 +570,12 @@ myApp.service('selectsuppliers', ['$rootScope',
 }
 ])
 
-myApp.run(['authService', '$location', '$rootScope', 'localStorageService','$state', function (authService, $location, $rootScope,localStorageService,$state) {
+myApp.run(['authService', '$location', '$rootScope', 'localStorageService', '$state', 'config', '$http', function (authService, $location, $rootScope, localStorageService, $state, config, $http) {
+    $http.get('config/config.json').then(function (response) {
+        config.api = response.data.api;
+        config.login = response.data.login;
+        $rootScope.$broadcast('config-loaded');
+    });
     authService.fillAuthData();
     //authManager.checkAuthOnRefresh();
     //authManager.redirectWhenUnauthenticated();

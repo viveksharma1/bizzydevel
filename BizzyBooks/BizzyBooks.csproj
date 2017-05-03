@@ -489,6 +489,7 @@
     <Content Include="packages.config" />
     <Content Include="ion\sounds\bell_ring.ogg" />
     <Content Include="js\angular-xeditable-0.5.0.zip" />
+    <Content Include="config\config.json" />
     <None Include="Project_Readme.html" />
     <Content Include="Views\Account\Login.cshtml" />
     <None Include="Properties\PublishProfiles\LOcal.pubxml" />
@@ -556,6 +557,9 @@
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>config\config.json</ApplicationManifest>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
