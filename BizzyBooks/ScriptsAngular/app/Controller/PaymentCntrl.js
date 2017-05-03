@@ -1,4 +1,4 @@
-﻿myApp.controller('PaymentCntrl', ['$scope', '$http', '$stateParams', '$timeout', 'myService', '$rootScope', '$state', 'config', '$filter','FileUploader', function ($scope, $http, $stateParams, $timeout, myService, $rootScope, $state, config, $filter,FileUploader) {
+﻿myApp.controller('PaymentCntrl', ['$scope', '$http', '$stateParams', '$timeout', 'myService', '$rootScope', '$state', 'config', '$filter', 'FileUploader', 'sharedFactory', function ($scope, $http, $stateParams, $timeout, myService, $rootScope, $state, config, $filter, FileUploader, sharedFactory) {
 
     $.fn.datepicker.defaults.format = "dd/mm/yyyy";
     //localStorage["type1"] = "PAYMENT"
@@ -7,7 +7,10 @@
     });
 
     $scope.goBack = function () {
-        window.history.back();
+        if ($rootScope.$previousState.name.length == 0) {
+            window.history.back();
+        } else
+            $state.go($rootScope.$previousState);
     },
     $(":file").filestyle({ buttonName: "btn-sm btn-info" });
     $scope.Accountbtn = function (id, type) {
@@ -120,11 +123,36 @@
         });
 
     }
-    if ($stateParams.voId) {
-        $scope.editMode = true;
+    "get open invoice"
+    $scope.getOpenInvoice = function () {
+        if ($scope.partyAccount.selected && $scope.partyAccount.selected.id) {
+            if (localStorage['usertype'] == 'O') {
+                var fields = '&filter[fields][adminAmount]=false&filter[fields][adminBalance]=false&[filter][where][balance][gt]=0'
+                getAllBill($scope.partyAccount.selected.id, fields);
+            }
+            else {
+                var fields = '&filter[fields][amount]=false&filter[fields][balance]=false&[filter][where][adminBalance][gt]=0'
+                getAllBill($scope.partyAccount.selected.id, fields);
+            }
+        }
+
+
+    }
+
+
+    if (sharedFactory.info != null) {
+        $scope.mode = "return";
+        //$scope.purInfo = sharedFactory.info;
+        setDate($scope.paymentdate);
+        $scope.currency = "Dollar";
+        $scope.exchangeRate();
+        fillRosemateData();
+    }
+    else if ($stateParams.voId) {
+        $scope.mode = "edit";
         getPaymentdata($stateParams.voId);
     } else {
-        $scope.editMode = false;
+        $scope.mode = "new";
         setDate($scope.paymentdate);
         $scope.currency = "Dollar";
         $scope.exchangeRate();
@@ -314,7 +342,7 @@
     //        checkPaymentBills();
     //    });
     //}
-    $scope.getAllBill = function (supliersId, fields) {
+    function getAllBill(supliersId, fields) {
         if (supliersId){
             $http.get(config.login + "getAllTransaction/"+ supliersId).then(function (response) {
                 if (response) {
@@ -408,58 +436,77 @@
                 attachements: attachements
             },
         }
-        $http.post(config.login + 'payment?id=' + $stateParams.voId, data)
-                 .then(function (response) {
 
-                     showSuccessToast("Payment Received.");
-                     $state.reload();
 
-                 });
+        if (sharedFactory.info != null) {
+            data.compCode = sharedFactory.info.selectedCompany2.CompanyId;
+            data.vo_payment.companyName = sharedFactory.info.selectedCompany2.CompanyName;// localStorage[data.compCode];
+            data.vo_payment.partyAccountName = localStorage[data.vo_payment.partyAccountId];
+            if (sharedFactory.info.selectedPaymentIndex != null && sharedFactory.info.payments && sharedFactory.info.payments.length > 0) {
+                sharedFactory.info.payments[sharedFactory.info.selectedPaymentIndex] = data;
+            } else {
+                sharedFactory.info.payments.push(data);
+            }
+            $scope.goBack(true);
+        } else {
+            $http.post(config.login + 'payment?id=' + $stateParams.voId, data)
+                     .then(function (response) {
+
+                         showSuccessToast("Payment Received.");
+                         $state.reload();
+
+                     });
+        }
 
     }
     
-
+    function fillRosemateData() {
+        $scope.bankAccount = { selected: sharedFactory.info.cashAccount.selected };
+        if (sharedFactory.info.paymentDate)
+            setDate($scope.paymentdate, sharedFactory.info.paymentDate);
+        if (sharedFactory.info.purPartyAccount) {
+            $scope.partyAccount = { selected: sharedFactory.info.purPartyAccount.selected };
+        }
+        if (sharedFactory.info.amtPurchase) {
+            $scope.totalPaidAmount = sharedFactory.info.amtPurchase;
+            $scope.balanceAmtReceipt = sharedFactory.info.amtPurchase;
+        }
+        if (sharedFactory.info.selectedPaymentIndex != null && sharedFactory.info.payments && sharedFactory.info.payments.length > 0) {
+            //fillreceipt info
+            fillData(sharedFactory.info.payments[sharedFactory.info.selectedPaymentIndex]);
+        } else {
+            $scope.getOpenInvoice();
+        }
+    }
   
     function getPaymentdata(id) {
         $http.get(config.api + 'voucherTransactions/' + id)
                     .then(function (response) {
-                        console.log(response);
-                        console.log(response);
-                        $scope.state = response.data.state;
-                        $scope.currency = response.data.vo_payment.currency;
-                        $scope.ExchangeRateINR = response.data.vo_payment.exchangeRate;
-                        $scope.totalPaidAmount = response.data.amount;
-                        $scope.balanceAmtReceipt = response.data.vo_payment.balanceAmtReceipt;
-                        $scope.paymentNo = response.data.vochNo;
-                        $scope.itemChecked = response.data.vo_payment.billDetail;
-                        $scope.bankAccount = { selected: { accountName: localStorage[response.data.vo_payment.bankAccountId], id: response.data.vo_payment.bankAccountId } };
-                        $scope.partyAccount = { selected: { accountName: localStorage[response.data.vo_payment.partyAccountId], id: response.data.vo_payment.partyAccountId } };
-                        setDate($scope.paymentdate, response.data.date);
-                        $scope.remarks = response.data.remark;
-                        $scope.attachements = response.data.vo_payment.attachements;
-                        bindAttachments(response.data.vo_payment.attachements, function () {
-                            $scope.oldAttachment = null;
-                        });
-                        calculateTotal(false);
-                        $scope.getOpenInvoice();
+                        fillData(response.data)
                     });
     }
-
+    function fillData(data) {
+        $scope.state = data.state;
+        $scope.currency = data.vo_payment.currency;
+        $scope.ExchangeRateINR = data.vo_payment.exchangeRate;
+        $scope.totalPaidAmount = data.amount;
+        $scope.balanceAmtReceipt = data.vo_payment.balanceAmtReceipt;
+        $scope.paymentNo = data.vochNo;
+        $scope.itemChecked = data.vo_payment.billDetail;
+        $scope.bankAccount = { selected: { accountName: localStorage[data.vo_payment.bankAccountId], id: data.vo_payment.bankAccountId } };
+        $scope.partyAccount = { selected: { accountName: localStorage[data.vo_payment.partyAccountId], id: data.vo_payment.partyAccountId } };
+        setDate($scope.paymentdate, data.date);
+        $scope.remarks = data.remark;
+        $scope.attachements = data.vo_payment.attachements;
+        bindAttachments(data.vo_payment.attachements, function () {
+            $scope.oldAttachment = null;
+        });
+        calculateTotal(false);
+        $scope.getOpenInvoice();
+    }
     
 
-    "get open invoice"
-    $scope.getOpenInvoice = function() {      
-            if (localStorage['usertype'] == 'O') {
-                var fields = '&filter[fields][adminAmount]=false&filter[fields][adminBalance]=false&[filter][where][balance][gt]=0'
-                $scope.getAllBill($scope.partyAccount.selected.id, fields);
-            }
-            else {
-                var fields = '&filter[fields][amount]=false&filter[fields][balance]=false&[filter][where][adminBalance][gt]=0'
-                $scope.getAllBill($scope.partyAccount.selected.id, fields);
-            }
-       
-
-    }
+    
 
     function bindAttachments(attachments, callback) {
 

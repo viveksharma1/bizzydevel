@@ -605,6 +605,8 @@ myApp.run(['authService', '$location', '$rootScope', 'localStorageService','$sta
             //else
             //    $state.go("/");
                 //$location.path(ngAuthSettings.defaultRoute);
+        } else {
+            $rootScope.$previousState = fromState;
         }
         //if (next.route != undefined) {
         //    var path = authService.getUserPermission(next.route, next.fallback);
@@ -1114,7 +1116,12 @@ myApp.run(['$templateCache', function ($templateCache) {
 
 }]);
 
-
+myApp.factory('sharedFactory', function() {
+    var info = null;
+    return {
+        info: info
+    };
+})
 
 
 

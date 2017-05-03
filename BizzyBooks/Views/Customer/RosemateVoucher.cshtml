@@ -101,7 +101,7 @@
                 <div class="col-sm-6 padding pull-right">
                     <h4 class="tabheading font_11">Cash</h4>
 
-                    <ui-select ui-tree-select  ng-model="purInfo.cashAccount.selected" id="countryCode"
+                    <ui-select ui-tree-select on-select = "cashAccountSelected()"  ng-model="purInfo.cashAccount.selected" id="countryCode"
                                ui-select-focuser ng-init="$select.addnew=1;$select.type='cashAccount'"
                                theme="selectize">
                         <ui-select-match class="selectuiTable" placeholder="Select Cash">{{ $select.selected.accountName }}</ui-select-match>
@@ -130,7 +130,7 @@
                             <thead>
                                 <tr>
                                     <th class="Rosemate-table" width="150">
-                                        <select class="form-control" ng-model="selectedCompany1" ng-options="item.CompanyName for item in CompanyList"></select>
+                                        <select class="form-control" ng-model="purInfo.selectedCompany1" ng-options="item.CompanyName for item in CompanyList"></select>
                                         @*<select class="form-control" ng-model="purInfo.selectedCompany1">
                                 <ng-options></ng-options>
                                 <option ng-repeat="company in CompanyList" value="{{company.CompanyId}}">{{company.CompanyName}}</option>
@@ -153,7 +153,7 @@
                                     </th>
                                     <th class="Rosemate-table" width="100"><input type="number" step="0.01" ng-model="purInfo.amtSale" class="form-control text-right" placeholder="Amount" /></th>
                                     <th class="Rosemate-table text-right" width="155">
-                                        <button type="button" class="btn-sm btn-warning btn" style="width:68px">Reciept</button>
+                                        <button type="button" class="btn-sm btn-warning btn" ng-click="openReceipt();" style="width:68px">Reciept</button>
                                         <button type="button" class="btn-sm btn-primary btn" ng-click="addReceipt();" style="width:68px">Add</button>
                                     </th>
                                 </tr>
@@ -165,7 +165,7 @@
                                 </tr>
                             </thead>
                             <tbody style="height: inherit; overflow: auto; display: block;">
-                                <tr ng-repeat="item in purInfo.receipts">
+                                <tr ng-repeat="item in purInfo.receipts" ng-click="editReceipt(item,$index)" ng-class="{selected: $index === selectedReceiptIndex}">
                                     <td class="Rosemate-table">{{item.vo_payment.companyName}}</td>
                                     <td class="Rosemate-table">{{item.vo_payment.partyAccountName}}</td>
                                     <td class="Rosemate-table text-right"><strong>{{item.amount}}</strong></td>
@@ -209,7 +209,7 @@
                             <thead>
                                 <tr>
                                     <th class="Rosemate-table" width="150">
-                                        <select class="form-control" ng-model="selectedCompany2" ng-options="item.CompanyName for item in CompanyList"></select>
+                                        <select class="form-control" ng-model="purInfo.selectedCompany2" ng-options="item.CompanyName for item in CompanyList"></select>
 
                                     </th>
                                     <th class="Rosemate-table">
@@ -229,7 +229,7 @@
                                     </th>
                                     <th class="Rosemate-table" width="100"><input type="number" step="0.01" ng-model="purInfo.amtPurchase" class="form-control text-right" placeholder="Amount" /></th>
                                     <th class="Rosemate-table text-right" width="155">
-                                        <button type="button" class="btn-sm btn-warning btn" style="width:68px">Payment</button>
+                                        <button type="button" class="btn-sm btn-warning btn" ng-click="openPayment();" style="width:68px">Payment</button>
                                         <button type="button" class="btn-sm btn-primary btn" ng-click="addPayment();" style="width:68px">Add</button>
                                     </th>
                                 </tr>
@@ -241,7 +241,7 @@
                                 </tr>
                             </thead>
                             <tbody style="height: inherit; overflow: auto; display: block;">
-                                <tr ng-repeat="item in purInfo.payments">
+                                <tr ng-repeat="item in purInfo.payments" ng-click="editPayment(item,$index)" ng-class="{selected: $index === selectedPaymentIndex}">
                                     <td class="Rosemate-table">{{item.vo_payment.companyName}}</td>
                                     <td class="Rosemate-table">{{item.vo_payment.partyAccountName}}</td>
                                     <td class="Rosemate-table text-right"><strong>{{item.amount}}</strong></td>
