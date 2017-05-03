@@ -330,12 +330,14 @@ var myApp = angular
         });
 
         $stateProvider.state("Customer.accountHistory", {
-            url: "/accountHistory/:accountId/:balanceType",
+            url: "/accountHistory/:accountId/:fromDate/:toDate/:closingBalance",
             templateUrl: "Customer/accountHistory",
             controller: "accountHistoryCntrl",
             params: {
                 accountId: null,
-                balanceType:null
+                fromDate: null,
+                toDate: null,
+                closingBalance:null
             }
         });
         // new controller
@@ -403,14 +405,11 @@ var myApp = angular
         });
 
         $stateProvider.state("Customer.PurchaseInvoiceSattlement", {
-            url: "/PurchaseInvoiceSattlement/:voId",
+            url: "/PurchaseInvoiceSattlement",
             templateUrl: "Customer/PurchaseInvoiceSattlement",
             controller: "PurchaseInvoiceSattlementCntrl",
             requiresAuthentication: true,
-            permissions: 'Float.add.Suppliers.Purchase Invoice.active',
-            params: {
-                voId: null
-            }
+            permissions:'Float.add.Suppliers.Purchase Invoice.active'
         });
 
         $stateProvider.state("Customer.BalanceInventoryViewInfo", {
@@ -453,7 +452,6 @@ var myApp = angular
             controller: "SattlementTransactionsCntrl",
             requiresAuthentication: true,
             permissions: 'Transaction.Settlement.active'
-           
 
         });
 
@@ -545,25 +543,16 @@ var myApp = angular
 
 
 
-//myApp.config(['$httpProvider', function ($httpProvider) {
-//    $httpProvider.defaults.useXDomain = true;
-//    delete $httpProvider.defaults.headers.common['X-Requested-With'];
-//}
-//]);
 myApp.value('config', {
+    login: '',
+    api:''
+//login: 'http://localhost:4000/',
 
-
-
-
-login: 'http://localhost:4000/',
-api: 'http://localhost:4000/api/'
+//api: 'http://localhost:4000/api/'
    
 
-
-
 //login: 'http://bizzy-book-api.azurewebsites.net/',
-//api: 'http://bizzy-book-api.azurewebsites.net/api/',
-
+// api: 'http://bizzy-book-api.azurewebsites.net/api/',
 });
 
 
@@ -581,7 +570,12 @@ myApp.service('selectsuppliers', ['$rootScope',
 }
 ])
 
-myApp.run(['authService', '$location', '$rootScope', 'localStorageService','$state', function (authService, $location, $rootScope,localStorageService,$state) {
+myApp.run(['authService', '$location', '$rootScope', 'localStorageService', '$state', 'config', '$http', function (authService, $location, $rootScope, localStorageService, $state, config, $http) {
+    $http.get('config/config.json').then(function (response) {
+        config.api = response.data.api;
+        config.login = response.data.login;
+        $rootScope.$broadcast('config-loaded');
+    });
     authService.fillAuthData();
     //authManager.checkAuthOnRefresh();
     //authManager.redirectWhenUnauthenticated();

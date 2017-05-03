@@ -75,9 +75,10 @@
     };
 
     //$scope.no = $stateParams.poNo;
-    $scope.bankAccount = {}
-    $scope.partyAccount = {}
-    $scope.badlaAccount = {}
+    $scope.bankAccount = {};
+    $scope.partyAccount = {};
+    $scope.badlaAccount = {};
+    $scope.badlaAccounts = [];
     $scope.badlaDate = 'badlaDate';
     $scope.paymentdate = 'paymentdate';
     $scope.oldAttachment = null;
@@ -101,6 +102,7 @@
     $scope.getSupplier = function () {
         $http.get(config.login + "getPartytAccount/" + localStorage.CompanyId).then(function (response) {
             $scope.partyAccounts = response.data;
+            angular.copy($scope.partyAccounts, $scope.badlaAccounts);
             console.log($scope.partyAccounts);
         });
     }
@@ -110,13 +112,13 @@
             console.log($scope.bankAccounts);
         });
     }
-    $scope.getBadlaAccount = function () {
-        //http://localhost:4000/api/accounts?filter[where][compCode]=COM2016123456780&filter[where][ancestor]=SUNDRY%20DEBTORS
-        $http.get(config.api + "accounts?filter[where][compCode]=" + localStorage.CompanyId + "&filter[where][ancestor]=SUNDRY DEBTORS").then(function (response) {
-            $scope.badlaAccounts = response.data
-            console.log($scope.badlaAccounts);
-        });
-    }
+    //$scope.getBadlaAccount = function () {
+    //    //http://localhost:4000/api/accounts?filter[where][compCode]=COM2016123456780&filter[where][ancestor]=SUNDRY%20DEBTORS
+    //    $http.get(config.api + "accounts?filter[where][compCode]=" + localStorage.CompanyId + "&filter[where][ancestor]=SUNDRY DEBTORS").then(function (response) {
+    //        $scope.badlaAccounts = response.data
+    //        console.log($scope.badlaAccounts);
+    //    });
+    //}
     $scope.mode = "new";
     var datas = [];
     $scope.balanceAmtReceipt = 0;
@@ -161,8 +163,9 @@
             checkPaymentBills();
         });
     }
+    
     $scope.getAccount();
-    $scope.getBadlaAccount();
+    //$scope.getBadlaAccount();
     $scope.getSupplier();
     if($scope.mode!="edit") getVoucherCount();
     $scope.openTransaction = function (id, voType) {
@@ -321,7 +324,7 @@
     }
     function saveBadlaVoucher() {
         var badlaDate = getDate($scope.badlaDate);
-        var badlaDueDate = moment(billDate).add(Number($scope.dayTotal), 'days');
+        var badlaDueDate = moment(badlaDate).add(Number($scope.dayTotal), 'days');
         ///var  badlaDueDate = moment($scope.badlaDate, "DD/MM/YYYY").add(Number($scope.dayTotal), 'days').format('DD/MM/YYYY');
     var data = {
                 compCode: localStorage.CompanyId,

@@ -88,7 +88,7 @@
                             <table style="width:100%; vertical-align:top;" cellpadding="5" cellspacing="5">
                                 <tr>
                                     <td width="170" style="padding:2px 5px"><strong>INVOICE NO.</strong></td>
-                                    <td width="300" style="padding:2px 5px"><strong>: {{invoiceData.vochNo}}</strong></td>
+                                    <td width="300" style="padding:2px 5px"><strong>: {{invoiceData.exciseInvoiceNo}}</strong></td>
 
                                     <td width="160" style="padding:2px 5px"><strong>DATE</strong></td>
                                     <td style="padding:2px 5px; width:150px"><strong>: {{invoiceData.date|date:'dd-MMM-yyyy'}}</strong></td>
@@ -107,7 +107,7 @@
                                 </tr>
                                 <tr>
                                     <td style="padding:2px 5px">Comm. Invoice No.</td>
-                                    <td style="padding:2px 5px" colspan="3">: {{invoiceData.invoiceData.comInvoiceNo}} <span style="margin-left:50px">Date : {{invoiceData.date|date:'dd-MMM-yyyy'}}</span></td>
+                                    <td style="padding:2px 5px" colspan="3">: {{invoiceData.comInvoiceNo}} <span style="margin-left:50px">Date : {{invoiceData.date|date:'dd-MMM-yyyy'}}</span></td>
 
                                 </tr>
                             </table>

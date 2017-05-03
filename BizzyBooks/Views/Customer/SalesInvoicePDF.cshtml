@@ -15,7 +15,7 @@
             <li><a href="" style="font-size:18px"><i class="fa fa-envelope"></i> Send Email</a></li>
             @*<li ng-hide="type =='1'"><a ui-sref="Customer.PurchaseOrder({enqNo:no,edit:1})" style="font-size:18px"><i class="fa fa-edit"></i> Edit</a></li>
             <li ng-hide="type =='2'"><a ui-sref="Customer.Enquiry({email:data.no,edit:1})" style="font-size:18px"><i class="fa fa-edit"></i> Edit</a></li>*@
-            <li><a href="#" style="font-size:18px"><i class="fa fa-print" ng-click="generatePDF()"></i> Print</a></li>
+            <li ng-click="printInvoice('printable');"><a href="" style="font-size:18px"><i class="fa fa-print" ></i> Print</a></li>
             <li><a href="" ng-click="goBack()"><i class="fa fa-times"></i></a></li>
         </ul>
     </div>
@@ -62,13 +62,13 @@
                                                 </td>
                                             </tr>
                                             <tr style="border-bottom:1px solid #e3e3e3; border-left:1px solid #e3e3e3;">
-                                                <td width="400" style="vertical-align:top">
+                                                <td width="400" style="vertical-align:top;padding:5px">
                                                     <p style="margin-bottom:0px">Buyer's Order No.</p>
-                                                    <strong>{{invoiceData.vochNo}}&nbsp;</strong>
+                                                    <strong>{{invoiceData.invoiceData.orderNo}}&nbsp;</strong>
                                                 </td>
                                                 <td width="400" style="border-left:1px solid #e3e3e3; padding:5px">
                                                     <p style="margin-bottom:0px">Dated</p>
-                                                    <strong>{{invoiceData.invoiceData.issueDate|date:'dd-MMM-yyyy'}}&nbsp;</strong>
+                                                    <strong>{{invoiceData.invoiceData.orderDate|date:'dd-MMM-yyyy'}}&nbsp;</strong>
                                                 </td>
                                             </tr>
                                         </table>
@@ -134,22 +134,24 @@
                     <tr>
                         <td style="vertical-align:top; width:100%">
                             <table style="vertical-align:top; width:100%; border-left:none; border-right:none; border-color:rgba(227, 227, 227, 0.2)" border="1">
-
-                                <tr>
-                                    <td style="padding:5px; text-align:center; width:50px">SI No.</td>
-                                    <td style="padding:5px">Description of Goods</td>
-                                    <td style="padding:5px; text-align:right; width:100px">Quantity</td>
-                                    @*<td style="text-align:right; padding:5px">Rate</td>
-                                    <td style="text-align:right; padding:5px">Per</td>*@
-                                </tr>
+                                <thead>
+                                    <tr>
+                                        <td style="padding:5px; text-align:center; width:50px">SI No.</td>
+                                        <td style="padding:5px">Description of Goods</td>
+                                        <td style="padding:5px; text-align:right; width:100px">Quantity</td>
+                                        @*<td style="text-align:right; padding:5px">Rate</td>
+            <td style="text-align:right; padding:5px">Per</td>*@
+                                    </tr>
+                                </thead>
+                                
                                 <tr ng-repeat="item in invoiceData.invoiceData.billData">
                                     <td style="padding:5px; text-align:center; vertical-align:top"><strong>{{$index+1}}</strong></td>
-                                    <td style="text-transform:uppercase; padding:5px; vertical-align:top">
+                                    <td style="padding:5px; text-transform:uppercase;  vertical-align:top">
                                         <strong>{{item.DESCRIPTION}}</strong>
                                     </td>
-                                    <td style="padding:5px; vertical-align:top; text-align:right">
+                                    <td style=" padding:5px; vertical-align:top; text-align:right">
                                         <strong>{{item.itemQty}} Kgs</strong>
-                                        <p style="font-weight:bold; padding:5px 0px">&nbsp;</p>
+                                        @*<p style="font-weight:bold; padding:5px 0px">&nbsp;</p>*@
                                     </td>
                                     @*<td style="text-align:right; padding:5px; vertical-align:top">
                                         500.00
@@ -160,24 +162,26 @@
                                         <p style="padding:10px 0px">%</p>
                                     </td>*@
                                 </tr>
-                                <tr>
-                                    <td style="padding:5px; text-align:center; vertical-align:top">&nbsp;</td>
-                                    <td style="padding:5px; vertical-align:top; text-align:right">
-                                        Total
-                                    </td>
-                                    <td style="padding:5px; vertical-align:top;text-align:right">
-                                        <strong>{{totalQty}} Kgs</strong>
+                                <tfoot>
+                                    <tr>
+                                        <td style="padding:5px; text-align:center; vertical-align:top">&nbsp;</td>
+                                        <td style="padding:5px; vertical-align:top; text-align:right">
+                                            Total
+                                        </td>
+                                        <td style="padding:5px; vertical-align:top;text-align:right">
+                                            <strong>{{totalQty}} Kgs</strong>
 
-                                    </td>
-                                    @*<td style="text-align:right; padding:5px; vertical-align:top">
-                                        500.00
+                                        </td>
+                                        @*<td style="text-align:right; padding:5px; vertical-align:top">
+                    500.00
 
-                                    </td>
-                                    <td style="text-align:right; padding:5px; vertical-align:top">
-                                        Kgs
+                </td>
+                <td style="text-align:right; padding:5px; vertical-align:top">
+                    Kgs
 
-                                    </td>*@
-                                </tr>
+                </td>*@
+                                    </tr>
+                                </tfoot>
                             </table>
                         </td>
                     </tr>

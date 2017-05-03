@@ -218,7 +218,7 @@
                                     <li permission="Float.add.Customers.Tax Invoice.active"><a ui-sref=".TaxInvoice">Tax Invoice</a></li>
                                     <li permission="Float.add.Customers.Sales Invoice.active"><a ui-sref=".SalesInvoice">Sales Invoice</a></li>
                                     <li permission="Float.add.Customers.General Invoice.active"><a ui-sref=".GeneralInvoice">General Invoice</a></li>
-                                    <li permission="Float.add.Customers.Badla Voucher.active"><a ui-sref=".BadlaVoucher">Badla Voucher</a></li>
+                                    @*<li permission="Float.add.Customers.Badla Voucher.active"><a ui-sref=".BadlaVoucher">Badla Voucher</a></li>*@
                                     <li permission="usertype:UO"><a ui-sref=".RosemateVoucher">Rosemate Voucher</a></li>
                                 </ul>
                             </div>
@@ -442,6 +442,7 @@
 
                                     </div>
                                 <div class="modal-footer content">
+                                    <button type="button" ng-show="edit" ng-click="deleteCompany()" class="btn btn-danger btn-sm" data-dismiss="modal" style="width:80px">Delete</button>
                                     <button type="button" ng-click="closenClear()" class="btn btn-default btn-sm" data-dismiss="modal" style="width:80px">Cancel</button>
                                     <button type="button" ng-click="saveCompany()" class="btn btn-primary btn-sm" style="width:80px">Save</button>
 
