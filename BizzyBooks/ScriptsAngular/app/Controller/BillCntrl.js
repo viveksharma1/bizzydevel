@@ -739,6 +739,9 @@
             $scope.billtable[$scope.tableIndex].totalDutyAmt = $scope.totalDutyAmt;
             $scope.billtable[$scope.tableIndex].actualDate = $scope.actualDate;
             $scope.billtable[$scope.tableIndex].customData = $scope.customDatanew
+            $scope.billtable[$scope.tableIndex].purchaseRate = (Number($scope.assesableValue) / Number($scope.billtable[$scope.tableIndex].NETWEIGHT)).toFixed(2);
+            $scope.billtable[$scope.tableIndex].dutyPerUnit = (Number($scope.exciseDuty1) / Number($scope.billtable[$scope.tableIndex].NETWEIGHT)).toFixed(2);
+            $scope.billtable[$scope.tableIndex].sadPerUnit = (Number($scope.SAD1) / Number($scope.billtable[$scope.tableIndex].NETWEIGHT)).toFixed(2);
             $scope.sumtotalcustomData();
         }
         if ($scope.exciseAssessableValue) {
@@ -1358,8 +1361,9 @@
         $scope.exciseDutyAmount = data.dutyAmount
         $scope.sadAmount = data.SAD
         $scope.exciseRate = data.exciseRate
-        $scope.sadRate = data.sadRate
-        $scope.sadPerUnit = Number((data.SAD / data.NETWEIGHT).toFixed(2));
+        $scope.sadRate = data.sadRate,
+        $scope.sadPerUnit = Number((data.SAD / data.NETWEIGHT).toFixed(2))
+       
     }
     $scope.exciseCalculate = function () {
         $scope.exciseDutyAmount = Number(((($scope.lineItemnetweight * $scope.lineItemBaseRate) * $scope.exciseRate) / 100).toFixed(2));
@@ -1386,7 +1390,10 @@
                 exciseDuty: $scope.exciseDutyAmount,
                 dutyAmount: $scope.exciseDutyAmount,
                 SAD: $scope.sadAmount,
-                totalDutyAmt: ''
+                totalDutyAmt: '',
+                purchaseRate: '',
+                dutyPerUnit: '',
+                sadPerUnit: ''
             }
         }
         if ($scope.invoiceType == 'Domestic') {
@@ -1404,7 +1411,10 @@
                 SAD: $scope.sadAmount,
                 totalDutyAmt: '',
                 exciseRate: $scope.exciseRate,
-                sadRate:$scope.sadRate
+                sadRate: $scope.sadRate,
+                purchaseRate: $scope.lineItemBaseRate,
+                dutyPerUnit: $scope.exciseDutyPerUnit,
+                sadPerUnit: (Number($scope.sadAmount) / Number($scope.lineItemnetweight)).toFixed(2)
             }
         }
         if ($scope.selectedItemIndex!=null) {
@@ -1626,35 +1636,7 @@
 
 
 
-    var urlToChangeStream = "" + config.api + "voucherTransactions/change-stream?_format=event-stream";
-    var src = new EventSource(urlToChangeStream, { withCredentials: true });
-    src.addEventListener('data', function (msg) {
-        var d = JSON.parse(msg.data);
-        console.log(d)
-        if (d) {
-            var username = authService.getAuthentication().username
-            var activityType;
-            if (d.type == 'create') {
-                var activityType = d.data.type + " " + "Created"
-
-            } else if (d.type == 'update') {
-                var activityType = d.data.type + " " + "Updated"
-            }
-            var logData = {
-                username: username,
-                date: moment().format('MMMM Do YYYY, h:mm:ss a'),
-                activityType: activityType,
-                vochNo: ''
-
-            }
-            $http.post(config.login + "userActivityLog", logData).then(function (response) {
-                return;
-            });
-
-        }
-        console.log(d.data);
-    })
-
+  
 
 }]);
 

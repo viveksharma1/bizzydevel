@@ -289,9 +289,9 @@
                                     <td> {{item.RRMARKS}}</td>
                                     <td> {{item.actualDate}}</td>
                                     <td> {{item.rgNo}}</td>
-                                    <td> {{item.assesableValue/item.NETWEIGHT |number : fractionSize}}</td>
-                                    <td> {{item.exciseDuty/item.NETWEIGHT |number : fractionSize}}</td>
-                                    <td> {{item.SAD/item.NETWEIGHT |number : fractionSize}}</td>
+                                    <td> {{item.purchaseRate |number : fractionSize}}</td>
+                                    <td> {{item.dutyPerUnit |number : fractionSize}}</td>
+                                    <td> {{item.sadPerUnit |number : fractionSize}}</td>
 
                                     <td> {{item.NETWEIGHT |number : fractionSize}}</td>
                                     <td> {{item.NETWEIGHT - item.BALANCE |number : fractionSize}}</td>
