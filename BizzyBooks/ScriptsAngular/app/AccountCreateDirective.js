@@ -198,21 +198,27 @@
                             
 
                             $http.post(config.login + "createAccount?id=" + $scope.accountId, accountData).then(function (response) {
-                                showSuccessToast("Account Created Succesfully");
-                                $http.post(config.login + "openingBalanceLedgerEntry/" + localStorage.CompanyId + "?accountId="+ $scope.accountId, accountData).then(function (response) {
-                                    $http.get(config.login + "getAccountNameById").then(function (response) {
-                                        $scope.accountData = response.data
-                                        for (var i = 0; i < $scope.accountData.length; i++) {
-                                            localStorage[$scope.accountData[i]._id] = $scope.accountData[i].accountName
-                                        }
+                                if (response.data.id) {
+                                    $scope.accountId = response.data.id
+                                    console.log(response.data)
+                                    showSuccessToast("Account Created Succesfully");
+                                    $http.post(config.login + "openingBalanceLedgerEntry/" + localStorage.CompanyId + "?accountId=" + $scope.accountId + "&role=" + localStorage.usertype, accountData).then(function (response) {
+                                        $http.get(config.login + "getAccountNameById").then(function (response) {
+                                            $scope.accountData = response.data
+                                            for (var i = 0; i < $scope.accountData.length; i++) {
+                                                localStorage[$scope.accountData[i]._id] = $scope.accountData[i].accountName
+                                            }
+                                        });
+
                                     });
-                                });
+                                }
+                             });
 
                                 //$http.get(config.login + "chartOfAccount/" + localStorage.CompanyId).then(function (response) {
                                 //    $scope.account = response.data;
 
                                 //});
-                            });
+                            
                         }
                         $scope.accountCreations();
 

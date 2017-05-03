@@ -304,7 +304,6 @@
     <Content Include="js\jspdf.min.js" />
     <Content Include="js\jszip-utils.js" />
     <Content Include="js\jszip.js" />
-    <Content Include="js\jszip.min.js" />
     <Content Include="js\kendo.all.min.js" />
     <Content Include="js\loading-bar.js" />
     <Content Include="js\modernizr.custom.js" />
@@ -549,12 +548,9 @@
     <Content Include="Views\Customer\UserList.cshtml" />
     <Content Include="Views\Customer\RosemateVoucher.cshtml" />
     <Content Include="Views\Customer\stockBalanceView.cshtml" />
-
-
     <Content Include="Views\Customer\ContraEntry.cshtml" />
     <Content Include="Views\Customer\BalanceSheet.cshtml" />
     <Content Include="Views\Customer\ProfitLossAccount.cshtml" />
-
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

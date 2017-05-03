@@ -204,6 +204,9 @@ myApp.controller('HomeCntrl', ['$state', '$http', '$rootScope', '$scope', 'confi
     //localStorage.toDate = moment().format('MM/DD/YYYY'); moment()
     $scope.fromDate = moment(localStorage.fromDate).format('DD/MM/YYYY');
     $scope.toDate = moment(localStorage.toDate).format('DD/MM/YYYY')
+
+
+   
     
 }]);
 

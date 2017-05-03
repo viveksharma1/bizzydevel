@@ -35,7 +35,7 @@
             <div class="panel-heading">
                 <strong class="heading">Balance Inventory</strong>
 
-                <div class="btn-group pull-right">
+                @*<div class="btn-group pull-right">
                     <button type="button" class="btn btn-primary btn-sm"><a href="" ng-click="UploadOpeningStock()" style="color:#fff">Opening Stock GRN Entry</a></button>
                     <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="caret" style="border-top-color:#fff !important"></span>
@@ -44,7 +44,26 @@
                         <li><a href="#/Customer/Import">Import GRN Entry</a></li>
 
                     </ul>
-                </div>
+                </div>*@
+                
+                <span id="fileUpload" class="pull-right">
+                    <label class="btn btn-default btn-sm" style="height:30px;width:150px">
+                        Choose file
+                        <input type="file" id="imageUpload" file-model="myFile"
+                               style="display: none">
+
+                    </label>
+                    <button ng-click="uploadFile()" ng-hide="saving" id="fileUpload1"
+                            class="btn btn-primary btn-sm">
+                        <i class="fa fa-upload"></i>
+                    </button>
+                    <button ng-click="uploadFile()" ng-show="saving" id="fileUpload1"
+                            class="btn btn-primary btn-sm">
+                        <i class="fa fa-spin fa-spinner"></i>
+                    </button>
+
+                </span>
+                <h4 style="color:green;margin-left:4px"class="pull-right"> Opening Stock: </h4>
             </div>
 
             <!-- Modal -->

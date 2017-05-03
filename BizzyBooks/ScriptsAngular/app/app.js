@@ -545,6 +545,11 @@ var myApp = angular
 
 
 
+myApp.config(['$httpProvider', function ($httpProvider) {
+    $httpProvider.defaults.useXDomain = true;
+    delete $httpProvider.defaults.headers.common['X-Requested-With'];
+}
+]);
 myApp.value('config', {
 
 
@@ -553,6 +558,7 @@ myApp.value('config', {
 login: 'http://localhost:4000/',
 api: 'http://localhost:4000/api/'
    
+
 
 
 //login: 'http://bizzy-book-api.azurewebsites.net/',

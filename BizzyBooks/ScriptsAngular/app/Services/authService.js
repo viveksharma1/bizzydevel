@@ -154,7 +154,8 @@ myApp.factory('authService', ['$http', 'jwtHelper', 'localStorageService','$root
         delete $rootScope.authentication;
     };
  
-    authServiceFactory.fillAuthData = _fillAuthData;
+    authServiceFactory.fillAuthData = _fillAuthData
+    authServiceFactory.getAuthentication = _getAuthentication;
     authServiceFactory.checkPermissionForView = _checkPermissionForView;
     authServiceFactory.userHasPermission = _userHasPermission;
     authServiceFactory.getUserPermission = _getUserPermission;

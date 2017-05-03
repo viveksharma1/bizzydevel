@@ -1622,8 +1622,39 @@
         content: "<table style='width:100%'><tr><th>Date</th><th>Amount Applied</th><th>Payment No.</th></tr><tr ng-repeat='data in paymentLog'><td>{{data.date}}</td><td>Rs{{data.amount}}</td><td>{{data.vochNo}}</td></tr><tr></tr></table>",
         html: true
     })
+    //event stream
 
-  
+
+
+    var urlToChangeStream = "" + config.api + "voucherTransactions/change-stream?_format=event-stream";
+    var src = new EventSource(urlToChangeStream, { withCredentials: true });
+    src.addEventListener('data', function (msg) {
+        var d = JSON.parse(msg.data);
+        console.log(d)
+        if (d) {
+            var username = authService.getAuthentication().username
+            var activityType;
+            if (d.type == 'create') {
+                var activityType = d.data.type + " " + "Created"
+
+            } else if (d.type == 'update') {
+                var activityType = d.data.type + " " + "Updated"
+            }
+            var logData = {
+                username: username,
+                date: moment().format('MMMM Do YYYY, h:mm:ss a'),
+                activityType: activityType,
+                vochNo: ''
+
+            }
+            $http.post(config.login + "userActivityLog", logData).then(function (response) {
+                return;
+            });
+
+        }
+        console.log(d.data);
+    })
+
 
 }]);
 
@@ -1693,8 +1724,6 @@ myApp.directive('addItem', function ($compile, $templateCache) {
        
     };
 });
-
-
 
 //excise
 

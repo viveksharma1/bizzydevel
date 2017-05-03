@@ -102,7 +102,7 @@
 
                 </div>
                 <div class="col-sm-1 padding">
-                    <button type="button" class="btn btn-sm btn-primary" bill-Info billdata ="settlementData" exciseData="settlementData">view</button>
+                    <button type="button" style="margin-top:26px" class="btn btn-sm btn-primary" bill-Info billdata ="settlementData" exciseData="settlementData">view</button>
 
                 </div>
             </div>
@@ -120,12 +120,16 @@
                 <input type="text" class="form-control" ng-model="settlementData.exciseAmount" />
 
             </div>
+            
 
             <div class="col-sm-4 padding text-right pull-right" style="margin-top:10px">
-                 <h4 class="tabheading" style="float:right; width:100%; margin-top:0px !important">Ref. No.</h4>
-                <input type="text" class="form-control pull-right"  ng-model="settlementData.refNo" disabled style="width:100px" />
+                 <h4 class="tabheading" style="float:right; width:100%; margin-top:0px !important">No.</h4>
+                <input type="text" class="form-control pull-right"  ng-model="settlementData.voRefNo" disabled style="width:100px" />
+            
+            
+                <h4 class="tabheading" style="float:right; width:100%; margin-top:0px !important">Ref. No.</h4>
+                <input type="text" class="form-control pull-right" ng-model="settlementData.invoiceNo" disabled style="width:100px" />
             </div>
-
 
             
 
@@ -138,7 +142,7 @@
         </div>
         <div class="col-sm-6">
             <div class="Settelmentbox">
-                <h3><input type="radio"  name="deduction" class="Settelment_Radio" /> Interest Deduction</h3>
+                <h3><input type="radio" ng-model="type"  name="deduction" class="Settelment_Radio" /> Interest Deduction</h3>
                 <hr />
                 <div class="col-sm-6">
                     <h4 class="tabheading font_11">Interest</h4>
@@ -153,7 +157,7 @@
 
         <div class="col-sm-6">
             <div class="Settelmentbox">
-                <h3><input type="radio" name="deduction" class="Settelment_Radio" /> Ded/Kg</h3>
+                <h3><input type="radio" name="deduction" ng-click="selectionBox("dedPerKg")" class="Settelment_Radio" /> Ded/Kg</h3>
                 <hr />
                 <div class="col-sm-4">
                     <h4 class="tabheading font_11">Vat ded/kg</h4>
@@ -166,8 +170,9 @@
 
                 <div class="col-sm-4">
                     <h4 class="tabheading font_11">Total ded/kg</h4>
-                    <input type="text" class="form-control" ng-model="settlementData.totalDedPerKg"/>
+                    <input type="text" class="form-control" ng-blur="vatDedPerkg()" ng-model="settlementData.totalDedPerKg"/>
                 </div>
+
             </div>
         </div>
 
