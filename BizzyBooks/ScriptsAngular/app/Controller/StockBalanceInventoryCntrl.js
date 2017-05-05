@@ -260,6 +260,70 @@
 
     $(":file").filestyle({ buttonName: "btn-sm btn-info" });
 
+    // stock upload
+    function uploadStockInventory(data) {
+        $http.post(config.api + "Inventories", data).then(function (response) {
+            console.log(response)
+            $scope.saving = false
+        })
+    }
+    $scope.uploadFile = function () {
+        $scope.saving = true
+        $scope.inventoryLedger = [];
+        $scope.rows = [];
+        $scope.ExeclDataRows = [];
+        $scope.Key = [];
+        $scope.KeyArray = [];
+        var KeyName1;
+        var file = $scope.myFile;
+        this.parseExcel = function (file) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var data = e.target.result;
+                var workbook = XLSX.read(data, { type: 'binary' });
+                workbook.SheetNames.forEach(function (sheetName) {
+                    // Here is your object
+                    var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+                    for (key in XL_row_object) {
+                        var retObj = {};
+                        for (var obj in XL_row_object[key]) {
+
+                            var obj1 = obj.replace(" ", "");
+                            retObj[obj1] = XL_row_object[key][obj];
+
+                            retObj["currentStatus"] = 'open';
+                            retObj["visible"] = true;
+                            retObj["no"] = "Opening Balance";
+                            retObj["statusTransaction"] = [{ dt: new Date(), status: 'open', remarks: 'inventory added' }];
+                            //retObj["assesableValue"] = '0';
+                           // retObj["exciseDuty"] = '0';
+                            //retObj["dutyAmount"] = '0';
+                            //retObj["SAD"] = '0';
+                            //retObj["totalDutyAmt"] = '0';
+                           
+                           
+                            var Keyobj = [];
+                            var KeyName = obj;
+                            Keyobj[KeyName1] = KeyName;
+                            $scope.Key.push(Keyobj);
+                        }
+                        $scope.ExeclDataRows.push(retObj);
+                        $scope.rows = [];
+                        $scope.KeyArray = $scope.Key;
+                        $scope.Key = [];
+                    }
+                })
+                uploadStockInventory($scope.ExeclDataRows);
+
+            };
+            reader.onerror = function (ex) {
+
+            };
+
+            reader.readAsBinaryString(file);
+        };
+        var data = this.parseExcel(file);
+    };
 
 
 }]);

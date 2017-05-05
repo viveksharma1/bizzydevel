@@ -2768,6 +2768,9 @@ th {
 .table-hover > tbody > tr:hover {
     background-color: #eee;
 }
+.account-hover > tbody > tr:hover {
+    background-color: #D6EDEE;
+}
 
 table col[class*=col-] {
     position: static;
@@ -7297,7 +7300,7 @@ button.close {
     height: 100%;
     margin-left: -150px;
     overflow-y: auto;
-    background: #0b4462;
+    background: #228D95;
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
@@ -7371,11 +7374,11 @@ button.close {
     }
 
         .sidebar-nav > .sidebar-brand a {
-            color: #999999;
+            color: #777;
         }
 
             .sidebar-nav > .sidebar-brand a:hover {
-                color: #fff;
+                color: #777;
                 background: none;
             }
 
@@ -7751,7 +7754,7 @@ button.close {
 .flexfooter {
     float: left;
     width: 100%;
-    background: #0b4462;
+    background: #D6EDEE;
     color: #fff;
     height: 46px;
     padding: 8px;

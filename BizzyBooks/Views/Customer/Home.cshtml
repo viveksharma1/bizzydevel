@@ -77,81 +77,45 @@
 
 <div id="wrapper">
 
-    <!-- Sidebar -->
-    @*<div id="sidebar-wrapper">*@
-    @*<ul class="sidebar-nav">
-            <li class="sidebar-brand">
-
-                    <i class="fa fa-compass">Account Books</i>
-
-            </li>
-            <li>
-                <a ui-sref=".HomePage"><i class="fa fa-dashboard"></i> Home</a>
-            </li>
-            <li>
-                <a ui-sref=".Customer"><i class="fa fa-users"></i> Customers</a>
-            </li>
-            <li>
-                <a ui-sref=".Suppliers"><i class="fa fa-street-view"></i> Suppliers</a>
-            </li>
-
-            <li>
-                <a href="" class="sub-menu"><i class="fa fa-money"></i> Transactions</a>
-                <ul class="list-unstyled leftsubmenu">
-                    <li><a ui-sref=".Banking">Banking</a></li>
-                    <li><a ui-sref=".Sales">Sales</a></li>
-                    <li><a ui-sref=".Expenses">Expenses</a></li>
-
-                </ul>
-            </li>
-            <li>
-                <a ui-sref=".Inventory"><i class="fa fa-cubes"></i> Inventory</a>
-            </li>
-            <li>
-                <a ui-sref=".Logistics"><i class="fa fa-truck"></i>Logistics </a>
-            </li>
-            <li>
-                <a href=""><i class="fa fa-bar-chart"></i> Reports</a>
-            </li>
-
-        </ul>*@
-
-    <div id="sidebar-wrapper" >
+    <div id="sidebar-wrapper">
         @*<em ng-switch-when="3">*@
             <ul class="sidebar-nav">
-                <li class="sidebar-brand">
+                @*<li class="sidebar-brand">
                     <a href="#" class="logo">
-                        <i class="fa fa-compass"></i> Account <span>Books</span>
+                         Account <span> Books </span>
                     </a>
+                </li>*@
+                <li permission="Home.active">
+                    <span style="color:white;font-size:16px; font:bold;font-family:Cambria, Cochin, Georgia, Times, Times New Roman, serif">Account  Books</span>
                 </li>
                 <li permission="Home.active">
-                    <a ui-sref=".HomePage"><i class="fa fa-dashboard"></i> Home</a>
+                    <a ui-sref=".HomePage"><i class="fa fa-home" style="color:#223839"></i> Home</a>
                 </li>
                 <li permission="Customers.active">
-                    <a ui-sref=".Customer"><i class="fa fa-users"></i> Customers</a>
+                    <a ui-sref=".Customer"><i class="fa fa-users" style="color:#223839"></i> Customers</a>
                 </li>
                 <li permission="Suppliers.active">
-                    <a ui-sref=".Suppliers"><i class="fa fa-street-view"></i> Suppliers</a>
+                    <a ui-sref=".Suppliers"><i class="fa fa-street-view" style="color:#223839"></i> Suppliers</a>
                 </li>
 
                 <li permission="Transaction.active" >
-                    <a href="" class="sub-menu"><i class="fa fa-money"></i> Transactions</a>
+                    <a href="" class="sub-menu"><i class="fa fa-money" style="color:#223839"></i> Transactions</a>
                     <ul class="list-unstyled">
-                        <li permission="Transaction.Banking.active" ><a ui-sref=".Banking" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Banking</a></li>
-                        <li permission="Transaction.Chart Of Accounts.active"><a ui-sref=".ChartofAccounts" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Chart of Accounts</a></li>
-                        <li permission="Transaction.Voucher.active"><a ui-sref=".VoucherTransactions" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Voucher </a></li>
-                        <li permission="Transaction.Settlement.active"><a ui-sref=".SattlementTransactions" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Settlement </a></li>
-                        <li permission="Transaction.ActivityLog.active"><a ui-sref=".ActivityLog" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Activity Log </a></li>
+                        <li permission="Transaction.Banking.active" ><a ui-sref=".Banking" style="font-size: 12px;  padding-left: 27px;  color: black;"><b>Banking</b></a></li>
+                        <li permission="Transaction.Chart Of Accounts.active"><a ui-sref=".ChartofAccounts" style="font-size: 12px;  padding-left: 27px;  color: black;"><b>Chart of Accounts</b></a></li>
+                        <li permission="Transaction.Voucher.active"><a ui-sref=".VoucherTransactions" style="font-size: 12px;  padding-left: 27px;  color: black;"><b>Voucher</b> </a></li>
+                        <li permission="Transaction.Settlement.active"><a ui-sref=".SattlementTransactions" style="font-size: 12px;  padding-left: 27px;  color: black;"><b>Settlement</b> </a></li>
+                        <li permission="Transaction.ActivityLog.active"><a ui-sref=".ActivityLog" style="font-size: 12px;  padding-left: 27px;  color: black;"><b>Activity Log</b> </a></li>
                     </ul>
                 </li>
                 <li>
-                    <a href="" class="sub-menu"><i class="fa fa-money"></i> Inventory</a>
+                    <a href="" class="sub-menu"><i class="fa fa-archive" style="color:#223839"></i> Inventory</a>
                     <ul class="list-unstyled">
                         @*<li><a ui-sref=".Inventory" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Stock Line </a></li>
                         <li><a ui-sref=".inventorystock" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Stock </a></li>
                         <li><a ui-sref=".BalanceInventory" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Balance  </a></li>*@
-                        <li permission="Inventory.Balance Stock.active"><a ui-sref=".StockBalanceInventory" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Stock Balance </a></li>
-                        <li permission="Inventory.Balance Stock Line.active"><a ui-sref=".BalanceInventory" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Line Item Balance</a></li>
+                        <li permission="Inventory.Balance Stock.active"><a ui-sref=".StockBalanceInventory" style="font-size: 12px;  padding-left: 27px;  color: black;"><b>Stock Balance</b> </a></li>
+                        <li permission="Inventory.Balance Stock Line.active"><a ui-sref=".BalanceInventory" style="font-size: 12px;  padding-left: 27px;  color: black;"><b>Line Item Balance</b></a></li>
 
                     </ul>
                 </li>
@@ -224,12 +188,12 @@
         <div class="container-fluid" >
             <div class="row">
 
-                <div class="bg-info cursor topbar">
+                <div class="cursor topbar" style="color:#0b4462;background:#C3EFF2">
                     <i class="fa fa-bars menutoggle" id="menutoggle"></i>
 
                     <ul class="list-unstyled topmenu">
-                        <li><a ui-sref=".SearchTransactions"><i class="fa fa-search" style="color:#fff"></i></a></li>
-                        <li class="addrotate flytopbar"><i class="fa fa-plus"></i> </li>
+                        <li><a ui-sref=".SearchTransactions"><i class="fa fa-search" style="color:#50CDD6"></i></a></li>
+                        <li class="addrotate flytopbar"><i class="fa fa-plus"style="color:#50CDD6"></i> </li>
                     </ul>
 
 

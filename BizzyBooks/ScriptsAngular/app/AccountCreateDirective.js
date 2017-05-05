@@ -27,6 +27,7 @@
                     $scope.groupMaster = response.data;
 
                 });
+                
 
                 $scope.createAccountBtn = function () {
                     $scope.isDisabled = false;
@@ -44,6 +45,10 @@
                         }
                         if ($scope.value.id) {
                             $scope.accountId = $scope.value.id
+                            $http.get(config.login + "getAccountOpeningBalnce/" + localStorage.CompanyId + "?accountId=" + $scope.accountId + "&role=" + localStorage.usertype).then(function (response) {
+                                $scope.openingBalance = Number(response.data.balance);
+
+                            });
                             console.log($scope.value);
 
                             $scope.accountName = $scope.value.accountName;
@@ -85,7 +90,7 @@
                             }
                             $scope.credit = $scope.value.credit;
                             $scope.debit = $scope.value.debit;
-                            $scope.openingBalance = $scope.value.openingBalance;
+                            //$scope.openingBalance = $scope.value.openingBalance;
                         }
                     }
                     else {
@@ -190,21 +195,30 @@
 
                         }
                         $scope.accountCreations = function () {
+                            
 
                             $http.post(config.login + "createAccount?id=" + $scope.accountId, accountData).then(function (response) {
-                                showSuccessToast("Account Created Succesfully");
-                                $http.get(config.login + "getAccountNameById").then(function (response) {
-                                    $scope.accountData = response.data
-                                    for (var i = 0; i < $scope.accountData.length; i++) {
-                                        localStorage[$scope.accountData[i]._id] = $scope.accountData[i].accountName
-                                    }
-                                });
+                                if (response.data.id) {
+                                    $scope.accountId = response.data.id
+                                    console.log(response.data)
+                                    showSuccessToast("Account Created Succesfully");
+                                    $http.post(config.login + "openingBalanceLedgerEntry/" + localStorage.CompanyId + "?accountId=" + $scope.accountId + "&role=" + localStorage.usertype, accountData).then(function (response) {
+                                        $http.get(config.login + "getAccountNameById").then(function (response) {
+                                            $scope.accountData = response.data
+                                            for (var i = 0; i < $scope.accountData.length; i++) {
+                                                localStorage[$scope.accountData[i]._id] = $scope.accountData[i].accountName
+                                            }
+                                        });
 
-                                $http.get(config.login + "chartOfAccount/" + localStorage.CompanyId).then(function (response) {
-                                    $scope.account = response.data;
+                                    });
+                                }
+                             });
 
-                                });
-                            });
+                                //$http.get(config.login + "chartOfAccount/" + localStorage.CompanyId).then(function (response) {
+                                //    $scope.account = response.data;
+
+                                //});
+                            
                         }
                         $scope.accountCreations();
 
