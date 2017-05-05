@@ -60,7 +60,7 @@ myApp.controller('HomeCntrl', ['$state', '$http', '$rootScope', '$scope', 'confi
     
     function GetCompanyData() {
         //$scope.reload = true;
-        $http.get(config.api + "CompanyMasters").success(function (response) {
+        $http.get(config.api + "CompanyMasters?filter[where][IsActive]=1").success(function (response) {
             $scope.CompanyList = filterCompanyList(response);
             //$scope.CompanyList = response;
             
@@ -156,10 +156,19 @@ myApp.controller('HomeCntrl', ['$state', '$http', '$rootScope', '$scope', 'confi
     $scope.editCompany = function (item) {
         $scope.edit = true;
         $scope.companyInfo = item;
+        $scope.delcompanyInfo = item;
         $('#AddCompnayModal').modal('show');
     }
     $scope.deleteCompany = function () {
-        showSuccessToast("Company Deleted");
+        $scope.delcompanyInfo.IsActive = 0;
+        $http.put(config.api + "CompanyMasters", $scope.delcompanyInfo).then(function (response) {
+            showSuccessToast("Company Deleted");
+            $scope.closenClear();
+        }, function () {
+            showSuccessToast("Error! while deleting company");
+        });
+        
+        //$scope.closenClear();
     }
     $scope.saveCompany = function () {
         
@@ -191,8 +200,10 @@ myApp.controller('HomeCntrl', ['$state', '$http', '$rootScope', '$scope', 'confi
             });
         } else {
             $scope.companyInfo.CompanyId = 'COM' + moment().format("YYYYMMDDHHmmssSSS");
+            var dataAssign={ role: localStorage['usertype'], compCode: $scope.companyInfo.CompanyId };
             $http.post(config.api + "CompanyMasters", $scope.companyInfo).then(function (response) {
                 showSuccessToast("Company created");
+                $http.post(config.login + "assignCompany", dataAssign);
                 $scope.closenClear();
             }, function () {
                 showSuccessToast("Error! while creating company");

@@ -1,5 +1,5 @@
 var myApp = angular
-    .module('myApp', ['ui.router', 'datatables', 'angular-loading-bar', 'anguFixedHeaderTable', 'ngAnimate','oitozero.ngSweetAlert', 'fsm', 'ui.select', 'ngSanitize', 'angular.filter', 'angularFileUpload', 'angular-jwt', 'LocalStorageModule', 'ng.jsoneditor', 'ui.bootstrap','ngConfirm'])
+    .module('myApp', ['ui.router', 'datatables', 'angular-loading-bar', 'anguFixedHeaderTable', 'ngAnimate', 'oitozero.ngSweetAlert', 'fsm', 'ui.select', 'ngSanitize', 'angular.filter', 'angularFileUpload', 'angular-jwt', 'LocalStorageModule', 'ng.jsoneditor', 'ui.bootstrap', 'ngConfirm','oitozero.ngSweetAlert'])
     .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
 
         $urlRouterProvider.otherwise('/');
@@ -577,6 +577,15 @@ myApp.run(['authService', '$location', '$rootScope', 'localStorageService', '$st
         config.login = response.data.login;
         $rootScope.$broadcast('config-loaded');
     });
+    $rootScope.spinner = {
+        active: false,
+        on: function () {
+            this.active = true;
+        },
+        off: function () {
+            this.active = false;
+        }
+    };
     if (!localStorage.fromDate)
     {
         var d = new Date(moment(new Date()).subtract(30, 'days'));
