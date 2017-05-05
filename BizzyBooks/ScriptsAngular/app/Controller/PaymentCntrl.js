@@ -6,7 +6,7 @@
         e.preventDefault();
     });
     $scope.goBack = function () {
-        if ($rootScope.$previousState.name.length == 0) {
+        if ($rootScope.$previousState.name.length == 0 || $rootScope.$previousState == $state.current) {
             window.history.back();
         } else
             $state.go($rootScope.$previousState);

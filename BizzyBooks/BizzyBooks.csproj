@@ -261,6 +261,7 @@
     <Content Include="js\bootstrap.min.js" />
     <Content Include="js\Chart.js" />
     <Content Include="js\Common.js" />
+    <Content Include="js\confirm.js" />
     <Content Include="js\custom.js" />
     <Content Include="js\dataTables.min.css" />
     <Content Include="js\datatables\buttons.bootstrap.min.css" />
@@ -311,6 +312,7 @@
     <Content Include="js\moment.js" />
     <Content Include="js\moment\moment.js" />
     <Content Include="js\moment\moment.min.js" />
+    <Content Include="js\ng-confirm.min.js" />
     <Content Include="js\ng-jsoneditor.js" />
     <Content Include="js\ngtimeago.js" />
     <Content Include="js\nprogress.js" />
@@ -371,12 +373,16 @@
     <Content Include="ScriptsAngular\Angular\angular-jwt.js" />
     <Content Include="ScriptsAngular\Angular\angular-local-storage.min.js" />
     <Content Include="ScriptsAngular\Angular\angular-route.js" />
+    <Content Include="ScriptsAngular\Angular\angular-route.min.js" />
     <Content Include="ScriptsAngular\Angular\angular-ui-router.js" />
     <Content Include="ScriptsAngular\Angular\angular.js" />
+    <Content Include="ScriptsAngular\Angular\angular.min.js" />
     <Content Include="ScriptsAngular\Angular\dirPagination.js" />
     <Content Include="ScriptsAngular\Angular\ng-google-chart.js" />
     <Content Include="ScriptsAngular\Angular\src\angular-animate.js" />
+    <Content Include="ScriptsAngular\Angular\src\angular-animate.min.js" />
     <Content Include="ScriptsAngular\Angular\src\angular-filter.min.js" />
+    <Content Include="ScriptsAngular\Angular\src\angular-sanitize.js" />
     <Content Include="ScriptsAngular\Angular\src\angular-sanitize.min.js" />
     <Content Include="ScriptsAngular\Angular\src\lodash.min.js" />
     <Content Include="ScriptsAngular\Angular\src\ng-scrollbar.min.js" />
@@ -395,6 +401,9 @@
     <Content Include="ScriptsAngular\Angular\src\plugins\tabletools\angular-datatables.tabletools.js" />
     <Content Include="ScriptsAngular\Angular\src\select.min.js" />
     <Content Include="ScriptsAngular\Angular\src\ui-bootstrap-tpls-0.13.4.js" />
+    <Content Include="ScriptsAngular\Angular\ui-bootstrap-tpls-0.14.3.min.js" />
+    <Content Include="ScriptsAngular\Angular\ui-bootstrap-tpls-1.0.0.min.js" />
+    <Content Include="ScriptsAngular\Angular\ui-bootstrap-tpls-2.5.0.min.js" />
     <Content Include="ScriptsAngular\app\AccountCreateDirective.js" />
     <Content Include="ScriptsAngular\app\Controller\accountHistoryCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\ActivityLogCntrl.js" />
@@ -552,6 +561,9 @@
     <Content Include="Views\Customer\ContraEntry.cshtml" />
     <Content Include="Views\Customer\BalanceSheet.cshtml" />
     <Content Include="Views\Customer\ProfitLossAccount.cshtml" />
+    <Content Include="ScriptsAngular\Angular\src\angular-animate.min.js.map" />
+    <Content Include="ScriptsAngular\Angular\src\angular-sanitize.min.js.map" />
+    <Content Include="ScriptsAngular\Angular\angular-route.min.js.map" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

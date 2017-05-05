@@ -1,7 +1,5 @@
 var myApp = angular
-    .module('myApp', ['ui.router', 'datatables', 'angular-loading-bar', 'anguFixedHeaderTable', 'ngAnimate',
-        //'ngtimeago',
-        'oitozero.ngSweetAlert', 'fsm', 'ui.select', 'ngSanitize', 'angular.filter', 'angularFileUpload', 'angular-jwt', 'LocalStorageModule','ng.jsoneditor'])
+    .module('myApp', ['ui.router', 'datatables', 'angular-loading-bar', 'anguFixedHeaderTable', 'ngAnimate','oitozero.ngSweetAlert', 'fsm', 'ui.select', 'ngSanitize', 'angular.filter', 'angularFileUpload', 'angular-jwt', 'LocalStorageModule', 'ng.jsoneditor', 'ui.bootstrap','ngConfirm'])
     .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
 
         $urlRouterProvider.otherwise('/');

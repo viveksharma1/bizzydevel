@@ -1,4 +1,4 @@
-﻿myApp.controller('ReceiptCntrl', ['$scope', '$http', '$timeout', '$rootScope', '$state', '$stateParams', 'config', '$filter', 'FileUploader', 'sharedFactory', function ($scope, $http, $timeout, $rootScope, $state, $stateParams, config, $filter, FileUploader, sharedFactory) {
+﻿myApp.controller('ReceiptCntrl', ['$scope', '$http', '$timeout', '$rootScope', '$state', '$stateParams', 'config', '$filter', 'FileUploader', 'sharedFactory', '$uibModal', function ($scope, $http, $timeout, $rootScope, $state, $stateParams, config, $filter, FileUploader, sharedFactory, $uibModal) {
 
     $.fn.datepicker.defaults.format = "dd/mm/yyyy";
     //localStorage["type1"] = "PAYMENT"
@@ -303,7 +303,13 @@
                     $http.post(config.login + 'receipt?id=' + $stateParams.voId, data)
                              .then(function (response) {
                                  showSuccessToast("Receipt Created.");
-                                 $state.reload();
+                                 $state.go('Customer.Receipt', null, { location: false,reload:true });
+                                 //$state.transitionTo($state.current, $stateParams, {
+                                 //    reload: true,
+                                 //    inherit: false,
+                                 //    notify: true
+                                 //});
+                                 //$state.reload();
 
                              });
                 }
