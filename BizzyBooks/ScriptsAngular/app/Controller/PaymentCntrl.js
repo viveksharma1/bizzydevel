@@ -5,7 +5,6 @@
     $(".my a").click(function (e) {
         e.preventDefault();
     });
-
     $scope.goBack = function () {
         if ($rootScope.$previousState.name.length == 0) {
             window.history.back();
@@ -387,7 +386,19 @@
     //    var savepaymentamount = paymentamount;
     //    $scope.paidDataTotal = paidData;
     //}
+    $scope.deletePayment = function () {
+        var data = {
+            compCode: localStorage.CompanyId,
+            type: type,
+            role: localStorage['usertype']
+        }
+        $http.post(config.login + 'deletePayment?id=' + $stateParams.voId, data)
+                            .then(function (response) {
+                                showSuccessToast("Payment deleted.");
+                                $scope.goBack();// $state.reload();
 
+                            });
+    }
     $scope.savePayment = function () {
         var paymentDate = getDate($scope.paymentdate);
         if ($scope.partyAccount.selected == undefined || $scope.partyAccount.selected == null) {

@@ -200,7 +200,19 @@
             });
         }
     }
-    
+    $scope.deleteReceipt = function () {
+        var data = {
+            compCode: localStorage.CompanyId,
+            type: type,
+            role: localStorage['usertype']
+        }
+        $http.post(config.login + 'deleteReceipt?id=' + $stateParams.voId, data)
+                            .then(function (response) {
+                                showSuccessToast("Receipt deleted.");
+                                $scope.goBack();// $state.reload();
+
+                            });
+    }
     $scope.receivePayment = function () {
         var paymentDate = getDate($scope.paymentdate);
         var badlaDate = getDate($scope.badlaDate);
@@ -290,7 +302,7 @@
                 else {
                     $http.post(config.login + 'receipt?id=' + $stateParams.voId, data)
                              .then(function (response) {
-                                 showSuccessToast("Payment Received.");
+                                 showSuccessToast("Receipt Created.");
                                  $state.reload();
 
                              });

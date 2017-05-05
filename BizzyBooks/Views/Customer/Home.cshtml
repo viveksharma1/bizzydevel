@@ -235,7 +235,7 @@
 
                     <ul class="list-unstyled submenu my">
                         <li id="CompanyInfo" class="flytopbar"><a href=""><i class="fa fa-gear"></i> {{DefaultCompany.CompanyName}}</a></li>
-                        <li @*id="Changename"*@ id="Datefilter" class="flytopbar" style="width:422px"><a href=""><i class="fa fa-calendar"></i> {{fromDate}} to {{toDate}} </a></li>
+                        <li @*id="Changename"*@ id="Datefilter" class="flytopbar" style="width:422px"><a href=""><i class="fa fa-calendar"></i> {{fromDate | date:'dd/MM/yyyy'}} to {{toDate | date:'dd/MM/yyyy'}} </a></li>
                     </ul>
 
 
@@ -498,7 +498,7 @@
                                 <div class="form-group">
                                     <small>From</small>
                                     <div class='input-group date' id='fDate'>
-                                        <input type='text' class="form-control"  placeholder="dd/mm/yyyy" ng-model="fDate" id="fdate" />
+                                        <input type='text' class="form-control"  placeholder="dd/mm/yyyy" ng-init="_fDate='fdate'" id="fdate" />
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-calendar"></span>
                                         </span>
@@ -510,7 +510,7 @@
                                 <div class="form-group">
                                     <small>To</small>
                                     <div class='input-group date' id='tDate'>
-                                        <input type='text' class="form-control"  placeholder="dd/mm/yyyy"  ng-model="tDate" id="tdate" />
+                                        <input type='text' class="form-control"  placeholder="dd/mm/yyyy" ng-init="_tDate='tdate'"  id="tdate" />
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-calendar"></span>
                                         </span>
@@ -518,7 +518,7 @@
                                 </div>
                             </div>
                             <hr style="float:left; width:100%" />
-                            <button type="button" class="btn btn-sm btn-primary pull-right" ng-click="setPeriod(fDate,tDate)">Search</button>
+                            <button type="button" class="btn btn-sm btn-primary pull-right" ng-click="setPeriod()">Search</button>
 
 
 

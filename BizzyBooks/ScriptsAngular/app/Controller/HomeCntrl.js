@@ -17,8 +17,12 @@ myApp.controller('HomeCntrl', ['$state', '$http', '$rootScope', '$scope', 'confi
         format: 'dd/mm/yyyy',
         autoclose: true,
     });
-    $scope.fdate = localStorage.fromDate
-    $scope.tdate = localStorage.toDate
+    $scope._fDate = 'fdate';
+    $scope._tDate = 'tdate';
+    //$scope.fdate = localStorage.fromDate
+    //$scope.tdate = localStorage.toDate
+
+
     function initiateHome() {
         authService.fillAuthData();
         $scope.userInfo = $rootScope.authentication;
@@ -196,17 +200,24 @@ myApp.controller('HomeCntrl', ['$state', '$http', '$rootScope', '$scope', 'confi
         }
     }
 
-    $scope.setPeriod = function (fdate,tdate) {
-        $rootScope.$broadcast('scanner-started', { fromDate: { fdate }, toDate: { tdate } });
-        $scope.fromDate = fdate;
-        $scope.toDate = tdate;
+    $scope.setPeriod = function () {
+        $scope.fromDate = new Date(getDate($scope._fDate)).setHours(0,0,0,0);
+        $scope.toDate = new Date(getDate($scope._tDate)).setHours(24, 0, 0, 0);
+        localStorage.fromDate = $scope.fromDate;
+        localStorage.toDate = $scope.toDate;
+        //var _sDate =new  getDate($scope._fDate);
+        //var _eDate = getDate($scope._tDate);
+        $rootScope.$broadcast('date-changed', { fromDate: fromDate, toDate: toDate });
+        
 
    }
 
     //localStorage.fromDate = moment().subtract(30, 'days').format('MM/DD/YYYY');
     //localStorage.toDate = moment().format('MM/DD/YYYY'); moment()
-    $scope.fromDate = moment(localStorage.fromDate).format('DD/MM/YYYY');
-    $scope.toDate = moment(localStorage.toDate).format('DD/MM/YYYY')
+    setDate($scope._fDate, localStorage.fromDate);
+    setDate($scope._tDate, localStorage.toDate);
+    $scope.fromDate = new Date(localStorage.fromDate);
+    $scope.toDate = new Date(localStorage.toDate);
     
 }]);
 

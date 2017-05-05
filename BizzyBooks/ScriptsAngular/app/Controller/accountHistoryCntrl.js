@@ -121,16 +121,16 @@
             console.log(balance)
             return balance
     }
-        $scope.$on('scanner-started', function (event, args) {
-            $scope.fdate = args.fromDate.fdate;
-            $scope.tDate = args.toDate.tdate;
+        $scope.$on('date-changed', function (event, args) {
+            $scope.fdate = args.fromDate;
+            $scope.tDate = args.toDate;
            
         $scope.closingBalance = Math.abs($stateParams.closingBalance)
         console.log($scope.closingBalance);
-        var toDate = $scope.dateFormat($scope.tDate)
-        var fromDate = $scope.dateFormat($scope.fdate)
-        localStorage.toDate = toDate
-        localStorage.fromDate = fromDate;
+        //var toDate = $scope.dateFormat($scope.tDate)
+        //var fromDate = $scope.dateFormat($scope.fdate)
+        //localStorage.toDate = toDate
+        //localStorage.fromDate = fromDate;
         $http.get(config.login + "getOpeningBalnce/" + $stateParams.accountId + "?compCode=" + localStorage.CompanyId + "&date=" + fromDate + "&todate=" + toDate).then(function (response) {
             console.log(response)
             $scope.openingBalance = calculateOpenningBalnce(response.data.openingBalance)
@@ -149,8 +149,8 @@
         });
         
         $scope.applyDateFilter = function () {
-            var toDate = localStorage.toDate
-            var fromDate = localStorage.fromDate
+            var toDate = new Date(localStorage.toDate);
+            var fromDate = new Date(localStorage.fromDate)
             $scope.closingBalance = Math.abs($stateParams.closingBalance)
             $http.get(config.login + "getOpeningBalnce/" + $stateParams.accountId + "?compCode=" + localStorage.CompanyId + "&date=" + fromDate + "&todate=" + toDate).then(function (response) {
                 console.log(response)

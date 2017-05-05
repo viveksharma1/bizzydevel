@@ -576,6 +576,17 @@ myApp.run(['authService', '$location', '$rootScope', 'localStorageService', '$st
         config.login = response.data.login;
         $rootScope.$broadcast('config-loaded');
     });
+    if (!localStorage.fromDate)
+    {
+        var d = new Date(moment(new Date()).subtract(30, 'days'));
+        d.setHours(0, 0, 0, 0);
+       localStorage.fromDate=d;
+    }
+    if (!localStorage.toDate) {
+        var d = new Date();
+        d.setHours(23, 59, 59, 0);
+        localStorage.toDate = d;
+    }
     authService.fillAuthData();
     //authManager.checkAuthOnRefresh();
     //authManager.redirectWhenUnauthenticated();
