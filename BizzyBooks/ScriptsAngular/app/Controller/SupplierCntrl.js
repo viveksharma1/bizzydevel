@@ -831,6 +831,23 @@ myApp.controller('SupplierCntrl', ['$scope', '$http', '$timeout', '$stateParams'
             });
         }
 
+    //delete voucher
+        $scope.deleteVoucherModal = function (id) {
+            $scope.voId = id
+            $('#deleteModal').modal('show');
+        }
+        $scope.deleteVoucher = function () {
+            $http.get(config.login + "deleteVoucher/" + $scope.voId).then(function (response) {
+                console.log(response);
+                if (response.data == "Voucher Deleted") {
+                    showSuccessToast("Invoice Deleted Succesfully");
+                    $state.reload();
+                }
+                else {
+                    showErrorToast(response.data);
+                }
+            });
+        }
     $scope.uploadFile = function () {
         $scope.rows = [];
         $scope.ExeclDataRows = [];

@@ -649,8 +649,9 @@
                        
                     });
     }
-
+    $scope.deleteBtn = false
     if ($stateParams.billNo) {
+        $scope.deleteBtn = true
         if (localStorage['usertype'] == 'O') {
             $scope.getBilldata($stateParams.billNo, '?filter[fields][itemDetail]=false&filter[fields][adminAmount]=false&filter[fields][adminBalance]=false');
         }
@@ -1569,7 +1570,7 @@
 
 
     $scope.Accountbtn = function (id, type) {
-        if (type) {
+       
             console.log(id);
             $('#formaccount').modal('show');
             if (id != undefined) {
@@ -1582,7 +1583,7 @@
             else {
                 $scope.myValue = null;
             }
-        }
+        
     };
     $(".selectTable tr").click(function () {
         $(this).addClass("highlighted").siblings().removeClass("highlighted");
@@ -1632,8 +1633,23 @@
         content: "<table style='width:100%'><tr><th>Date</th><th>Amount Applied</th><th>Payment No.</th></tr><tr ng-repeat='data in paymentLog'><td>{{data.date}}</td><td>Rs{{data.amount}}</td><td>{{data.vochNo}}</td></tr><tr></tr></table>",
         html: true
     })
-    //event stream
-
+    
+    // delete voucher transaction
+    $scope.deleteVoucherModal = function () {
+        $('#deleteModal').modal('show');
+    }
+    $scope.deleteVoucher = function () {
+        $http.get(config.login + "deleteVoucher/" + $stateParams.billNo).then(function (response) {
+            console.log(response);
+            if (response.data == "Voucher Deleted") {
+                showSuccessToast("Invoice Deleted Succesfully");
+                $state.reload();
+            }
+            else{
+                showErrorToast(response.data);
+            }
+        });
+      }
 
 
   
