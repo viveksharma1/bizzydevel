@@ -29,7 +29,11 @@ namespace Restaurant
                         "~/css/daterangepicker.css",
                         "~/css/jquery.toastmessage-min.css",
                         "~/css/jquery.timepicker.css",
-                        "~/css/jsoneditor.min.css"
+                        "~/css/jsoneditor.min.css",
+                        "~/css/sweet-alert.css"
+                //"~/css/treasure-overlay-spinner.min.css"
+                //,
+                //"~/css/angular-progress-button-styles.min.css"
 
                 ));
 
@@ -49,16 +53,26 @@ namespace Restaurant
                    "~/ScriptsAngular/Angular/angular.js",
                    "~/ScriptsAngular/Angular/angular-route.js",
                    "~/ScriptsAngular/Angular/angular-ui-router.js",
-                   "~/ScriptsAngular/Angular/angular-filter.min.js",
-                   "~/ScriptsAngular/Angular/src/plugins/Animate/angular-animate.js",
-                   "~/ScriptsAngular/Angular/src/ui-bootstrap-tpls-0.13.4.js",
                    "~/ScriptsAngular/Angular/src/angular-sanitize.min.js",
+                   "~/ScriptsAngular/Angular/angular-filter.min.js",
+                   "~/ScriptsAngular/Angular/src/angular-animate.js",
+                   //"~/ScriptsAngular/Angular/ui-bootstrap-tpls-1.0.0.min.js",
+                   "~/ScriptsAngular/Angular/ui-bootstrap-tpls-2.5.0.min.js",
+
+                   
                    "~/ScriptsAngular/Angular/angular-datatables.js",
                     "~/ScriptsAngular/Angular/src/lodash.min.js",
                      "~/ScriptsAngular/Angular/src/select.min.js",
                    "~/ScriptsAngular/Angular/angular-file-upload.js",
                    "~/ScriptsAngular/Angular/angular-jwt.js",
                    "~/ScriptsAngular/Angular/angular-local-storage.min.js",
+                   "~/js/confirm.js",
+                   "~/js/SweetAlert.js",
+                   "~/js/sweet-alert.min.js",
+                   //"~/ScriptsAngular/Angular/treasure-overlay-spinner.min.js",
+                   //"~/ScriptsAngular/Angular/angular-progress-button-styles.js",
+                   //"~/js/ng-confirm.min.js",
+
                    //"~/ScriptsAngular/Angular/jspdf.min.js",
                    //"~/ScriptsAngular/Angular/pixastic-standalone.js",
                    //"~/ScriptsAngular/Angular/pixastic-crop.js",

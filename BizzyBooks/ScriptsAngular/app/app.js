@@ -1,7 +1,5 @@
 var myApp = angular
-    .module('myApp', ['ui.router', 'datatables', 'angular-loading-bar', 'anguFixedHeaderTable', 'ngAnimate',
-        //'ngtimeago',
-        'oitozero.ngSweetAlert', 'fsm', 'ui.select', 'ngSanitize', 'angular.filter', 'angularFileUpload', 'angular-jwt', 'LocalStorageModule','ng.jsoneditor'])
+    .module('myApp', ['ui.router', 'datatables', 'angular-loading-bar', 'anguFixedHeaderTable', 'ngAnimate', 'oitozero.ngSweetAlert', 'fsm', 'ui.select', 'ngSanitize', 'angular.filter', 'angularFileUpload', 'angular-jwt', 'LocalStorageModule', 'ng.jsoneditor', 'ui.bootstrap', 'ngConfirm','oitozero.ngSweetAlert'])
     .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
 
         $urlRouterProvider.otherwise('/');
@@ -579,6 +577,26 @@ myApp.run(['authService', '$location', '$rootScope', 'localStorageService', '$st
         config.login = response.data.login;
         $rootScope.$broadcast('config-loaded');
     });
+    $rootScope.spinner = {
+        active: false,
+        on: function () {
+            this.active = true;
+        },
+        off: function () {
+            this.active = false;
+        }
+    };
+    if (!localStorage.fromDate)
+    {
+        var d = new Date(moment(new Date()).subtract(30, 'days'));
+        d.setHours(0, 0, 0, 0);
+       localStorage.fromDate=d;
+    }
+    if (!localStorage.toDate) {
+        var d = new Date();
+        d.setHours(23, 59, 59, 0);
+        localStorage.toDate = d;
+    }
     authService.fillAuthData();
     //authManager.checkAuthOnRefresh();
     //authManager.redirectWhenUnauthenticated();
