@@ -304,7 +304,7 @@
 
                     <h4 class="tabheading font_11">Invoice Date</h4>
                     <div class='input-group date' id="billDate">
-                        <input type='text' class="form-control" ng-model="billDate " id='billDate'  />
+                        <input type='text' class="form-control" ng-init="billDate = 'billDate'" id='billDate'  />
                         <span class="input-group-addon ">
                             <span class="glyphicon glyphicon-calendar" style="color:forestgreen"></span>
                         </span>
@@ -312,7 +312,7 @@
 
                     <h4 class="tabheading font_11">Due Date</h4>
                     <div class='input-group date' id="billDueDate">
-                        <input type='text' class="form-control" ng-model="billDueDate" id='DueDate' />
+                        <input type='text' class="form-control" ng-init="billDueDate = 'DueDate'" id='DueDate' />
                         <span class="input-group-addon ">
                             <span class="glyphicon glyphicon-calendar" style="color:forestgreen"></span>
                         </span>
@@ -330,7 +330,7 @@
 
                     <h4 class="tabheading font_11">Actual Date</h4>
                     <div class='input-group date' id='actualDate'>
-                        <input type='text' class="form-control" ng-model="actualDate"  />
+                        <input type='text' class="form-control" ng-init="actualDate = 'actualDate'" id="actualDate" />
                         <span class="input-group-addon datepicker">
                             <span class="glyphicon glyphicon-calendar" style="color:forestgreen"></span>
                         </span>
@@ -367,29 +367,20 @@
                       </div>
                   
                     <h4 class="tabheading font_11">INVOICE NO.</h4>
-                    <input type="text" class="form-control pull-right" id="billNo" ng-model="billNo" style="width:100px" />
-                    @*<i id="EmpCodeLoad1" style="display:none; margin:0px 5px; font-size:28px;" class="fa fa-spinner fa-spin"></i>
-                        <i id="EmpCodeDone1" style="display:none; margin:0px 5px; font-size:28px;" class="fa fa-check text-success"></i>
-                        <i id="EmpCodeFail1" style="display:none; margin:0px 5px; font-size:28px; " class="fa fa-times text-danger"></i>*@
-
-
-
-                    @*InvoicePopup*@
-
-                    <div id="InvoicePopup" class="modal fade" role="dialog">
+                    <input type="text" class="form-control pull-right" ng-blur="getExistingBill(billNo)"id="billNo" ng-model="billNo" style="width:100px" />
+                    <div id="invoiceExist" class="modal fade" role="dialog">
                         <div class="modal-dialog modal-sm" style="margin-top:150px">
-
                             <!-- Modal content-->
                             <div class="modal-content">
                                 <div class="modal-header bg-primary">
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4 class="modal-title">Invoice Alert</h4>
+                                   
                                 </div>
                                 <div class="modal-body text-center" style="padding:20px">
-                                    <strong>This Invoice no. is already exisiting. Do you want to reload.</strong>
+                                    <strong>This Invoice No is allready exist. Do you want to reload.</strong>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary" ui-sref="Customer.Bill({billNo:billNo})">Ok</button>
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal" ui-sref="Customer.Bill({billNo:existingEnvoiceId})">Ok</button>
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                 </div>
                             </div>
