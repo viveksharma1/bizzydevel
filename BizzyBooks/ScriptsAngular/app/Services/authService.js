@@ -22,6 +22,7 @@ myApp.factory('authService', ['$http', 'jwtHelper', 'localStorageService','$root
     var _authentication = {
         isAuth: false,
         username: "",
+        userid:"",
         role: "",
         usertype: "",
         companies: []
@@ -31,6 +32,7 @@ myApp.factory('authService', ['$http', 'jwtHelper', 'localStorageService','$root
         if (authData) {
             _authentication.isAuth = true;
             _authentication.username = authData.username;
+            _authentication.userid=authData.userid,
             _authentication.role = authData.role;
             _authentication.usertype = authData.usertype;
             _authentication.companies = authData.companies
@@ -38,6 +40,7 @@ myApp.factory('authService', ['$http', 'jwtHelper', 'localStorageService','$root
             _authentication = {
                 isAuth: false,
                 username: "",
+                userid:"",
                 role: "",
                 usertype: "",
                 companies: []

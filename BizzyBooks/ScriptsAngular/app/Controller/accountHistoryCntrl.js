@@ -121,30 +121,24 @@
             console.log(balance)
             return balance
     }
-        $scope.$on('date-changed', function (event, args) {
-            $scope.fdate = args.fromDate;
-            $scope.tDate = args.toDate;
-           
-       // $scope.closingBalance = Math.abs($stateParams.closingBalance)
-        console.log($scope.closingBalance);
-        //var toDate = $scope.dateFormat($scope.tDate)
-        //var fromDate = $scope.dateFormat($scope.fdate)
-        //localStorage.toDate = toDate
-        //localStorage.fromDate = fromDate;
-        $http.get(config.login + "getOpeningBalnce/" + $stateParams.accountId + "?compCode=" + localStorage.CompanyId + "&date=" + fromDate + "&todate=" + toDate).then(function (response) {
+    $scope.$on('date-changed', function (event, args) {
+        $scope.fdate = args.fromDate;
+        $scope.tDate = args.toDate;
+        //console.log($scope.closingBalance);
+        $http.get(config.login + "getOpeningBalnce/" + $stateParams.accountId + "?compCode=" + localStorage.CompanyId + "&date=" + args.fromDate + "&todate=" + args.toDate).then(function (response) {
             console.log(response)
             $scope.openingBalance = calculateOpenningBalnce(response.data.openingBalance)
-            console.log('opening balance',$scope.openingBalance)
+            console.log('opening balance', $scope.openingBalance)
             bindAccountName(response.data.ledgerData)
-            $http.get(config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + toDate + "&accountName=" + $stateParams.accountId).then(function (response) {
+            $http.get(config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + args.toDate + "&accountName=" + $stateParams.accountId).then(function (response) {
                 var closingBalance = response.data.openingBalance
-                    $scope.closingBalance = calculateOpenningBalnce(closingBalance);
-                    console.log($scope.closingBalance);
-          
+                $scope.closingBalance = calculateOpenningBalnce(closingBalance);
+                console.log($scope.closingBalance);
+
             });
-           
+
         });
-        });
+    });
         
         $scope.applyDateFilter = function () {
             var toDate = new Date(localStorage.toDate);
