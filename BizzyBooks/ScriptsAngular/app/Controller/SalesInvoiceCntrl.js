@@ -265,7 +265,7 @@
                       $scope.salesAccount = {
                           selected: {
                               accountName:
-                                  [response.data.invoiceData.ledgerAccountId], id: response.data.invoiceData.ledgerAccountId
+                                  localStorage[response.data.invoiceData.ledgerAccountId], id: response.data.invoiceData.ledgerAccountId
                           }
                       };
                       $scope.supplier = { selected: { accountName: localStorage[response.data.invoiceData.customerAccountId], id: response.data.invoiceData.customerAccountId } };

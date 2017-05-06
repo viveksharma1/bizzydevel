@@ -3,23 +3,32 @@
     ViewBag.Title = "ChartofAccounts";
     Layout = null;
 }
+<style>
+    .ui-select-multiple.ui-select-bootstrap input.ui-select-search{width:30px !important;}
+
+   
+</style>
 <div class="panel lightblue bluebrdr marginbottom">
     <div class="panel-heading" style="height:84px">
         <strong class="heading" style="margin-top: 15px; float: left;">Chart of Accounts</strong>
- 
-        <div class="btn-group pull-right">
-            <button type="button" class="btn btn-primary btn-sm" ng-click="Accountbtn()"id="NewCustomerCreate">Create Account</button>
-      
-        </div>
-
-        <div class="pull-right col-sm-4" style="padding:0px">
-            
-            
+        <div class="pull-right" style="margin-top:17px;">
+            <div style="width: 350px; float: left; margin-right: 10px;">
+                <ui-select multiple ng-model="company.selected" ui-select-focuser theme="bootstrap" close-on-select="true" title="Choose a color" on-select="getCompcode($item.CompanyId)">
+                    <ui-select-match>{{$item.CompanyName}}</ui-select-match>
+                    <ui-select-choices repeat="company in companyList | filter:$select.search">
+                        {{company.CompanyName}}
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary btn-sm" ng-click="Accountbtn()" style="height:28px" id="NewCustomerCreate">Create Account</button>
 
             </div>
-         
-           
-   
+        </div>
+    
+
+
+
         </div>
     </div>
 <div class="col-sm-12" style="padding:10px">
@@ -67,14 +76,14 @@
                 <td style="text-align:right" ><b>{{data.balance}}</b></td>
                
                 <td style="text-align:right; width:150px">
-                    <button type="button" class="editbtn"><a ui-sref="Customer.accountHistory({accountId:data.id,balanceType:data.balanceType})" style="font-weight:bold;color:#228D95">Account History</a></button>
+                    <button type="button" class="editbtn"><a ui-sref="Customer.accountHistory({accountId:data._id,balanceType:data.balanceType})" style="font-weight:bold;color:#228D95">Account History</a></button>
                     <class class="linkseparator" style="margin-top:4px; margin-right:0px"></class>
                     <div class="btn-group editcaret">
                         <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>
                         <ul class="dropdown-menu editdrpdwn" role="menu" style="left:-135px">
 
-                            <li class="cursor"><a ng-click="Accountbtn(data.id)">Edit</a></li>
-                            <li class="cursor"><a ng-click="deleteAccountPopup(data.id)">Delete</a></li>
+                            <li class="cursor"><a ng-click="Accountbtn(data._id)">Edit</a></li>
+                            <li class="cursor"><a ng-click="deleteAccountPopup(data._id)">Delete</a></li>
                             
                            
                         </ul>

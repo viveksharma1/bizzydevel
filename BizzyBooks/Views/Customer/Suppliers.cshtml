@@ -180,6 +180,7 @@
                                         <li><a ui-sref="Customer.MakePayment()">Make Payment</a></li>
                                         <li><a ui-sref="Customer.PurchaseInvoiceSattlement()">Purchase Settlement</a></li>
                                         <li><a ui-sref="Customer.SalesInvoiceSattlement()">Sales Settlement</a></li>
+                                        <li><a ng-click="deleteVoucherModal(data.id)">Delete</a></li>
                                     </ul>
 
                                 </div>
@@ -494,6 +495,7 @@
                                     <li ng-click="addInventrybtn(data)"><a href="">Add Enventory</a></li>
                                     <li><a ui-sref="Customer.PurchaseInvoiceSattlement()">Purchase Settlement</a></li>
                                     <li><a ui-sref="Customer.SalesInvoiceSattlement()">Sales Settlement</a></li>
+                                    <li><a ng-click="deleteVoucherModal(data.id)">Delete</a></li>
                                 </ul>
 
                             </div>
@@ -1290,7 +1292,26 @@
     </div>
 </div>
 
+<div id="deleteModal" class="modal fade" role="dialog">
+    <div class="modal-admin">
 
+        <!-- Modal content-->
+        <div class="modal-content">
+
+            <div class="modal-body" style="background-color:#525DB0">
+                <label style="color:#FFFFFF">Do you want to Delete this Voucher</label>
+            </div>
+
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm btn bg-purple" data-dismiss="modal" ng-click="goBack()" style="float:left">No</button>
+                <button type="button" class="btn btn-secondary btn-sm btn-success" ng-click="deleteVoucher()" data-close="modal">Yes</button>
+            </div>
+        </div>
+
+    </div>
+</div>
 
       <!-- addInventryModal -->
 <div id="addInventryModal" class="modal fade" role="dialog">
