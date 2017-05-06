@@ -1,5 +1,5 @@
 var myApp = angular
-    .module('myApp', ['ui.router', 'datatables', 'angular-loading-bar', 'anguFixedHeaderTable', 'ngAnimate', 'oitozero.ngSweetAlert', 'fsm', 'ui.select', 'ngSanitize', 'angular.filter', 'angularFileUpload', 'angular-jwt', 'LocalStorageModule', 'ng.jsoneditor', 'ui.bootstrap', 'ngConfirm','oitozero.ngSweetAlert'])
+    .module('myApp', ['ui.router', 'datatables', 'angular-loading-bar', 'anguFixedHeaderTable', 'ngAnimate', 'oitozero.ngSweetAlert', 'fsm', 'ui.select', 'ngSanitize', 'angular.filter', 'angularFileUpload', 'angular-jwt', 'LocalStorageModule', 'ng.jsoneditor', 'ui.bootstrap', 'ngConfirm', 'oitozero.ngSweetAlert'])
     .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
 
         $urlRouterProvider.otherwise('/');
@@ -547,14 +547,11 @@ var myApp = angular
 myApp.value('config', {
     login: '',
     api:''
-////login: 'http://localhost:4000/',
 
-//<<<<<<< HEAD
-////login: 'http://localhost:4000/',
+//login: 'http://localhost:4000/',
 
-//=======
-//>>>>>>> f312d6d91f3c781340b7d8f1a5485e79a5390d63
-////api: 'http://localhost:4000/api/'
+
+//api: 'http://localhost:4000/api/'
    
 
 //login: 'http://bizzy-book-api.azurewebsites.net/',

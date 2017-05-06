@@ -19,7 +19,8 @@
     if (message == undefined)
         message = "Success Dialog which is fading away ...";
     $().toastmessage('showSuccessToast', message);
-}
+    }
+
 function showStickySuccessToast(message) {
     $().toastmessage('showToast', {
         text: message,
@@ -82,6 +83,7 @@ function showStickyErrorToast(message) {
         }
     });
 }
+
 
     
 $('html').on('mouseup', function (e) {
@@ -152,5 +154,31 @@ function urlToPromise(url) {
             }
         };
         req.send();
+    });
+}
+function SweetAlertProcess(message) {
+    swal({
+        title: "Proccessing!",
+        text: message ? message : ".....",
+        customClass: 'animated tada',
+        imageUrl: "http://www.gkgm.gov.tr/vtu/Resim/loading70.gif"
+    });
+}
+
+function SweetAlertSuccess(message) {
+    swal({
+        title: "Success!",
+        text: message ? message : "Success",
+        customClass: 'animated tada',
+        imageUrl: "http://www.webmastertoys.com/image/grammar-checker.svg"
+    });
+}
+
+function SweetAlertError(message) {
+    swal({
+        title: "Error!",
+        text: message ? message : "Please check...",
+        customClass: 'animated tada',
+        imageUrl: "https://cdn2.iconfinder.com/data/icons/bitsies/128/Cancel-128.png"
     });
 }

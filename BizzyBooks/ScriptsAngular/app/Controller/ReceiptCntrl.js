@@ -7,6 +7,8 @@
     });
 
 
+
+
     $scope.goBack = function (retain) {
         if ($rootScope.$previousState.name.length == 0 || $rootScope.$previousState==$state.current) {
             window.history.back();

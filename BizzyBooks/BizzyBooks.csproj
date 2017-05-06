@@ -220,6 +220,7 @@
     <Content Include="css\select.min.css" />
     <Content Include="css\select2.css" />
     <Content Include="css\selectize.bootstrap3.min.css" />
+    <Content Include="css\sweet-alert.css" />
     <Content Include="css\treasure-overlay-spinner.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\css\font-awesome.css" />

@@ -7289,18 +7289,18 @@ button.close {
 }
 
     #wrapper.toggled {
-        padding-left: 150px;
+        padding-left: 180px;
     }
 
 #sidebar-wrapper {
     z-index: 1000;
     position: fixed;
-    left: 150px;
+    left: 180px;
     width: 0;
     height: 100%;
-    margin-left: -150px;
+    margin-left: -180px;
     overflow-y: auto;
-    background: #228D95;
+    background: #296193;
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
@@ -7308,7 +7308,7 @@ button.close {
 }
 
 #wrapper.toggled #sidebar-wrapper {
-    width: 150px;
+    width: 180px;
 }
 
 #page-content-wrapper {
@@ -7319,13 +7319,13 @@ button.close {
 
 #wrapper.toggled #page-content-wrapper {
     position: absolute;
-    margin-right: -150px;
+    margin-right: -180px;
 }
 /* Sidebar Styles */
 .sidebar-nav {
     position: absolute;
     top: 0;
-    width: 150px;
+    width: 180px;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -7340,7 +7340,8 @@ button.close {
             display: block;
             text-decoration: none;
             color: #fff;
-            font-size: 13px;
+            font-size: 15px;
+      
         }
 
             .sidebar-nav li a i {
@@ -7367,10 +7368,13 @@ button.close {
                 text-decoration: none;
             }
 
+            .sidebar-nav li ul li a{color:yellow !important; text-shadow:none;}
+
     .sidebar-nav > .sidebar-brand {
-        height: 50px;
-        font-size: 18px;
-        line-height: 60px;
+        /*height: 50px;*/
+        font-weight:bold;
+        font-size: 20px;
+        /*line-height: 60px;*/
     }
 
         .sidebar-nav > .sidebar-brand a {
@@ -7384,7 +7388,7 @@ button.close {
 
 @media(min-width:768px) {
     #wrapper {
-        padding-left: 150px;
+        padding-left: 180px;
     }
 
         #wrapper.toggled {
@@ -7392,7 +7396,7 @@ button.close {
         }
 
     #sidebar-wrapper {
-        width: 150px;
+        width: 180px;
     }
 
     #wrapper.toggled #sidebar-wrapper {
@@ -7413,8 +7417,8 @@ button.close {
 .logo {
     color: #75d0ff !important;
     background: #0b4462;
-    text-indent: 8px !important;
-    font-size:16px !important;
+    text-indent: 6px !important;
+    font-size:18px !important;
 }
 
     .logo i {
@@ -8382,9 +8386,9 @@ main {
 .flyoutdiv ul li{width:100%;}
 .flyoutdiv ul li a{color:#000; text-decoration:none; float:left; width:100%; font-family:din; padding:5px; font-size:14px;}
 .flyoutdiv ul li a:hover{background:#337ab7; color:#fff;}
-#flyoutCompany{width: 43%;right: 154px; position: absolute; z-index: 20; padding-top:7px;}
+#flyoutCompany{width: 43%;right: 187px; position: absolute; z-index: 20; padding-top:7px;}
 #flyoutChange{width: 20%; right: 10px; position: absolute; z-index: 20; padding-top:7px;}
-#flyoutDate{width: 25%; right: 157px; position: absolute; z-index: 20; padding-top:7px;}
+#flyoutDate{width: 25%; right: 187px; position: absolute; z-index: 20; padding-top:7px;}
 .logout {
     border-bottom: 0 none;
     float:left
@@ -9075,3 +9079,5 @@ main {
     height: 23px;
     float: left;
     margin-top: 0px !important;}
+.Entry-label{margin-bottom:0px; padding-left:20px; width:100%; float:left}
+.Entry-Sublabel{margin-bottom:0px; padding-left:30px; width:100%; float:left;color:#808080}
