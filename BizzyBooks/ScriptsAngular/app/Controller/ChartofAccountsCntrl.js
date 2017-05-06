@@ -150,14 +150,31 @@
             console.log($scope.account);
         });
     });
-    $scope.getAccountList = function () {
-        $http.get(config.login + "dateWiseAccountDetail/" + localStorage.CompanyId + "?date=" + localStorage.toDate).then(function (response) {
+    $http.get(config.api + "CompanyMasters").then(function (response) {
+        $scope.companyList = response.data;
+    });
+    $scope.company = {};
+    console.log($scope.company)
+    $scope.compCode = []
+    //$scope.compCode = ["COM2016123456780"]
+
+    $scope.getCompcode = function (companyId) {
+        $scope.compCode.push(companyId)
+        console.log($scope.compCode)
+        console.log(companyId)
+        $scope.getAccountList($scope.compCode);
+    }
+   
+    $scope.getAccountList = function (compCode) {
+        console.log(compCode)
+        
+        $http.post(config.login + "dateWiseAccountDetail" + "?date=" + localStorage.toDate + "&role=" + localStorage['usertype'], compCode).then(function (response) {
             //$scope.account = response.data;
             $scope.account = getAccountData(response.data);
             console.log($scope.account);
         });
     }
-    $scope.getAccountList();
+    $scope.getAccountList([localStorage.CompanyId]);
     
 
     // delete account 

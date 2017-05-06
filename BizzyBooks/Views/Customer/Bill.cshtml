@@ -140,6 +140,27 @@
 
         </div>
     </div>
+    <create-account value="myValue"> </create-account>
+    <div id="deleteModal" class="modal fade" role="dialog">
+        <div class="modal-admin">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+
+                <div class="modal-body" style="background-color:#525DB0">
+                    <label style="color:#FFFFFF">Do you want to Delete this Voucher</label>
+                </div>
+
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm btn bg-purple" data-dismiss="modal" ng-click="goBack()" style="float:left">No</button>
+                    <button type="button" class="btn btn-secondary btn-sm btn-success"  ng-click="deleteVoucher()" data-close="modal">Yes</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
 
 
@@ -2002,7 +2023,8 @@
     <div class="flexfooter scroll">
         <span class="pull-left">
 
-            <button type="button" class="btn btn-sm btn-primary">Clear</button>
+            <button type="button" ng-show="deleteBtn == true" ng-click="deleteVoucherModal()"class="btn btn-sm btn-danger">Delete</button>
+
         </span>
 
         <div class="pull-right">
