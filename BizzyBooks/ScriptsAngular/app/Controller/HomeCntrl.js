@@ -186,6 +186,7 @@ myApp.controller('HomeCntrl', ['$state', '$http', '$rootScope', '$scope', 'confi
         $scope.delcompanyInfo.IsActive = 0;
         $http.put(config.api + "CompanyMasters", $scope.delcompanyInfo).then(function (response) {
             showSuccessToast("Company Deleted");
+            GetCompanyData();
             $scope.closenClear();
         }, function () {
             showSuccessToast("Error! while deleting company");
@@ -226,7 +227,9 @@ myApp.controller('HomeCntrl', ['$state', '$http', '$rootScope', '$scope', 'confi
             var dataAssign={ role: localStorage['usertype'], compCode: $scope.companyInfo.CompanyId };
             $http.post(config.api + "CompanyMasters", $scope.companyInfo).then(function (response) {
                 showSuccessToast("Company created");
-                $http.post(config.login + "assignCompany", dataAssign);
+                $http.post(config.login + "assignCompany", dataAssign).then(function (response) {
+                    GetCompanyData();
+                });
                 $scope.closenClear();
             }, function () {
                 showSuccessToast("Error! while creating company");
@@ -250,7 +253,7 @@ myApp.controller('HomeCntrl', ['$state', '$http', '$rootScope', '$scope', 'confi
 
    }
 
-    //localStorage.fromDate = moment().subtract(30, 'days').format('MM/DD/YYYY');
+    //localStorage.fromDate = moment().subtract(30, 'days').format('MM/DD/YYYY'); 
     //localStorage.toDate = moment().format('MM/DD/YYYY'); moment()
     setDate($scope._fDate, localStorage.fromDate);
     setDate($scope._tDate, localStorage.toDate);
