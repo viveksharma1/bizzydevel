@@ -165,5 +165,6 @@ myApp.factory('authService', ['$http', 'jwtHelper', 'localStorageService','$root
     authServiceFactory.isLoggedIn = _isLoggedIn;
     authServiceFactory.innerToken = _innerToken;
     authServiceFactory.logOut = _logOut;
+    authServiceFactory.getPermissionJson = _permissionJson;
     return authServiceFactory;
 }]);
