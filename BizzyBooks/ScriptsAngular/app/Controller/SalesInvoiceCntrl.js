@@ -262,7 +262,12 @@
                   .then(function (response) {
 
                       $scope.invoiceType = response.data.invoiceData.invoiceSubType;
-                      $scope.salesAccount = { selected: { accountName: localStorage[response.data.invoiceData.ledgerAccountId], id: response.data.invoiceData.ledgerAccountId } };
+                      $scope.salesAccount = {
+                          selected: {
+                              accountName:
+                                  [response.data.invoiceData.ledgerAccountId], id: response.data.invoiceData.ledgerAccountId
+                          }
+                      };
                       $scope.supplier = { selected: { accountName: localStorage[response.data.invoiceData.customerAccountId], id: response.data.invoiceData.customerAccountId } };
                       $scope.supplier2 = { selected: { accountName: localStorage[response.data.invoiceData.consigneeAccountId], id: response.data.invoiceData.consigneeAccountId } };
                       $scope.totalAmount = response.data.amount;

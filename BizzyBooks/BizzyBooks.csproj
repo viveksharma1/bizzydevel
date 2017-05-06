@@ -176,6 +176,8 @@
     <Content Include="CreateAccount.html" />
     <Content Include="css\accordion.min.css" />
     <Content Include="css\angular-datatables.min.css" />
+    <Content Include="css\angular-progress-button-styles.css" />
+    <Content Include="css\angular-progress-button-styles.min.css" />
     <Content Include="css\bootstrap-datepicker.css" />
     <Content Include="css\bootstrap-select.min.css" />
     <Content Include="css\bootstrap-theme.min.css" />
@@ -218,6 +220,7 @@
     <Content Include="css\select.min.css" />
     <Content Include="css\select2.css" />
     <Content Include="css\selectize.bootstrap3.min.css" />
+    <Content Include="css\treasure-overlay-spinner.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\css\font-awesome.css" />
     <Content Include="fonts\css\font-awesome.min.css" />
@@ -262,6 +265,7 @@
     <Content Include="js\bootstrap.min.js" />
     <Content Include="js\Chart.js" />
     <Content Include="js\Common.js" />
+    <Content Include="js\confirm.js" />
     <Content Include="js\custom.js" />
     <Content Include="js\dataTables.min.css" />
     <Content Include="js\datatables\buttons.bootstrap.min.css" />
@@ -371,13 +375,19 @@
     <Content Include="ScriptsAngular\Angular\angular-filter.min.js" />
     <Content Include="ScriptsAngular\Angular\angular-jwt.js" />
     <Content Include="ScriptsAngular\Angular\angular-local-storage.min.js" />
+    <Content Include="ScriptsAngular\Angular\angular-progress-button-styles.js" />
+    <Content Include="ScriptsAngular\Angular\angular-progress-button-styles.min.js" />
     <Content Include="ScriptsAngular\Angular\angular-route.js" />
+    <Content Include="ScriptsAngular\Angular\angular-route.min.js" />
     <Content Include="ScriptsAngular\Angular\angular-ui-router.js" />
     <Content Include="ScriptsAngular\Angular\angular.js" />
+    <Content Include="ScriptsAngular\Angular\angular.min.js" />
     <Content Include="ScriptsAngular\Angular\dirPagination.js" />
     <Content Include="ScriptsAngular\Angular\ng-google-chart.js" />
     <Content Include="ScriptsAngular\Angular\src\angular-animate.js" />
+    <Content Include="ScriptsAngular\Angular\src\angular-animate.min.js" />
     <Content Include="ScriptsAngular\Angular\src\angular-filter.min.js" />
+    <Content Include="ScriptsAngular\Angular\src\angular-sanitize.js" />
     <Content Include="ScriptsAngular\Angular\src\angular-sanitize.min.js" />
     <Content Include="ScriptsAngular\Angular\src\lodash.min.js" />
     <Content Include="ScriptsAngular\Angular\src\ng-scrollbar.min.js" />
@@ -396,6 +406,8 @@
     <Content Include="ScriptsAngular\Angular\src\plugins\tabletools\angular-datatables.tabletools.js" />
     <Content Include="ScriptsAngular\Angular\src\select.min.js" />
     <Content Include="ScriptsAngular\Angular\src\ui-bootstrap-tpls-0.13.4.js" />
+    <Content Include="ScriptsAngular\Angular\treasure-overlay-spinner.min.js" />
+    <Content Include="ScriptsAngular\Angular\ui-bootstrap-tpls-2.5.0.min.js" />
     <Content Include="ScriptsAngular\app\AccountCreateDirective.js" />
     <Content Include="ScriptsAngular\app\Controller\accountHistoryCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\ActivityLogCntrl.js" />
@@ -553,6 +565,9 @@
     <Content Include="Views\Customer\ContraEntry.cshtml" />
     <Content Include="Views\Customer\BalanceSheet.cshtml" />
     <Content Include="Views\Customer\ProfitLossAccount.cshtml" />
+    <Content Include="ScriptsAngular\Angular\src\angular-animate.min.js.map" />
+    <Content Include="ScriptsAngular\Angular\src\angular-sanitize.min.js.map" />
+    <Content Include="ScriptsAngular\Angular\angular-route.min.js.map" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

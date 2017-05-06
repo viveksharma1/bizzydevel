@@ -199,7 +199,7 @@
 
                     <ul class="list-unstyled submenu my">
                         <li id="CompanyInfo" class="flytopbar"><a href=""><i class="fa fa-gear"></i> {{DefaultCompany.CompanyName}}</a></li>
-                        <li @*id="Changename"*@ id="Datefilter" class="flytopbar" style="width:422px"><a href=""><i class="fa fa-calendar"></i> {{fromDate}} to {{toDate}} </a></li>
+                        <li @*id="Changename"*@ id="Datefilter" class="flytopbar" style="width:422px"><a href=""><i class="fa fa-calendar"></i> {{fromDate | date:'dd/MM/yyyy'}} to {{toDate | date:'dd/MM/yyyy'}} </a></li>
                     </ul>
 
 
@@ -270,13 +270,13 @@
                         <div class="arrow-up" style="margin-right:62%; float:right"></div>
                         <div class="flyoutdiv">
                             <h3 class="title" style="border-bottom:1px solid rgba(204, 204, 204, 0.26); padding-bottom:15px">{{DefaultCompany.CompanyName}}  ({{userInfo.username}})
-                                <button permission="usertype:UO" type="button" class="btn btn-sm btn-warning pull-right btn-xs" ng-click="AddCompnay()">Add New Company</button>
+                                <button permission="company.create" type="button" class="btn btn-sm btn-warning pull-right btn-xs" ng-click="AddCompnay()">Add New Company</button>
                             </h3>
 
                             <div class="col-sm-7" style="padding:0px">
                                 <h3 class="Subtitle">Comapny List</h3>
                                 <ul class="list-unstyled my" ng-repeat="list in CompanyList">
-                                    <li><a><span ng-click="changeCompany(list)">{{list.CompanyName}}</span> &nbsp; <i permission="usertype:UO"  ng-click="editCompany(list);" class="fa fa-pencil-square text-warning"></i></a></li>
+                                    <li><a><span ng-click="changeCompany(list)">{{list.CompanyName}}</span> &nbsp; <i permission="company.edit"  ng-click="editCompany(list);" class="fa fa-pencil-square text-warning"></i></a></li>
                                 </ul>
 
                             </div>
@@ -442,7 +442,7 @@
 
                                     </div>
                                 <div class="modal-footer content">
-                                    <button type="button" ng-show="edit" ng-click="deleteCompany()" class="btn btn-danger btn-sm" data-dismiss="modal" style="width:80px">Delete</button>
+                                    <button type="button" ng-show="edit" ng-click="deleteCompany()" class="btn btn-danger btn-sm" ng-confirm data-dismiss="modal" style="width:80px">Delete</button>
                                     <button type="button" ng-click="closenClear()" class="btn btn-default btn-sm" data-dismiss="modal" style="width:80px">Cancel</button>
                                     <button type="button" ng-click="saveCompany()" class="btn btn-primary btn-sm" style="width:80px">Save</button>
 
@@ -462,7 +462,7 @@
                                 <div class="form-group">
                                     <small>From</small>
                                     <div class='input-group date' id='fDate'>
-                                        <input type='text' class="form-control"  placeholder="dd/mm/yyyy" ng-model="fDate" id="fdate" />
+                                        <input type='text' class="form-control"  placeholder="dd/mm/yyyy" ng-init="_fDate='fdate'" id="fdate" />
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-calendar"></span>
                                         </span>
@@ -474,7 +474,7 @@
                                 <div class="form-group">
                                     <small>To</small>
                                     <div class='input-group date' id='tDate'>
-                                        <input type='text' class="form-control"  placeholder="dd/mm/yyyy"  ng-model="tDate" id="tdate" />
+                                        <input type='text' class="form-control"  placeholder="dd/mm/yyyy" ng-init="_tDate='tdate'"  id="tdate" />
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-calendar"></span>
                                         </span>
@@ -482,7 +482,7 @@
                                 </div>
                             </div>
                             <hr style="float:left; width:100%" />
-                            <button type="button" class="btn btn-sm btn-primary pull-right" ng-click="setPeriod(fDate,tDate)">Search</button>
+                            <button type="button" class="btn btn-sm btn-primary pull-right" ng-click="setPeriod()">Search</button>
 
 
 
