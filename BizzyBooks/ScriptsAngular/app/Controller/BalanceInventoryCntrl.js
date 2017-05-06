@@ -363,6 +363,108 @@
     //    $scope.closeAddjustmentBox();
     //}
 
+    function uploadStockInventory(data) {
+        $http.post(config.api + "Inventories", data).then(function (response) {
+            console.log(response)
+            $scope.saving = false
+        })
+    }
+    $scope.uploadFile = function () {
+        $scope.saving =true
+        $scope.inventoryLedger = [];
+        $scope.rows = [];
+        $scope.ExeclDataRows = [];
+        $scope.Key = [];
+        $scope.KeyArray = [];
+        var KeyName1;
+        var file = $scope.myFile;
+        this.parseExcel = function (file) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var data = e.target.result;
+                var workbook = XLSX.read(data, { type: 'binary' });
+                workbook.SheetNames.forEach(function (sheetName) {
+                    // Here is your object
+                    var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+                    for (key in XL_row_object) {
+                        var retObj = {};
+                        for (var obj in XL_row_object[key]) {
+
+                            var obj3 = obj.replace(" ", "");
+                            var obj2 = obj3.replace(" ", "");
+                            var obj4 = obj2.replace(" ", "");
+                            var obj1 = obj4.replace("/", "");
+
+                           
+                            var INOUT = "IN/OUT"
+
+                            var date = "date"
+                            var exchangeRate = "exchangeRate"
+                            if (obj1 == "NETWEIGHT") {
+
+                                $scope.netweight = Number(XL_row_object[key][obj]);
+                            }
+                            if (obj1 == "TOTALPRICE") {
+                                $scope.totalprice = Number(XL_row_object[key][obj]);
+                                retObj["TOTALAMOUNTUSD"] = $scope.netweight * $scope.totalprice;
+                                console.log(retObj["TOTALAMOUNTUSD"]);
+                            }
+
+                            if (obj1 == "FOBUNITPRICEUSD" || obj1 == "CIFUNITPRICE" || obj1 == "NETWEIGHT" || obj1 == "TOTALPRICE" || obj1 == "LENGTH" || obj1 == "WIDTH" || obj1 == "THICKNESS" || obj1 == "GROSSWT") {
+                                retObj[obj1] = Number(XL_row_object[key][obj]);
+                            }
+
+
+                            else {
+                                retObj[obj1] = XL_row_object[key][obj];
+                            }
+                           
+                           
+                            retObj[exchangeRate] = $scope.ExchangeRateINR
+                            retObj[INOUT] = 0
+                            retObj["currentStatus"] = 'open';
+                            retObj["visible"] = false;
+                            retObj["no"] = "Opening Balance" ;
+                            retObj["statusTransaction"] = [{ dt: new Date(), status: 'open', remarks: 'inventory added' }];
+                            retObj["assesableValue"] = '0';
+                            retObj["exciseDuty"] = '0';
+                            retObj["dutyAmount"] = '0';
+                            retObj["SAD"] = '0';
+                            retObj["totalDutyAmt"] = '0';
+                            if ($scope.rate && $scope.weight) {
+
+                                retObj["fobamount"] = Number($scope.rate) * Number($scope.weight);
+                            }
+                            if ($scope.cifrate && $scope.weight) {
+                                retObj["cifamount"] = Number($scope.rate) * Number($scope.weight);
+
+                            }
+                            var Keyobj = [];
+                            var KeyName = obj;
+                            Keyobj[KeyName1] = KeyName;
+                            $scope.Key.push(Keyobj);
+                        }
+                        $scope.ExeclDataRows.push(retObj);
+                        $scope.rows = [];
+                        $scope.KeyArray = $scope.Key;
+                        $scope.Key = [];
+                    }
+                })
+                uploadStockInventory($scope.ExeclDataRows);
+
+            };
+            reader.onerror = function (ex) {
+
+            };
+
+            reader.readAsBinaryString(file);
+        };
+        var data = this.parseExcel(file);
+    };
+
+
+    
+
 
 
 

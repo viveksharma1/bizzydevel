@@ -1,4 +1,4 @@
-﻿myApp.controller('ReceiptCntrl', ['$scope', '$http', '$timeout', '$rootScope', '$state', '$stateParams', 'config', '$filter', 'FileUploader', function ($scope, $http, $timeout, $rootScope, $state, $stateParams, config, $filter,FileUploader) {
+﻿myApp.controller('ReceiptCntrl', ['$scope', '$http', '$timeout', '$rootScope', '$state', '$stateParams', 'config', '$filter', 'FileUploader', 'sharedFactory', function ($scope, $http, $timeout, $rootScope, $state, $stateParams, config, $filter, FileUploader, sharedFactory) {
 
     $.fn.datepicker.defaults.format = "dd/mm/yyyy";
     //localStorage["type1"] = "PAYMENT"
@@ -6,8 +6,15 @@
         e.preventDefault();
     });
 
-    $scope.goBack = function () {
-        window.history.back();
+
+    $scope.goBack = function (retain) {
+        if ($rootScope.$previousState.name.length == 0 || $rootScope.$previousState==$state.current) {
+            window.history.back();
+        }else
+            $state.go($rootScope.$previousState);
+        //if (!retain)
+        //    sharedFactory.info = null;
+        //window.history.back();
     },
     $(":file").filestyle({ buttonName: "btn-sm btn-info" });
     $scope.Accountbtn = function (id,type) {
@@ -69,9 +76,10 @@
     };
 
     //$scope.no = $stateParams.poNo;
-    $scope.bankAccount = {}
-    $scope.partyAccount = {}
-    $scope.badlaAccount = {}
+    $scope.bankAccount = {};
+    $scope.partyAccount = {};
+    $scope.badlaAccount = {};
+    $scope.badlaAccounts = [];
     $scope.badlaDate = 'badlaDate';
     $scope.paymentdate = 'paymentdate';
     $scope.oldAttachment = null;
@@ -94,7 +102,8 @@
     //}
     $scope.getSupplier = function () {
         $http.get(config.login + "getPartytAccount/" + localStorage.CompanyId).then(function (response) {
-            $scope.partyAccounts = response.data
+            $scope.partyAccounts = response.data;
+            angular.copy($scope.partyAccounts, $scope.badlaAccounts);
             console.log($scope.partyAccounts);
         });
     }
@@ -104,14 +113,14 @@
             console.log($scope.bankAccounts);
         });
     }
-    $scope.getBadlaAccount = function () {
-        //http://localhost:4000/api/accounts?filter[where][compCode]=COM2016123456780&filter[where][ancestor]=SUNDRY%20DEBTORS
-        $http.get(config.api + "accounts?filter[where][compCode]=" + localStorage.CompanyId + "&filter[where][ancestor]=SUNDRY DEBTORS").then(function (response) {
-            $scope.badlaAccounts = response.data
-            console.log($scope.badlaAccounts);
-        });
-    }
-    $scope.editMode = false;
+    //$scope.getBadlaAccount = function () {
+    //    //http://localhost:4000/api/accounts?filter[where][compCode]=COM2016123456780&filter[where][ancestor]=SUNDRY%20DEBTORS
+    //    $http.get(config.api + "accounts?filter[where][compCode]=" + localStorage.CompanyId + "&filter[where][ancestor]=SUNDRY DEBTORS").then(function (response) {
+    //        $scope.badlaAccounts = response.data
+    //        console.log($scope.badlaAccounts);
+    //    });
+    //}
+    $scope.mode = "new";
     var datas = [];
     $scope.balanceAmtReceipt = 0;
     $scope.paymentData = [];
@@ -120,61 +129,69 @@
     $scope.itemChecked = [];
     var type = $stateParams.type;
     console.log(type);
-    if ($stateParams.voId) {
-        $scope.editMode = true;
-        getPaymentdata($stateParams.voId);
-    } else {
-        $scope.editMode = false;
-        setDate($scope.paymentdate);
-        setDate($scope.badlaDate);
-    }
-    ///else {
-    $scope.$watch('partyAccount.selected', function () {
+    $scope.partyAccountSelected = function () {
         if ($scope.partyAccount.selected && $scope.partyAccount.selected.id) {
             if (localStorage['usertype'] == 'O') {
-                $scope.getAllBill($scope.partyAccount.selected.id);
+               getAllBill($scope.partyAccount.selected.id);
             }
             else {
-                $scope.getAllBill($scope.partyAccount.selected.id);
+               getAllBill($scope.partyAccount.selected.id);
             }
         }
 
-    });
+    };
+    if (sharedFactory.info != null) {
+        $scope.mode="return";
+        //$scope.purInfo = sharedFactory.info;
+        setDate($scope.paymentdate);
+        setDate($scope.badlaDate);
+        fillRosemateData();
+    }
+    else if ($stateParams.voId) {
+        $scope.mode = "edit";
+        getPaymentdata($stateParams.voId);
+    } else {
+        $scope.mode = "new";
+        setDate($scope.paymentdate);
+        setDate($scope.badlaDate);
+    }
+   
     //}
-    $scope.getAllBill = function (id) {
+    function getAllBill(id) {
         $http.get(config.login + "getVoucherData" + "?customerId=" + id).then(function (response) {
             $scope.paymentData = response.data
             angular.copy($scope.paymentData, $scope.paidData);
             checkPaymentBills();
         });
     }
+    
     $scope.getAccount();
-    $scope.getBadlaAccount();
+    //$scope.getBadlaAccount();
     $scope.getSupplier();
-    if(!$scope.editMode) getVoucherCount();
-    $scope.openTransaction = function (id, voType) {
+    if($scope.mode!="edit") getVoucherCount();
+    //$scope.openTransaction = function (id, voType) {
 
-        if (voType == 'BILL') {
+    //    if (voType == 'BILL') {
 
-            $state.go('Customer.Bill', { billNo: id });
-        }
-        if (voType == 'Expense') {
+    //        $state.go('Customer.Bill', { billNo: id });
+    //    }
+    //    if (voType == 'Expense') {
 
-            $state.go('Customer.Expense', { expenceId: id });
-        }
-        if (voType == 'Sales Invoice') {
+    //        $state.go('Customer.Expense', { expenceId: id });
+    //    }
+    //    if (voType == 'Sales Invoice') {
 
-            $state.go('Customer.SalesInvoice', { voId: id });
-        }
-        if (voType == 'General Invoice') {
+    //        $state.go('Customer.SalesInvoice', { voId: id });
+    //    }
+    //    if (voType == 'General Invoice') {
 
-            $state.go('Customer.GeneralInvoice', { voId: id });
-        }
-    }
+    //        $state.go('Customer.GeneralInvoice', { voId: id });
+    //    }
+    //}
     $scope.totalInvoiceAmount = 0;
 
     function getVoucherCount(callback) {
-        if ($scope.editMode) {
+        if ($scope.mode=="edit") {
             if (callback) callback();
         } else {
             $http.get(config.api + "voucherTransactions/count" + "?[where][type]="+type).then(function (response) {
@@ -219,11 +236,11 @@
         calculateTotal(true);
         getVoucherCount(function () {
             var badla = undefined;
-            if ($scope.chkBadla)
+            if ($scope.chkBadla) {
                 badla = {
                     amount: $scope.badlaAmount,
                     partyAccountId: $scope.badlaAccount.selected.id,
-                    date:badlaDate,// $scope.dateFormat($scope.badlaDate),
+                    date: badlaDate,// $scope.dateFormat($scope.badlaDate),
                     conditons: {
                         dayTotal: $scope.totaldays,
                         dayInterest: $scope.dayInterest,
@@ -233,6 +250,7 @@
                         perDiff: $scope.perDiff
                     }
                 }
+            }
             var data = {
                 compCode: localStorage.CompanyId,
                 type: type,
@@ -251,20 +269,34 @@
                     billDetail: $scope.itemChecked,
                     badla: badla,
                     attachements:attachements
-                }
+                },
+                vo_badla:getBadlaVoucherInfo()
             };
-            if ($scope.chkBadla) {
-                datas.push(data);
-                saveBadlaVoucher();
-            }
-            else {
-                $http.post(config.login + 'receipt?id=' + $stateParams.voId, data)
-                         .then(function (response) {
-                             showSuccessToast("Payment Received.");
-                             $state.reload();
+            //if ($scope.chkBadla) {
+            //    datas.push(data);
+            //    pushBadlaVoucherInfo();
+            //}
+            //else {
+                if (sharedFactory.info != null) {
+                    data.compCode = sharedFactory.info.selectedCompany1.CompanyId;
+                    data.vo_payment.companyName = sharedFactory.info.selectedCompany1.CompanyName;// localStorage[data.compCode];
+                    data.vo_payment.partyAccountName = localStorage[data.vo_payment.partyAccountId];
+                    if (sharedFactory.info.selectedReceiptIndex !=null && sharedFactory.info.receipts && sharedFactory.info.receipts.length > 0) {
+                        sharedFactory.info.receipts[sharedFactory.info.selectedReceiptIndex] = data;
+                    } else {
+                        sharedFactory.info.receipts.push(data);
+                    }
+                    $scope.goBack(true);
+                }
+                else {
+                    $http.post(config.login + 'receipt?id=' + $stateParams.voId, data)
+                             .then(function (response) {
+                                 showSuccessToast("Payment Received.");
+                                 $state.reload();
 
-                         });
-            }
+                             });
+                }
+            //}
             
 
 
@@ -293,22 +325,23 @@
             $scope.totalInvoiceAmount = 0;
         }
     }
-    function saveBadlaVoucher() {
-        var badlaDate = getDate($scope.badlaDate);
-        var badlaDueDate = moment(billDate).add(Number($scope.dayTotal), 'days');
-        ///var  badlaDueDate = moment($scope.badlaDate, "DD/MM/YYYY").add(Number($scope.dayTotal), 'days').format('DD/MM/YYYY');
-    var data = {
+    function getBadlaVoucherInfo() {
+        if ($scope.chkBadla) {
+            var badlaDate = getDate($scope.badlaDate);
+            var badlaDueDate = moment(badlaDate).add(Number($scope.dayTotal), 'days');
+            ///var  badlaDueDate = moment($scope.badlaDate, "DD/MM/YYYY").add(Number($scope.dayTotal), 'days').format('DD/MM/YYYY');
+            var data = {
                 compCode: localStorage.CompanyId,
                 type: "Badla Voucher",
                 role: localStorage['usertype'],
                 date: badlaDate,
-                duedate:badlaDueDate,
+                duedate: badlaDueDate,
                 amount: $scope.badlaAmount,
-                vochNo: $scope.paymentNo+1,
-                balance:$scope.badlaAmount,
+                //vochNo: $scope.paymentNo + 1,
+                balance: $scope.badlaAmount,
                 state: "OPEN",
                 remark: $scope.remarks,
-                customerId:$scope.badlaAccount.selected.id,
+                customerId: $scope.badlaAccount.selected.id,
                 vo_badla: {
                     billDetail: $scope.itemChecked,
                     partyAccountId: $scope.partyAccount.selected.id,
@@ -326,59 +359,82 @@
                     }
                 }
             };
-            
-    datas.push(data);
-    $http.post(config.login + 'saveBadlaVoucher?id=' + $stateParams.voId, datas)
-                 .then(function (response) {
-                     showSuccessToast("Payment Received.");
-                     $state.reload();
+            return data;
+        }
+    //datas.push(data);
+    //$http.post(config.login + 'saveBadlaVoucher?id=' + $stateParams.voId, datas)
+    //             .then(function (response) {
+    //                 showSuccessToast("Payment Received.");
+    //                 $state.reload();
 
-                 });
+    //             });
     }
     function checkPaymentBills() {
         Array.prototype.push.apply($scope.paymentData, $scope.itemChecked);
         angular.copy($scope.paymentData, $scope.paidData);
     }
+    function fillRosemateData(){
+        $scope.bankAccount = { selected: sharedFactory.info.cashAccount.selected };
+        if(sharedFactory.info.paymentDate)
+            setDate($scope.paymentdate, sharedFactory.info.paymentDate);
+        if (sharedFactory.info.salePartyAccount) {
+            $scope.partyAccount = { selected: sharedFactory.info.salePartyAccount.selected };
+        }
+        if (sharedFactory.info.amtSale) {
+            $scope.totalPaidAmount = sharedFactory.info.amtSale;
+            $scope.balanceAmtReceipt = sharedFactory.info.amtSale;
+        }
+        if(sharedFactory.info.selectedReceiptIndex!=null && sharedFactory.info.receipts && sharedFactory.info.receipts.length>0)
+        {
+            //fillreceipt info
+            fillData(sharedFactory.info.receipts[sharedFactory.info.selectedReceiptIndex]);
+        } else {
+            $scope.partyAccountSelected();
+        }
+    }
     function getPaymentdata(id) {
         $http.get(config.api + 'voucherTransactions/' + id)
                     .then(function (response) {
-                        $scope.bindingEdit = true;
-                        console.log(response);
-                        $scope.state = response.data.state;
-                        $scope.totalPaidAmount = response.data.amount;
-                        $scope.balanceAmtReceipt = response.data.vo_payment.balanceAmtReceipt;
-                        $scope.paymentNo = response.data.vochNo;
-                        $scope.itemChecked = response.data.vo_payment.billDetail;
-                        $scope.bankAccount = { selected: { accountName: localStorage[response.data.vo_payment.bankAccountId], id:response.data.vo_payment.bankAccountId } };
-                        console.log(response.data.vo_payment.bankAccount);
-                        $scope.partyAccount = { selected: { accountName: localStorage[response.data.vo_payment.partyAccountId],id: response.data.vo_payment.partyAccountId } };
-                        setDate($scope.paymentdate, response.data.date);
-                        //$scope.paymentdate = $filter('date')(response.data.date, 'dd/MM/yyyy');
-                        //fill badla info if exists
-                        $scope.attachements = response.data.vo_payment.attachements;
-                        bindAttachments(response.data.vo_payment.attachements, function () {
-                            $scope.oldAttachment = null;
-                        });
-                        var badlaInfo = response.data.vo_payment.badla;
-                        if(badlaInfo)
-                        {
-                            $scope.chkBadla = true;
-                            setDate($scope.badlaDate, badlaInfo.data);
-                            //$scope.badlaDate = $filter('date')(badlaInfo.data, 'dd/MM/yyyy');
-                            $scope.badlaAccount = { selected: { id: badlaInfo.partyAccountId } };
-                            $scope.badlaAmount = badlaInfo.amount;
-                            $scope.dayTotal = badlaInfo.conditons.dayTotal;
-                            $scope.dayInterest = badlaInfo.conditons.dayInterest;
-                            $scope.dayDiff = badlaInfo.conditons.dayDiff;
-                            $scope.perTotal = badlaInfo.conditons.perTotal;
-                            $scope.perInterest = badlaInfo.conditons.perInterest;
-                            $scope.perDiff = badlaInfo.conditons.perDiff;
-                        }
-
-                        calculateTotal(false);
+                        fillData(response.data);
                     });
     }
-    
+    function fillData(data){
+        $scope.bindingEdit = true;
+        //console.log(response);
+        $scope.state = data.state;
+        $scope.totalPaidAmount = data.amount;
+        $scope.balanceAmtReceipt = data.vo_payment.balanceAmtReceipt;
+        $scope.paymentNo = data.vochNo;
+        $scope.itemChecked = data.vo_payment.billDetail;
+        $scope.bankAccount = { selected: { accountName: localStorage[data.vo_payment.bankAccountId], id:data.vo_payment.bankAccountId } };
+        console.log(data.vo_payment.bankAccount);
+        $scope.partyAccount = { selected: { accountName: localStorage[data.vo_payment.partyAccountId],id: data.vo_payment.partyAccountId } };
+        setDate($scope.paymentdate, data.date);
+        //$scope.paymentdate = $filter('date')(data.date, 'dd/MM/yyyy');
+        //fill badla info if exists
+        $scope.attachements = data.vo_payment.attachements;
+        bindAttachments(data.vo_payment.attachements, function () {
+            $scope.oldAttachment = null;
+        });
+        var badlaInfo = data.vo_payment.badla;
+        if(badlaInfo)
+        {
+            $scope.chkBadla = true;
+            setDate($scope.badlaDate, badlaInfo.data);
+            //$scope.badlaDate = $filter('date')(badlaInfo.data, 'dd/MM/yyyy');
+            $scope.badlaAccount = { selected: { id: badlaInfo.partyAccountId } };
+            $scope.badlaAmount = badlaInfo.amount;
+            $scope.dayTotal = badlaInfo.conditons.dayTotal;
+            $scope.dayInterest = badlaInfo.conditons.dayInterest;
+            $scope.dayDiff = badlaInfo.conditons.dayDiff;
+            $scope.perTotal = badlaInfo.conditons.perTotal;
+            $scope.perInterest = badlaInfo.conditons.perInterest;
+            $scope.perDiff = badlaInfo.conditons.perDiff;
+        }
+
+        calculateTotal(false);
+        $scope.partyAccountSelected();
+    }
     //var Promise = window.Promise;
     //if (!Promise) {
     //    Promise = JSZip.external.Promise;
@@ -459,17 +515,18 @@
             paymentDateChange();
 
     });
-    
-    $scope.$watch('totalPaidAmount', function () {
-        if (!$scope.bindingEdit) {
+    $scope.totalPaidAmountChanged=function(){
+    //$scope.$watch('totalPaidAmount', function () {
+        //if (!$scope.bindingEdit) {
             if ($scope.itemChecked.length > 0) {
                 $scope.itemChecked = [];
                 angular.copy($scope.paidData, $scope.paymentData);
             }
             $scope.balanceAmtReceipt = $scope.totalPaidAmount;
-        }
+        //}
 
-    });
+    }
+    //);
     //$scope.$watch('itemChecked', function () {
     //    calculateTotal(false);
 

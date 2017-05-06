@@ -154,6 +154,9 @@ myApp.controller('HomeCntrl', ['$state', '$http', '$rootScope', '$scope', 'confi
         $scope.companyInfo = item;
         $('#AddCompnayModal').modal('show');
     }
+    $scope.deleteCompany = function () {
+        showSuccessToast("Company Deleted");
+    }
     $scope.saveCompany = function () {
         
         $scope.companyInfo.IsActive = 1;
@@ -204,6 +207,9 @@ myApp.controller('HomeCntrl', ['$state', '$http', '$rootScope', '$scope', 'confi
     //localStorage.toDate = moment().format('MM/DD/YYYY'); moment()
     $scope.fromDate = moment(localStorage.fromDate).format('DD/MM/YYYY');
     $scope.toDate = moment(localStorage.toDate).format('DD/MM/YYYY')
+
+
+   
     
 }]);
 

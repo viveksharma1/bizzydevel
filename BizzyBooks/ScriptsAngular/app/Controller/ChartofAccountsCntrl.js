@@ -1,4 +1,4 @@
-﻿myApp.controller('ChartofAccountsCntrl', ['$scope', '$http', 'config', 'dateService', function ($scope, $http, config, dateService) {
+﻿myApp.controller('ChartofAccountsCntrl', ['$scope', '$http', 'config', 'dateService', 'authService', function ($scope, $http, config, dateService, authService) {
     
     $(".my a").click(function (e) {
         e.preventDefault();
@@ -121,13 +121,10 @@
                 data[i].balance = data[i].credit - data[i].debit
             }
             else {
-                if (data[i].openingBalance && data[i].balanceType == 'credit') {
-                    data[i].balance = data[i].openingBalance + data[i].credit - data[i].debit
-                } else if (data[i].openingBalance && data[i].balanceType == 'debit') {
-                    data[i].balance = data[i].openingBalance + data[i].credit - data[i].debit
-                }
-                else if (data[i].balanceType == 'debit') {
-                    data[i].balance = data[i].debit - data[i].credit
+                if ( data[i].balanceType == 'credit') {
+                    data[i].balance = data[i].credit - data[i].debit
+                } else if (data[i].balanceType == 'debit') {
+                    data[i].balance =  data[i].credit - data[i].debit
                 }
             }
         }
@@ -149,13 +146,67 @@
             console.log($scope.account);
         });
     });
-        
-    $http.get(config.login + "dateWiseAccountDetail/" + localStorage.CompanyId + "?date=" + localStorage.toDate).then(function (response) {
-        //$scope.account = response.data;
-        $scope.account = getAccountData(response.data);
-        console.log($scope.account);
-    });
-    //console.log(dateService)
+    $scope.getAccountList = function () {
+        $http.get(config.login + "dateWiseAccountDetail/" + localStorage.CompanyId + "?date=" + localStorage.toDate).then(function (response) {
+            //$scope.account = response.data;
+            $scope.account = getAccountData(response.data);
+            console.log($scope.account);
+        });
+    }
+    $scope.getAccountList();
     
+
+    // delete account 
+
+     $scope.deleteAccountPopup = function (id) {
+         $scope.accountId = id
+         console.log($scope.accountId)
+         $("#accountAlert").modal("show");
+         
+     }
+
+        $scope.deleteAccount = function (id) {
+            $http.post(config.login + "deleteAccount/" + $scope.accountId).then(function (response) {
+                if (response.data.status == 'success') {
+                    showSuccessToast("Account deleted Succesfully");
+                    $scope.getAccountList();
+                }
+                else {
+                    showSuccessToast("some internal problem");
+                }
+            });
+
+
+        }
+
+       
+        var urlToChangeStream = "" + config.api + "accounts/change-stream?_format=event-stream";
+        var src = new EventSource(urlToChangeStream);
+        src.addEventListener('data', function (msg) {
+            var d = JSON.parse(msg.data);
+            console.log(d)
+            if (d) {
+                var username = authService.getAuthentication().username
+                var activityType;
+                if (d.type == 'create') {
+                    var activityType = "Account" +" "+ d.data.accountName +" "+ "Created"
+
+                } else if(d.type == 'update'){
+                    var activityType = "Account" +" "+ d.data.accountName + " "+"Updated"
+                }
+                var logData = {
+                    username: username,
+                    date: moment().format('MMMM Do YYYY, h:mm:ss a'),
+                    activityType:activityType,
+                    vochNo:''
+
+                }
+                $http.post(config.login + "userActivityLog", logData).then(function (response) {
+                    return;
+                });
+
+            }
+          console.log(d.data);
+        })
    
 }]);

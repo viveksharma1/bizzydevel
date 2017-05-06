@@ -12,6 +12,11 @@
         format: 'dd/mm/yyyy',
         autoclose: true,
     });
+    
+    $('#OrderDate').datepicker({
+        format: 'dd/mm/yyyy',
+        autoclose: true,
+    });
 
     $('#actualDate').datepicker({
         format: 'dd/mm/yyyy',
@@ -29,6 +34,10 @@
     });
 
     $('#RemovalDate').datepicker({
+        format: 'dd/mm/yyyy',
+        autoclose: true,
+    });
+    $('#orderDate').datepicker({
         format: 'dd/mm/yyyy',
         autoclose: true,
     });
@@ -179,6 +188,8 @@
     $scope.SAD = {};
     $scope.NETWEIGHT = {};
     $scope.billNoValid = false;
+    $scope.comInvoiceNoValid = true;
+    $scope.exciseInvoiceNoValid = true;
     $scope.clearFilter = function () {
         $scope.godown = {};
         $scope.description = {};
@@ -251,18 +262,16 @@
                   .then(function (response) {
 
                       $scope.invoiceType = response.data.invoiceData.invoiceSubType;
-                      //$scope.customerType=customerType:,
                       $scope.salesAccount = { selected: { accountName: localStorage[response.data.invoiceData.ledgerAccountId], id: response.data.invoiceData.ledgerAccountId } };
                       $scope.supplier = { selected: { accountName: localStorage[response.data.invoiceData.customerAccountId], id: response.data.invoiceData.customerAccountId } };
                       $scope.supplier2 = { selected: { accountName: localStorage[response.data.invoiceData.consigneeAccountId], id: response.data.invoiceData.consigneeAccountId } };
-                     // $scope.salesAccount = { selected: { accountName: response.data.invoiceData.ledgerAccount } };
-                     // $scope.supplier = { selected: { company: response.data.invoiceData.customerAccount } };
-                      //$scope.supplier2 = { selected: { company: response.data.invoiceData.consigneeAccount } };
-                      //$scope.email = { selected: { company: response.data.email } };
                       $scope.totalAmount = response.data.amount;
-                      //$scope.billDate = response.data.date;
                       $scope.billNo = response.data.vochNo;
-                      $scope.comInvoiceNo = response.data.invoiceData.comInvoiceNo,
+                      $scope.comInvoiceNo = response.data.comInvoiceNo;
+                      $scope.exciseInvoiceNo = response.data.exciseInvoiceNo;
+                      $scope.orderNo = response.data.invoiceData.orderNo;
+                      setDate($scope.orderDate, response.data.invoiceData.orderDate);
+                      $scope.termsDelivery = response.data.invoiceData.termsDelivery;
                       $scope.narration = response.data.remark;
                       $scope.totalAmount = response.data.amount;
                       $scope.intRate = response.data.invoiceData.roi;
@@ -273,14 +282,8 @@
                       $scope.accountTable = response.data.invoiceData.accountlineItem;
                       setDate($scope.billDate, response.data.date);
                       setDate($scope.billDueDate, response.data.duedate);
-                      //$scope.billDueDate = $filter('date')(response.data.duedate, 'dd/MM/yyyy');
-
-                      //$scope.billIssueDate =
                       setDate($scope.billIssueDate, response.data.invoiceData.issueDate, $scope.billIssueTime);// $filter('date')(response.data.invoiceData.issueDate, 'dd/MM/yyyy');
-                      //$scope.billDate =
                       setDate($scope.billRemovalDate, response.data.invoiceData.removalDate, $scope.billRemovalTime);// $filter('date')(response.data.invoiceData.issueDate, 'dd/MM/yyyy');
-
-                      //$scope.billRemovalDate = $filter('date')(response.data.invoiceData.removalDate, 'dd/MM/yyyy');
                       $scope.paymentDays = response.data.invoiceData.paymentDays;
                       getSupplierDetail(response.data.invoiceData.customerAccountId);
                       getSupplierDetail(response.data.invoiceData.consigneeAccountId, true);
@@ -301,6 +304,8 @@
         $scope.hasVoId = true;
         $scope.getInvoiceData($stateParams.voId);
         $scope.billNoValid = true;
+        $scope.comInvoiceNoValid = true;
+        $scope.exciseInvoiceNoValid = true;
     }
     $scope.$watch('supplier.selected', function () {
         if ($scope.supplier.selected) {
@@ -338,7 +343,7 @@
     $scope.$watch('account.selected', function () {
         $scope.accountAmount = null;
         if ($scope.account.selected && $scope.account.selected.rate) {
-            $scope.accountAmount = Number(((Number($scope.totalAccountAmount)+Number($scope.listTotalAmount)) * Number($scope.account.selected.rate) / 100).toFixed(2));
+            $scope.accountAmount = Number(((Number($scope.totalAccountAmount?$scope.totalAccountAmount:0)+Number($scope.listTotalAmount?$scope.listTotalAmount:0)) * Number($scope.account.selected.rate) / 100).toFixed(2));
         }
     });
 
@@ -405,19 +410,49 @@
     //});
     
     $("#billNo").focusout(function () {
-
         var billNo = $scope.billNo;
-
         if (billNo != undefined && !$scope.hasVoId) {
-            $http.get(config.api + "transactions" + "/count" + "?where[no]=" + $scope.billNo).then(function (response) {
+            $http.get(config.api + "voucherTransactions" + "/count?[where][type]="+type+"&[where][vochNo]="+ $scope.billNo).then(function (response) {
                 $timeout(function () {
                     var data = response.data;
                     if (response.data.count > 0) {
-                        showErrorToast("Bill no already exists");
+                        showErrorToast("Delivery Challan No already exists");
                     } else {
                         $scope.billNoValid = true;
                     }
                     
+                });
+            });
+        }
+    })
+    $("#exciseInvoiceNo").focusout(function () {
+        var billNo = $scope.billNo;
+        if (billNo != undefined && !$scope.hasVoId) {
+            $http.get(config.api + "voucherTransactions" + "/count?[where][type]=" + type + "&[where][exciseInvoiceNo]=" + $scope.exciseInvoiceNo).then(function (response) {
+                $timeout(function () {
+                    var data = response.data;
+                    if (response.data.count > 0) {
+                        showErrorToast("Excise Invoice No already exists");
+                    } else {
+                        $scope.exciseInvoiceNoValid = true;
+                    }
+
+                });
+            });
+        }
+    })
+    $("#comInvoiceNo").focusout(function () {
+        var billNo = $scope.billNo;
+        if (billNo != undefined && !$scope.hasVoId) {
+            $http.get(config.api + "voucherTransactions" + "/count?[where][type]=" + type + "&[where][comInvoiceNo]=" + $scope.comInvoiceNo).then(function (response) {
+                $timeout(function () {
+                    var data = response.data;
+                    if (response.data.count > 0) {
+                        showErrorToast("Commercial Invoice no already exists");
+                    } else {
+                        $scope.comInvoiceNoValid = true;
+                    }
+
                 });
             });
         }
@@ -792,18 +827,21 @@
             var itemCart = $scope.itemCart;
             var found = false;
             for (var i = 0; i < itemChecked.length; i++) {
-                for (var j = 0; j < itemCart.length; j++) {
-                    if (itemCart[j].id === itemChecked[i].id) {
-                        //check item qty can be added 
-                        var availQty = parseFloat(itemCart[j].NETWEIGHT) - parseFloat(itemCart[j].itemQty);
-                        if (availQty - parseFloat(itemChecked[i].itemQty) < 0)
-                            showErrorToast("Only " + availQty + " can be added for Item " + itemChecked[i].DESCRIPTION);
-                        itemCart[j].itemQty = parseFloat(itemCart[j].itemQty) + Math.min(availQty, parseFloat(itemChecked[i].itemQty));
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found)
+                //for (var j = 0; j < itemCart.length; j++) {
+                //    if (itemCart[j].id === itemChecked[i].id) {
+                //        //check item qty can be added 
+                //        var availQty = parseFloat(itemCart[j].NETWEIGHT) - parseFloat(itemCart[j].itemQty);
+                //        if (availQty - parseFloat(itemChecked[i].itemQty) < 0)
+                //            showErrorToast("Only " + availQty + " can be added for Item " + itemChecked[i].DESCRIPTION);
+                //        itemCart[j].itemQty = parseFloat(itemCart[j].itemQty) + Math.min(availQty, parseFloat(itemChecked[i].itemQty));
+                //        found = true;
+                //        break;
+                //    }
+
+
+
+                //}
+                //if (!found)
                     itemCart.push(itemChecked[i]);
             }
             $scope.itemCart = itemCart;
@@ -888,8 +926,10 @@
     }
     
 
-   function clearInvoice() {
+    function clearInvoice() {
         $scope.billNo = null;
+        $scope.comInvoiceNo = null;
+        $scope.exciseInvoiceNo = null;
         $scope.salesAccount = null;
         $scope.rdi = false;
         $scope.supplier = null;
@@ -904,18 +944,25 @@
         $scope.invoiceType = "Tax";
         $scope.customerType = "Buyer";
         $scope.billNoValid = false;
+        $scope.comInvoiceNoValid = true;
+        $scope.exciseInvoiceNoValid = true;
         $scope.uploader.clearQueue();
         //$scope.billDate = null;
         setDate($scope.billDate, new Date());
-
         $scope.paymentDays = null;
-        $scope.billDueDate = null;
+        setDate($scope.billDueDate, '')
+        // = null;
         setDate($scope.billIssueDate, '', $scope.billIssueTime)
+        setDate($scope.billRemovalDate, '', $scope.billRemovalTime)
         //$scope.billIssueDate = null;
-        $scope.billRemovalDate = null;
-        $scope.intRate=null;
+        //$scope.billRemovalDate = null;
+        $scope.intRate = null;
         $scope.modeTransport = null;
         $scope.narration = null;
+        $scope.orderNo = null;
+        setDate($scope.orderDate, '');
+        $scope.termsDelivery = null;
+
         $scope.accountTable = [];
         $scope.itemTable = [];
         sumItemListTable($scope.itemTable);
@@ -923,26 +970,27 @@
 
     }
 
-   function setDate(inputDateId, val,inputTimeId) {
-       $('#' + inputDateId).datepicker('setDate', new Date(val));
-       if(inputTimeId)
-           $('#' + inputTimeId).timepicker('setTime',new Date(val));
+   //function setDate(inputDateId, val,inputTimeId) {
+   //    $('#' + inputDateId).datepicker('setDate', new Date(val));
+   //    if(inputTimeId)
+   //        $('#' + inputTimeId).timepicker('setTime',new Date(val));
 
 
-   }
-   function getDate(inputDateId,inputTimeId) {
-       var ret=$('#'+inputDateId).datepicker('getDate');
-       if(inputTimeId)
-           ret=$('#'+inputTimeId).timepicker('getTime',ret);
-       return ret;
+   //}
+   //function getDate(inputDateId,inputTimeId) {
+   //    var ret=$('#'+inputDateId).datepicker('getDate');
+   //    if(inputTimeId)
+   //        ret=$('#'+inputTimeId).timepicker('getTime',ret);
+   //    return ret;
 
-   }
+   //}
 
    $scope.saveInvoice = function () {
        var billDate = getDate($scope.billDate);
        var billIssueDateTime = getDate($scope.billIssueDate, $scope.billIssueTime);
        var billRemovalDateTime = getDate($scope.billRemovalDate, $scope.billRemovalTime);
        var billDueDate = getDate($scope.billDueDate);
+       var orderDate = getDate($scope.orderDate);
         if ($scope.supplier2.selected == undefined || $scope.supplier2.selected==null) {
             showErrorToast("Please select consignee");
             return;
@@ -997,6 +1045,8 @@
             amount: $scope.gTotal,
             roundOff:$scope.roundOff,
             vochNo: $scope.billNo,
+            comInvoiceNo: $scope.comInvoiceNo,
+            exciseInvoiceNo: $scope.exciseInvoiceNo,
             state: "OPEN",
             customerId: $scope.supplier2.selected.id,
             balance: $scope.gTotal,
@@ -1005,7 +1055,9 @@
             //email: $scope.suppliers2.selected.email,
             remark: $scope.narration,
             invoiceData: {
-                comInvoiceNo:$scope.comInvoiceNo,
+                orderNo: $scope.orderNo,
+                orderDate: orderDate,
+                termsDelivery:$scope.termsDelivery,
                 invoiceSubType: $scope.invoiceType,
                 customerType:$scope.customerType,
                 issueDate: billIssueDateTime,

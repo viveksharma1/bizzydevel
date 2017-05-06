@@ -405,11 +405,14 @@ var myApp = angular
         });
 
         $stateProvider.state("Customer.PurchaseInvoiceSattlement", {
-            url: "/PurchaseInvoiceSattlement",
+            url: "/PurchaseInvoiceSattlement/:voId",
             templateUrl: "Customer/PurchaseInvoiceSattlement",
             controller: "PurchaseInvoiceSattlementCntrl",
             requiresAuthentication: true,
-            permissions:'Float.add.Suppliers.Purchase Invoice.active'
+            permissions: 'Float.add.Suppliers.Purchase Invoice.active',
+            params: {
+                voId: null,
+            }
         });
 
         $stateProvider.state("Customer.BalanceInventoryViewInfo", {
@@ -544,14 +547,20 @@ var myApp = angular
 
 
 myApp.value('config', {
+    login: '',
+    api:''
+////login: 'http://localhost:4000/',
 
-//login: 'http://localhost:4000/',
+//<<<<<<< HEAD
+////login: 'http://localhost:4000/',
 
-//api: 'http://localhost:4000/api/'
+//=======
+//>>>>>>> f312d6d91f3c781340b7d8f1a5485e79a5390d63
+////api: 'http://localhost:4000/api/'
    
 
-login: 'http://bizzy-book-api.azurewebsites.net/',
- api: 'http://bizzy-book-api.azurewebsites.net/api/',
+//login: 'http://bizzy-book-api.azurewebsites.net/',
+// api: 'http://bizzy-book-api.azurewebsites.net/api/',
 });
 
 
@@ -569,7 +578,12 @@ myApp.service('selectsuppliers', ['$rootScope',
 }
 ])
 
-myApp.run(['authService', '$location', '$rootScope', 'localStorageService','$state', function (authService, $location, $rootScope,localStorageService,$state) {
+myApp.run(['authService', '$location', '$rootScope', 'localStorageService', '$state', 'config', '$http', function (authService, $location, $rootScope, localStorageService, $state, config, $http) {
+    $http.get('config/config.json').then(function (response) {
+        config.api = response.data.api;
+        config.login = response.data.login;
+        $rootScope.$broadcast('config-loaded');
+    });
     authService.fillAuthData();
     //authManager.checkAuthOnRefresh();
     //authManager.redirectWhenUnauthenticated();
@@ -593,6 +607,8 @@ myApp.run(['authService', '$location', '$rootScope', 'localStorageService','$sta
             //else
             //    $state.go("/");
                 //$location.path(ngAuthSettings.defaultRoute);
+        } else {
+            $rootScope.$previousState = fromState;
         }
         //if (next.route != undefined) {
         //    var path = authService.getUserPermission(next.route, next.fallback);
@@ -1102,7 +1118,12 @@ myApp.run(['$templateCache', function ($templateCache) {
 
 }]);
 
-
+myApp.factory('sharedFactory', function() {
+    var info = null;
+    return {
+        info: info
+    };
+})
 
 
 

@@ -171,6 +171,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="config\config.json" />
     <Content Include="Content\Site.css" />
     <Content Include="CreateAccount.html" />
     <Content Include="css\accordion.min.css" />
@@ -253,6 +254,7 @@
     <Content Include="js\accordion.min.js" />
     <Content Include="js\alertify.js" />
     <Content Include="js\angular-charts.js" />
+    <Content Include="js\angular-confirm.js" />
     <Content Include="js\angular-fusioncharts.min.js" />
     <Content Include="js\bootstrap-datepicker.js" />
     <Content Include="js\bootstrap-filestyle.min.js" />
@@ -304,7 +306,6 @@
     <Content Include="js\jspdf.min.js" />
     <Content Include="js\jszip-utils.js" />
     <Content Include="js\jszip.js" />
-    <Content Include="js\jszip.min.js" />
     <Content Include="js\kendo.all.min.js" />
     <Content Include="js\loading-bar.js" />
     <Content Include="js\modernizr.custom.js" />
@@ -406,7 +407,6 @@
     <Content Include="ScriptsAngular\app\Controller\BankingCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\BillCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\ChartofAccountsCntrl.js" />
-    <Content Include="ScriptsAngular\app\Controller\ContraEntryCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\CreateInventoryCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\CustomerCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\CustomerdetailCntrl.js" />
@@ -558,6 +558,7 @@
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
+  <PropertyGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />

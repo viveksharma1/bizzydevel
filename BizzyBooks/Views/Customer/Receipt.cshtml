@@ -31,6 +31,9 @@
         <label style="float:left;padding:15px ">
 
             <strong><span style="font-size:20px;  color:#585655">Receipt</span></strong>
+ <button type="button" ng-click="delete()" confirm="Are you sure?">Delete</button>
+               
+          
         </label>
 
         <label style="float:right;padding:15px">
@@ -97,7 +100,7 @@
                 <div class="col-sm-6 padding" >
                     <create-account value="myValue"> </create-account>
                     <h4 class="tabheading" >Party Name</h4>
-                    <ui-select ui-tree-select ng-model="partyAccount.selected" id="countryCode"
+                    <ui-select ui-tree-select on-select="partyAccountSelected();" ng-model="partyAccount.selected" id="countryCode"
                                ui-select-focuser  ng-init="$select.addnew=1;$select.type='buyer';"
                                theme="selectize">
                         <ui-select-match placeholder="Select Customers">
@@ -118,7 +121,7 @@
 
                 <div  class="col-sm-3 padding">
                     <h4 class="tabheading">Rs.</h4>
-                    <input type="number" step="0.01" ng-model="totalPaidAmount"class="form-control" />
+                    <input type="number" step="0.01" ng-change="totalPaidAmountChanged();" ng-model="totalPaidAmount"class="form-control" />
                   
                 </div>
                 <div class="col-sm-3 padding">
