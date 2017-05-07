@@ -134,18 +134,7 @@
     $scope.$on('date-changed', function (event, args) {
         var toDate = new Date(localStorage.toDate);
         var fromDate = new Date(localStorage.fromDate)
-        $scope.fdate = args.fromDate;
-         $scope.tDate = args.toDate;
-         $scope.fdate = args.fromDate.fdate;
-         $scope.tDate = args.toDate.tdate;
-
-        $scope.fromDate = $scope.dateFormat($scope.fdate)
-        $scope.toDate = $scope.dateFormat($scope.tDate)
-        localStorage.fromDate = $scope.fromDate
-        localStorage.toDate = $scope.toDate
-
-
-        $http.get(config.login + "dateWiseAccountDetail/" + localStorage.CompanyId + "?date=" + toDate).then(function (response) {
+        $http.post(config.login + "dateWiseAccountDetail" + "?date=" + localStorage.toDate + "&role=" + localStorage['usertype'], [localStorage.CompanyId]).then(function (response) {
             $scope.account = getAccountData(response.data);
             console.log($scope.account);
         });
@@ -159,9 +148,11 @@
     //$scope.compCode = ["COM2016123456780"]
 
     $scope.getCompcode = function (companyId) {
+
         compCode.push(companyId)
         $scope.getAccountList(compCode);
         localStorage.selectedCompany = compCode
+
     }
 
     $scope.removeCompCode = function (companyId) {
