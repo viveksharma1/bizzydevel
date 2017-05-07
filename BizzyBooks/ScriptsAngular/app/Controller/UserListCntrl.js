@@ -40,25 +40,61 @@
     $scope.pretty = function (obj) {
         return angular.toJson(obj, true);
     }
-    $scope.roles = [
+    $scope.roles = [];
+    createRoles();
+    function createRoles() {
+        authService.fillAuthData();
+        $scope.userInfo = $rootScope.authentication;
+        switch($scope.userInfo.role){
+            case '1':
+                $scope.roles = [
         { "roleId": "2", "roleName": "Official" },
-        { "roleId": "1", "roleName": "UO Manager" },
-        { "roleId": "3", "roleName": "UO Admin" }
-    ];
+        { "roleId": "1", "roleName": "UO Manager" }
+                ];
+                break;
+            //case '2':
+            //    $scope.roles = [
+            //        { "roleId": "2", "roleName": "Official" }
+            //    ];
+            //    break;
+            case '3':
+                $scope.roles = [
+                    { "roleId": "2", "roleName": "Official" },
+                    { "roleId": "1", "roleName": "UO Manager" },
+                    { "roleId": "3", "roleName": "UO Admin" }
+                ];
+                break;
+    
+        }
+    
+    }
+    
     //var userInfo=authService.Authentication();
     //var authData = localStorageService.get('authorizationData');
-    $http.get(config.api + 'Users?access_token=' + authService.innerToken())
+    $http.get(config.api + 'Users?filter[where][status]=1&access_token=' + authService.innerToken())
                 .then(function (response) {
-                    $scope.userList = response.data;
+                    $scope.userList=filterList(response.data);
+
                 });
-    $http.get(config.api + "CompanyMasters").then(function (response) {
+    $http.get(config.api + "CompanyMasters?filter[where][IsActive]=1").then(function (response) {
         $scope.companyList = response.data;
     });
+    
+    function filterList(data) {
+        var userList = [];
+        angular.forEach(data, function (user) {
+            if(!($scope.userInfo.role=='1' && user.role=='3'))
+                userList.push(user)
+        })
+        return userList;
+        
+    }
     $scope.newUser = function () {
         $scope.editMode = "new";
         $scope.user = {};
         $scope.company = { selected: []};
         $scope.role = { selected: undefined };
+        $scope.obj = { data: authService.getPermissionJson(), options: { mode: 'tree' } }; ///logged ub user permission.
         $('#UserEditModal').modal('show');
     }
     //$scope.company.selected = null;
@@ -72,28 +108,28 @@
         $('#UserEditModal').modal('show');
 
     }
-    function validateInputs() {
-        if ($scope.user.username == undefined) {
-            showErrorToast("Please enter username");
-            return;
-        }
-        if ($scope.user.password === $scope.rePassword) {
-            showErrorToast("Passwords are not same");
-            return;
-        }
-        if ($scope.user.password) {
-            showErrorToast("Passwords can not be empty");
-        }
-        if ($scope.user.password) {
-            showErrorToast("Passwords can not be empty");
-        }
+    //function validateInputs() {
+    //    if ($scope.user.username == undefined) {
+    //        showErrorToast("Please enter username");
+    //        return;
+    //    }
+    //    if ($scope.user.password === $scope.rePassword) {
+    //        showErrorToast("Passwords are not same");
+    //        return;
+    //    }
+    //    if ($scope.user.password) {
+    //        showErrorToast("Passwords can not be empty");
+    //    }
+    //    if ($scope.user.password) {
+    //        showErrorToast("Passwords can not be empty");
+    //    }
 
-        if ($scope.role.selected) {
-            showErrorToast("Please select a role");
-            return;
-        }
-    }
-    $scope.updateUser = function () {
+    //    if ($scope.role.selected) {
+    //        showErrorToast("Please select a role");
+    //        return;
+    //    }
+    //}
+    $scope.updateUser = function (del) {
         if ($scope.user.username == undefined || $scope.user.username == "") {
             showErrorToast("Please enter username");
             return;
@@ -123,6 +159,8 @@
             user.companies = getCompanyIds($scope.company.selected);
             user.role = $scope.role.selected.roleId;
             user.permission = $scope.obj.data;
+            if (del)
+                user.status = "0";
             $http.put(config.api + 'Users?access_token=' + authService.innerToken(), user)
                     .then(function (response) {
                         $('#UserEditModal').modal('hide');
@@ -140,7 +178,7 @@
             user.role = $scope.role.selected.roleId;
             user.admin = {};
             user.emailVerified = true;
-            user.status = "active";
+            user.status = "1";
             user.permission = $scope.obj.data;
             $http.post(config.api + 'Users?access_token=' + authService.innerToken(), user)
                     .then(function (response) {
