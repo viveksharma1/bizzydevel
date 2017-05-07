@@ -32,6 +32,7 @@ myApp.controller('LoginCntrl', ['$state', '$http', '$rootScope', '$scope', 'conf
                     authData={
                                 token_inner: data.id,
                                 token: data.token,
+                                userid:data.user.id,
                                 username: data.user.username,
                                 role: data.user.role,
                                 usertype: "O",

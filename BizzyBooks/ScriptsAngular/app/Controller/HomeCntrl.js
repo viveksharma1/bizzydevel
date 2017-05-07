@@ -21,29 +21,40 @@ myApp.controller('HomeCntrl', ['$state', '$http', '$rootScope', '$scope', 'confi
     $scope._tDate = 'tdate';
     //$scope.fdate = localStorage.fromDate
     //$scope.tdate = localStorage.toDate
+    $scope.$on('companylist-change', function (event, args) {
 
+        //// get user companies....
+        //// 
+        GetCompanyData();
+
+    });
+    //function getUserCompanies() {
+
+    //}
 
     function initiateHome() {
         authService.fillAuthData();
         $scope.userInfo = $rootScope.authentication;
         //if ($scope.CompanyList == undefined) {
-            if (localStorage.comobj != undefined) {
-                $scope.CompanyList = JSON.parse(localStorage.comobj); 
-                if ($scope.CompanyList.length == 0) GetCompanyData();
-                else {
-                    console.log($scope.CompanyList);
-                    if (localStorage.DefaultCompany) {
-                        setCompany(JSON.parse(localStorage.DefaultCompany));
-                        //$scope.DefaultCompany = JSON.parse(
-                        //.DefaultCompany);//[0];
-                    } else {
-                        //$scope.DefaultCompany = $scope.CompanyList[0];
-                        //localStorage.DefaultCompany = JSON.stringify($scope.DefaultCompany);
-                        setCompany($scope.CompanyList[0]);
-                    }
-                    //$scope.DefaultCompanyName = localStorage.DefaultCompanyName;
-                }
-            } else GetCompanyData();
+        //    if (localStorage.comobj != undefined) {
+        //        $scope.CompanyList = JSON.parse(localStorage.comobj); 
+        //        if ($scope.CompanyList.length == 0) GetCompanyData();
+        //        else {
+        //            console.log($scope.CompanyList);
+        //            if (localStorage.DefaultCompany) {
+        //                setCompany(JSON.parse(localStorage.DefaultCompany));
+        //                //$scope.DefaultCompany = JSON.parse(
+        //                //.DefaultCompany);//[0];
+        //            } else {
+        //                //$scope.DefaultCompany = $scope.CompanyList[0];
+        //                //localStorage.DefaultCompany = JSON.stringify($scope.DefaultCompany);
+        //                setCompany($scope.CompanyList[0]);
+        //            }
+        //            //$scope.DefaultCompanyName = localStorage.DefaultCompanyName;
+        //        }
+        //    } else
+
+                GetCompanyData();
 
         //}
     }
@@ -57,16 +68,28 @@ myApp.controller('HomeCntrl', ['$state', '$http', '$rootScope', '$scope', 'confi
     //} else {
         initiateHome();
     //}
-    
+        function CheckCompayExists(CompanyId) {
+            for(var i=0;i<$scope.CompanyList.length;i++) {
+                if ($scope.CompanyList[i].CompanyId == CompanyId)
+                    return true;
+            }
+            return false;
+        }
     function GetCompanyData() {
         //$scope.reload = true;
-        $http.get(config.api + "CompanyMasters?filter[where][IsActive]=1").success(function (response) {
-            $scope.CompanyList = filterCompanyList(response);
-            //$scope.CompanyList = response;
-            
-            console.log($scope.CompanyList)
+        $http.get(config.login + "getUserCompanies/"+$scope.userInfo.userid).success(function (response) {
+        //$http.get(config.api + "CompanyMasters?filter[where][IsActive]=1").success(function (response) {
+            //$scope.CompanyList = filterCompanyList(response);
+            $scope.CompanyList = response;
+            console.log($scope.CompanyList);
             localStorage.comobj = JSON.stringify($scope.CompanyList);
-            setCompany($scope.CompanyList[0]);
+            var dCompany = {};
+            if (localStorage.DefaultCompany != undefined)
+                dCompany = JSON.parse(localStorage.DefaultCompany);
+            setCompany(CheckCompayExists(dCompany.CompanyId)? dCompany: $scope.CompanyList[0]);
+            
+
+            //setCompany($scope.CompanyList[0]);
             //$scope.DefaultCompany = $scope.CompanyList[0];
             //localStorage.DefaultCompany = JSON.stringify($scope.DefaultCompany);
             //localStorage.DefaultCompanyName = response[0].CompanyName;
@@ -101,13 +124,13 @@ myApp.controller('HomeCntrl', ['$state', '$http', '$rootScope', '$scope', 'confi
 
         //}
     }
-    function filterCompanyList(companyList) {
-        var filtercompany=[];
-        angular.forEach(companyList, function (item) {
-            $scope.userInfo.companies.indexOf(item.CompanyId) >= 0 ? filtercompany.push(item) : "";
-        })
-        return filtercompany;
-    }
+    //function filterCompanyList(companyList) {
+    //    var filtercompany=[];
+    //    angular.forEach(companyList, function (item) {
+    //        $scope.userInfo.companies.indexOf(item.CompanyId) >= 0 ? filtercompany.push(item) : "";
+    //    })
+    //    return filtercompany;
+    //}
     function setCompany(company) {
         $scope.DefaultCompany = company;
         localStorage.DefaultCompany = JSON.stringify($scope.DefaultCompany);
@@ -118,7 +141,7 @@ myApp.controller('HomeCntrl', ['$state', '$http', '$rootScope', '$scope', 'confi
     }
     $scope.changeCompany = function (company) {
         setCompany(company);
-        $state.reload();
+        //$state.reload();
     }
     $scope.logout = function () {
         $http.get(config.login + 'logout' + "?token1=" + localStorage["tokenNo"])
@@ -212,8 +235,12 @@ myApp.controller('HomeCntrl', ['$state', '$http', '$rootScope', '$scope', 'confi
     }
 
     $scope.setPeriod = function () {
-        $scope.fromDate = new Date(getDate($scope._fDate)).setHours(0,0,0,0);
-        $scope.toDate = new Date(getDate($scope._tDate)).setHours(24, 0, 0, 0);
+        var d = new Date(getDate($scope._fDate));
+        d.setHours(0, 0, 0, 0);
+        $scope.fromDate = d;
+        d = new Date(getDate($scope._tDate));
+        d.setHours(23, 59, 59, 0);
+        $scope.toDate = d;
         localStorage.fromDate = $scope.fromDate;
         localStorage.toDate = $scope.toDate;
 

@@ -176,8 +176,6 @@
     <Content Include="CreateAccount.html" />
     <Content Include="css\accordion.min.css" />
     <Content Include="css\angular-datatables.min.css" />
-    <Content Include="css\angular-progress-button-styles.css" />
-    <Content Include="css\angular-progress-button-styles.min.css" />
     <Content Include="css\bootstrap-datepicker.css" />
     <Content Include="css\bootstrap-select.min.css" />
     <Content Include="css\bootstrap-theme.min.css" />
@@ -220,7 +218,6 @@
     <Content Include="css\select.min.css" />
     <Content Include="css\select2.css" />
     <Content Include="css\selectize.bootstrap3.min.css" />
-    <Content Include="css\treasure-overlay-spinner.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\css\font-awesome.css" />
     <Content Include="fonts\css\font-awesome.min.css" />
@@ -374,8 +371,6 @@
     <Content Include="ScriptsAngular\Angular\angular-filter.min.js" />
     <Content Include="ScriptsAngular\Angular\angular-jwt.js" />
     <Content Include="ScriptsAngular\Angular\angular-local-storage.min.js" />
-    <Content Include="ScriptsAngular\Angular\angular-progress-button-styles.js" />
-    <Content Include="ScriptsAngular\Angular\angular-progress-button-styles.min.js" />
     <Content Include="ScriptsAngular\Angular\angular-route.js" />
     <Content Include="ScriptsAngular\Angular\angular-route.min.js" />
     <Content Include="ScriptsAngular\Angular\angular-ui-router.js" />
@@ -405,7 +400,6 @@
     <Content Include="ScriptsAngular\Angular\src\plugins\tabletools\angular-datatables.tabletools.js" />
     <Content Include="ScriptsAngular\Angular\src\select.min.js" />
     <Content Include="ScriptsAngular\Angular\src\ui-bootstrap-tpls-0.13.4.js" />
-    <Content Include="ScriptsAngular\Angular\treasure-overlay-spinner.min.js" />
     <Content Include="ScriptsAngular\Angular\ui-bootstrap-tpls-2.5.0.min.js" />
     <Content Include="ScriptsAngular\app\AccountCreateDirective.js" />
     <Content Include="ScriptsAngular\app\Controller\accountHistoryCntrl.js" />
@@ -503,6 +497,7 @@
     <Content Include="js\angular-xeditable-0.5.0.zip" />
     <None Include="Project_Readme.html" />
     <Content Include="Views\Account\Login.cshtml" />
+    <None Include="Properties\PublishProfiles\ff.pubxml" />
     <None Include="Properties\PublishProfiles\LOcal.pubxml" />
     <None Include="Properties\PublishProfiles\restorders.pubxml" />
     <Content Include="Views\Account\Home.cshtml" />
