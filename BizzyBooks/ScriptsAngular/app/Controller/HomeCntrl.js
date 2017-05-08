@@ -31,7 +31,7 @@ myApp.controller('HomeCntrl', ['$state', '$http', '$rootScope', '$scope', 'confi
     //function getUserCompanies() {
 
     //}
-
+    $scope.delcompanyInfo = {};
     function initiateHome() {
         authService.fillAuthData();
         $scope.userInfo = $rootScope.authentication;
@@ -179,12 +179,13 @@ myApp.controller('HomeCntrl', ['$state', '$http', '$rootScope', '$scope', 'confi
     $scope.editCompany = function (item) {
         $scope.edit = true;
         $scope.companyInfo = item;
-        $scope.delcompanyInfo = item;
+        angular.copy($scope.companyInfo, $scope.delcompanyInfo);
+        //$scope.delcompanyInfo = item;
         $('#AddCompnayModal').modal('show');
     }
     $scope.deleteCompany = function () {
         $scope.delcompanyInfo.IsActive = 0;
-        $http.put(config.api + "CompanyMasters", $scope.delcompanyInfo).then(function (response) {
+        $http.post(config.login + "editCompany", $scope.delcompanyInfo).then(function (response) {
             showSuccessToast("Company Deleted");
             GetCompanyData();
             $scope.closenClear();
@@ -216,7 +217,7 @@ myApp.controller('HomeCntrl', ['$state', '$http', '$rootScope', '$scope', 'confi
 
         //}
         if ($scope.edit) {
-            $http.put(config.api + "CompanyMasters", $scope.companyInfo).then(function (response) {
+            $http.post(config.login + "editCompany", $scope.companyInfo).then(function (response) {
                 showSuccessToast("Company info updated");
                 $scope.closenClear();
             }, function () {
