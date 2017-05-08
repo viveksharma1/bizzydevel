@@ -59,25 +59,25 @@
     //$scope.buyerAdd = function () {
     //    showSuccessToast("Buyer Add");
     //}
-    $("#myPopover").popover({
-        //  title: '<h3 class="custom-title"><span class="glyphicon glyphicon-info-sign"></span> Popover Info</h3>',
-        content: "<table style='width:100%'><tr><th>Date</th><th>Amount Applied</th><th>Payment No.</th></tr><tr><td><a href=''>17/03/2017</a></td><td>Rs500.00</td><td>58</td></tr><tr><td><a href=''>17/03/2017</a></td><td>Rs500.00</td><td>58</td></tr></table>",
-        html: true
-    })
+    //$("#myPopover").popover({
+    //    //  title: '<h3 class="custom-title"><span class="glyphicon glyphicon-info-sign"></span> Popover Info</h3>',
+    //    content: "<table style='width:100%'><tr><th>Date</th><th>Amount Applied</th><th>Payment No.</th></tr><tr><td><a href=''>17/03/2017</a></td><td>Rs500.00</td><td>58</td></tr><tr><td><a href=''>17/03/2017</a></td><td>Rs500.00</td><td>58</td></tr></table>",
+    //    html: true
+    //})
 
 
-    $('.filenameDiv').hide();
-    $('.attechmentDescription').hide();
-    $('.Attechmentdetail').click(function () {
-        $('.filenameDiv').show();
-        $("#name").append($("#NameInput").val());
-        $("#type").append($("#uploadBtn").val());
+    //$('.filenameDiv').hide();
+    //$('.attechmentDescription').hide();
+    //$('.Attechmentdetail').click(function () {
+    //    $('.filenameDiv').show();
+    //    $("#name").append($("#NameInput").val());
+    //    $("#type").append($("#uploadBtn").val());
 
-    });
+    //});
 
-    $('#removeattachment').click(function () {
-        $('.filenameDiv').hide();
-    });
+    //$('#removeattachment').click(function () {
+    //    $('.filenameDiv').hide();
+    //});
 
     $(":file").filestyle({ buttonName: "btn-sm btn-info" });
 
@@ -292,7 +292,6 @@
                       $scope.paymentDays = response.data.invoiceData.paymentDays;
                       getSupplierDetail(response.data.invoiceData.customerAccountId);
                       getSupplierDetail(response.data.invoiceData.consigneeAccountId, true);
-                      
                       sumItemListTable($scope.itemTable);
                       accountTableSum();
                       $scope.attachements=response.data.invoiceData.attachements;
@@ -312,23 +311,21 @@
         $scope.comInvoiceNoValid = true;
         $scope.exciseInvoiceNoValid = true;
     }
-    $scope.$watch('supplier.selected', function () {
+
+    $scope.supplierSelected = function () {
         if ($scope.supplier.selected) {
             if ($scope.supplier.selected.billingAddress && $scope.supplier.selected.billingAddress.length > 0) {
                 $scope.shippingAddress = $scope.supplier.selected.billingAddress[0].street
             }
             if ($scope.supplier.selected.email) {
                 $scope.email = $scope.supplier.selected.email
-
             }
             if ($scope.supplier.selected.phone) {
                 $scope.contactNo = $scope.supplier.selected.phone;
-
             }
-
         }
-    });
-    $scope.$watch('supplier2.selected', function () {
+    };
+    $scope.supplier2Selected = function () {
         if ($scope.supplier2.selected) {
             if ($scope.supplier2.selected.billingAddress && $scope.supplier2.selected.billingAddress.length > 0) {
                 $scope.shippingAddress2 = $scope.supplier2.selected.billingAddress[0].street
@@ -341,9 +338,46 @@
                 $scope.contactNo2 = $scope.supplier2.selected.phone;
 
             }
-
         }
-    });
+    };
+    $scope.accountSelected = function () {
+        $scope.accountAmount = null;
+        if ($scope.account.selected && $scope.account.selected.rate) {
+            $scope.accountAmount = Number(((Number($scope.totalAccountAmount ? $scope.totalAccountAmount : 0) + Number($scope.listTotalAmount ? $scope.listTotalAmount : 0)) * Number($scope.account.selected.rate) / 100).toFixed(2));
+        }
+    }
+    //$scope.$watch('supplier.selected', function () {
+    //    if ($scope.supplier.selected) {
+    //        if ($scope.supplier.selected.billingAddress && $scope.supplier.selected.billingAddress.length > 0) {
+    //            $scope.shippingAddress = $scope.supplier.selected.billingAddress[0].street
+    //        }
+    //        if ($scope.supplier.selected.email) {
+    //            $scope.email = $scope.supplier.selected.email
+
+    //        }
+    //        if ($scope.supplier.selected.phone) {
+    //            $scope.contactNo = $scope.supplier.selected.phone;
+
+    //        }
+
+    //    }
+    //});
+    //$scope.$watch('supplier2.selected', function () {
+    //    if ($scope.supplier2.selected) {
+    //        if ($scope.supplier2.selected.billingAddress && $scope.supplier2.selected.billingAddress.length > 0) {
+    //            $scope.shippingAddress2 = $scope.supplier2.selected.billingAddress[0].street
+    //        }
+    //        if ($scope.supplier2.selected.email) {
+    //            $scope.email2 = $scope.supplier2.selected.email
+
+    //        }
+    //        if ($scope.supplier2.selected.phone) {
+    //            $scope.contactNo2 = $scope.supplier2.selected.phone;
+
+    //        }
+
+    //    }
+    //});
 
     $scope.$watch('account.selected', function () {
         $scope.accountAmount = null;

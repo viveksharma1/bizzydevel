@@ -69,7 +69,7 @@
 
                         <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
                                    ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';"
-                                   theme="selectize">
+                                   theme="selectize" on-select="supplierSelected();">
                             <ui-select-match placeholder="Select Buyer">{{ $select.selected.accountName }}</ui-select-match>
 
                             <ui-select-choices repeat="person in supliers  | filter: $select.search">
@@ -85,7 +85,7 @@
                         <h4 class="tabheading font_11">Consignee</h4>
                         <ui-select ui-tree-select ng-model="supplier2.selected" 
                                    ui-select-focuser ng-init="$select.addnew=1;$select.type='consignee'"
-                                   theme="selectize">
+                                   theme="selectize" on-select="supplierSelected();">
                             <ui-select-match placeholder="Select Consignee">{{ $select.selected.accountName }}</ui-select-match>
 
                             <ui-select-choices repeat="person in supliers2  | filter: $select.search">
@@ -854,7 +854,7 @@
                         <tr style="background:rgb(243, 245, 248)">
                             <th>
                                 <ui-select ng-model="account.selected" 
-                                           ui-select-focuser
+                                           ui-select-focuser on-select="accountSelected();"
                                            theme="selectize" ng-init="$select.addnew=1;$select.type='accounts';">
                                     <ui-select-match placeholder="ACCOUNT">
                                         <span class="selectuiTable" style="width:100%">
