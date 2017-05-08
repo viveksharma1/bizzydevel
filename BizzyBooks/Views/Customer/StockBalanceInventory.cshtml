@@ -164,8 +164,9 @@
                                 @*<ui-select-match allow-clear="true" placeholder="Select Invoice No">{{ $select.selected.no }}</ui-select-match>*@
                                 <ui-select-match placeholder="">
                                     <span class="selectuiTable" style="width:100% !important">
+                                        <a class="btn btn-xs btn-link pull-left" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
                                         <span>{{ $select.selected._id.no}}</span>
-                                        <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
+                                      
                                     </span>
                                 </ui-select-match>
 
@@ -187,8 +188,9 @@
                                        theme="selectize">
                                 <ui-select-match allow-clear="true" placeholder="">
                                     <span class="selectuiTable" style="width:100% !important">
+                                        <a class="btn btn-xs btn-link pull-left" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
                                         <span>{{ $select.selected._id.DESCRIPTION}}</span>
-                                        <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
+                                    
                                     </span>
                                 </ui-select-match>
 
@@ -209,8 +211,9 @@
                                        theme="selectize">
                                 <ui-select-match allow-clear="true" placeholder="">
                                     <span class="selectuiTable" style="width:100% !important">
+                                        <a class="btn btn-xs btn-link pull-left" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
                                         <span>{{ $select.selected._id.GODOWN}}</span>
-                                        <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
+                                       
                                     </span>
                                 </ui-select-match>
 
@@ -231,8 +234,9 @@
                                        theme="selectize">
                                 <ui-select-match allow-clear="true" placeholder="">
                                     <span class="selectuiTable" style="width:100% !important">
+                                        <a class="btn btn-xs btn-link pull-left" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
                                         <span>{{ $select.selected._id.RRMARKS}}</span>
-                                        <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
+                                   
                                     </span>
                                 </ui-select-match>
 
