@@ -69,7 +69,7 @@
 
                         <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
                                    ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';"
-                                   theme="selectize">
+                                   theme="selectize" on-select="supplierSelected();">
                             <ui-select-match placeholder="Select Buyer">{{ $select.selected.accountName }}</ui-select-match>
 
                             <ui-select-choices repeat="person in supliers  | filter: $select.search">
@@ -85,7 +85,7 @@
                         <h4 class="tabheading font_11">Consignee</h4>
                         <ui-select ui-tree-select ng-model="supplier2.selected" 
                                    ui-select-focuser ng-init="$select.addnew=1;$select.type='consignee'"
-                                   theme="selectize">
+                                   theme="selectize" on-select="supplier2Selected();">
                             <ui-select-match placeholder="Select Consignee">{{ $select.selected.accountName }}</ui-select-match>
 
                             <ui-select-choices repeat="person in supliers2  | filter: $select.search">
@@ -230,23 +230,7 @@
                     </span>
                 </div>*@
 
-                        <h4 class="tabheading font_11">Date & time of removal</h4>
-                        <div class="col-sm-6" style="padding:0px">
-                            <div class='input-group'>
-                                <input type='text' class="form-control" ng-init="billRemovalDate='RemovalDate'" id='RemovalDate' placeholder="dd/mm/yyyy" />
-                                <span class="input-group-addon" style="padding:6px 6px">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
-                            </div>
-                            </div>
-                        <div class="col-sm-6" style="padding:0px; padding-left:4px">
-                            <div class='input-group'>
-                                <input type='text' class="form-control" ng-init="billRemovalTime='RemovalTime'" id='RemovalTime' placeholder="00:00" />
-                                <span class="input-group-addon" style="padding:6px 6px">
-                                    <span class="fa fa-clock-o"></span>
-                                </span>
-                            </div>
-                            </div>
+                     
                        
                         <div class="col-sm-6" style="padding:0px">
                             <h4 class="tabheading font_11">Order Date</h4>
@@ -261,6 +245,24 @@
                         <div class="col-sm-6" style="padding:0px; padding-left:4px">
                             <h4 class="tabheading font_11">Order No.</h4>
                             <input type="text" ng-model="orderNo" class="form-control" />
+                        </div>
+
+                        <h4 class="tabheading font_11" style="margin-top:10px; float:left">Date & time of removal</h4>
+                        <div class="col-sm-6" style="padding:0px">
+                            <div class='input-group'>
+                                <input type='text' class="form-control" ng-init="billRemovalDate='RemovalDate'" id='RemovalDate' placeholder="dd/mm/yyyy" />
+                                <span class="input-group-addon" style="padding:6px 6px">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6" style="padding:0px; padding-left:4px">
+                            <div class='input-group'>
+                                <input type='text' class="form-control" ng-init="billRemovalTime='RemovalTime'" id='RemovalTime' placeholder="00:00" />
+                                <span class="input-group-addon" style="padding:6px 6px">
+                                    <span class="fa fa-clock-o"></span>
+                                </span>
+                            </div>
                         </div>
 
                         </div>
@@ -278,14 +280,15 @@
                 <p class="text-right">Balance Due</p>
                 <p class="balancedue" style="float:none">&#8377; {{gTotal}}</p>
 
-
-                <button type="button" class="btn btn-sm btn-default pull-right" style="margin-top:65px">Receipt</button>
-                <div class="col-sm-4 padding" style="margin-top:16px">
+                <div class="col-sm-12" style="padding:0px">
+                    <button type="button" class="btn btn-sm btn-default pull-right" style="margin-top:65px">Receipt</button>
+                </div>
+                <div class="col-sm-4 padding" style="margin-top:-20px">
                     <h4 class="tabheading font_11" style="width:100%; margin-top:0px !important; text-align:left">Terms of Delivery</h4>
                     <input type="text" ng-model="termsDelivery" class="form-control" />
                 </div>
-                <small style="float:right; width:100%; margin:10px 0px"><span class="text-primary cursor" id="myPopover" data-toggle="popover" data-placement="left">1 reciept </span> made on 12/march/2017</small>
-                <div class="pull-right">
+                <small style="float:right; margin:10px 0px"><span class="text-primary cursor" id="myPopover" data-toggle="popover" data-placement="left">1 reciept </span> made on 12/march/2017</small>
+                <div class="pull-right" style="text-align:left">
                     <div class="col-sm-4 pull-right padding">
                         <h4 class="tabheading font_11" style="float:left; width:100%; margin-top:0px !important">Delivery Challan no.</h4>
                         <input type="text" class="form-control pull-right" id="billNo" ng-model="billNo" />
@@ -421,7 +424,7 @@
                                                     </span>
                                                 </ui-select-match>
 
-                                                <ui-select-choices repeat="invoice in ItemList  | unique:'_id.GODOWN'|filter: $select.search">
+                                                <ui-select-choices repeat="invoice in ItemList| unique:'_id.GODOWN'|filter: $select.search "  ng-init="$select.hide=!invoice._id.GODOWN" >
                                                     <div>
                                                         <span style="color:forestgreen">{{invoice._id.GODOWN}}</span>
                                                     </div>
@@ -854,7 +857,7 @@
                         <tr style="background:rgb(243, 245, 248)">
                             <th>
                                 <ui-select ng-model="account.selected" 
-                                           ui-select-focuser
+                                           ui-select-focuser on-select="taxAccountSelected();"
                                            theme="selectize" ng-init="$select.addnew=1;$select.type='accounts';">
                                     <ui-select-match placeholder="ACCOUNT">
                                         <span class="selectuiTable" style="width:100%">

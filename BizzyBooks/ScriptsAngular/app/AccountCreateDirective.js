@@ -8,7 +8,7 @@
             templateUrl: 'CreateAccount.html',
             transclude: true,
             replace: true,
-            controller: ['$scope', '$http', 'config', function ($scope, $http, config) {
+            controller: ['$scope', '$http','$rootScope', 'config', function ($scope, $http,$rootScope, config) {
                 $(".my a").click(function (e) {
                     e.preventDefault();
                 });
@@ -191,6 +191,8 @@
                                 compCode: localStorage.CompanyId,
                             }
                             $http.post(config.login + "updateAccount/" + $scope.accId, accountData).then(function (response) {
+                                $rootScope.$broadcast('event:accountReferesh', {});
+                                $('#formaccount').modal('hide');
                             });
 
                         }
@@ -205,9 +207,11 @@
                                     $http.post(config.login + "openingBalanceLedgerEntry/" + localStorage.CompanyId + "?accountId=" + $scope.accountId + "&role=" + localStorage.usertype, accountData).then(function (response) {
                                         $http.get(config.login + "getAccountNameById").then(function (response) {
                                             $scope.accountData = response.data
+                                            $rootScope.$broadcast('event:accountReferesh', {});
                                             for (var i = 0; i < $scope.accountData.length; i++) {
                                                 localStorage[$scope.accountData[i]._id] = $scope.accountData[i].accountName
                                             }
+                                            $('#formaccount').modal('hide');
                                         });
 
                                     });

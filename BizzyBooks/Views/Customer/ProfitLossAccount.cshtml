@@ -22,7 +22,7 @@
         <table style="width:100%; border-top:1px solid #e3e3e3;">
             <tr>
                 <td width="50%" style="border-right:1px solid #e3e3e3; vertical-align:top">
-                    <table class="table-hover" fixed-header style="height:480px; width:100%">
+                    <table class="table-hover" fixed-header style="height:480px; width:100%; vertical-align:top">
                         <thead style="border-bottom:1px solid #e3e3e3; background:#F0EEEE; padding:5px 0px">
                             <tr>
                                 <th class="tablepadding2">Particular</th>
@@ -43,7 +43,7 @@
                                 <td class="tablepadding2"><strong>Gross Profit</strong></td>
                                 <td class="tablepadding2" style="text-align:right"><strong>12,500</strong></td>
                             </tr>
-                            
+
                             <tr>
                                 <td>&nbsp;</td>
                                 <td class="tablepadding2" style="text-align:right; border-bottom:1px solid #e3e3e3; border-top:1px solid #e3e3e3"><strong>8,79,000</strong></td>
@@ -53,10 +53,21 @@
                                 <td class="tablepadding2"><strong>&nbsp;</strong></td>
                             </tr>
                             <tr>
-                                <td class="tablepadding2"><strong>Direct Expenses</strong></td>
-                                <td class="tablepadding2" style="text-align:right;"><strong>14,500</strong></td>
+                                <td class="tablepadding2">
+                                    <strong data-toggle="collapse" data-target="#demo">Indirect Expenses <i class="fa fa-angle-double-down text-primary cursor"></i></strong>
+                                    <div id="demo" class="collapse">
+                                        <p class="Entry-label" data-toggle="collapse" data-target="#demo2"><em>Advertisement <i class="fa fa-angle-double-down text-primary cursor"></i><span class="pull-right">14,000.00</span></em></p>
+                                        <div id="demo2" class="collapse">
+                                            <p class="Entry-Sublabel"><em>Misc. <span class="pull-right">10,000.00</span></em></p>
+                                            <p class="Entry-Sublabel"><em>Print <span class="pull-right" style="border-bottom:1px solid #e3e3e3">4,000.00</span></em></p>
+                                        </div>
+                                        <p class="Entry-label"><em>General Exp <span class="pull-right" style="border-bottom:1px solid #e3e3e3">500.00</span></em></p>
+                                    </div>
+                                </td>
+                                <td class="tablepadding2" style="text-align:right; vertical-align:top"><strong>14,500</strong></td>
                             </tr>
-                            <tr>    
+                            
+                            <tr>
                                 <td class="tablepadding2"><strong>Net Profit</strong></td>
                                 <td class="tablepadding2" style="text-align:right;"><strong>54,000</strong></td>
                             </tr>
@@ -64,7 +75,7 @@
                         <tfoot style="border-top:1px solid #e3e3e3; background:#F0EEEE; padding:5px 0px; font-size:16px; color:#000">
                             <tr>
                                 <th class="tablepadding2">Total</th>
-                                <th class="tablepadding2" style="text-align:right">8,79,000</th>
+                                <th class="tablepadding2" style="text-align:right">68,500</th>
                             </tr>
                         </tfoot>
                     </table>

@@ -1,5 +1,5 @@
 var myApp = angular
-    .module('myApp', ['ui.router', 'datatables', 'angular-loading-bar', 'anguFixedHeaderTable', 'ngAnimate', 'oitozero.ngSweetAlert', 'fsm', 'ui.select', 'ngSanitize', 'angular.filter', 'angularFileUpload', 'angular-jwt', 'LocalStorageModule', 'ng.jsoneditor', 'ui.bootstrap', 'ngConfirm','oitozero.ngSweetAlert'])
+    .module('myApp', ['ui.router', 'datatables', 'angular-loading-bar', 'anguFixedHeaderTable', 'ngAnimate', 'oitozero.ngSweetAlert', 'fsm', 'ui.select', 'ngSanitize', 'angular.filter', 'angularFileUpload', 'angular-jwt', 'LocalStorageModule', 'ng.jsoneditor', 'ui.bootstrap', 'ngConfirm', 'oitozero.ngSweetAlert'])
     .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
 
         $urlRouterProvider.otherwise('/');
@@ -545,7 +545,9 @@ var myApp = angular
 myApp.value('config', {
     login: '',
     api:''
+
 //login: 'http://localhost:4000/',
+
 
 //api: 'http://localhost:4000/api/'
    
@@ -569,7 +571,7 @@ myApp.service('selectsuppliers', ['$rootScope',
 }
 ])
 
-myApp.run(['authService', '$location', '$rootScope', 'localStorageService', '$state', 'config', '$http', function (authService, $location, $rootScope, localStorageService, $state, config, $http) {
+myApp.run(['authService', '$location', '$rootScope', 'localStorageService', '$state', 'config', '$http', 'SweetAlert', function (authService, $location, $rootScope, localStorageService, $state, config, $http, SweetAlert) {
     $http.get('config/config.json').then(function (response) {
         config.api = response.data.api;
         config.login = response.data.login;
@@ -650,6 +652,28 @@ myApp.run(['authService', '$location', '$rootScope', 'localStorageService', '$st
     //    $location.path(ngAuthSettings.defaultRoute);
 
     //});
+    $rootScope.$on('event:progress', function (event, args) {
+        if (args && args.message)
+            var message = args.message;
+        SweetAlert.progress('Proccessing!',message);
+        //SweetAlertProcess(message);
+
+    });
+    $rootScope.$on('event:success', function (event, args) {
+        if (args && args.message)
+            var message = args.message;
+        //SweetAlert.progress(message);
+        //SweetAlert.success('Success!', message);
+        SweetAlertSuccess(message)
+
+    });
+    $rootScope.$on('event:error', function (event, args) {
+        if (args && args.message)
+            var message = args.message;
+        SweetAlertError(message);
+        //SweetAlert.error('Error!', message);
+
+    });
 
 }]);
 
@@ -963,7 +987,22 @@ myApp.filter("asDate", function () {
       return function (input) {
           return new Date(input);
       }
-  });
+});
+//myApp.filter('hasSomeValue', [function(){
+//    return function(input, param) {
+//        var ret = [];
+//        if(!angular.isDefined(param)) param = true;
+
+//        angular.forEach(input, function(v){
+//            if(angular.isDefined(v.Message) && v.Message) {
+//                v.Message = v.Message.replace(/^\s*/g, '');
+//                ret.push(v);
+//            }
+//        });
+
+//        return ret;
+//    };
+//}])
 myApp.filter('words', function () {
     function isInt(n) {
         return Number(n) === n && n % 1 === 0;
@@ -1113,7 +1152,7 @@ myApp.run(['$templateCache', function ($templateCache) {
       '      <div class="ui-select-choices-row" ng-class="{active: $select.isActive(this), disabled: $select.isDisabled(this)}">',
       '        <div class="ui-select-choices-row-inner" ',
       '           data-selectable="">',
-      '<span ng-show="$select.addnew==1" class="pull-right" style="margin:6px 5px 0px 5px"> <i class="fa fa-pencil-square-o" ng-click="Accountbtn(person.id,person.accountName)" style="color:seagreen" aria-hidden="true"></i></span>',
+      '<span ng-show="$select.addnew==1" class="pull-right" style="margin:0px 5px 0px 5px"> <i class="fa fa-pencil-square-o" ng-click="Accountbtn(person.id,person.accountName)" style="color:seagreen" aria-hidden="true"></i></span>',
       '        </div>',
       '      </div>',
       '    </div>',

@@ -1075,39 +1075,41 @@
 
             <!-- moreEmployeeModal -->
             <div id="currencyRate" class="modal fade" role="dialog">
-                <div class="modal-dialog" style="width:251px">
+                <div class="modal-dialog modal-sm" style="margin-top:100px">
 
                     <!-- Modal content-->
                     <div class="modal-content">
                         <div class="modal-header ">
                             <button type="button" class="close active" data-dismiss="modal">&times;</button>
-                            <h2 class="modal-title fa fa-calculator ">Average Currency Calculator</h2>
+                            <h4 class="modal-title"><i class="fa fa-calculator"></i> Average Currency Calculator</h4>
                         </div>
-                        <table class="table-bordered table-condensed table-hover card" id="ItemTable" style="width:88%; margin-top:10px; margin-left:10px">
-                            <thead style="font-size: 11px;font-weight: bold; color: #000;">
-                                <tr>
+                        <div class="modal-body">
+                            <table class="table table-bordered table-condensed table-hover" id="ItemTable" >
+                                <thead>
+                                    <tr>
 
-                                    <th>Exchange Rate</th>
-                                    <th>Amount</th>
+                                        <th>Exchange Rate</th>
+                                        <th>Amount</th>
 
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="item in rateCalculator">
-
-
-                                    <td class="Count"><input ng:model="item.exchangeRate" class="form-control" value="0.00" ng:required ng:validate="number" id="line" style="border:none;" /></td>
-                                    <td class="Count"><input ng:model="item.amount" class="form-control" value="0.00" ng:required ng:validate="number" style="border:none;" /></td>
-
-                                </tr>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="item in rateCalculator">
 
 
+                                        <td class="Count"><input ng:model="item.exchangeRate" class="form-control" value="0.00" ng:required ng:validate="number" id="line" style="border:none;" /></td>
+                                        <td class="Count"><input ng:model="item.amount" class="form-control" value="0.00" ng:required ng:validate="number" style="border:none;" /></td>
 
-                            </tbody>
+                                    </tr>
 
-                        </table>
-                        <button class="button fa fa-plus" aria-hidden="true" type="button" style="margin-top:7px; margin-left:10px" class="btn btn-default" ng-click="addCurrencyRateLine()"></button>
-                        <span class="fa-pull-right center-margin">  Avg.Rate:  {{avgRate |number : fractionSize }}</span>
+
+
+                                </tbody>
+
+                            </table>
+                            <button class="btn btn-default btn-sm" aria-hidden="true" type="button" ng-click="addCurrencyRateLine()"><i class="fa fa-plus"></i></button>
+                            <span class="fa-pull-right center-margin">  Avg.Rate:  {{avgRate |number : fractionSize }}</span>
+                        </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         </div>
@@ -1120,7 +1122,7 @@
 
             <!-- ExciseDutyModal -->
             <div id="ExciseDutyModal" class="modal fade" role="dialog">
-                <div class="modal-dialog modal-sm" style="margin-top:100px">
+                <div class="modal-dialog" style="margin-top:100px">
 
                     <!-- Modal content-->
                     <div class="modal-content">
@@ -1129,20 +1131,23 @@
                             <h4 class="modal-title">Excise Duty</h4>
                         </div>
                         <div class="modal-body">
-                            <table>
+                            <table class="ExciseTable">
                                 <thead>
                                     <tr>
                                         <th>&nbsp;</th>
-                                        <th>&nbsp;</th><th>Amount</th>
-                                        <th>Per Unit </th>
+                                        <th style="text-align:center">(%)</th>
+                                        <th style="text-align:center">Amount</th>
+                                        <th style="text-align:center">Per Unit </th>
                                     </tr>
                                 </thead>
                                 <tr>
 
-                                    <td><label style="margin-top:-10px; float: left;">Excise Rate</label></td>
-                                    <td><input type="text"  tab-index = 3 ng-model="exciseRate"ng-blur="exciseCalculate()" class="form-control" style="margin-bottom:15px" /></td>
-                                    <td><input type="text" tab-index=3 ng-model="exciseDutyAmount" class="form-control" style="margin-bottom:15px" /></td>
-                                    <td><input type="text" tab-index=3 ng-model="exciseDutyPerUnit" class="form-control" style="margin-bottom:15px" /></td>
+                                    <td width="150"><label style="margin-top:-10px; float: left;">Excise Rate</label></td>
+
+                                    <td><input type="text"  tab-index = 3 ng-model="exciseRate"ng-blur="exciseCalculate()" class="form-control text-right" style="margin-bottom:15px" /></td>
+
+                                    <td><input type="text" tab-index=3 ng-model="exciseDutyAmount" class="form-control text-right" style="margin-bottom:15px" /></td>
+                                    <td><input type="text" tab-index=3 ng-model="exciseDutyPerUnit" class="form-control text-right" style="margin-bottom:15px" /></td>
 
                                 </tr>
                                 @*<tr>
@@ -1152,15 +1157,15 @@
                                 </tr>*@
                                 <tr>
                                     <td><label style="margin-top: -10px;float: left;">SAD (4%) Per Unit</label></td>
-                                    <td><input type="text" tab-index = 5 ng-model="sadRate" ng-blur="sadCalculate()" class="form-control" style="margin-bottom:15px" /></td>
-                                    <td><input type="text" tab-index=3 ng-model="sadAmount" class="form-control" style="margin-bottom:15px" /></td>
+                                    <td><input type="text" tab-index = 5 ng-model="sadRate" ng-blur="sadCalculate()" class="form-control text-right" style="margin-bottom:15px" /></td>
+                                    <td><input type="text" tab-index=3 ng-model="sadAmount" class="form-control text-right" style="margin-bottom:15px" /></td>
                                    
-                                    <td><input type="text" tab-index=3 ng-model="sadPerUnit" class="form-control" style="margin-bottom:15px" /></td>
+                                    <td><input type="text" tab-index=3 ng-model="sadPerUnit" class="form-control text-right" style="margin-bottom:15px" /></td>
 
                                 </tr>
                                 <tr>
                                     <td><label tab-index = 6 style="margin-top: -10px;float:  left;">Assessable Value</label></td>
-                                    <td><input tab-index = 7 type="text" ng-model="exciseAssessableValue" class="form-control" style="margin-bottom:15px" /></td>
+                                    <td><input tab-index = 7 type="text" ng-model="exciseAssessableValue" class="form-control text-right" style="margin-bottom:15px" /></td>
 
                                 </tr>
                             </table>
