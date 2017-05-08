@@ -1117,7 +1117,7 @@ myApp.run(['$templateCache', function ($templateCache) {
       '      <div class="ui-select-choices-row" ng-class="{active: $select.isActive(this), disabled: $select.isDisabled(this)}">',
       '        <div class="ui-select-choices-row-inner" ',
       '           data-selectable="">',
-      '<span class="pull-right" style="margin:6px 5px 0px 5px"> <i class="fa fa-pencil-square-o" ng-click="Accountbtn(person.id,person.accountName)" style="color:seagreen" aria-hidden="true"></i></span>',
+      '<span ng-show="$select.addnew==1" class="pull-right" style="margin:6px 5px 0px 5px"> <i class="fa fa-pencil-square-o" ng-click="Accountbtn(person.id,person.accountName)" style="color:seagreen" aria-hidden="true"></i></span>',
       '        </div>',
       '      </div>',
       '    </div>',

@@ -161,7 +161,7 @@
     $scope.getCompcode = function (companyId) {
         $scope.compCode.push(companyId)
         console.log($scope.compCode)
-        console.log(companyId)
+        console.log(companyId);
         $scope.getAccountList($scope.compCode);
     }
    

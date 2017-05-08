@@ -101,11 +101,12 @@
                 <li permission="Transaction.active" >
                     <a href="" class="sub-menu"><i class="fa fa-money" ></i> Transactions</a>
                     <ul class="list-unstyled">
-                        <li permission="Transaction.Banking.active" ><a ui-sref=".Banking" style="font-size: 12px;  padding-left: 27px;  color: black;"><b>- Banking</b></a></li>
-                        <li permission="Transaction.Chart Of Accounts.active"><a ui-sref=".ChartofAccounts" style="font-size: 12px;  padding-left: 27px;  color: black;"><b>- Chart of Accounts</b></a></li>
-                        <li permission="Transaction.Voucher.active"><a ui-sref=".VoucherTransactions" style="font-size: 12px;  padding-left: 27px;  color: black;"><b>- Voucher</b> </a></li>
-                        <li permission="Transaction.Settlement.active"><a ui-sref=".SattlementTransactions" style="font-size: 12px;  padding-left: 27px;  color: black;"><b>- Settlement</b> </a></li>
-                        <li permission="Transaction.ActivityLog.active"><a ui-sref=".ActivityLog" style="font-size: 12px;  padding-left: 27px;  color: black;"><b>- Activity Log</b> </a></li>
+
+                        @*<li permission="Transaction.Banking.active" ><a ui-sref=".Banking" style="font-size: 12px;  padding-left: 27px;  color: black;"><b>Banking</b></a></li>*@
+                        <li permission="Transaction.Chart Of Accounts.active"><a ui-sref=".ChartofAccounts" style="font-size: 12px;  padding-left: 27px;  color: black;"><b>Chart of Accounts</b></a></li>
+                        <li permission="Transaction.Voucher.active"><a ui-sref=".VoucherTransactions" style="font-size: 12px;  padding-left: 27px;  color: black;"><b>Voucher</b> </a></li>
+                        @*<li permission="Transaction.Settlement.active"><a ui-sref=".SattlementTransactions" style="font-size: 12px;  padding-left: 27px;  color: black;"><b>Settlement</b> </a></li>*@
+                        <li permission="Transaction.ActivityLog.active"><a ui-sref=".ActivityLog" style="font-size: 12px;  padding-left: 27px;  color: black;"><b>Activity Log</b> </a></li>
                     </ul>
                 </li>
                 <li>
@@ -120,11 +121,16 @@
                     </ul>
                 </li>
 
-                <li>
+                <li permisison="Report.active">
                     <a href="" class="sub-menu"><i class="fa fa-file"></i> Report</a>
                     <ul class="list-unstyled">
+<<<<<<< HEAD
                      <li permission="Inventory.Balance Sheet.active"><a ui-sref=".BalanceSheet" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">- Balance Sheet </a></li>
                         <li permission="Inventory.Profit Loss.active"><a ui-sref=".ProfitLossAccount" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">- Profit & Loss A/c</a></li>
+=======
+                     <li permission="Report.Balance Sheet.active"><a ui-sref=".BalanceSheet" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Balance Sheet </a></li>
+                        <li permission="Report.Profit Loss.active"><a ui-sref=".ProfitLossAccount" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Profit & Loss A/c</a></li>
+>>>>>>> ccba63987cd3790da6d88bf6f08e29a41b1ad8fa
 
                     </ul>
                 </li>
@@ -211,25 +217,26 @@
                             <div permission="Float.add.Customers.active" class="col-sm-3" style="padding:0px">
                                 <h3 class="Subtitle">Customers</h3>
                                 <ul class="list-unstyled">
-                                    <li permission="Float.add.Customers.Invoice.active"><a ui-sref=".Invoice">Invoice</a></li>
-                                    <li permission="Float.add.Customers.Receipt.active"><a ui-sref=".Receipt">Receipt</a></li>
-                                    <li permission="Float.add.Customers.Journal Entry.active"><a ui-sref=".JournalEntry">Journal Entry</a></li>
-                                    <li permission="Float.add.Customers.Contra Entry.active"><a ui-sref=".ContraEntry">Contra Entry</a></li>
-                                    <li permission="Float.add.Customers.Tax Invoice.active"><a ui-sref=".TaxInvoice">Tax Invoice</a></li>
-                                    <li permission="Float.add.Customers.Sales Invoice.active"><a ui-sref=".SalesInvoice">Sales Invoice</a></li>
-                                    <li permission="Float.add.Customers.General Invoice.active"><a ui-sref=".GeneralInvoice">General Invoice</a></li>
+                                    @*<li permission="Customers.Invoice.active"><a ui-sref=".Invoice">Invoice</a></li>*@
+                                    <li permission="Customers.Receipt.active"><a ui-sref=".Receipt">Receipt</a></li>
+                                    <li permission="Vouchers.Journal Voucher.active"><a ui-sref=".JournalEntry">Journal Voucher</a></li>
+                                    <li permission="Vouchers.Contra Voucher.active"><a ui-sref=".ContraEntry">Contra Voucher</a></li>
+                                    @*<li permission="Float.add.Customers.Tax Invoice.active"><a ui-sref=".TaxInvoice">Tax Invoice</a></li>*@
+                                    <li permission="Customers.Sales Invoice.active"><a ui-sref=".SalesInvoice">Sales Invoice</a></li>
+                                    <li permission="Customers.General Invoice.active"><a ui-sref=".GeneralInvoice">General Invoice</a></li>
                                     @*<li permission="Float.add.Customers.Badla Voucher.active"><a ui-sref=".BadlaVoucher">Badla Voucher</a></li>*@
-                                    <li permission="usertype:UO"><a ui-sref=".RosemateVoucher">Rosemate Voucher</a></li>
+                                    @*ng-show="checkPermisison('Vouchers.Rosemate.active,role:3')"*@
+                                    <li permission="Vouchers.Rosemate.active" ><a ui-sref=".RosemateVoucher">Rosemate Voucher</a></li>
                                 </ul>
                             </div>
                             <div permission="Float.add.Suppliers.active" class="col-sm-3" style="padding:0px">
                                 <h3 class="Subtitle">Suppliers</h3>
                                 <ul class="list-unstyled">
-                                    <li permission="Float.add.Suppliers.Enquiry.active"><a ui-sref=".Enquiry">Enquiry</a></li>
-                                    <li permission="Float.add.Suppliers.Purchase Order.active"><a ui-sref=".PurchaseOrder">Purchase Order</a></li>
-                                    <li permission="Float.add.Suppliers.Purchase Invoice.active"><a ui-sref=".Bill">Purchase Invoice</a></li>
-                                    <li permission="Float.add.Suppliers.Payment.active"><a ui-sref=".Payment">Payment</a></li>
-                                    <li permission="Float.add.Suppliers.Add Expense.active"><a ui-sref=".Expense">Add Expense</a></li>
+                                    @*<li permission="Float.add.Suppliers.Enquiry.active"><a ui-sref=".Enquiry">Enquiry</a></li>*@
+                                    @*<li permission="Float.add.Suppliers.Purchase Order.active"><a ui-sref=".PurchaseOrder">Purchase Order</a></li>*@
+                                    <li permission="Suppliers.Purchase Invoice.active"><a ui-sref=".Bill">Purchase Invoice</a></li>
+                                    <li permission="Suppliers.Payment.active"><a ui-sref=".Payment">Payment</a></li>
+                                    <li permission="Suppliers.Expense.active"><a ui-sref=".Expense">Expense</a></li>
 
                                 </ul>
                             </div>
@@ -253,9 +260,9 @@
                                     <li permission="Transaction.Forex Gain/Loss.active"><a ui-sref=".ForexGainLoss">Forex Gain/Loss</a></li>
                                     <li permission="Transaction.Chart Of Accounts.active"><a ui-sref=".ChartofAccounts">Chart of Accounts</a></li>
                                     <li permission="Transaction.Voucher.active"><a ui-sref=".VoucherTransactions">Voucher</a></li>
-                                    <li permission="Transaction.Settlement.active"><a ui-sref=".SattlementTransactions">Settlement </a></li>
-                                    <li permission="Transaction.Settlement.active"><a ui-sref=".PurchaseInvoiceSattlement">Purchase Settlement</a></li>
-                                    <li permission="Transaction.Settlement.active"><a ui-sref=".SalesInvoiceSattlement">Sales Settlement </a></li>
+                                    @*<li permission="Transaction.Settlement.active"><a ui-sref=".SattlementTransactions">Settlement </a></li>*@
+                                    <li permission="Suppliers.Purchase Settlement.active"><a ui-sref=".PurchaseInvoiceSattlement">Purchase Settlement</a></li>
+                                    <li permission="Customers.Sales Settlement.active"><a ui-sref=".SalesInvoiceSattlement">Sales Settlement </a></li>
                                     <li permission="Transaction.ActivityLog.active"><a ui-sref=".ActivityLog">Activity Log </a></li>
                                 </ul>
                             </div>
@@ -270,13 +277,13 @@
                         <div class="arrow-up" style="margin-right:62%; float:right"></div>
                         <div class="flyoutdiv">
                             <h3 class="title" style="border-bottom:1px solid rgba(204, 204, 204, 0.26); padding-bottom:15px">{{DefaultCompany.CompanyName}}  ({{userInfo.username}})
-                                <button permission="company.create" type="button" class="btn btn-sm btn-warning pull-right btn-xs" ng-click="AddCompnay()">Add New Company</button>
+                                <button permission="Company.create" type="button" class="btn btn-sm btn-warning pull-right btn-xs" ng-click="AddCompnay()">Add New Company</button>
                             </h3>
 
                             <div class="col-sm-7" style="padding:0px">
                                 <h3 class="Subtitle">Comapny List</h3>
                                 <ul class="list-unstyled my" ng-repeat="list in CompanyList">
-                                    <li><a><span ng-click="changeCompany(list)">{{list.CompanyName}}</span> &nbsp; <i permission="company.edit"  ng-click="editCompany(list);" class="fa fa-pencil-square text-warning"></i></a></li>
+                                    <li><a><span ng-click="changeCompany(list)">{{list.CompanyName}}</span> &nbsp; <i permission="Company.create"  ng-click="editCompany(list);" class="fa fa-pencil-square text-warning"></i></a></li>
                                 </ul>
 
                             </div>
@@ -442,7 +449,7 @@
 
                                     </div>
                                 <div class="modal-footer content">
-                                    <button type="button" ng-show="edit" ng-click="deleteCompany()" class="btn btn-danger btn-sm" ng-confirm data-dismiss="modal" style="width:80px">Delete</button>
+                                    <button type="button" permission="Company.delete" ng-show="edit" ng-click="deleteCompany()" class="btn btn-danger btn-sm" ng-confirm data-dismiss="modal" style="width:80px">Delete</button>
                                     <button type="button" ng-click="closenClear()" class="btn btn-default btn-sm" data-dismiss="modal" style="width:80px">Cancel</button>
                                     <button type="button" ng-click="saveCompany()" class="btn btn-primary btn-sm" style="width:80px">Save</button>
 
