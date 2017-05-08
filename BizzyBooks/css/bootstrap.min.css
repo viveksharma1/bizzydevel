@@ -2729,7 +2729,8 @@ th {
     }
 
     .table > thead > tr > th {
-        vertical-align: bottom;
+        vertical-align: top;
+        text-transform:capitalize !important;
         border-bottom: 2px solid #ddd;
     }
 
@@ -9081,3 +9082,5 @@ main {
     margin-top: 0px !important;}
 .Entry-label{margin-bottom:0px; padding-left:20px; width:100%; float:left}
 .Entry-Sublabel{margin-bottom:0px; padding-left:30px; width:100%; float:left;color:#808080}
+#ExciseDutyModal .modal-dialog{width:40%;}
+.ExciseTable th, .ExciseTable td{padding:5px}
