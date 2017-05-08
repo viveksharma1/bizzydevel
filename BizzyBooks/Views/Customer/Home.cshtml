@@ -15,8 +15,9 @@
     $('#flyoutChange').hide();
 
     $(".addrotate").click(function (e) {
-        $(this).addClass("down");
-        $(this).removeClass("up");
+        $(this).toggleClass("down");
+        //$(this).addClass("down");
+        //$(this).removeClass("up");
         $('#flyout').fadeToggle("slow", "linear");
         $('#flyoutCompany').hide();
         $('#flyoutChange').hide();
@@ -80,27 +81,28 @@
     <div id="sidebar-wrapper">
         @*<em ng-switch-when="3">*@
             <ul class="sidebar-nav">
-                @*<li class="sidebar-brand">
-                    <a href="#" class="logo">
-                         Account <span> Books </span>
+                <li class="sidebar-brand" style="line-height:25px; margin-bottom:10px;">
+                    <a href="#" class="logo" style="padding-bottom:3px;">
+                        <i class="fa fa-compass"></i>  Account <span> Books </span>
                     </a>
+                </li>
+                @*<li permission="Home.active">
+                    <span style="color:white;font-size:20px; font-weight:bold;font-family:Cambria, Cochin, Georgia, Times, Times New Roman, serif"> Account  Books</span>
                 </li>*@
                 <li permission="Home.active">
-                    <span style="color:white;font-size:16px; font:bold;font-family:Cambria, Cochin, Georgia, Times, Times New Roman, serif">Account  Books</span>
-                </li>
-                <li permission="Home.active">
-                    <a ui-sref=".HomePage"><i class="fa fa-home" style="color:#223839"></i> Home</a>
+                    <a ui-sref=".HomePage"><i class="fa fa-home" @*style="color:#223839"*@></i> Home</a>
                 </li>
                 <li permission="Customers.active">
-                    <a ui-sref=".Customer"><i class="fa fa-users" style="color:#223839"></i> Customers</a>
+                    <a ui-sref=".Customer"><i class="fa fa-users"></i> Customers</a>
                 </li>
                 <li permission="Suppliers.active">
-                    <a ui-sref=".Suppliers"><i class="fa fa-street-view" style="color:#223839"></i> Suppliers</a>
+                    <a ui-sref=".Suppliers"><i class="fa fa-street-view"></i> Suppliers</a>
                 </li>
 
                 <li permission="Transaction.active" >
-                    <a href="" class="sub-menu"><i class="fa fa-money" style="color:#223839"></i> Transactions</a>
+                    <a href="" class="sub-menu"><i class="fa fa-money" ></i> Transactions</a>
                     <ul class="list-unstyled">
+
                         @*<li permission="Transaction.Banking.active" ><a ui-sref=".Banking" style="font-size: 12px;  padding-left: 27px;  color: black;"><b>Banking</b></a></li>*@
                         <li permission="Transaction.Chart Of Accounts.active"><a ui-sref=".ChartofAccounts" style="font-size: 12px;  padding-left: 27px;  color: black;"><b>Chart of Accounts</b></a></li>
                         <li permission="Transaction.Voucher.active"><a ui-sref=".VoucherTransactions" style="font-size: 12px;  padding-left: 27px;  color: black;"><b>Voucher</b> </a></li>
@@ -109,13 +111,13 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="" class="sub-menu"><i class="fa fa-archive" style="color:#223839"></i> Inventory</a>
+                    <a href="" class="sub-menu"><i class="fa fa-archive"></i> Inventory</a>
                     <ul class="list-unstyled">
                         @*<li><a ui-sref=".Inventory" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Stock Line </a></li>
                         <li><a ui-sref=".inventorystock" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Stock </a></li>
                         <li><a ui-sref=".BalanceInventory" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Balance  </a></li>*@
-                        <li permission="Inventory.Balance Stock.active"><a ui-sref=".StockBalanceInventory" style="font-size: 12px;  padding-left: 27px;  color: black;"><b>Stock Balance</b> </a></li>
-                        <li permission="Inventory.Balance Stock Line.active"><a ui-sref=".BalanceInventory" style="font-size: 12px;  padding-left: 27px;  color: black;"><b>Line Item Balance</b></a></li>
+                        <li permission="Inventory.Balance Stock.active"><a ui-sref=".StockBalanceInventory" style="font-size: 12px;  padding-left: 27px;  color: black;"><b>- Stock Balance</b> </a></li>
+                        <li permission="Inventory.Balance Stock Line.active"><a ui-sref=".BalanceInventory" style="font-size: 12px;  padding-left: 27px;  color: black;"><b>- Line Item Balance</b></a></li>
 
                     </ul>
                 </li>
@@ -123,8 +125,10 @@
                 <li permisison="Report.active">
                     <a href="" class="sub-menu"><i class="fa fa-file"></i> Report</a>
                     <ul class="list-unstyled">
+
                      <li permission="Report.Balance Sheet.active"><a ui-sref=".BalanceSheet" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Balance Sheet </a></li>
                         <li permission="Report.Profit Loss.active"><a ui-sref=".ProfitLossAccount" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Profit & Loss A/c</a></li>
+
 
                     </ul>
                 </li>

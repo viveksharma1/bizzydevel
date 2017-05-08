@@ -1,5 +1,5 @@
 var myApp = angular
-    .module('myApp', ['ui.router', 'datatables', 'angular-loading-bar', 'anguFixedHeaderTable', 'ngAnimate', 'oitozero.ngSweetAlert', 'fsm', 'ui.select', 'ngSanitize', 'angular.filter', 'angularFileUpload', 'angular-jwt', 'LocalStorageModule', 'ng.jsoneditor', 'ui.bootstrap', 'ngConfirm','oitozero.ngSweetAlert'])
+    .module('myApp', ['ui.router', 'datatables', 'angular-loading-bar', 'anguFixedHeaderTable', 'ngAnimate', 'oitozero.ngSweetAlert', 'fsm', 'ui.select', 'ngSanitize', 'angular.filter', 'angularFileUpload', 'angular-jwt', 'LocalStorageModule', 'ng.jsoneditor', 'ui.bootstrap', 'ngConfirm', 'oitozero.ngSweetAlert'])
     .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
 
         $urlRouterProvider.otherwise('/');
@@ -547,7 +547,9 @@ var myApp = angular
 myApp.value('config', {
     login: '',
     api:''
+
 //login: 'http://localhost:4000/',
+
 
 //api: 'http://localhost:4000/api/'
    

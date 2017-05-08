@@ -218,6 +218,8 @@
     <Content Include="css\select.min.css" />
     <Content Include="css\select2.css" />
     <Content Include="css\selectize.bootstrap3.min.css" />
+    <Content Include="css\sweet-alert.css" />
+    <Content Include="css\treasure-overlay-spinner.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\css\font-awesome.css" />
     <Content Include="fonts\css\font-awesome.min.css" />
@@ -228,6 +230,7 @@
     <Content Include="Global.asax" />
     <Content Include="images\bg.jpg" />
     <Content Include="images\bg2.png" />
+    <Content Include="images\Cancel.png" />
     <Content Include="images\captcha-bg.jpg" />
     <Content Include="images\captcha.png" />
     <Content Include="images\drop.png" />
@@ -241,11 +244,14 @@
     <Content Include="images\noorder.png" />
     <Content Include="images\noorderprocess.png" />
     <Content Include="images\overlayclose.png" />
+    <Content Include="images\process.gif" />
     <Content Include="images\sprite-skin-flat.png" />
     <Content Include="images\sprite-skin-modern.png" />
     <Content Include="images\sprite-skin-nice.png" />
     <Content Include="images\sprite-skin-simple.png" />
+    <Content Include="images\success.jpg" />
     <Content Include="images\success.png" />
+    <Content Include="images\successmsg.png" />
     <Content Include="images\toolbar_find.png" />
     <Content Include="images\user.png" />
     <Content Include="images\warning-icon-24.png" />
