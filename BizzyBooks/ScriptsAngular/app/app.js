@@ -328,14 +328,12 @@ var myApp = angular
         });
 
         $stateProvider.state("Customer.accountHistory", {
-            url: "/accountHistory/:accountId/:fromDate/:toDate/:closingBalance",
+            url: "/accountHistory/:accountId/:balanceType",
             templateUrl: "Customer/accountHistory",
             controller: "accountHistoryCntrl",
             params: {
                 accountId: null,
-                fromDate: null,
-                toDate: null,
-                closingBalance:null
+                balanceType: null
             }
         });
         // new controller
@@ -588,7 +586,7 @@ myApp.run(['authService', '$location', '$rootScope', 'localStorageService', '$st
     };
     if (!localStorage.fromDate)
     {
-        var d = new Date(moment(new Date()).subtract(30, 'days'));
+        var d = new Date(moment(new Date()).subtract(1, 'year'));
         d.setHours(0, 0, 0, 0);
        localStorage.fromDate=d;
     }

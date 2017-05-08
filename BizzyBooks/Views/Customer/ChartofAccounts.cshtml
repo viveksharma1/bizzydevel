@@ -12,11 +12,11 @@
     <div class="panel-heading" style="height:84px">
         <strong class="heading" style="margin-top: 15px; float: left;">Chart of Accounts</strong>
         <div class="pull-right" style="margin-top:17px;">
-            <div style="width: 350px; float: left; margin-right: 10px;">
+            <div permission="usertype:UO" style="width: 350px; float: left; margin-right: 10px;">
                 <ui-select multiple ng-model="company.selected"  theme="bootstrap"  title="Choose a color" on-remove="removeCompCode($item.CompanyId)" on-select="getCompcode($item.CompanyId)">
                     <ui-select-match >{{$item.CompanyName}}</ui-select-match>
-                    <ui-select-choices repeat="company in companyList | filter:$select.search">
-                        {{company.CompanyName}}
+                    <ui-select-choices repeat="data in companyList | filter:$select.search">
+                        {{data.CompanyName}}
                     </ui-select-choices>
                 </ui-select>
             </div>

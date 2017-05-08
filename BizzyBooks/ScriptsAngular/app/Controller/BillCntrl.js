@@ -180,7 +180,7 @@
         $scope.totalWeight = Number(totalweight);
         $scope.TOTALAMOUNTUSD = Math.round(total);
         if ($scope.ExchangeRateINR) {
-            $scope.totalAmountINR = Number($scope.TOTALAMOUNTUSD.toFixed(2)) * Number($scope.ExchangeRateINR.toFixed(2));
+            $scope.totalAmountINR = Number((Number($scope.TOTALAMOUNTUSD) * Number($scope.ExchangeRateINR)).toFixed(2));
         }
         return $scope.totalAmountINR
     }
@@ -469,13 +469,16 @@
     $scope.saving = false;
     $scope.saveBill = function (index) {
         $scope.saving = true;
+        var purchaseAmount;
         var date = getDate($scope.billDate);
         var billDueDate = getDate($scope.billDueDate);
         var actualDate = getDate($scope.actualDate);
         if (authService.userHasPermission('usertype:O')) {
             var totalAmountINR = $scope.manualTableSum() + $scope.accountTableSum();
+            purchaseAmount = $scope.manualTableSum()
         }
         if (authService.userHasPermission('usertype:UO')) {
+            purchaseAmount = $scope.excelTableItemSum();
             var totalAmountINR = $scope.excelTableItemSum() + $scope.accountTableSum()
         }
         if ($scope.assesableValue) {
@@ -528,7 +531,7 @@
                 purchaseAccountId: $scope.purchaseAccounts.selected.id,
                 adminAmount: $scope.totalAmountINR.toFixed(2),
                 adminBalance: $scope.totalAmountINR.toFixed(2),
-                purchaseAmount: $scope.manualTotalINR.toFixed(2),
+                purchaseAmount: purchaseAmount,
                 amount: totalAmountINR,
                 balance: totalAmountINR,
                 totalWeight: $scope.totalWeight,

@@ -111,12 +111,13 @@
 
     function calculateOpenningBalnce(data) {
         var balance;
-            console.log($scope.accountData);
-            console.log(data)
+        console.log(data)
+        console.log($stateParams.balanceTyp)
             if ($stateParams.balanceType == 'credit' && data.credit ) {
-                balance = data.credit - data.debit
-            } else if ($stateParams.balanceType == 'debit' && data.debit) {
-                balance = data.debit - data.credit
+                balance = Number(data.credit) - Number(data.debit)
+            }
+            if ($stateParams.balanceType == 'debit') {
+                balance = Number(data.debit) - Number(data.credit)
             }
             console.log(balance)
             return balance
@@ -126,14 +127,13 @@
         $scope.tDate = args.toDate;
         //console.log($scope.closingBalance);
         $http.post(config.login + "getOpeningBalnce/" + $stateParams.accountId + "?date=" + localStorage.fromDate + "&todate=" + localStorage.toDate + "&role=" + localStorage.usertype, [localStorage.CompanyId]).then(function (response) {
-            console.log(response)
-            $scope.openingBalance = calculateOpenningBalnce(response.data.openingBalance)
+            var openingBalance = response.data.openingBalance
+            $scope.openingBalance = calculateOpenningBalnce(openingBalance)
             console.log($scope.openingBalance)
             bindAccountName(response.data.ledgerData)
         });
         $http.post(config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + $stateParams.accountId + "&role=" + localStorage.usertype, [localStorage.CompanyId]).then(function (response) {
-            var closingBalance = response.data.openingBalance
-
+            var closingBalance = response.data.openingBalanc
             $scope.closingBalance = calculateOpenningBalnce(closingBalance);
             console.log("closingBalance", $scope.closingBalance);
             console.log($scope.closingBalance);
