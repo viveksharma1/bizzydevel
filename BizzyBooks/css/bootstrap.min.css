@@ -7368,7 +7368,7 @@ button.close {
                 text-decoration: none;
             }
 
-            .sidebar-nav li ul li a{color:yellow !important; text-shadow:none;}
+            .sidebar-nav li ul li a{color:#ffc107 !important; text-shadow:none;}
 
     .sidebar-nav > .sidebar-brand {
         /*height: 50px;*/
@@ -8350,7 +8350,7 @@ main {
 .topmenu{margin:0 auto; width:110px; background:#337ab7; position:fixed; top:0px; left:49.5%}
 .topmenu li{display:block; float:left; width:55px; text-align:center;  color:#fff; height:37px; padding-top:4px; border-right:1px solid #116fa0; margin:0px; font-weight:normal; font-size:20px}
 .topmenu li:last-child{border-right:none;}
-#flyout{position:absolute; width:70%; left:9.6%; padding-top:7px; z-index:10;}
+#flyout{position:absolute; width:66%; left:9.6%; padding-top:7px; z-index:10;}
 .arrow-up {
   width: 0; 
   height: 0; 

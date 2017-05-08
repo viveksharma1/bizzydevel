@@ -161,7 +161,7 @@ function SweetAlertProcess(message) {
         title: "Proccessing!",
         text: message ? message : ".....",
         customClass: 'animated tada',
-        imageUrl: "http://www.gkgm.gov.tr/vtu/Resim/loading70.gif"
+        imageUrl: "../images/process.gif"
     });
 }
 
@@ -170,7 +170,7 @@ function SweetAlertSuccess(message) {
         title: "Success!",
         text: message ? message : "Success",
         customClass: 'animated tada',
-        imageUrl: "http://www.webmastertoys.com/image/grammar-checker.svg"
+        imageUrl: "../images/successmsg.png"
     });
 }
 
@@ -179,6 +179,6 @@ function SweetAlertError(message) {
         title: "Error!",
         text: message ? message : "Please check...",
         customClass: 'animated tada',
-        imageUrl: "https://cdn2.iconfinder.com/data/icons/bitsies/128/Cancel-128.png"
+        imageUrl: "../images/Cancel.png"
     });
 }

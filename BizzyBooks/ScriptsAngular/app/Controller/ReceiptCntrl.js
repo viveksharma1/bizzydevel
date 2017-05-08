@@ -303,12 +303,13 @@
                     $scope.goBack(true);
                 }
                 else {
-
+                    SweetAlertProcess();
                     //SweetAlert.swal("In Progress", "", "loading");
                     //spinner.start();
                     //var res = $q.defer();
                     $http.post(config.login + 'receipt?id=' + $stateParams.voId, data)
                              .then(function (response) {
+                                 SweetAlertSuccess();
                                  //SweetAlert.swal("Done", "Receipt Created.", "success")
                                  //showSuccessToast("Receipt Created.");
                                  $state.go('Customer.Receipt', null, { location: false, reload: true });
@@ -318,6 +319,7 @@
                              }, function (err) {
                                  console.log(err);
                                  //SweetAlert.swal("Error", "Error while creating receiipt", "error");
+                                 SweetAlertError();
                                  //spinner.stop();
                                  //res.reject();
                              });

@@ -15,8 +15,9 @@
     $('#flyoutChange').hide();
 
     $(".addrotate").click(function (e) {
-        $(this).addClass("down");
-        $(this).removeClass("up");
+        $(this).toggleClass("down");
+        //$(this).addClass("down");
+        //$(this).removeClass("up");
         $('#flyout').fadeToggle("slow", "linear");
         $('#flyoutCompany').hide();
         $('#flyoutChange').hide();
@@ -124,13 +125,10 @@
                 <li permisison="Report.active">
                     <a href="" class="sub-menu"><i class="fa fa-file"></i> Report</a>
                     <ul class="list-unstyled">
-<<<<<<< HEAD
-                     <li permission="Inventory.Balance Sheet.active"><a ui-sref=".BalanceSheet" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">- Balance Sheet </a></li>
-                        <li permission="Inventory.Profit Loss.active"><a ui-sref=".ProfitLossAccount" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">- Profit & Loss A/c</a></li>
-=======
+
                      <li permission="Report.Balance Sheet.active"><a ui-sref=".BalanceSheet" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Balance Sheet </a></li>
                         <li permission="Report.Profit Loss.active"><a ui-sref=".ProfitLossAccount" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Profit & Loss A/c</a></li>
->>>>>>> ccba63987cd3790da6d88bf6f08e29a41b1ad8fa
+
 
                     </ul>
                 </li>
