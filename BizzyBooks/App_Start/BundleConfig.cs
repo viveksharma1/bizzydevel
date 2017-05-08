@@ -30,7 +30,7 @@ namespace Restaurant
                         "~/css/jquery.toastmessage-min.css",
                         "~/css/jquery.timepicker.css",
                         "~/css/jsoneditor.min.css",
-                        "~/css/sweet-alert.css"
+                        "~/css/sweetalert.css"
                 //"~/css/treasure-overlay-spinner.min.css"
                 //,
                 //"~/css/angular-progress-button-styles.min.css"
@@ -68,7 +68,7 @@ namespace Restaurant
                    "~/ScriptsAngular/Angular/angular-local-storage.min.js",
                    "~/js/confirm.js",
                    "~/js/SweetAlert.js",
-                   "~/js/sweet-alert.min.js",
+                   "~/js/sweetalert-dev.js",
                    //"~/ScriptsAngular/Angular/treasure-overlay-spinner.min.js",
                    //"~/ScriptsAngular/Angular/angular-progress-button-styles.js",
                    //"~/js/ng-confirm.min.js",

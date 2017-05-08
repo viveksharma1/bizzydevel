@@ -831,7 +831,9 @@
 
                 //}
                 //if (!found)
-                    itemCart.push(itemChecked[i]);
+                //update itemlist2 with new qty..... 
+
+                itemCart.push(itemChecked[i]);
             }
             $scope.itemCart = itemCart;
             calculateCartTotal($scope.itemCart);
@@ -973,7 +975,24 @@
    //    return ret;
 
    //}
-
+    $scope.deleteInvoice = function () {
+        var data = {
+            compCode: localStorage.CompanyId,
+            type: type,
+            role: localStorage['usertype']
+        }
+        $http.post(config.login + 'deleteSalesInvoice?id=' + $stateParams.voId, data)
+                            .then(function (response) {
+                                if (response.err) {
+                                    showErrorToast(response.err);
+                                    return;
+                                }
+                                showSuccessToast("Invoice deleted.");
+                                $scope.goBack();// $state.reload();
+                            }, function (err) {
+                                    
+                            });
+    }
    $scope.saveInvoice = function () {
        var billDate = getDate($scope.billDate);
        var billIssueDateTime = getDate($scope.billIssueDate, $scope.billIssueTime);
