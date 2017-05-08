@@ -54,7 +54,7 @@ namespace Restaurant
                    "~/ScriptsAngular/Angular/angular-route.js",
                    "~/ScriptsAngular/Angular/angular-ui-router.js",
                    "~/ScriptsAngular/Angular/src/angular-sanitize.min.js",
-                   "~/ScriptsAngular/Angular/angular-filter.min.js",
+                   "~/ScriptsAngular/Angular/angular-filter.js",
                    "~/ScriptsAngular/Angular/src/angular-animate.js",
                    //"~/ScriptsAngular/Angular/ui-bootstrap-tpls-1.0.0.min.js",
                    "~/ScriptsAngular/Angular/ui-bootstrap-tpls-2.5.0.min.js",

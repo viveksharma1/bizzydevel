@@ -23,9 +23,14 @@
         autoclose: true,
     });
 
-    $('#RemovalTime').timepicker();
+    $('#RemovalTime').timepicker(
+        { 'scrollDefault': 'now',
+        'step':15  });
  
-    $('#IssueTime').timepicker();
+    $('#IssueTime').timepicker({
+        'scrollDefault': 'now',
+        'step': 15
+    });
 
 
     $('#IssueDate').datepicker({
@@ -52,37 +57,10 @@
     $scope.add = function (type, value) {
         $('#formaccount').modal('show');
         $scope.myValue = { accountName: value };
-        //$scope.getSupplier();
-
-
     }
-    //$scope.buyerAdd = function () {
-    //    showSuccessToast("Buyer Add");
-    //}
-    //$("#myPopover").popover({
-    //    //  title: '<h3 class="custom-title"><span class="glyphicon glyphicon-info-sign"></span> Popover Info</h3>',
-    //    content: "<table style='width:100%'><tr><th>Date</th><th>Amount Applied</th><th>Payment No.</th></tr><tr><td><a href=''>17/03/2017</a></td><td>Rs500.00</td><td>58</td></tr><tr><td><a href=''>17/03/2017</a></td><td>Rs500.00</td><td>58</td></tr></table>",
-    //    html: true
-    //})
-
-
-    //$('.filenameDiv').hide();
-    //$('.attechmentDescription').hide();
-    //$('.Attechmentdetail').click(function () {
-    //    $('.filenameDiv').show();
-    //    $("#name").append($("#NameInput").val());
-    //    $("#type").append($("#uploadBtn").val());
-
-    //});
-
-    //$('#removeattachment').click(function () {
-    //    $('.filenameDiv').hide();
-    //});
 
     $(":file").filestyle({ buttonName: "btn-sm btn-info" });
-
     var type = $stateParams.type;
-
     var uploader = $scope.uploader = new FileUploader({
         url: config.login + "upload"
     });
@@ -97,15 +75,10 @@
     });
 
     // CALLBACKS
-
-    //uploader.onWhenAddingFileFailed = function (item /*{File|FileLikeObject}*/, filter, options) {
-    //    console.info('onWhenAddingFileFailed', item, filter, options);
-    //};
     uploader.onAfterAddingFile = function (fileItem) {
         if (fileItem.isOld && $scope.oldAttachment) {
             fileItem.title = $scope.oldAttachment.title;
             fileItem.cdnPath = $scope.oldAttachment.cdnPath;
-            //fileItem_onSuccess();
         } else {
             console.info('onAfterAddingFile', fileItem);
             if ($scope.filename) {
@@ -118,37 +91,11 @@
         }
         
     };
-    //uploader.onAfterAddingAll = function (addedFileItems) {
-    //    console.info('onAfterAddingAll', addedFileItems);
-    //};
-    //uploader.onBeforeUploadItem = function (item) {
-    //    console.info('onBeforeUploadItem', item);
-    //};
-    //uploader.onProgressItem = function (fileItem, progress) {
-    //    console.info('onProgressItem', fileItem, progress);
-    //};
-    //uploader.onProgressAll = function (progress) {
-    //    console.info('onProgressAll', progress);
-    //};
     uploader.onSuccessItem = function (fileItem, response, status, headers) {
         console.info('onSuccessItem', fileItem, response, status, headers);
         fileItem.cdnPath = //response.container + "/" +
             response.name;
     };
-    //uploader.onErrorItem = function (fileItem, response, status, headers) {
-    //    console.info('onErrorItem', fileItem, response, status, headers);
-    //};
-    //uploader.onCancelItem = function (fileItem, response, status, headers) {
-    //    console.info('onCancelItem', fileItem, response, status, headers);
-    //};
-    //uploader.onCompleteItem = function (fileItem, response, status, headers) {
-    //    console.info('onCompleteItem', fileItem, response, status, headers);
-    //};
-    //uploader.onCompleteAll = function () {
-    //    console.info('onCompleteAll');
-    //};
-
-    //console.info('uploader', uploader);
     $scope.AddLineItem = function (val) {
         $('#AddInventoryModal').modal('show');
         if (val) {
@@ -179,7 +126,6 @@
     //$scope.totalAmountINR = 0;
     $scope.invoiceType = "Excise";
     $scope.customerType = "Consignee";
-
     $scope.remarks = {};
     $scope.godown = {};
     $scope.description = {};
@@ -201,23 +147,36 @@
         $scope.filterList = $scope.ItemList2;
     }
     $scope.applyFilter = function () {
-        var qry = "Inventories?filter[where][visible]=true";
-        if ($scope.godown.selected)
-            qry = qry + "&filter[where][GODOWN]=" + $scope.godown.selected._id.GODOWN;
-        if ($scope.description.selected)
-            qry = qry + "&filter[where][DESCRIPTION]=" + $scope.description.selected._id.DESCRIPTION;
-        if ($scope.remarks.selected)
-            qry = qry + "&filter[where][RRMARKS]=" + $scope.remarks.selected._id.RRMARKS;
-        if ($scope.rgno.selected)
-            qry = qry + "&filter[where][rgNo]=" + $scope.rgno.selected._id.rgNo;
-        if ($scope.exciseDuty.selected)
-            qry = qry + "&filter[where][exciseDuty]=" + $scope.exciseDuty.selected._id.exciseDuty;
-        if ($scope.SAD.selected)
-            qry = qry + "&filter[where][SAD]=" + $scope.SAD.selected._id.SAD;
-        if ($scope.NETWEIGHT.selected)
-            qry = qry + "&filter[where][NETWEIGHT]=" + $scope.NETWEIGHT.selected._id.NETWEIGHT;
 
-        $http.get(config.api + qry).then(function (response) {
+        var qry = {
+            "where": {
+                "visible":true,
+                "GODOWN": $scope.godown.selected ? $scope.godown.selected._id.GODOWN : $scope.godown.selected,
+                "DESCRIPTION": $scope.description.selected ? $scope.description.selected._id.DESCRIPTION : $scope.description.selected,
+                "RRMARKS": $scope.remarks.selected ? $scope.remarks.selected._id.RRMARKS : $scope.remarks.selected,
+                "rgNo": $scope.rgno.selected ? $scope.remarks.selected._id.rgNo : $scope.rgno.selected,
+                "exciseDuty": $scope.exciseDuty.selected ? $scope.exciseDuty.selected._id.exciseDuty : $scope.exciseDuty.selected,
+                "SAD": $scope.SAD.selected ? $scope.SAD.selected._id.SAD : $scope.SAD.selected,
+                "NETWEIGHT": $scope.NETWEIGHT.selected ? $scope.NETWEIGHT.selected._id.NETWEIGHT : $scope.NETWEIGHT.selected,
+            }
+        }
+
+        //var qry = "Inventories?filter[where][visible]=true";
+        //if ($scope.godown.selected)
+        //    qry = qry + "&filter[where][GODOWN]='" + $scope.godown.selected._id.GODOWN;
+        //if ($scope.description.selected)
+        //    qry = qry + "&filter[where][DESCRIPTION]=" + $scope.description.selected._id.DESCRIPTION;
+        //if ($scope.remarks.selected)
+        //    qry = qry + "&filter[where][RRMARKS]=" + $scope.remarks.selected._id.RRMARKS;
+        //if ($scope.rgno.selected)
+        //    qry = qry + "&filter[where][rgNo]=" + $scope.rgno.selected._id.rgNo;
+        //if ($scope.exciseDuty.selected)
+        //    qry = qry + "&filter[where][exciseDuty]=" + $scope.exciseDuty.selected._id.exciseDuty;
+        //if ($scope.SAD.selected)
+        //    qry = qry + "&filter[where][SAD]=" + $scope.SAD.selected._id.SAD;
+        //if ($scope.NETWEIGHT.selected)
+        //    qry = qry + "&filter[where][NETWEIGHT]=" + $scope.NETWEIGHT.selected._id.NETWEIGHT;
+        $http.get(config.api + "Inventories?filter="+encodeURIComponent(JSON.stringify( qry))).then(function (response) {
             $scope.filterList = response.data;
             //console.log($scope.ItemList);
             //$scope.ItemCount = response.data.length;
@@ -238,7 +197,6 @@
     });
     $scope.oldAttachment = null;
     function bindAttachments(attachments,callback) {
-        
         if (attachments) {
             angular.forEach(attachments, function (item) {
                 $scope.oldAttachment =item;
@@ -260,7 +218,6 @@
     $scope.getInvoiceData = function (id) {
         $http.get(config.api + 'voucherTransactions/' + id)
                   .then(function (response) {
-
                       $scope.invoiceType = response.data.invoiceData.invoiceSubType;
                       $scope.salesAccount = {
                           selected: {
@@ -340,7 +297,7 @@
             }
         }
     };
-    $scope.accountSelected = function () {
+    $scope.taxAccountSelected = function () {
         $scope.accountAmount = null;
         if ($scope.account.selected && $scope.account.selected.rate) {
             $scope.accountAmount = Number(((Number($scope.totalAccountAmount ? $scope.totalAccountAmount : 0) + Number($scope.listTotalAmount ? $scope.listTotalAmount : 0)) * Number($scope.account.selected.rate) / 100).toFixed(2));
@@ -379,12 +336,12 @@
     //    }
     //});
 
-    $scope.$watch('account.selected', function () {
-        $scope.accountAmount = null;
-        if ($scope.account.selected && $scope.account.selected.rate) {
-            $scope.accountAmount = Number(((Number($scope.totalAccountAmount?$scope.totalAccountAmount:0)+Number($scope.listTotalAmount?$scope.listTotalAmount:0)) * Number($scope.account.selected.rate) / 100).toFixed(2));
-        }
-    });
+    //$scope.$watch('account.selected', function () {
+    //    $scope.accountAmount = null;
+    //    if ($scope.account.selected && $scope.account.selected.rate) {
+    //        $scope.accountAmount = Number(((Number($scope.totalAccountAmount?$scope.totalAccountAmount:0)+Number($scope.listTotalAmount?$scope.listTotalAmount:0)) * Number($scope.account.selected.rate) / 100).toFixed(2));
+    //    }
+    //});
 
     //$scope.applyRate = function (rate) {
     //    if (rate) {
@@ -516,14 +473,7 @@
             //console.log($scope.partyAccounts);
         });
     }
-    $scope.getSupplier();
-    //function getSupplier() {
-        
-    //    $http.get(config.api + "suppliers" + "?filter[where][compCode]=" + localStorage.CompanyId).then(function (response) {
-    //        $scope.supliers = response.data;
-    //        angular.copy($scope.supliers, $scope.supliers2);
-    //    });
-    //}
+    
     function getSupplierDetail(id,isConsignee) {
         //$scope.supliersDetail = []
         $http.get(config.api + "accounts" + "?filter[where][id]=" + id).then(function (response) {
@@ -541,23 +491,23 @@
         });
     }
     $scope.accounts = [];
+    function getSalesAccounts() {
+        $http.get(config.login + "getSaleAccount/" + localStorage.CompanyId).then(function (response) {
+            $scope.salesAccounts = response.data;
+            angular.copy($scope.salesAccounts, $scope.accounts);
 
-    //$scope.getAccount = function () {
-    //    $http.get(config.login + "getPaymentAccount/" + localStorage.CompanyId).then(function (response) {
-    //        $scope.bankAccounts = response.data
-    //        console.log($scope.bankAccounts);
-    //    });
-    //}
-    $http.get(config.login + "getSaleAccount/" + localStorage.CompanyId).then(function (response) {
-        $scope.salesAccounts = response.data;
-        angular.copy($scope.salesAccounts, $scope.accounts);
-
-    });
-
-    $http.get(config.api + "accounts").then(function (response) {
-        $scope.taxAccounts = response.data
-        console.log($scope.account);
-    });
+        });
+    }
+    function getTaxAccounts() {
+        $http.get(config.api + "accounts").then(function (response) {
+            $scope.taxAccounts = response.data
+            console.log($scope.account);
+        });
+    }
+    $scope.getSupplier();
+    getSalesAccounts();
+    getTaxAccounts()
+    
     //$http.get(config.login + "getExpenseAccount/" + localStorage.CompanyId).then(function (response) {
     //    $scope.taxAccounts = response.data;
     //    //angular.copy($scope.salesAccounts, $scope.taxAccounts);
@@ -1198,6 +1148,14 @@
 
         return false;
     };
+
+    $scope.$on("event:accountReferesh", function (event, args) {
+        // Refresh accounts...
+        $scope.getSupplier();
+        getSalesAccounts();
+        getTaxAccounts()
+    });
+
     
     
 }]);

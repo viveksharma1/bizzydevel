@@ -219,17 +219,21 @@
     $scope.receivePayment = function () {
         var paymentDate = getDate($scope.paymentdate);
         var badlaDate = getDate($scope.badlaDate);
-        if ($scope.partyAccount.selected==undefined || $scope.partyAccount.selected == null) {
-            showErrorToast("Please select party account");
+        if (!$scope.paymentdate) {
+            showErrorToast("Please select receipt date");
             return;
-
         }
         if ($scope.bankAccount.selected == undefined || $scope.bankAccount.selected == null) {
             showErrorToast("Please select bank/cash account");
             return;
         }
-        if (!$scope.paymentdate) {
-            showErrorToast("Please select receipt date");
+        if ($scope.partyAccount.selected==undefined || $scope.partyAccount.selected == null) {
+            showErrorToast("Please select party account");
+            return;
+
+        }
+        if (!$scope.totalPaidAmount) {
+            showErrorToast("Please enter amount.");
             return;
         }
         if ($scope.chkBadla && $scope.itemChecked.length > 1) {
@@ -303,13 +307,13 @@
                     $scope.goBack(true);
                 }
                 else {
-                    SweetAlertProcess();
+                    $rootScope.$broadcast('event:progress', { message: "Please wait while processing.."});
                     //SweetAlert.swal("In Progress", "", "loading");
                     //spinner.start();
                     //var res = $q.defer();
                     $http.post(config.login + 'receipt?id=' + $stateParams.voId, data)
                              .then(function (response) {
-                                 SweetAlertSuccess();
+                                 $rootScope.$broadcast('event:success', { message: "Receipt Created" });
                                  //SweetAlert.swal("Done", "Receipt Created.", "success")
                                  //showSuccessToast("Receipt Created.");
                                  $state.go('Customer.Receipt', null, { location: false, reload: true });
@@ -319,7 +323,8 @@
                              }, function (err) {
                                  console.log(err);
                                  //SweetAlert.swal("Error", "Error while creating receiipt", "error");
-                                 SweetAlertError();
+                                 //SweetAlertError();
+                                 $rootScope.$broadcast('event:error', { message: "Error while creating receiipt" });
                                  //spinner.stop();
                                  //res.reject();
                              });

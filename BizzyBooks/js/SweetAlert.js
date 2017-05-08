@@ -40,7 +40,18 @@ angular.module('oitozero.ngSweetAlert', [])
             $rootScope.$evalAsync(function () {
                 swal(title, message, 'info');
             });
+        },
+        progress: function (title, message) {
+            $rootScope.$evalAsync(function () {
+                swal({
+                    title:title?title: "Proccessing!",
+                    text: message ? message : ".....",
+                    customClass: 'animated tada',
+                    imageUrl: "../images/process.gif"
+                });
+            });
         }
+
     };
 
     return self;

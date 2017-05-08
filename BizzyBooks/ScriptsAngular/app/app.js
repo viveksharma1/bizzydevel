@@ -573,7 +573,7 @@ myApp.service('selectsuppliers', ['$rootScope',
 }
 ])
 
-myApp.run(['authService', '$location', '$rootScope', 'localStorageService', '$state', 'config', '$http', function (authService, $location, $rootScope, localStorageService, $state, config, $http) {
+myApp.run(['authService', '$location', '$rootScope', 'localStorageService', '$state', 'config', '$http', 'SweetAlert', function (authService, $location, $rootScope, localStorageService, $state, config, $http, SweetAlert) {
     $http.get('config/config.json').then(function (response) {
         config.api = response.data.api;
         config.login = response.data.login;
@@ -654,6 +654,28 @@ myApp.run(['authService', '$location', '$rootScope', 'localStorageService', '$st
     //    $location.path(ngAuthSettings.defaultRoute);
 
     //});
+    $rootScope.$on('event:progress', function (event, args) {
+        if (args && args.message)
+            var message = args.message;
+        SweetAlert.progress('Proccessing!',message);
+        //SweetAlertProcess(message);
+
+    });
+    $rootScope.$on('event:success', function (event, args) {
+        if (args && args.message)
+            var message = args.message;
+        //SweetAlert.progress(message);
+        //SweetAlert.success('Success!', message);
+        SweetAlertSuccess(message)
+
+    });
+    $rootScope.$on('event:error', function (event, args) {
+        if (args && args.message)
+            var message = args.message;
+        SweetAlertError(message);
+        //SweetAlert.error('Error!', message);
+
+    });
 
 }]);
 
@@ -967,7 +989,22 @@ myApp.filter("asDate", function () {
       return function (input) {
           return new Date(input);
       }
-  });
+});
+//myApp.filter('hasSomeValue', [function(){
+//    return function(input, param) {
+//        var ret = [];
+//        if(!angular.isDefined(param)) param = true;
+
+//        angular.forEach(input, function(v){
+//            if(angular.isDefined(v.Message) && v.Message) {
+//                v.Message = v.Message.replace(/^\s*/g, '');
+//                ret.push(v);
+//            }
+//        });
+
+//        return ret;
+//    };
+//}])
 myApp.filter('words', function () {
     function isInt(n) {
         return Number(n) === n && n % 1 === 0;
