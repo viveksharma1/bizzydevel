@@ -1141,8 +1141,7 @@ myApp.run(['$templateCache', function ($templateCache) {
       '  class="ui-select-choices group-tree selectize-dropdown single">',
       '  <div  class="ui-select-breadcrumbs cursor"  ng-click="add($select.type,$select.search);"ng-show="$select.addnew==1" >',
       '    <span   class="ui-breadcrumb"',
-     
-      '       <span><label class="badge cursor" style="color:white"tabindex="2"ng-keyup="$event.keyCode == 13 ? add($select.type,$select.search) : null"aria-hidden="false"><i class="fa fa-plus"></i> Add</label> <span class="pull-right text-warning">{{$select.search }}</span></span>',
+           '       <span><label class="badge cursor" style="color:white"tabindex="2"ng-keyup="$event.keyCode == 13 ? add($select.type,$select.search) : null"aria-hidden="false"><i class="fa fa-plus"></i> Add</label> <span class="pull-right text-warning">{{$select.search }}</span></span>',
       '    </span>',
       '  </div>',
       '  <div class="ui-select-choices-content selectize-dropdown-content">',
@@ -1162,8 +1161,8 @@ myApp.run(['$templateCache', function ($templateCache) {
       '</div>'
     ].join(''))
 
-    $templateCache.put("select2/match.tpl.html", 
-    "<a ...> ... <span class=\"select2-arrow ui-select-toggle\" ng-click=\"$select.toggle($event)\"><b></b></span></a>");
+    //$templateCache.put("select2/match.tpl.html", 
+    //"<a ...> ... <span class=\"select2-arrow ui-select-toggle\" ng-click=\"$select.toggle($event)\"><b></b></span></a>");
 
 
 
