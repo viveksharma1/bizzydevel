@@ -128,6 +128,7 @@ namespace Restaurant
                 "~/js/jsoneditor.min.js",
                 "~/js/ng-jsoneditor.js",
                 "~/js/jquery.timepicker.js",
+                "~/js/linq.min.js",
 
                  //"~/ScriptsAngular/Angular/angular.js",
                  //"~/ScriptsAngular/Angular/angular-route.js",

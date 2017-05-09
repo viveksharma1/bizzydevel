@@ -728,15 +728,15 @@
 
 
                         <tr ng-repeat="item in itemTable">
-                            <td style="text-align:center">{{$index +1}}</td>
-                            <td class="Count">{{item.DESCRIPTION}}</td>
-                            <td class="Count" style="text-align:center">{{item.rgNo}}</td>
-                            <td class="Count" style="text-align:center">{{item.itemQty}}</td>
-                            <td class="Count" style="text-align:right">{{item.itemRate}}</td>
-                            <td class="Count" style="text-align:center">{{item.exciseDuty/item.NETWEIGHT |number : fractionSize}}</td>
-                            <td class="Count" style="text-align:center">{{item.SAD/item.NETWEIGHT |number : fractionSize}}</td>
-                            <td class="Count" style="text-align:right">{{item.itemAmount}}</td>
-                            <td class="text-center Count" value="0.00"><a class="edit" title="Edit"> <i class="fa fa-times-circle cursor RemoveTR" style="font-size:16px" ng-click="removeItemTable($index)"></i></a></td>
+                            <td style="text-align:center" width="50">{{$index +1}}</td>
+                            <td class="Count" width="450">{{item.DESCRIPTION}}</td>
+                            <td class="Count" style="text-align:center" width="100px">{{item.rgNo}}</td>
+                            <td class="Count" style="text-align:center" width="100px">{{item.itemQty}}</td>
+                            <td class="Count" style="text-align:right" width="100px">{{item.itemRate}}</td>
+                            <td class="Count" style="text-align:center" width="150px">{{item.exciseDuty/item.NETWEIGHT |number : fractionSize}}</td>
+                            <td class="Count" style="text-align:center" width="152px">{{item.SAD/item.NETWEIGHT |number : fractionSize}}</td>
+                            <td class="Count" style="text-align:right" width="200px">{{item.itemAmount}}</td>
+                            <td class="text-center Count" value="0.00" style="width:50px"><a class="edit" title="Edit"> <i class="fa fa-times-circle cursor RemoveTR" style="font-size:16px" ng-click="removeItemTable($index)"></i></a></td>
                         </tr>
 
                     </tbody>
