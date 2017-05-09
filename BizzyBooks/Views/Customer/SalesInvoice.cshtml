@@ -70,7 +70,10 @@
                         <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
                                    ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';"
                                    theme="selectize" on-select="supplierSelected();">
-                            <ui-select-match placeholder="Select Buyer">{{ $select.selected.accountName }}</ui-select-match>
+                            <ui-select-match placeholder="Select Buyer">
+                            <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                   {{ $select.selected.accountName || $select.search }}
+                            </span></ui-select-match>
 
                             <ui-select-choices repeat="person in supliers  | filter: $select.search">
                                 <div>
@@ -86,7 +89,11 @@
                         <ui-select ui-tree-select ng-model="supplier2.selected" 
                                    ui-select-focuser ng-init="$select.addnew=1;$select.type='consignee'"
                                    theme="selectize" on-select="supplier2Selected();">
-                            <ui-select-match placeholder="Select Consignee">{{ $select.selected.accountName }}</ui-select-match>
+                            <ui-select-match placeholder="Select Consignee">
+                                <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                    {{ $select.selected.accountName || $select.search }}
+                                </span>
+                            </ui-select-match>
 
                             <ui-select-choices repeat="person in supliers2  | filter: $select.search">
                                 <div>
@@ -168,7 +175,11 @@
                     <ui-select ng-model="salesAccount.selected" id="countryCode" ui-select-focuser ng-init="$select.addnew=1;$select.type='account';"
                                theme="selectize">
 
-                        <ui-select-match placeholder="Choose an account">{{$select.selected.accountName}}</ui-select-match>
+                        <ui-select-match placeholder="Choose an account">
+                            <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                {{ $select.selected.accountName || $select.search }}
+                            </span>
+                        </ui-select-match>
                         <ui-select-choices repeat="person in salesAccounts  | filter: $select.search">
                             <div>
                                 @*<span style="color:black" ng-bind-html="account.name | highlight: $select.search">{{account.type}}</span>*@
@@ -860,9 +871,10 @@
                                            ui-select-focuser on-select="taxAccountSelected();"
                                            theme="selectize" ng-init="$select.addnew=1;$select.type='accounts';">
                                     <ui-select-match placeholder="ACCOUNT">
-                                        <span class="selectuiTable" style="width:100%">
-                                            <span>{{ $select.selected.accountName || $select.search }}</span>
-                                            <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
+                                        <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                            {{ $select.selected.accountName || $select.search }}
+                                            @*<span>{{ $select.selected.accountName || $select.search }}</span>*@
+                                            @*<a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>*@
                                         </span>
 
                                     </ui-select-match>

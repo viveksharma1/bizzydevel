@@ -170,7 +170,9 @@ function SweetAlertSuccess(message) {
         title: "Success!",
         text: message ? message : "Success",
         customClass: 'animated tada',
-        imageUrl: "../images/successmsg.png"
+        imageUrl: "../images/successmsg.png",
+        timer:600
+
     });
 }
 

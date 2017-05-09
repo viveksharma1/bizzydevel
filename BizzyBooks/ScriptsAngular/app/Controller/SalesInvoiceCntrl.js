@@ -385,11 +385,13 @@
     $scope.clear = function ($event, $select) {
         $event.stopPropagation();
         //to allow empty field, in order to force a selection remove the following line
-        $select.selected = undefined;
+        $select.selected=null;
         //reset search query
         $select.search = undefined;
         //focus and open dropdown
-        //$select.activate();
+        $timeout(function () {
+            $select.activate();
+        }, 200);
     }
     //$scope.$watch('accounts.selected', function () {
     //    $scope.accountAmount = null;
@@ -983,8 +985,8 @@
         }
         $http.post(config.login + 'deleteSalesInvoice?id=' + $stateParams.voId, data)
                             .then(function (response) {
-                                if (response.err) {
-                                    showErrorToast(response.err);
+                                if (response.data.err) {
+                                    showErrorToast("Invoice could not be deleted as "+ response.data.err);
                                     return;
                                 }
                                 showSuccessToast("Invoice deleted.");
