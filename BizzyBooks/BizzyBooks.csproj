@@ -219,7 +219,7 @@
     <Content Include="css\select2.css" />
     <Content Include="css\selectize.bootstrap3.min.css" />
     <Content Include="css\sweet-alert.css" />
-    <Content Include="css\treasure-overlay-spinner.min.css" />
+    <Content Include="css\sweetalert.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\css\font-awesome.css" />
     <Content Include="fonts\css\font-awesome.min.css" />
@@ -323,10 +323,9 @@
     <Content Include="js\nprogress.js" />
     <Content Include="js\prefixfree.min.js" />
     <Content Include="js\select2.min.js" />
-    <Content Include="js\sweet-alert.min.js" />
     <Content Include="js\sweetalert-dev.js" />
     <Content Include="js\SweetAlert.js" />
-    <Content Include="js\SweetAlert.min.js" />
+    <Content Include="js\sweetalert.min.js" />
     <Content Include="js\underscore-min.js" />
     <Content Include="js\datatables\json\scroller-demo.json" />
     <Content Include="css\datatables\images\Sorting icons.psd" />
