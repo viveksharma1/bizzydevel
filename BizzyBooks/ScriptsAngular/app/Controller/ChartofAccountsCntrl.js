@@ -173,7 +173,6 @@
             compCode.push(allCompCode[i].CompanyId)
         }
         $scope.company = { selected: allCompCode }
-        console.log(compCode)
         $scope.getAccountList(compCode);
     }
     else {

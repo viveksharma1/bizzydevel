@@ -382,8 +382,10 @@
     $scope.getSupplier();
     $scope.getBilldata = function (billNo, fields) {
         $scope.field = fields
+        $rootScope.$broadcast('event:progress', { message: "Please wait while processing.." });
         $http.get(config.api + 'voucherTransactions/' + billNo)
                     .then(function (response) {
+                        swal.close();
                         var billData = response.data.transactionData;
                         $scope.customPaymentInfo = billData.customPaymentInfo;
                         $scope.accountTable = billData.accountlineItem;
@@ -468,6 +470,7 @@
     // save bill 
     $scope.saving = false;
     $scope.saveBill = function (index) {
+        $rootScope.$broadcast('event:progress', { message: "Please wait while processing.." });
         $scope.saving = true;
         var purchaseAmount;
         var date = getDate($scope.billDate);
@@ -552,9 +555,12 @@
         $http.post(config.login + "saveBillTest/" + $stateParams.billNo, data).then(function (response) {
             if (response.status == 200) {
                 $scope.saving = false;
-                showSuccessToast("Purchase Invoice Save Succesfully");
+                $rootScope.$broadcast('event:success', { message: "Purchase Invoice Created" });
                 $stateParams.billNo = response.data
                 $state.go('Customer.Bill', { billNo: response.data });
+            }
+            else {
+                $rootScope.$broadcast('event:error', { message: "Error while creating receiipt" });
             }
         });
     };

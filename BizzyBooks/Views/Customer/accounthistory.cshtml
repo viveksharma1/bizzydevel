@@ -3,7 +3,7 @@
     ViewBag.Title = "accountHistory";
     Layout = null;
 }
-<div class="panel lightblue bluebrdr ">
+<div class="panel lightblue bluebrdr content">
 
 
 
@@ -17,6 +17,17 @@
 
         </div>
         <button type="button" class="btn btn-xs  btn-success" id="HideLedger">Hide</button>
+
+        <div class="pull-right" >
+            <div permission="usertype:UO" style="width: 350px; float: left; margin-right: 10px;">
+                <ui-select multiple ng-model="company.selected" theme="bootstrap" title="Choose a color" on-remove="removeCompCode($item.CompanyId)" on-select="getCompcode($item.CompanyId)">
+                    <ui-select-match>{{$item.CompanyName}}</ui-select-match>
+                    <ui-select-choices repeat="data in companyList | filter:$select.search">
+                        {{data.CompanyName}}
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </div>
         @*<div class="totalIncomeSection  card accordion">
                 <span style="font-size: 120%; color: #1E294B; "> <b>{{credit-debit |number : fractionSize}}</b></span>
                 <div class="subheading">Ending Balance</div>

@@ -151,19 +151,31 @@
                 bindAccountName(response.data.ledgerData)
             });
             $http.post(config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + $stateParams.accountId + "&role=" + localStorage.usertype, compCode).then(function (response) {
-                 var closingBalance = response.data.openingBalance
-               
+                 var closingBalance = response.data.openingBalance 
                     $scope.closingBalance = calculateOpenningBalnce(closingBalance);
                     console.log("closingBalance", $scope.closingBalance);
-                    console.log($scope.closingBalance);
-               
+                    console.log($scope.closingBalance);        
             });
         }
-        $scope.applyDateFilter([localStorage.CompanyId]);
+
+        var compCode = []
+        $scope.company = {};
+        if (localStorage.usertype == 'UO') {
+            var allCompCode = JSON.parse(localStorage.comobj);
+            for (var i = 0; i < allCompCode.length; i++) {
+                compCode.push(allCompCode[i].CompanyId)
+            }
+            $scope.company = { selected: allCompCode }
+            console.log(compCode)
+            $scope.applyDateFilter(compCode);
+        }
+        else {
+            $scope.applyDateFilter([localStorage.CompanyId]);
+        }
+       
     $scope.getAllCompanyLedger = function () {
         $http.get(config.api + "ledgers/" + "?filter[where][accountName]=" + $stateParams.accountId).then(function (response) {
             bindAccountName(response.data)
-
             console.log($scope.compName)
         });
 
@@ -262,14 +274,27 @@
     }
 
 
-    $scope.getAccountName = function (id) {
-     
+    $scope.getAccountName = function (id) { 
         console.log(localStorage[id])
-
         return localStorage[id];
     }
+    $http.get(config.api + "CompanyMasters").then(function (response) {
+        $scope.companyList = response.data;
+    });
+    $scope.getCompcode = function (companyId) {
+        compCode.push(companyId)
+        $scope.applyDateFilter(compCode);
+        localStorage.selectedCompany = compCode
+    }
 
-
+    $scope.removeCompCode = function (companyId) {
+        var index = compCode.indexOf(companyId);
+        if (index > -1) {
+            compCode.splice(index, 1);
+        }
+        localStorage.selectedCompany = compCode
+        $scope.applyDateFilter(compCode);
+    }
    
 
 }]);

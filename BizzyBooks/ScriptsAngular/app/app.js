@@ -663,8 +663,8 @@ myApp.run(['authService', '$location', '$rootScope', 'localStorageService', '$st
         if (args && args.message)
             var message = args.message;
         //SweetAlert.progress(message);
-        //SweetAlert.success('Success!', message);
-        SweetAlertSuccess(message)
+        SweetAlert.success('Success!', message);
+      //  SweetAlertSuccess(message)
 
     });
     $rootScope.$on('event:error', function (event, args) {

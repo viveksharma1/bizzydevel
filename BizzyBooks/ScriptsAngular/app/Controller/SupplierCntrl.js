@@ -834,18 +834,36 @@ myApp.controller('SupplierCntrl', ['$scope', '$http', '$timeout', '$stateParams'
     //delete voucher
         $scope.deleteVoucherModal = function (id) {
             $scope.voId = id
-            $('#deleteModal').modal('show');
+            swal({
+                title: "Are you sure?",
+                text: "You will not be able to recover this Invoice !",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete",
+                cancelButtonText: "Cancel",
+                closeOnConfirm: false,
+                closeOnCancel: true
+            },
+               function (isConfirm) {
+                   if (isConfirm) {
+                       $scope.deleteVoucher();
+                      
+              } 
+});
         }
         $scope.deleteVoucher = function () {
+            $rootScope.$broadcast('event:progress', { message: "Please wait while processing.." });
             $http.get(config.login + "deleteVoucher/" + $scope.voId).then(function (response) {
                 console.log(response);
                 if (response.data == "Voucher Deleted") {
-                    showSuccessToast("Invoice Deleted Succesfully");
+                    $rootScope.$broadcast('event:success', { message: "Invoice Deleted Succesfully" });
                     $state.reload();
                 }
                 else {
-                    showErrorToast(response.data);
+                    $rootScope.$broadcast('event:error', { message: response.data });
                 }
+                return response.data
             });
         }
     $scope.uploadFile = function () {
