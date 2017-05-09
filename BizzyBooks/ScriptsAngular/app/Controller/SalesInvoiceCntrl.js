@@ -978,6 +978,7 @@
 
    //}
     $scope.deleteInvoice = function () {
+        $rootScope.$broadcast("event:progress", { message: "Please wait while processing.." });
         var data = {
             compCode: localStorage.CompanyId,
             type: type,
@@ -986,10 +987,12 @@
         $http.post(config.login + 'deleteSalesInvoice?id=' + $stateParams.voId, data)
                             .then(function (response) {
                                 if (response.data.err) {
-                                    showErrorToast("Invoice could not be deleted as "+ response.data.err);
+                                    //showErrorToast("Invoice could not be deleted as " + response.data.err);
+                                    $rootScope.$broadcast('event:error', { message: "Invoice could not be deleted as " + response.data.err });
                                     return;
                                 }
-                                showSuccessToast("Invoice deleted.");
+                                $rootScope.$broadcast('event:success', { message: "Invoice Deleted" });
+                                //showSuccessToast("Invoice deleted.");
                                 $scope.goBack();// $state.reload();
                             }, function (err) {
                                     
@@ -1030,6 +1033,7 @@
             return;
         }
 
+        $rootScope.$broadcast("event:progress", { message: "Please wait while processing.." });
         var queue = uploader.queue;
         var attachements = [];
         angular.forEach(queue, function (fileItem) {
@@ -1090,16 +1094,19 @@
 
 
         $http.post(config.login + "saveVoucher" + "?id=" + $stateParams.voId, data).then(function (response) {
-            showSuccessToast("Bill Save Succesfully");
+            //showSuccessToast("Bill Save Succesfully");
+            $rootScope.$broadcast('event:success', { message: "Invoice Created" });
             if (!$scope.hasVoId) {
                 $state.go("Customer.SalesInvoice", { voId: response.data.id });
             } else {
                 $state.reload();
             }
             //$state.go("Customer.SalesInvoice/" + response.data.id);
-            
+
             //if (!$scope.hasVoId) clearInvoice();
             //else $scope.goBack();
+        }, function (err) {
+            $rootScope.$broadcast('event:error', { message: "Error while creating invoice" });
         });
 
     };
