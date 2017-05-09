@@ -250,11 +250,15 @@
 
             <div class="col-sm-4 padding" style="margin-left:10px">
 
-                <h4 class="tabheading font_11">Supplier @*<span class="pull-right text-primary"><i class="fa fa-rupee"></i> 2,30,000</span></h4>*@
+                <h4 class="tabheading font_11">Supplier <span class="pull-right text-primary"><i class="fa fa-rupee"></i> {{closingBalance}}</span></h4>
                 <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
                            ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';" on-select="bindSupplierDetail($select.selected)"
                            theme="selectize" >
-                    <ui-select-match placeholder="Select Suppliers">{{ $select.selected.accountName }}</ui-select-match>
+                    <ui-select-match placeholder="Select Suppliers">
+                        <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+    {{ $select.selected.accountName || $select.search }}
+</span>
+                    </ui-select-match>
 
                     <ui-select-choices repeat="person in supliers  | filter: $select.search">
                         <div>

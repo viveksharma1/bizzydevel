@@ -112,7 +112,7 @@
     function calculateOpenningBalnce(data) {
         var balance;
         console.log(data)
-        console.log($stateParams.balanceTyp)
+        console.log($stateParams.balanceType)
             if ($stateParams.balanceType == 'credit' && data.credit ) {
                 balance = Number(data.credit) - Number(data.debit)
             }

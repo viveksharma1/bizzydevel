@@ -1,4 +1,4 @@
-﻿myApp.controller('ChartofAccountsCntrl', ['$scope', '$http', 'config', 'dateService', 'authService', function ($scope, $http, config, dateService, authService) {
+﻿myApp.controller('ChartofAccountsCntrl', ['$scope', '$http', 'config', 'dateService', 'authService', '$rootScope', function ($scope, $http, config, dateService, authService, $rootScope) {
 
     $(".my a").click(function (e) {
         e.preventDefault();
@@ -185,18 +185,36 @@
     $scope.deleteAccountPopup = function (id) {
         $scope.accountId = id
         console.log($scope.accountId)
-        $("#accountAlert").modal("show");
+        swal({
+            title: "Are you sure?",
+            text: "You will not be able to recover this Account !",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, delete",
+            cancelButtonText: "Cancel",
+            closeOnConfirm: false,
+            closeOnCancel: true
+        },
+               function (isConfirm) {
+                   if (isConfirm) {
+                       $scope.deleteAccount();
+
+                   }
+               });
 
     }
 
     $scope.deleteAccount = function (id) {
+        $rootScope.$broadcast('event:progress', { message: "Please wait while processing.." });
         $http.post(config.login + "deleteAccount/" + $scope.accountId).then(function (response) {
             if (response.data.status == 'success') {
-                showSuccessToast("Account deleted Succesfully");
-                $scope.getAccountList();
+                $rootScope.$broadcast('event:success', { message: "Account Deleted Succesfully" });
+                $scope.getAccountList([localStorage.CompanyId]);
             }
             else {
                 showSuccessToast("some internal problem");
+                $rootScope.$broadcast('event:error', { message: response.data });
             }
         });
 

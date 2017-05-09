@@ -242,7 +242,7 @@
                 </div>
                     <table id="EnquiryTable" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%" dt-options="dtOptions" dt-columns="dtColumns">
 
-                        <thead style="background:#75757A; color:white; text-transform:uppercase">
+                        <thead style="background:#e3e3e3; color:white; text-transform:uppercase">
                             <tr>
                                 <th style="padding-left:30px; width:30px"><input type="checkbox" class="checkboxcss" /></th>
                                 <th class="fontnormal" ng-click="order('no')">Enquiry No </th>
@@ -361,7 +361,7 @@
                 <input class="pull-right reportSearch" type="search" placeholder="search" name="lastname" ng-model="search" style="width:200px;height:30px; margin:10px 0px">
            
             <table  class="table table-bordered table-hover" cellspacing="0" width="100%" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs">
-                <thead style="background:#75757A; color:white; text-transform:uppercase">
+                <thead style="background:#e3e3e3; color:white; text-transform:uppercase">
                     
                     <tr>
                         <th style="padding-left:30px; width:30px"></th>
@@ -453,7 +453,7 @@
             <input class="pull-right reportSearch" type="search" placeholder="search" name="lastname" ng-model="search" style="border-color:cadetblue;   width:200px;height:30px; margin:10px 0px">
             <table  class="table table-bordered table-hover" cellspacing="0" width="100%" dt-options="dtOptions" dt-columns="dtColumns">
 
-                <thead style="background:#75757A; height:25px;color:white; text-transform:uppercase">
+                <thead style="background:#e3e3e3; height:25px;color:black; text-transform:uppercase">
                     <tr>
                         <th style="padding-left:30px; width:30px"></th>
                         <th class="fontnormal">Suppliers / Company</th>
@@ -477,24 +477,24 @@
                         <td>{{data.email}}</td>
                         <td>{{data.invoiceNo}}</td>
                         <td ng-bind="data.date | date:'dd MMM yyyy'"></td>
-                      
-                        <td ng-hide="Role =='3'">{{data.amount |number : fractionSize}}</td>
-                        <td ng-show="Role =='3'">{{data.adminAmount |number : fractionSize}}</td>
-                        <td ng-show="data.balance == 0" ><span class="badge bg-green">{{"PAID"}}</span></td>
-                        <td ng-hide="data.balance == 0">{{data.balance |number : fractionSize}}</td>
+                        <td style="color:forestgreen;font:bold">
+                            {{data.amount}}
+                        </td>
+                        <td style="color:forestgreen">{{data.balance}}</td>
+                       
 
                         <td style="text-align:right; width:150px">
-                            <button type="button" class="editbtn"><a ui-sref="Customer.MakePayment({poNo:data.no,suppliers:data.supliersName,Code:data.supCode})">Make Payment</a></button>
+                            <button type="button" class="editbtn"><a ui-sref="Customer.Payment({poNo:data.no,suppliers:data.supliersName,Code:data.supCode})">Make Payment</a></button>
                             <class class="linkseparator" style="margin-top:4px; margin-right:0px">|</class>
                             <div class="btn-group editcaret">
                                 <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>
                                 <ul class="dropdown-menu editdrpdwn" role="menu" style="left:-135px">
-                                    <li><a ui-sref="Customer.MakePayment({poNo:data.no,suppliers:data.supliersName})">Make Payment</a></li>
+                                    
                                     <li><a ui-sref="Customer.Bill({billNo:data.id,suppliers:data.supliersName})">Edit Bill</a></li>
                                     <li><a ui-sref="Customer.Expense({no:data.no,suppliers:data.supliersName})">Add Expense</a></li>
-                                    <li ng-click="addInventrybtn(data)"><a href="">Add Enventory</a></li>
+                   
                                     <li><a ui-sref="Customer.PurchaseInvoiceSattlement()">Purchase Settlement</a></li>
-                                    <li><a ui-sref="Customer.SalesInvoiceSattlement()">Sales Settlement</a></li>
+                                    @*<li><a ui-sref="Customer.SalesInvoiceSattlement()">Sales Settlement</a></li>*@
                                     <li><a ng-click="deleteVoucherModal(data.id)">Delete</a></li>
                                 </ul>
 
@@ -539,7 +539,7 @@
 
             <div>
                 <table id="PaidBillTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
-                    <thead style="background:#e3eaf3; height:25px; color:#486C8F; text-transform:uppercase">
+                    <thead style="background:#e3e3e3; height:25px; color:black; text-transform:uppercase">
                         <tr>
                             <th style="padding-left:30px; width:30px"></th>
                             <th class="fontnormal">Suppliers / Company</th>

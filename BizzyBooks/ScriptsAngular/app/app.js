@@ -803,23 +803,14 @@ myApp.run(['authService', '$location', '$rootScope', 'localStorageService', '$st
 //]);
 
 
-  myApp.factory('myService', function ($http) {
-      var url = "http://bizzy-book-api.azurewebsites.net/api/"
-      var http = {
-          postSuppliers: function (webService, data) {
-              var promise = $http.post(url + webService, data).then(function (response) {
-                  return response.data;
-              });     
-              return promise;
-          },
-          getSuppliers: function () {
-          var promise = $http.get(url+"suppliers").then(function (response) {
-              return response.data;
-          });
-          return promise;
-      }
-      };
-      return http;
+myApp.service('myService', function ($http) {
+      
+    this.getOpeningBalance = function (url, CompanyId) {
+        $http.post(url, CompanyId).then(function (response) {
+            console.log(response)
+            return response.data.openingBalance;
+        });
+          }        
   });
 
   myApp.directive('onlyDigits', function () {
@@ -1137,7 +1128,7 @@ myApp.run(['$templateCache', function ($templateCache) {
     $templateCache.put('selectize/choices.tpl.html', [
       '<div ng-show="$select.open"',
       '  class="ui-select-choices group-tree selectize-dropdown single">',
-      '  <div  class="ui-select-breadcrumbs cursor"  ng-click="add($select.type,$select.search);"ng-show="$select.addnew==1" >',
+      '  <div  class="ui-select-breadcrumbs cursor"  "ng-show="$select.addnew==1" >',
       '    <span   class="ui-breadcrumb"',
      
       '       <span><label class="badge cursor" style="color:white"tabindex="2"ng-keyup="$event.keyCode == 13 ? add($select.type,$select.search) : null"aria-hidden="false"><i class="fa fa-plus"></i> Add</label> <span class="pull-right text-warning">{{$select.search }}</span></span>',

@@ -382,10 +382,9 @@
     $scope.getSupplier();
     $scope.getBilldata = function (billNo, fields) {
         $scope.field = fields
-        $rootScope.$broadcast('event:progress', { message: "Please wait while processing.." });
         $http.get(config.api + 'voucherTransactions/' + billNo)
                     .then(function (response) {
-                        swal.close();
+                       
                         var billData = response.data.transactionData;
                         $scope.customPaymentInfo = billData.customPaymentInfo;
                         $scope.accountTable = billData.accountlineItem;
@@ -420,6 +419,7 @@
                         setDate($scope.billDueDate, billData.billDueDate);
                         setDate($scope.actualDate, billData.actualDate);
                         $('#invoiceExist').modal('hide');
+                      
                     });
               }
     $scope.deleteBtn = false
@@ -556,8 +556,10 @@
             if (response.status == 200) {
                 $scope.saving = false;
                 $rootScope.$broadcast('event:success', { message: "Purchase Invoice Created" });
+                
                 $stateParams.billNo = response.data
                 $state.go('Customer.Bill', { billNo: response.data });
+                
             }
             else {
                 $rootScope.$broadcast('event:error', { message: "Error while creating receiipt" });
@@ -946,9 +948,10 @@
     }
     $scope.clear = function ($event, $select) {
         $event.stopPropagation();
-        $select.selected = undefined;
+        $select.selected = null;
         $select.search = undefined;
-        $select.activate();
+
+        $timeout(function(){$select.activate()},300);
     }
     $http.get(config.api + "accounts").then(function (response) {
         $scope.account = response.data
@@ -992,7 +995,28 @@
             delete $scope.DESCRIPTION[index].name
         }
     }
+    function calculateOpenningBalnce(data, balanceType) {
+        var balance;
+        console.log(data)
+        console.log(balanceType)
+        if (balanceType == 'credit' && data.credit) {
+            balance = Number(data.credit) - Number(data.debit)
+        }
+        if (balanceType == 'debit') {
+            balance = Number(data.debit) - Number(data.credit)
+        }
+        console.log(balance)
+        return balance
+    }
     $scope.bindSupplierDetail = function (data) {
+        console.log(data.balanceType)
+        var balanceType = data.balanceType
+        var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
+        myService.getOpeningBalance(url, [localStorage.CompanyId], function (response) {
+            $scope.closingBalance = calculateOpenningBalnce(response, balanceType)
+            console.log($scope.closingBalance)
+
+        })
         $scope.email = data.email
         $scope.shippingAddress = data.billingAddress[0].street
     }
@@ -1062,7 +1086,7 @@
             }
         });
     }
-
+   
     //get existing bill
     $scope.getExistingBill = function (billNo) {
         $http.get(config.login + "isVoucherExist/" + billNo).then(function (response) {
