@@ -160,7 +160,26 @@
             $scope.email = $scope.supliersDetail[0].email;
         });
     }
+    function calculateOpenningBalnce(data, balanceType) {
+        var balance;
+        if (balanceType == 'credit' && data.credit) {
+            balance = Number(data.credit) - Number(data.debit)
+        }
+        if (balanceType == 'debit') {
+            balance = Number(data.debit) - Number(data.credit)
+        }
+        return balance
+    }
     $scope.bindSupplierDetail = function (data) {
+        var balanceType = data.balanceType
+        var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
+        myService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
+            if (response.data.openingBalance) {
+                $scope.supplierBalance = calculateOpenningBalnce(response.data.openingBalance, balanceType)
+            } else {
+                $scope.purchaseLedgerBalance = '';
+            }
+        })
         $scope.email = data.email
         $scope.shippingAddress = data.billingAddress[0].street
         console.log(data)

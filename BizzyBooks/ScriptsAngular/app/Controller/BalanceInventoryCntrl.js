@@ -366,11 +366,11 @@
     function uploadStockInventory(data) {
         $http.post(config.api + "Inventories", data).then(function (response) {
             console.log(response)
-            $scope.saving = false
+            $rootScope.$broadcast('event:success', { message: $scope.ExeclDataRows.length + " Opening Stock Uploaded Successfully " });
         })
     }
     $scope.uploadFile = function () {
-        $scope.saving =true
+        $rootScope.$broadcast('event:progress', { message: "Please wait while processing.." });
         $scope.inventoryLedger = [];
         $scope.rows = [];
         $scope.ExeclDataRows = [];
@@ -382,6 +382,7 @@
             var reader = new FileReader();
             reader.onload = function (e) {
                 var data = e.target.result;
+                try{
                 var workbook = XLSX.read(data, { type: 'binary' });
                 workbook.SheetNames.forEach(function (sheetName) {
                     // Here is your object
@@ -451,6 +452,14 @@
                     }
                 })
                 uploadStockInventory($scope.ExeclDataRows);
+                } catch (e) {
+                    console.log(e)
+                    $rootScope.$broadcast('event:error', { message: "Unsupported file" });
+                    $scope.myFile = null;
+                    $scope.$apply();
+
+                }
+               
 
             };
             reader.onerror = function (ex) {

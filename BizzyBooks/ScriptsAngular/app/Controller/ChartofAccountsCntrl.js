@@ -122,8 +122,10 @@
             }
             else {
                 if (data[i].balanceType == 'credit') {
+                    data[i].bType = " (Cr.) "
                     data[i].balance = (data[i].credit - data[i].debit).toFixed(2)
                 } else if (data[i].balanceType == 'debit') {
+                    data[i].bType = " (Dr.) "
                     data[i].balance = (data[i].credit - data[i].debit).toFixed(2)
                 }
             }

@@ -469,13 +469,46 @@
 
     // save bill 
     $scope.saving = false;
-    $scope.saveBill = function (index) {
-        $rootScope.$broadcast('event:progress', { message: "Please wait while processing.." });
-        $scope.saving = true;
-        var purchaseAmount;
+    $scope.saveBill = function (index) {   
+        // $scope.saving = true;
+      
         var date = getDate($scope.billDate);
         var billDueDate = getDate($scope.billDueDate);
         var actualDate = getDate($scope.actualDate);
+        console.log($scope.billNo)
+        if ($scope.billNo == undefined) {
+            $rootScope.$broadcast('event:error', { message: "Please type Invoice No" });
+            return;
+        }
+        if ($scope.billtable.length == 0 && $scope.billtable1.length  == 0) {
+            $rootScope.$broadcast('event:error', { message: "Please Select Item" });
+            return;
+        }
+        if ($scope.supplier.selected == undefined || $scope.supplier.selected == null) {
+            $rootScope.$broadcast('event:error', { message: "Please select supplier" });
+            return;
+        }
+        if ($scope.purchaseAccounts.selected == undefined || $scope.purchaseAccounts.selected == null) {
+            $rootScope.$broadcast('event:error', { message: "Please select Purchase ledger Account" });
+            return;
+        }
+
+        if (!date) {
+            $rootScope.$broadcast('event:error', { message: "Invoice date is not valid" });
+            return;
+        }
+        if (!billDueDate) {
+            $rootScope.$broadcast('event:error', { message: "Invoice due date is not valid" });
+            return;
+        } 
+        if (!actualDate) {
+            $rootScope.$broadcast('event:error', { message: "Invoice actual date is not valid" });
+            return;
+        }
+       
+        $rootScope.$broadcast('event:progress', { message: "Please wait while processing.." });
+        var purchaseAmount;
+       
         if (authService.userHasPermission('usertype:O')) {
             var totalAmountINR = $scope.manualTableSum() + $scope.accountTableSum();
             purchaseAmount = $scope.manualTableSum()
@@ -568,7 +601,9 @@
     };
 
     // exel line item upload
+    
     $scope.uploadFile = function () {
+        $scope.billtable1 = [];
         $scope.inventoryLedger = [];
         $scope.rows = [];
         $scope.ExeclDataRows = [];
@@ -576,76 +611,98 @@
         $scope.KeyArray = [];
         var KeyName1;
         var file = $scope.myFile;
+        if (!file) {
+            $rootScope.$broadcast('event:error', { message: "Please Choose File" });
+            return;
+        }
         this.parseExcel = function (file) {
+            $rootScope.$broadcast('event:progress', { message: "Please wait while processing.." });
             var reader = new FileReader();
             reader.onload = function (e) {
                 var data = e.target.result;
-                var workbook = XLSX.read(data, { type: 'binary' });
-                workbook.SheetNames.forEach(function (sheetName) {
-                    var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
-                    for (key in XL_row_object) {
-                        var retObj = {};
-                        for (var obj in XL_row_object[key]) {
-                            var obj3 = obj.replace(" ", "");
-                            var obj2 = obj3.replace(" ", "");
-                            var obj4 = obj2.replace(" ", "");
-                            var obj1 = obj4.replace("/", "");
-                            var no = "no"
-                            var INOUT = "IN/OUT"
-                            var date = "date"
-                            var exchangeRate = "exchangeRate"
-                            if (obj1 == "NETWEIGHT") {
-                                $scope.netweight = Number(XL_row_object[key][obj]);
-                            }
-                            if (obj1 == "TOTALPRICE") {
-                                $scope.totalprice = Number(XL_row_object[key][obj]);
-                                retObj["TOTALAMOUNTUSD"] = $scope.netweight * $scope.totalprice;
-                            }
+                try{
+                    var workbook = XLSX.read(data, { type: 'binary' });
+                    workbook.SheetNames.forEach(function (sheetName) {
+                        var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+                        for (key in XL_row_object) {
+                            var retObj = {};
+                            for (var obj in XL_row_object[key]) {
+                                var obj3 = obj.replace(" ", "");
+                                var obj2 = obj3.replace(" ", "");
+                                var obj4 = obj2.replace(" ", "");
+                                var obj1 = obj4.replace("/", "");
+                                var no = "no"
+                                var INOUT = "IN/OUT"
+                                var date = "date"
+                                var exchangeRate = "exchangeRate"
+                                if (obj1 == "NETWEIGHT") {
+                                    $scope.netweight = Number(XL_row_object[key][obj]);
+                                }
+                                if (obj1 == "TOTALPRICE") {
+                                    $scope.totalprice = Number(XL_row_object[key][obj]);
+                                    retObj["TOTALAMOUNTUSD"] = $scope.netweight * $scope.totalprice;
+                                }
 
-                            if (obj1 == "FOBUNITPRICEUSD" || obj1 == "CIFUNITPRICE" || obj1 == "NETWEIGHT" || obj1 == "TOTALPRICE" || obj1 == "LENGTH" || obj1 == "WIDTH" || obj1 == "THICKNESS" || obj1 == "GROSSWT") {
-                                retObj[obj1] = Number(XL_row_object[key][obj]);
-                            }
-                            else {
-                                retObj[obj1] = XL_row_object[key][obj];
-                            }
-                            retObj[no] = $scope.billNo;
-                            retObj[date] = $scope.billDate;
-                            retObj[exchangeRate] = $scope.ExchangeRateINR
-                            retObj[INOUT] = 0
-                            retObj["currentStatus"] = 'open';
-                            retObj["statusTransaction"] = [{ dt: new Date(), status: 'open', remarks: 'inventory added' }];
-                            retObj["assesableValue"] = '0';
-                            retObj["exciseDuty"] = '0';
-                            retObj["dutyAmount"] = '0';
-                            retObj["SAD"] = '0';
-                            retObj["totalDutyAmt"] = '0';
-                            if ($scope.rate && $scope.weight) {
+                                if (obj1 == "FOBUNITPRICEUSD" || obj1 == "CIFUNITPRICE" || obj1 == "NETWEIGHT" || obj1 == "TOTALPRICE" || obj1 == "LENGTH" || obj1 == "WIDTH" || obj1 == "THICKNESS" || obj1 == "GROSSWT") {
+                                    retObj[obj1] = Number(XL_row_object[key][obj]);
+                                }
+                                else {
+                                    retObj[obj1] = XL_row_object[key][obj];
+                                }
+                                retObj[no] = $scope.billNo;
+                                retObj[date] = $scope.billDate;
+                                retObj[exchangeRate] = $scope.ExchangeRateINR
+                                retObj[INOUT] = 0
+                                retObj["currentStatus"] = 'open';
+                                retObj["statusTransaction"] = [{ dt: new Date(), status: 'open', remarks: 'inventory added' }];
+                                retObj["assesableValue"] = '0';
+                                retObj["exciseDuty"] = '0';
+                                retObj["dutyAmount"] = '0';
+                                retObj["SAD"] = '0';
+                                retObj["totalDutyAmt"] = '0';
+                                if ($scope.rate && $scope.weight) {
 
-                                retObj["fobamount"] = Number($scope.rate) * Number($scope.weight);
+                                    retObj["fobamount"] = Number($scope.rate) * Number($scope.weight);
+                                }
+                                if ($scope.cifrate && $scope.weight) {
+                                    retObj["cifamount"] = Number($scope.rate) * Number($scope.weight);
+                                }
+                                var Keyobj = [];
+                                var KeyName = obj;
+                                Keyobj[KeyName1] = KeyName;
+                                $scope.Key.push(Keyobj);
                             }
-                            if ($scope.cifrate && $scope.weight) {
-                                retObj["cifamount"] = Number($scope.rate) * Number($scope.weight);
-                            }
-                            var Keyobj = [];
-                            var KeyName = obj;
-                            Keyobj[KeyName1] = KeyName;
-                            $scope.Key.push(Keyobj);
+                            $scope.ExeclDataRows.push(retObj);
+                            $scope.rows = [];
+                            $scope.KeyArray = $scope.Key;
+                            $scope.Key = [];       
                         }
-                        $scope.ExeclDataRows.push(retObj);
-                        $scope.rows = [];
-                        $scope.KeyArray = $scope.Key;
-                        $scope.Key = [];
-                    }
-                })
-                $scope.billtable12 = $scope.ExeclDataRows
-                $scope.billtable1 = $scope.ExeclDataRows
-                $scope.excelTableItemSum();
+
+                    
+                    })
+
+                    $scope.billtable1 = $scope.ExeclDataRows
+                    $scope.excelTableItemSum();
+                    $scope.$apply();
+                    $rootScope.$broadcast('event:success', { message: $scope.ExeclDataRows.length +" Line Item Uploaded" });
+                } catch (e) {
+                    console.log(e)
+                    $rootScope.$broadcast('event:error', { message: "Unsupported file" });
+                    $scope.myFile = null;
+                    $scope.$apply();
+                   
+                }
+                
             };
             reader.onerror = function (ex) {
+                alert("unsuported file")
+                
             };
             reader.readAsBinaryString(file);
         };
         var data = this.parseExcel(file);
+        
+     
     };
 
     //Custom modal added by khushboo 04-03
@@ -872,6 +929,7 @@
                 DESCRIPTION: $scope.description.selected.name,
                 RRMARKS: $scope.remarks.selected.name,
                 NETWEIGHT: $scope.lineItemnetweight,
+                BALANCE: $scope.lineItemnetweight,
                 BASERATE: $scope.lineItemBaseRate,
                 TOTALAMOUNT: $scope.lineItemnetweight * $scope.lineItemBaseRate,
                 AMOUNTINR: $scope.lineItemnetweight * $scope.lineItemBaseRate * $scope.ExchangeRateINR,
@@ -891,6 +949,7 @@
                 DESCRIPTION: $scope.description.selected.name,
                 RRMARKS: $scope.remarks.selected.name,
                 NETWEIGHT: $scope.lineItemnetweight,
+                BALANCE: $scope.lineItemnetweight,
                 BASERATE: $scope.lineItemBaseRate,
                 TOTALAMOUNT: '',
                 AMOUNTINR: $scope.lineItemnetweight * $scope.lineItemBaseRate,
@@ -997,28 +1056,51 @@
     }
     function calculateOpenningBalnce(data, balanceType) {
         var balance;
-        console.log(data)
-        console.log(balanceType)
         if (balanceType == 'credit' && data.credit) {
             balance = Number(data.credit) - Number(data.debit)
         }
         if (balanceType == 'debit') {
             balance = Number(data.debit) - Number(data.credit)
         }
-        console.log(balance)
         return balance
     }
     $scope.bindSupplierDetail = function (data) {
         console.log(data.balanceType)
         var balanceType = data.balanceType
+       
+        if (data.balanceType == 'debit') {
+            $scope.supplierType = " (Dr.) "
+        }else{
+            $scope.supplierType = " (Cr.)"
+        }
         var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
-        myService.getOpeningBalance(url, [localStorage.CompanyId], function (response) {
-            $scope.closingBalance = calculateOpenningBalnce(response, balanceType)
-            console.log($scope.closingBalance)
-
+        myService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
+            if (response.data.openingBalance) {
+                $scope.supplierBalance = Math.abs(calculateOpenningBalnce(response.data.openingBalance, balanceType))
+            } else {
+                $scope.supplierBalance = 0.00;
+            }
         })
         $scope.email = data.email
         $scope.shippingAddress = data.billingAddress[0].street
+    }
+    $scope.bindPurchaseLedgerDetail = function (data) {
+        var balanceType = data.balanceType
+        if (data.balanceType == 'debit') {
+            $scope.purchaseType = " (Dr.) "
+        } else {
+            $scope.purchaseType = " (Cr.)"
+        }
+        var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
+        myService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
+            if (response.data.openingBalance) {
+                $scope.purchaseLedgerBalance = calculateOpenningBalnce(response.data.openingBalance, balanceType)
+            }
+            else {
+                $scope.purchaseLedgerBalance = 0.00;
+            }
+            
+        })
     }
     $scope.Accountbtn = function (id, type) {
         $('#formaccount').modal('show');
@@ -1073,16 +1155,35 @@
 
     // delete voucher transaction
     $scope.deleteVoucherModal = function () {
-        $('#deleteModal').modal('show');
+        swal({
+            title: "Are you sure?",
+            text: "You will not be able to recover this Invoice !",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, delete",
+            cancelButtonText: "Cancel",
+            closeOnConfirm: false,
+            closeOnCancel: true
+        },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        $scope.deleteVoucher();
+
+                    }
+                });
     }
     $scope.deleteVoucher = function () {
+        $rootScope.$broadcast('event:progress', { message: "Please wait while processing.." });
         $http.get(config.login + "deleteVoucher/" + $stateParams.billNo).then(function (response) {
             if (response.data == "Voucher Deleted") {
-                showSuccessToast("Invoice Deleted Succesfully");
+                $rootScope.$broadcast('event:success', { message: "Invoice No " + $scope.billNo + " Deleted Succesfully" });
+                $stateParams.billNo = null;
+                window.history.back();
                 $state.reload();
             }
             else {
-                showErrorToast(response.data);
+                $rootScope.$broadcast('event:error', { message: response.data });
             }
         });
     }

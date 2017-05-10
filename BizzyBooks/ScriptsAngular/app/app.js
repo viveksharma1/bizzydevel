@@ -230,6 +230,7 @@ var myApp = angular
             requiresAuthentication: true,
             permissions: 'Float.add.Customers.Sales Invoice.active',
             params: {
+                type: "Sales Invoice",
                 voId: null,
             }
 
@@ -804,13 +805,14 @@ myApp.run(['authService', '$location', '$rootScope', 'localStorageService', '$st
 
 
 myApp.service('myService', function ($http) {
-      
-    this.getOpeningBalance = function (url, CompanyId) {
-        $http.post(url, CompanyId).then(function (response) {
-            console.log(response)
-            return response.data.openingBalance;
-        });
-          }        
+    return {
+        getOpeningBalance: function (url, CompanyId) {
+            return $http.post(url, CompanyId,function (response) {
+                console.log(JSON.stringify(response));
+                return response.data;
+            });
+        }
+    };  
   });
 
   myApp.directive('onlyDigits', function () {

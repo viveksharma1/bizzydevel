@@ -36,7 +36,7 @@
         <div class="lightblue bluebrdr content" style="padding:10px 0px">
             <div class="col-sm-4 padding" style="padding-left:10px !important">
 
-                <h4 class="tabheading font_11">Supplier</h4>
+                <h4 class="tabheading font_11">Supplier<span class="pull-right"style="color:forestgreen"><i class="fa fa-rupee"></i> {{supplierBalance}}</span></h4>
                 <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
                            ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';" on-select="bindSupplierDetail($select.selected)"
                            theme="selectize">

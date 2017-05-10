@@ -57,6 +57,7 @@
                             $scope.groupMasters.selected.type = $scope.value.type;
                             $scope.balanceType = $scope.value.balanceType;
                             $scope.email = $scope.value.email;
+                            
 
                             $scope.phone = $scope.value.phone;
                             $scope.mobile = $scope.value.mobile;
@@ -109,7 +110,7 @@
                     return false;
                 }
                 $scope.createAccount = function () {
-
+                    $rootScope.$broadcast('event:progress', { message: "Please wait while processing.." });
                     //if (localStorage.['adminrole'] = '3') {
                     //    var isUo = true
                     //} if (localStorage['adminrole'] = '2') {
@@ -138,6 +139,7 @@
                             debit: 0,
                             rate: $scope.rate,
                             isUo: isUo,
+                            isActive:true,
                             openingBalanceVisible: OBalance,
                             rate: Number($scope.rate),
                             openingBalance: $scope.openingBalance,
@@ -203,11 +205,12 @@
                                 if (response.data.id) {
                                     $scope.accountId = response.data.id
                                     console.log(response.data)
-                                    showSuccessToast("Account Created Succesfully");
                                     $http.post(config.login + "openingBalanceLedgerEntry/" + localStorage.CompanyId + "?accountId=" + $scope.accountId + "&role=" + localStorage.usertype, accountData).then(function (response) {
                                         $http.get(config.login + "getAccountNameById").then(function (response) {
                                             $scope.accountData = response.data
+                                            $rootScope.$broadcast('event:success', { message: "Account Created Succesfully" });
                                             $rootScope.$broadcast('event:accountReferesh', {});
+                                           
                                             for (var i = 0; i < $scope.accountData.length; i++) {
                                                 localStorage[$scope.accountData[i]._id] = $scope.accountData[i].accountName
                                             }

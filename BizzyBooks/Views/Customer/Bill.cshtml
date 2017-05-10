@@ -250,7 +250,7 @@
 
             <div class="col-sm-4 padding" style="margin-left:10px">
 
-                <h4 class="tabheading font_11">Supplier <span class="pull-right text-primary"><i class="fa fa-rupee"></i> {{closingBalance}}</span></h4>
+                <h4 class="tabheading font_11">Supplier <span class="pull-right" style="color:forestgreen" ><i class="fa fa-rupee"></i> {{supplierBalance}} <em style="color:red">{{supplierType}}</em></span></h4>
                 <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
                            ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';" on-select="bindSupplierDetail($select.selected)"
                            theme="selectize" >
@@ -286,9 +286,9 @@
 
 
             <div class="col-sm-4 padding" style="margin-left:10px">
-                <h4 class="tabheading font_11">Purchase Ledger @*<span class="pull-right text-primary"><i class="fa fa-rupee"></i> 2,30,000</span></h4>*@
+                <h4 class="tabheading font_11">Purchase Ledger <span class="pull-right" style="color:forestgreen"><i class="fa fa-rupee"></i> {{purchaseLedgerBalance}}<em style="color:red">{{purchaseType}}</em></span></h4>
                 <ui-select ng-model="purchaseAccounts.selected" id="countryCode" ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';"
-                           theme="selectize">
+                           theme="selectize" on-select="bindPurchaseLedgerDetail($select.selected)">
 
                     <ui-select-match placeholder="Choose an account">{{$select.selected.accountName}}</ui-select-match>
                     <ui-select-header>Top of the list!</ui-select-header>
@@ -475,7 +475,7 @@
                 <span id="fileUpload">
                     <label class="btn btn-default btn-sm" style="height:30px;width:150px">
                         Choose file
-                        <input type="file" id="imageUpload" file-model="myFile"
+                        <input type="file" id="imageUpload" file-model="myFile" 
                                style="display: none">
 
                     </label>
@@ -483,6 +483,7 @@
                             class="btn btn-primary btn-sm">
                         <i class="fa fa-upload"></i>
                     </button>
+                   
                 </span>
             </div>
             <hr style="float:left; width:100%; margin-bottom:10px; margin-top: 10px;" />
@@ -1093,7 +1094,8 @@
                                     <tr>
 
                                         <th>Exchange Rate</th>
-                                        <th>Amount</th>
+                                        <th>
+                                        </th>
 
                                     </tr>
                                 </thead>
