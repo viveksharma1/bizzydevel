@@ -1,4 +1,4 @@
-﻿myApp.controller('SalesInvoiceCntrl', ['$scope', '$http', '$timeout', '$rootScope', '$state', 'config', '$stateParams', '$filter', 'FileUploader', function ($scope, $http, $timeout, $rootScope, $state, config, $stateParams, $filter, FileUploader) {
+﻿myApp.controller('SalesInvoiceCntrl', ['$scope', '$http', '$timeout', '$rootScope', '$state', 'config', '$stateParams', '$filter', 'FileUploader', 'commonService', 'SweetAlert', function ($scope, $http, $timeout, $rootScope, $state, config, $stateParams, $filter, FileUploader, commonService, SweetAlert) {
 
     $(".my a").click(function (e) {
         e.preventDefault();
@@ -48,7 +48,11 @@
     });
 
     $scope.goBack = function () {
-        window.history.back();
+        if ($rootScope.$previousState.name.length == 0 || $rootScope.$previousState == $state.current) {
+            window.history.back();
+        } else
+            $state.go($rootScope.$previousState);
+        //window.history.back();
     }
     $scope.add = function (type, value) {
         $('#formaccount').modal('show');
@@ -228,7 +232,7 @@
             $select.activate();
         }, 200);
     }
-    $scope.supplierSelected = function () {
+    $scope.supplierSelected = function (data) {
         if ($scope.supplier.selected) {
             if ($scope.supplier.selected.billingAddress && $scope.supplier.selected.billingAddress.length > 0) {
                 $scope.shippingAddress = $scope.supplier.selected.billingAddress[0].street
@@ -239,21 +243,37 @@
             if ($scope.supplier.selected.phone) {
                 $scope.contactNo = $scope.supplier.selected.phone;
             }
+            $scope.buyerType = data.balanceType == 'debit' ? " (Dr.) " : " (Cr.)";
+            var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
+            commonService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
+                if (response.data.openingBalance) {
+                    $scope.buyerBalance = Math.abs(calculateOpenningBalnce(response.data.openingBalance, data.balanceType))
+                } else {
+                    $scope.buyerBalance = 0.00;
+                }
+            });
         }
     };
-    $scope.supplier2Selected = function () {
+    $scope.supplier2Selected = function (data) {
         if ($scope.supplier2.selected) {
             if ($scope.supplier2.selected.billingAddress && $scope.supplier2.selected.billingAddress.length > 0) {
                 $scope.shippingAddress2 = $scope.supplier2.selected.billingAddress[0].street
             }
             if ($scope.supplier2.selected.email) {
                 $scope.email2 = $scope.supplier2.selected.email
-
             }
             if ($scope.supplier2.selected.phone) {
                 $scope.contactNo2 = $scope.supplier2.selected.phone;
-
             }
+            $scope.consigneeType = data.balanceType == 'debit' ? " (Dr.) " : " (Cr.)";
+            var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
+            commonService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
+                if (response.data.openingBalance) {
+                    $scope.consigneeBalance = Math.abs(calculateOpenningBalnce(response.data.openingBalance, data.balanceType))
+                } else {
+                    $scope.consigneeBalance = 0.00;
+                }
+            });
         }
     };
     $scope.taxAccountSelected = function () {
@@ -296,8 +316,18 @@
                       $scope.paymentDays = response.data.invoiceData.paymentDays;
                       getSupplierDetail(response.data.invoiceData.customerAccountId);
                       getSupplierDetail(response.data.invoiceData.consigneeAccountId, true);
+                      if (response.data.paymentLog) {
+                          $scope.receiptCount = response.data.paymentLog.length;
+                          $scope.receipts = response.data.paymentLog;
+                      } else {
+                          $scope.receiptCount = null;
+                          $scope.receipts = [];
+                      }
+
                       sumItemListTable($scope.itemTable);
                       accountTableSum();
+
+
                       $scope.attachements = response.data.invoiceData.attachements;
                       bindAttachments(response.data.invoiceData.attachements, function () {
                           $scope.oldAttachment = null;
@@ -307,17 +337,6 @@
                   });
 
     }
-
-    $scope.hasVoId = false;
-    if ($stateParams.voId) {
-        $scope.hasVoId = true;
-        $scope.getInvoiceData($stateParams.voId);
-        $scope.billNoValid = true;
-        $scope.comInvoiceNoValid = true;
-        $scope.exciseInvoiceNoValid = true;
-    }
-    
-
     $scope.remarks = {};
     $scope.godown = {};
     $scope.description = {};
@@ -338,8 +357,16 @@
         $scope.NETWEIGHT = {};
         $scope.filterList = $scope.ItemList2;
     }
+    $scope.hasVoId = false;
+    if ($stateParams.voId) {
+        $scope.hasVoId = true;
+        $scope.getInvoiceData($stateParams.voId);
+        //$scope.getReceipts($stateParams.voId);
+        $scope.billNoValid = true;
+        $scope.comInvoiceNoValid = true;
+        $scope.exciseInvoiceNoValid = true;
+    }
     $scope.applyFilter = function () {
-
         var qry = {
             "where": {
                 "visible":true,
@@ -402,7 +429,7 @@
         if (isNaN(qty)) {
             item.itemQty = oldQty;
         }
-        if (parseFloat(item.NETWEIGHT) - parseFloat(qty) >= 0) {
+        if (parseFloat(item.BALANCE) - parseFloat(qty) >= 0) { //Replaced NETWEIGHT with balance.
             item.itemAmount = qty * Number(item.itemRate);
             if (!$scope.isCart)
                 $scope.applyRate(item.itemRate, item);
@@ -673,14 +700,14 @@
         var aggregateCart = Enumerable.From(itemCart).GroupBy("$.id", null, function (key, g) {
             return {
                 id: key,
-                netwt: g.Max("$.NETWEIGHT"),
+                balance: g.Max("$.BALANCE"), //NETWEIGHT replaced with balance
                 sum: g.Sum("$.itemQty| 0")
             }
         })
        .ToArray();
         console.log(aggregateCart);
         //alert(JSON.stringify(result));
-        var result2 = Enumerable.From(aggregateCart).Where("x=>x['sum']>x['netwt']").ToArray();
+        var result2 = Enumerable.From(aggregateCart).Where("x=>x['sum']>x['balance']").ToArray();
         if (result2.length == 0)
             ret = true;
         return ret;
@@ -780,8 +807,8 @@
         angular.copy($scope.itemTableTemp, $scope.itemTable);
         if ($scope.invoiceType == 'Excise') {
             angular.forEach($scope.itemTable, function (item) {
-                if ($scope.rdi) {
-                    item.itemAmount = item.itemQty * (item.itemRate + Number(item.exciseDuty/item.NETWEIGHT) + Number(item.SAD/item.NETWEIGHT));
+                if ($scope.rdi ) {
+                    item.itemAmount = item.itemQty * (item.itemRate + Number(item.exciseDuty?item.exciseDuty:0/item.NETWEIGHT) + Number(item.SAD?item.SAD:0/item.NETWEIGHT));
                 }
             });
         } else if ($scope.invoiceType == 'Non Excise') {
@@ -943,7 +970,7 @@
         return Enumerable.From($scope.itemTable).GroupBy("$.id", null, function (key, g) {
             return {
                 id: key,
-                netwt: g.Max("$.NETWEIGHT"),
+                balance: g.Max("$.BALANCE"),
                 sum: g.Sum("$.itemQty| 0")
             }
         })
@@ -1047,7 +1074,7 @@
         }
 
 
-        $http.post(config.login + "saveVoucher" + "?id=" + $stateParams.voId, data).then(function (response) {
+        $http.post(config.login + "salesInvoiceVoucher" + "?id=" + $stateParams.voId, data).then(function (response) {
             if (response.data.err) {
                 $rootScope.$broadcast('event:error', { message: "Error while creating invoice: "+response.data.err });
             } else {
@@ -1076,17 +1103,54 @@
     $("#billNo").focusout(function () {
         var billNo = $scope.billNo;
         if (billNo != undefined && !$scope.hasVoId) {
-            $http.get(config.api + "voucherTransactions" + "/count?[where][type]=" + type + "&[where][vochNo]=" + $scope.billNo).then(function (response) {
-                $timeout(function () {
-                    var data = response.data;
-                    if (response.data.count > 0) {
-                        showErrorToast("Delivery Challan No already exists");
-                    } else {
-                        $scope.billNoValid = true;
-                    }
-
-                });
+            $http.get(config.login + "isVoucherExist/" + billNo).then(function (response) {
+                if(response.data.id) {
+                    //$scope.existingEnvoiceId = response.data.id
+                    SweetAlert.swal({
+                        title: "Do you want to reload?",
+                        text: "This Invoice No is allready exist.",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "Yes",
+                        closeOnConfirm: true
+                    },
+                       function () {
+                           //reload
+                           $state.go("Customer.SalesInvoice",{voId:response.data.id});
+                           //ui-sref="Customer.Bill({voId:response.data.id})"
+                       });      
+                }
+                else {
+                    $scope.billNoValid = true;
+                }     
             });
+            //$http.get(config.api + "voucherTransactions" + "/count?[where][type]=" + type + "&[where][vochNo]=" + $scope.billNo).then(function (response) {
+            //    $timeout(function () {
+            //        var data = response.data;
+            //        if (response.data.count > 0) {
+            //            SweetAlert.swal({
+            //                title: "Do you want to reload?",
+            //                text: "This Invoice No is allready exist.",
+            //                type: "warning",
+            //                showCancelButton: true,
+            //                confirmButtonColor: "#DD6B55",
+            //                confirmButtonText: "Yes",
+            //                closeOnConfirm: false
+            //            },
+            //            function () {
+            //                //reload
+            //                $state.go("")
+            //                ui-sref="Customer.Bill({billNo:existingEnvoiceId})"
+            //            });
+
+            //            //showErrorToast("Delivery Challan No already exists");
+            //        } else {
+            //            $scope.billNoValid = true;
+            //        }
+
+            //    });
+            //});
         }
     })
     $("#exciseInvoiceNo").focusout(function () {
@@ -1121,6 +1185,24 @@
             });
         }
     })
-    
+    $scope.bindSalesAccountDetail = function (data) {
+        $scope.salesAccountType = data.balanceType == 'debit' ? " (Dr.) " : " (Cr.)";
+        var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
+        commonService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
+            if (response.data.openingBalance) {
+                $scope.salesAccountType = Math.abs(calculateOpenningBalnce(response.data.openingBalance, data.balanceType))
+            } else {
+                $scope.salesAccountType = 0.00;
+            }
+        });
+        //$scope.email = data.email
+        //$scope.shippingAddress = data.billingAddress[0].street
+    }
+    //$scope.openReceipt = function (id) {
+    //    if (id)
+    //        $state.go('Customer.Receipt', { voId: id }, { location: false });
+    //    else
+    //        $state.go('Customer.Receipt', null, { location: false });
+    //}
     
 }]);

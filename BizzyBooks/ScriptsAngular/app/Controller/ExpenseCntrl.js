@@ -1,5 +1,5 @@
-﻿myApp.controller('ExpenseCntrl', ['$scope', '$http', '$stateParams', '$timeout', '$rootScope', '$state', 'myService', 'config','$filter',
-    function ($scope, $http, $stateParams, $timeout, $rootScope, $state, myService, config, $filter) {
+﻿myApp.controller('ExpenseCntrl', ['$scope', '$http', '$stateParams', '$timeout', '$rootScope', '$state', 'commonService', 'config','$filter',
+    function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonService, config, $filter) {
         $.fn.datepicker.defaults.format = "dd/mm/yyyy";
         $(".my a").click(function (e) {
             e.preventDefault();
@@ -179,7 +179,7 @@
     $scope.bindSupplierDetail = function (data) {
         var balanceType = data.balanceType
         var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
-        myService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
+        commonService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
             if (response.data.openingBalance) {
                 $scope.supplierBalance = calculateOpenningBalnce(response.data.openingBalance, balanceType)
             } else {

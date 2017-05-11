@@ -7,7 +7,7 @@ var Skip;
 
 
 
-myApp.controller('SupplierCntrl', ['$scope', '$http', '$timeout', '$stateParams','$rootScope', 'myService', '$state', 'config', '$location', 'DTOptionsBuilder', 'DTDefaultOptions', function ($scope, $http, $timeout,$stateParams, $rootScope, myService, $state, config, $location, DTOptionsBuilder, DTDefaultOptions) {
+myApp.controller('SupplierCntrl', ['$scope', '$http', '$timeout', '$stateParams','$rootScope', 'commonService', '$state', 'config', '$location', 'DTOptionsBuilder', 'DTDefaultOptions', function ($scope, $http, $timeout,$stateParams, $rootScope, commonService, $state, config, $location, DTOptionsBuilder, DTDefaultOptions) {
     $(".loader").show()
     $('#addInventryModal').modal('hide');
     $('#nodataimageview').hide();

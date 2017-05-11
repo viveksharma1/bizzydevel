@@ -139,6 +139,7 @@ namespace Restaurant
                  "~/ScriptsAngular/app/App.js",
                  "~/ScriptsAngular/app/directives/permissionDirective.js",
                  "~/ScriptsAngular/app/Services/authService.js",
+                 "~/ScriptsAngular/app/Services/commonService.js",
                  "~/ScriptsAngular/app/Controller/LoginCntrl.js",
                  "~/ScriptsAngular/app/Controller/HomeCntrl.js",
                  "~/ScriptsAngular/app/Controller/CustomerCntrl.js",

@@ -130,6 +130,9 @@ function getDate(inputDateId, inputTimeId) {
     return ret;
 
 }
+function calculateOpenningBalnce(data, balanceType) {
+    return balanceType == 'credit' ? Number(data.credit) - Number(data.debit) : Number(data.debit) - Number(data.credit);
+}
 var Promise = window.Promise;
 if (!Promise) {
     Promise = JSZip.external.Promise;

@@ -1,4 +1,4 @@
-﻿myApp.controller('BillCntrl', ['$scope', '$http', '$timeout', '$stateParams', 'myService', '$rootScope', '$state', 'config', '$filter', 'authService', function ($scope, $http, $timeout, $stateParams, myService, $rootScope, $state, config, $filter, authService) {
+﻿myApp.controller('BillCntrl', ['$scope', '$http', '$timeout', '$stateParams', 'commonService', '$rootScope', '$state', 'config', '$filter', 'authService', function ($scope, $http, $timeout, $stateParams, commonService, $rootScope, $state, config, $filter, authService) {
     $scope.manualTotal = 0;
     $scope.CIFTOTAL1 = 0;
     $scope.role = localStorage["usertype"];
@@ -1075,7 +1075,7 @@
             $scope.supplierType = " (Cr.)"
         }
         var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
-        myService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
+        commonService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
             if (response.data.openingBalance) {
                 $scope.supplierBalance = Math.abs(calculateOpenningBalnce(response.data.openingBalance, balanceType))
             } else {
@@ -1093,7 +1093,7 @@
             $scope.purchaseType = " (Cr.)"
         }
         var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
-        myService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
+        commonService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
             if (response.data.openingBalance) {
                 $scope.purchaseLedgerBalance = calculateOpenningBalnce(response.data.openingBalance, balanceType)
             }
@@ -1201,35 +1201,35 @@
     }
 }]);
 
-myApp.directive('popOver', function ($compile, $templateCache) {
-    var getTemplate = function () {
-        $templateCache.put('templateId.html', 'This is the content of the template');
-        return $templateCache.get("popover_template.html");
-    }
-    return {
-        restrict: "A",
-        transclude: true,
-        template: "<span ng-transclude></span>",
-        link: function (scope, element, attrs) {
-            var popOverContent;
-            if (scope.friends) {
-                var html = getTemplate();
-                popOverContent = $compile(html)(scope);
-                var options = {
-                    content: popOverContent,
-                    placement: "bottom",
-                    html: true,
-                    title: scope.title
-                };
-                $(element).popover(options);
-            }
-        },
-        scope: {
-            friends: '=',
-            title: '@'
-        }
-    };
-});
+//myApp.directive('popOver', function ($compile, $templateCache) {
+//    var getTemplate = function () {
+//        $templateCache.put('templateId.html', 'This is the content of the template');
+//        return $templateCache.get("popover_template.html");
+//    }
+//    return {
+//        restrict: "A",
+//        transclude: true,
+//        template: "<span ng-transclude></span>",
+//        link: function (scope, element, attrs) {
+//            var popOverContent;
+//            if (scope.friends) {
+//                var html = getTemplate();
+//                popOverContent = $compile(html)(scope);
+//                var options = {
+//                    content: popOverContent,
+//                    placement: "bottom",
+//                    html: true,
+//                    title: scope.title
+//                };
+//                $(element).popover(options);
+//            }
+//        },
+//        scope: {
+//            friends: '=',
+//            title: '@'
+//        }
+//    };
+//});
 
 myApp.directive('addItem', function ($compile, $templateCache) {
     var getTemplate = function () {

@@ -153,8 +153,9 @@ var myApp = angular
             templateUrl: "Customer/Receipt",
             controller: "ReceiptCntrl",
             params: {
-                type:'Receipt',
-                voId: null
+                type: 'Receipt',
+                noBackTrack:false,
+                voId: null,
             }
 
         });
@@ -232,6 +233,7 @@ var myApp = angular
             params: {
                 type: "Sales Invoice",
                 voId: null,
+                noBackTrack:false
             }
 
         });
@@ -626,7 +628,8 @@ myApp.run(['authService', '$location', '$rootScope', 'localStorageService', '$st
             //    $state.go("/");
                 //$location.path(ngAuthSettings.defaultRoute);
         } else {
-            $rootScope.$previousState = fromState;
+            if (!fromParams.noBackTrack)
+                $rootScope.$previousState = fromState;
         }
         //if (next.route != undefined) {
         //    var path = authService.getUserPermission(next.route, next.fallback);
@@ -808,16 +811,7 @@ myApp.run(['authService', '$location', '$rootScope', 'localStorageService', '$st
 //]);
 
 
-myApp.service('myService', function ($http) {
-    return {
-        getOpeningBalance: function (url, CompanyId) {
-            return $http.post(url, CompanyId,function (response) {
-                console.log(JSON.stringify(response));
-                return response.data;
-            });
-        }
-    };  
-  });
+
 
   myApp.directive('onlyDigits', function () {
       return {
@@ -840,7 +834,35 @@ myApp.service('myService', function ($http) {
           }
       };
   });
- 
+  myApp.directive('popOver', function ($compile, $templateCache) {
+      var getTemplate = function () {
+          //$templateCache.put('templateId.html', 'This is the content of the template');
+          return $templateCache.get("popover_template.html");
+      }
+      return {
+          restrict: "A",
+          transclude: true,
+          template: "<span ng-transclude></span>",
+          link: function (scope, element, attrs) {
+              var popOverContent;
+              if (scope.datas) {
+                  var html = getTemplate();
+                  popOverContent = $compile(html)(scope);
+                  var options = {
+                      content: popOverContent,
+                      placement: "bottom",
+                      html: true,
+                      title: scope.title
+                  };
+                  $(element).popover(options);
+              }
+          },
+          scope: {
+              datas: '=',
+              title: '@'
+          }
+      };
+  });
 
 //myApp.directive('uiTreeInvoice', [
 //  'groupFactory',

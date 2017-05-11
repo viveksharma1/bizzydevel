@@ -1,4 +1,4 @@
-﻿myApp.controller('SupplierdetailCntrl', ['$scope', '$http', '$timeout', 'myService', '$rootScope', '$stateParams','$state', 'config','DTOptionsBuilder', 'DTDefaultOptions', function ($scope, $http, $timeout,myService, $rootScope, $stateParams, $state, config ,DTOptionsBuilder,DTDefaultOptions) {
+﻿myApp.controller('SupplierdetailCntrl', ['$scope', '$http', '$timeout', 'commonService', '$rootScope', '$stateParams','$state', 'config','DTOptionsBuilder', 'DTDefaultOptions', function ($scope, $http, $timeout,commonService, $rootScope, $stateParams, $state, config ,DTOptionsBuilder,DTDefaultOptions) {
 
     $scope.dataSource = {
         "chart": {

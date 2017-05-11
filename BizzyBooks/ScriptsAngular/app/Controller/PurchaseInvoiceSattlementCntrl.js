@@ -1,4 +1,4 @@
-﻿myApp.controller('PurchaseInvoiceSattlementCntrl', ['$scope', '$http', '$timeout', '$stateParams', 'myService', '$rootScope', '$state', 'config', '$filter', 'authService', function ($scope, $http, $timeout, $stateParams, myService, $rootScope, $state, config, $filter, authService) {
+﻿myApp.controller('PurchaseInvoiceSattlementCntrl', ['$scope', '$http', '$timeout', '$stateParams', 'commonService', '$rootScope', '$state', 'config', '$filter', 'authService', function ($scope, $http, $timeout, $stateParams, commonService, $rootScope, $state, config, $filter, authService) {
 
     $(".my a").click(function (e) {
         e.preventDefault();

@@ -25,7 +25,7 @@
    
 </script>
 <script type="text/ng-template" id="popover_template.html">
-    <table style='width:100%'><tr><th>Date</th><th>Amount Paid</th><th>Voch No.</th></tr><tr ng-repeat='data in friends' class="cursor" ui-sref="Customer.MakePayment({voId:data.id})"><td style="color:forestgreen">{{data.date}}</td><td>Rs{{data.amount}}</td><td>{{data.vochNo}}</td></tr><tr></tr></table>
+    <table style='width:100%'><tr><th>Date</th><th>Amount Paid</th><th>Voch No.</th></tr><tr ng-repeat='data in datas' class="cursor" ui-sref="Customer.MakePayment({voId:data.id})"><td style="color:forestgreen">{{data.date}}</td><td>Rs{{data.amount}}</td><td>{{data.vochNo}}</td></tr><tr></tr></table>
 
     
 </script>
@@ -367,7 +367,7 @@
                    
                    
                     <div ng-repeat="data in paymentLog | limitTo:1">
-                        <small style="float:right; width:100%; margin:10px 0px"> <a class="cursor"  pop-over friends="paymentLog" , title="Payment Log">{{paymentLog.length}} Payment Made</a></small>
+                        <small style="float:right; width:100%; margin:10px 0px"> <a class="cursor"  pop-over datas="paymentLog" , title="Payment Log">{{paymentLog.length}} Payment Made</a></small>
                       </div>
                   
                     <h4 class="tabheading font_11">INVOICE NO.</h4>
