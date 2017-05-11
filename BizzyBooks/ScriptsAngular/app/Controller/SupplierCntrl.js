@@ -58,75 +58,41 @@ myApp.controller('SupplierCntrl', ['$scope', '$http', '$timeout', '$stateParams'
     $scope.admin = localStorage['adminrole'];
     $scope.Role = localStorage['adminrole'];
 
-    $scope.paginationTable = function (url2, globalUrl) {
-        $scope.url2 = url2;
-        $scope.globalUrl = globalUrl;
-
-        $http.get(config.login + 'getTransactionData/'+ localStorage.CompanyId + '?role=' + localStorage["usertype"]).then(function (response) {
-            $scope.InventoryList = response.data;
-            console.log(response);
-            for (var i = 0; i < $scope.InventoryList.length; i++) {
-                $scope.InventoryList[i].supplier = localStorage[$scope.InventoryList[i].supplier];
-
-            }
-           
-            console.log($scope.InventoryList)
-            $(".loader").hide()
-
-
+    //get purchase invoice  data
+    $scope.getPurchaseInvoice = function () {
+        $http.get(config.login + 'getTransactionData/'+ localStorage.CompanyId + '?role=' + localStorage["usertype"] + "&type=Purchase Invoice").then(function (response) {
+            $scope.purchaseInvoiceTable = response.data;
+            for (var i = 0; i < $scope.purchaseInvoiceTable.length; i++) {
+                $scope.purchaseInvoiceTable[i].supplier = localStorage[$scope.purchaseInvoiceTable[i].supplier];
+            }         
         });
-       
-
-
-
-        //-----------------------Pagination start for Employee List
-
-
-
-
+    }  
+    //get expense data
+    $scope.getExpense = function () {
+        $http.get(config.login + 'getTransactionData/' + localStorage.CompanyId + '?role=' + localStorage["usertype"] + "&type=EXPENSE").then(function (response) {
+            $scope.expenseTable = response.data;
+            $scope.expenseCount = $scope.expenseTable.length
+                for (var i = 0; i < $scope.expenseTable.length; i++) {
+                    $scope.expenseTable[i].supplier = localStorage[$scope.expenseTable[i].supplier];
+                }
+            });  
     }
-
-    //suppliers peginations
-
-    $scope.pagination1 = function (url2, globalUrl) {
-        $scope.url2 = url2;
-        $scope.globalUrl = globalUrl;
-        $http.get(config.api + $scope.url2 + "?filter[where][compCode]=" + localStorage.CompanyId + "&filter[limit]=10&filter[skip]=0").then(function (response) {
-            $scope.InventoryList = response.data;
-            $(".loader").hide()
-        });
-        var compFilter = "&where[compCode]=" + localStorage.CompanyId
-        var url = config.api + $scope.globalUrl + compFilter;
-       
-        $http.get(url).then(function (response) {
-            $scope.TotalCount = response.data.count;
+    //get supplier data
+    $scope.getSupplier = function () {
+        $http.get(config.login + "getSupplierAccount/" + localStorage.CompanyId).then(function (response) {
+            $scope.supplierList = response.data
         });
     }
-
-    //pagination for suppliers
-
-
-
-
-    //order table
-
-
-    $scope.order = function (data) {
-
-        $scope.orderData = data;
-
-
-
-    }
-
+    $scope.getPurchaseInvoice();
+    $scope.getSupplier();
+    $scope.getExpense();
+    
     $scope.SuppliersTablebtn = function () {
-
         $(".loader").show()
         $scope.url3 = "getSupplierAccount"
         $scope.globalUrl4 = "suppliers/count"
         $scope.InventoryList = [];
         $scope.getSupplier();
-
         $('#example').show();
         $('#PurchaseOrderTable').hide();
         $('#EnquiryTable').hide();
@@ -136,17 +102,8 @@ myApp.controller('SupplierCntrl', ['$scope', '$http', '$timeout', '$stateParams'
 
 
 
-    $scope.OpenBillTable = function (status) {
-        $(".loader").show()
-        $scope.InventoryList = [];
-        $scope.newStatus = "&filter[where][status]=" + status;
-        $scope.newStatus1 = "&[where][status]=" + status;
-
-       
-        $scope.paginationTable()
-
-
-
+    $scope.OpenBillTable = function () {
+        $scope.getPurchaseInvoice()
         $('#OpenBill').show();
         $('#PurchaseOrderTable').hide();
         $('#EnquiryTable').hide();
@@ -164,19 +121,10 @@ myApp.controller('SupplierCntrl', ['$scope', '$http', '$timeout', '$stateParams'
     },
      
     $scope.EnquiryTablebtn = function (status) {
-
         $scope.InventoryList = [];
         $(".loader").show()
         $scope.newStatus = "&filter[where][status]=" + status;
         $scope.newStatus1 = "&[where][status]=" + status;
-
-       
-
-
-        
-       
-        
-
         $('#PaidBillTable').hide();
         $('#OpenBill').hide();
         $('#PurchaseOrderTable').hide();
@@ -188,22 +136,8 @@ myApp.controller('SupplierCntrl', ['$scope', '$http', '$timeout', '$stateParams'
 
 
   
-    $scope.PurchaseOrderTable = function (status) {
-        
-        $scope.newStatus = "&filter[where][status]=" + status;
-        $scope.newStatus1 = "&[where][status]=" + status;
-        $scope.InventoryList = [];
-        $(".loader").show()
-   
-
-       
-
-
-
-
-
-
-
+    $scope.ExpenseTable = function (status) {
+        $scope.getExpense()
         $('#example').hide();
         $('#PurchaseOrderTable').show();
         $('#EnquiryTable').hide();
@@ -236,32 +170,8 @@ myApp.controller('SupplierCntrl', ['$scope', '$http', '$timeout', '$stateParams'
     }
 
 
-    //get suppliers count
-
-    $scope.getSupplier = function () {
-        $http.get(config.login + "getSupplierAccount/" + localStorage.CompanyId).then(function (response) {
-            $scope.InventoryList = response.data
-
-        });
-    }
-  
-    $http.get(config.login + "getSupplierCount/" + localStorage.CompanyId).then(function (response) {
-        $scope.suppliersCount = response.data.count;
-        console.log(response.data);
-    });
-
-    
-
-    $scope.viewPo = function (data) {
-        $location.path('#/Customer/PdfView' + data);
-    }
-
-
-
-
-    
-
-
+    //get suppliers coun
+   
     $scope.GRNDetail = function (data) {
         $('#GRNDetailDiv').slideDown();
         $scope.EnqNo = data;
@@ -435,22 +345,7 @@ myApp.controller('SupplierCntrl', ['$scope', '$http', '$timeout', '$stateParams'
         $scope.billDate1 = data.date
         $('#addInventryModal').modal('show');
     }
-
-
-    $scope.addEnventory = function () {
-        var data = {
-            Inventory: $scope.billtable1,
-            inventoryNo: $scope.billNo1,
-            supliersName: $scope.supplier1,
-            date: $scope.billDate1
-        }
-        $http.post(config.api + "Inventories", data).then(function (response) {
-        })
-    }
-    //geting sent supplier count
-
-
-
+   
     if (localStorage["type1"] == "PO") {
        
         $scope.InventoryList = [];

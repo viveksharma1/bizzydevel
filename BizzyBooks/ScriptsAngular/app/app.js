@@ -383,11 +383,15 @@ var myApp = angular
           });
 
         $stateProvider.state("Customer.JournalEntry", {
-            url: "/JournalEntry",
+            url: "/JournalEntry/:voId",
             templateUrl: "Customer/JournalEntry",
             controller: "JournalEntryCntrl",
             requiresAuthentication: true,
-            permissions: 'Float.add.Customers.Journal Entry.active'
+            permissions: 'Float.add.Customers.Journal Entry.active',
+            params: {
+                voId: null,
+                type: 'Journal Entry',
+            }
 
         });
 

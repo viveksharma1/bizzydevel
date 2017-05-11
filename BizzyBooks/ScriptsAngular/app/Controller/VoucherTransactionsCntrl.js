@@ -55,6 +55,10 @@
 
             $state.go('Customer.RosemateVoucher', { voId: id });
         }
+        if (voType == 'Journal Entry') {
+
+            $state.go('Customer.JournalEntry', { voId: id });
+        }
 
 
     }

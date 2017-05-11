@@ -166,8 +166,8 @@
         for (var i = 0; i < $scope.accountTable.length; i++) {
             amount += Number($scope.accountTable[i].amount);
         }
-        $scope.totalAccountAmount = Number(amount);
-        return $scope.totalAccountAmount
+        $scope.totalAccountAmount = Number(amount.toFixed(2));
+        return Number(($scope.totalAccountAmount.toFixed(2)))
     }
     $scope.excelTableItemSum = function () {
         var total = 0;
@@ -189,9 +189,9 @@
         var netweight = 0;
         var totalAmountINR = 0;
         for (var i = 0; i < $scope.billtable.length; i++) {
-            manualTotal += Number($scope.billtable[i].TOTALAMOUNT);
+            manualTotal += Number($scope.billtable[i].TOTALAMOUNT.toFixed(2));
             netweight += Number($scope.billtable[i].NETWEIGHT);
-            totalAmountINR += Number($scope.billtable[i].AMOUNTINR);
+            totalAmountINR += Number($scope.billtable[i].AMOUNTINR.toFixed(2));
         }
         $scope.totalAmountINR = Number(totalAmountINR.toFixed(2));
         $scope.manualTotalINR = Number(totalAmountINR)
@@ -368,10 +368,11 @@
             $scope.supliers = response.data
         });
     }
-    $scope.getSupplierDetail = function (id) {
+    $scope.getSupplierDetail = function (name) {
         $scope.supliersDetail = []
-        $http.get(config.api + "accounts" + "?filter[where][compCode]=" + localStorage.CompanyId + "&filter[where][id]=" + id).then(function (response) {
+        $http.get(config.api + "accounts" + "?filter[where][compCode]=" + localStorage.CompanyId + "&filter[where][accountName]=" + name).then(function (response) {
             $scope.supliersDetail = response.data;
+            console.log($scope.supliersDetail)
             $scope.shippingAddress = $scope.supliersDetail[0].billingAddress[0].street;
             $scope.email = $scope.supliersDetail[0].email;
         });
@@ -551,7 +552,7 @@
             transactionData: {
                 compCode: localStorage.CompanyId,
                 supliersId: $scope.supplier.selected.id,
-                email: $scope.supplier.selected.email,
+                email: $scope.email,
                 role: localStorage['usertype'],
                 currency: $scope.currency,
                 date: date,
@@ -1082,7 +1083,7 @@
             }
         })
         $scope.email = data.email
-        $scope.shippingAddress = data.billingAddress[0].street
+        //$scope.shippingAddress = data.billingAddress[0].street
     }
     $scope.bindPurchaseLedgerDetail = function (data) {
         var balanceType = data.balanceType

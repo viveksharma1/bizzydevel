@@ -114,13 +114,7 @@
 
     function getAccountData(data) {
         for (var i = 0; i < data.length; i++) {
-            if (data[i].openingBalanceVisible == true && localStorage.usertype == 'UO') {
-                data[i].balance = (data[i].openingBalance + data[i].credit - data[i].debit).toFixed(2)
-            }
-            else if ((data.openingBalanceVisible == false || data.openingBalanceVisible == undefined) && localStorage.usertype == 'UO') {
-                data[i].balance = (data[i].credit - data[i].debit).toFixed(2)
-            }
-            else {
+           
                 if (data[i].balanceType == 'credit') {
                     data[i].bType = " (Cr.) "
                     data[i].balance = (data[i].credit - data[i].debit).toFixed(2)
@@ -128,7 +122,7 @@
                     data[i].bType = " (Dr.) "
                     data[i].balance = (data[i].credit - data[i].debit).toFixed(2)
                 }
-            }
+            
         }
         return data;
     }

@@ -251,6 +251,10 @@
 
             $state.go('Customer.PurchaseInvoiceSattlement', { voId: id });
         }
+        if (voType == 'Journal Entry') {
+
+            $state.go('Customer.JournalEntry', { voId: id });
+        }
 
 
 

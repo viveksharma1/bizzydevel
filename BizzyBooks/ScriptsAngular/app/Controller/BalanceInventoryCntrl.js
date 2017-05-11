@@ -370,7 +370,7 @@
         })
     }
     $scope.uploadFile = function () {
-        $rootScope.$broadcast('event:progress', { message: "Please wait while processing.." });
+        
         $scope.inventoryLedger = [];
         $scope.rows = [];
         $scope.ExeclDataRows = [];
@@ -378,7 +378,12 @@
         $scope.KeyArray = [];
         var KeyName1;
         var file = $scope.myFile;
+        if (!file) {
+            $rootScope.$broadcast('event:error', { message: "Please Choose File" });
+            return;
+        }
         this.parseExcel = function (file) {
+            $rootScope.$broadcast('event:progress', { message: "Please wait while processing.." });
             var reader = new FileReader();
             reader.onload = function (e) {
                 var data = e.target.result;

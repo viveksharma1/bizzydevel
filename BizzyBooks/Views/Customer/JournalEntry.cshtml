@@ -12,59 +12,12 @@
         </label>
         <label style="float:right;padding:15px ">
 
-            <strong style="font-size:20px"><a href="" ng-click="addInventry()"><i class="fa fa-times"></i></a></strong>
+            <strong style="font-size:20px"><a href="" ng-click="goBack()"><i class="fa fa-times"></i></a></strong>
 
 
         </label>
     </div>
-    <!-- addInventryModal -->
-    <div id="addInventryModal7" class="modal fade" role="dialog">
-        <div class="modal-admin">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-
-                <div class="modal-body" style="background-color:#525DB0">
-                    <label style="color:#FFFFFF">Do you want to leave without saving</label>
-                </div>
-
-
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary btn-sm btn bg-purple" data-dismiss="modal" style="float:left">No</button>
-                    <button type="button" class="btn btn-secondary btn-sm btn-success" ng-click="goBack()" data-close="modal">Yes</button>
-                </div>
-            </div>
-
-        </div>
-    </div>
-    <div id="addInventryModal1" class="modal fade" role="dialog">
-        <div class="modal-alert">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-
-                <div class="modal-body fa fa-check-circle fa-1x co-ok" style="background-color:#FFFFFF">
-                    <label style="color:#0A0503">Bill Saved</label>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <div id="billNoAlert" class="modal fade" role="dialog">
-        <div class="modal-alert">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-
-                <div class="modal-body fa fa-warning" style="background-color:#FFFFFF">
-                    <label style="color:#ff0000">Bill No All Ready Exist</label>
-                </div>
-            </div>
-
-        </div>
-    </div>
+    
 
     <div class="flexcontainer">
         <div class="lightblue bluebrdr content" style="padding:10px 0px">
@@ -73,7 +26,7 @@
                 <h4 class="tabheading font_11">Journal date</h4>
 
                 <div class='input-group date' id='Journaldt'>
-                    <input type='text' class="form-control" placeholder="dd/mm/yyyy" />
+                    <input type='text' class="form-control" ng-init="Journaldt = 'Journaldt'"  id="Journaldt"/>
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
@@ -84,7 +37,7 @@
 
             <div class="col-sm-2 pull-right">
                 <h4 class="tabheading font_11">Journal no.</h4>
-                <input type="text" class="form-control" />
+                <input type="text" class="form-control" ng-model="no" />
 
             </div>
 
@@ -96,37 +49,36 @@
                 <i class="fa fa-caret-right"></i> Item details
             </h4>
             <hr style="float:left; width:100%; margin-bottom:10px; margin-top: 10px;" />
-            <table class="table table-bordered wordbreak" fixed-header style="border-collapse: collapse; height:285px">
+            <table class="table table-bordered wordbreak table-hover" fixed-header style="border-collapse: collapse; height:285px">
                 <thead>
                     <tr style="background:rgb(243, 245, 248)">
                         <th style="vertical-align:middle; padding:5px">
-                            <ui-select ui-tree-select ng-model="remarks.selected.name" id="countryCode"
+                            <ui-select ui-tree-select ng-model="account.selected" id="countryCode"
                                        ui-select-focuser
                                        theme="selectize">
                                 <ui-select-match placeholder="Account">
-                                    <span class="selectuiTable">
-                                        <span>{{ $select.selected.name|| $select.search }}</span>
-                                        <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
+                                    <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                        {{ $select.selected.accountName || $select.search }}
                                     </span>
                                 </ui-select-match>
-                                <ui-select-choices repeat="person.name as person in RRMARKS  | filter: $select.search" refresh="refreshResults($select,'RRMARKS')" refresh-delay="2">
+                                <ui-select-choices repeat="person in allAccount  | filter: $select.search" refresh="refreshResults($select,'RRMARKS')" refresh-delay="2">
                                     <div>
-                                        <span ng-bind-html="person.name | highlight: $select.search"></span>
+                                        <span ng-bind-html="person.accountName | highlight: $select.search"></span>
                                     </div>
                                 </ui-select-choices>
                             </ui-select>
                         </th>
                         <th style="vertical-align:middle; padding:5px">
-                            <input type="text" class="form-control" placeholder="Description" />
+                            <input type="text" class="form-control"  ng-model="description" placeholder="Description" />
                         </th>
                         <th style="vertical-align:middle; padding:5px">
-                            <input type="text" class="form-control text-right" placeholder="Debits" />
+                            <input type="text" class="form-control text-right" ng-model="debit" placeholder="Debits" />
                         </th>
                         <th style="vertical-align:middle; padding:5px">
-                            <input type="text" class="form-control text-right" placeholder="Credits" />
+                            <input type="text" class="form-control text-right"  ng-model="credit"placeholder="Credits" />
                         </th>
 
-                        <th style="text-align:center"><button type="button" class="btn btn-sm btn-primary">Add</button></th>
+                        <th style="text-align:center"><button type="button" class="btn btn-sm btn-primary" ng-click="addItem()">Add</button></th>
                     </tr>
                     <tr>
                         <th style="color:#000;">Account</th>
@@ -138,27 +90,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>CLEARING & FORWARDING EXP.</td>
-                        <td>C.R. S.S. COILS3</td>
-                        <td style="text-align:right">666,266.00</td>
-                        <td style="text-align:right">&nbsp;</td>
-                        <td class="text-center Count" value="0.00"><a class="edit" title="Edit"> <i class="fa fa-times-circle cursor RemoveTR" style="font-size:16px"></i></a></td>
+                    <tr ng-repeat="data in journalData"  class="cursor" ng-click="editJournalTable(data,$index)" ng-class="{selected: $index === selectedIndex}">
+                        <td>{{data.accountName}}.</td>
+                        <td>{{data.description}}</td>
+                        <td style="text-align:right">{{data.debit}}</td>
+                        <td style="text-align:right">{{data.credit}}</td>
+                        <td class="text-center Count" value="0.00"><a class="edit" title="Edit"> <i class="fa fa-times-circle cursor RemoveTR" ng-click="removeTable($index)"style="font-size:16px"></i></a></td>
                     </tr>
-                    <tr>
-                        <td>CLEARING & FORWARDING EXP.</td>
-                        <td>C.R. S.S. COILS3</td>
-                        <td style="text-align:right">&nbsp;</td>
-                        <td style="text-align:right">666,266.00</td>
-                        <td class="text-center Count" value="0.00"><a class="edit" title="Edit"> <i class="fa fa-times-circle cursor RemoveTR" style="font-size:16px"></i></a></td>
-                    </tr>
+                    
                 </tbody>
                 <tfoot>
                     <tr style="background:#F0EEEE">
                         <th style="color:#000;">&nbsp;</th>
                         <th style="color:#000; text-align:right">Total Balance</th>
-                        <th style="text-align:right; color:#000;">666,266.00</th>
-                        <th style="text-align:right; color:#000;">666,266.00</th>
+                        <th style="text-align:right; color:#000;">{{totalDebit | number:2}}</th>
+                        <th style="text-align:right; color:#000;">{{totalCredit | number:2}}</th>
                         <th>&nbsp;</th>
                     </tr>
                 </tfoot>
@@ -190,24 +136,7 @@
         <hr style="float:left; width:100%; margin:10px 0px" />
 
         <div class="col-sm-12" style="margin-bottom:20px">
-            @*<div class="col-sm-4 padding">
-
-                    <div class="form-group">
-                        <h4 class="tabheading">Attachments</h4>
-                        <div class="attachmets">
-                            <input type="file" id="uploadBtn" multiple="multiple" name="browsefile">
-                            <div>
-                                <i class="fa fa-plus"></i>
-                                <p>Add file</p>
-                            </div>
-                        </div>
-
-
-                    </div>
-                </div>
-                <div id="upload_prev" class="upload_prev"></div>*@
-
-
+          
 
             <ul ng-repeat="data in datapath">
                 <li>
@@ -225,18 +154,12 @@
                             <small class="text-primary cursor dwn">(<i class="fa fa-download"></i> Download all files)</small>
                         </h4>
 
-                        @*<div class="attachmets">*@
-                        @*<input type="file" id="uploadBtn" multiple="multiple" name="browsefile">*@
-                        @*<div id="uploadAttchments">
-                                    <i class="fa fa-plus"></i>
-                                    <p>Add file</p>
-                                </div>
-                            </div>*@
+                    
                         <div class="col-sm-5 padding5">
                             <input type="text" class="form-control" id="NameInput" placeholder="Title" />
                         </div>
                         <div class="col-sm-5 padding5">
-                            @*<input type="file" class="form-control" id="id=" uploadBtn" />*@
+                        
                             <input type="file" class="filestyle" id="uploadBtn" data-buttonName="btn-info">
                         </div>
 
@@ -270,36 +193,7 @@
     </div>
 
 
-    @*
-        <div class="col-sm-2 statusBody" style="padding:0px;">
-            <div class="lightblue bluebrdr flexcontainer" style="padding:0px 10px">
-                <h3 class="AddBill">Add to Bill</h3>
-
-
-
-                <div>
-                    <input class="pull-right reportSearch" type="search" placeholder="search" name="lastname" ng-change="searchPO()" ng-model="search" style="height:30px;">
-                </div>
-
-                <div class="PurchaseBox" ng-repeat="data in polist | filter:search ">
-                    <h3>{{data.supliersName}}</h3>
-                    <small>{{data.date | date: "dd/MM/yyyy"}}</small>
-                    <strong>{{data.no}} </strong>
-
-                    <br /><strong>Amount Rs {{data.amount |number : fractionSize}} </strong><br />
-                    <ul class="Purchasefooter list-unstyled">
-                        <li ng-click="addtoBill($index)"><strong><i class="fa fa-long-arrow-left"></i> Add</strong></li>
-                        <li><a ui-sref="Customer.PdfView({po:data.no,enq:2})">View</a></li>
-                    </ul>
-
-                </div>
-
-
-
-
-            </div>
-        </div>
-    *@
+    
     <div class="flexfooter">
         <span class="pull-left">
 
@@ -307,21 +201,9 @@
         </span>
 
         <div class="pull-right">
-            <button type="button" class="btn btn-sm btn-primary" ng-click="saveBill()">Save</button>
+            <button type="button" class="btn btn-sm btn-primary" ng-click="savejournal()">Save</button>
             <div class="btn-group dropup">
-                @*
-                    <button type="button" class="btn btn-info btn-sm" ng-click ="saveBill()">Save and send</button>
-                    <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:25px">
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" style="right:-2px !important">
-                        <li><a href="#">Save and close</a></li>
-                        <li><a href="#">Save and send</a></li>
-                        <li><a href="#">Save and new</a></li>
-                        <li><a href="#">Save and share link</a></li>
-                    </ul>
-
-                *@
+               
             </div>
         </div>
     </div>

@@ -75,7 +75,7 @@
                 <td style="color:#1D4B8F"><b>{{data.accountName}}</b></td>
                 <td>{{data.Under}} <span style="color:forestgreen">({{data.type}})</span></td>
              
-                <td style="text-align:right" ><b>{{data.balance}}  <em style="color:red">{{data.bType}}</em></b></td>
+                <td style="text-align:right" ><b>{{data.balance | number:2  }}  <em style="color:red">{{data.bType}}</em></b></td>
 
                 <td style="text-align:right; width:150px">
                     <button type="button" class="editbtn"><a ui-sref="Customer.accountHistory({accountId:data._id,balanceType:data.balanceType})" style="font-weight:bold;color:#1D4B8F">Account History</a></button>

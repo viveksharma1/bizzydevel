@@ -358,8 +358,8 @@
 
             <div class="col-sm-3 padding pull-right">
                 <div class="pull-right" style="margin-right:10px; margin-top:25px; height:96px; width:100%; text-align:right">
-                    <span permission="usertype:O" class="balancedue"><small><i class="fa fa-rupee" style="color:#9E9E9E"></i></small> {{manualTableSum() + accountTableSum()}}</span>
-                    <span permission="usertype:UO" class="balancedue"><small><i class="fa fa-rupee" style="color:#9E9E9E"></i></small> {{excelTableItemSum() + accountTableSum()}}</span>
+                    <span permission="usertype:O" class="balancedue"><small><i class="fa fa-rupee" style="color:#9E9E9E"></i></small> {{(manualTableSum() + accountTableSum()) | number : 2}}</span>
+                    <span permission="usertype:UO" class="balancedue"><small><i class="fa fa-rupee" style="color:#9E9E9E"></i></small> {{(excelTableItemSum() + accountTableSum()) | number : 2}}</span>
                     
                 </div>
                
@@ -1241,6 +1241,7 @@
                                     <th style="text-align:right">{{SAD12}}</th>
                                     <th style="text-align:right">{{totalDutyAmt13}}</th>
                                     <th style="text-align:right;">&nbsp;</th>
+                                   
                                 </tr>
                             </tfoot>
                         </table>
@@ -1818,7 +1819,7 @@
                         <th style="text-align:right;color:forestgreen">{{manualTotal |number : 2}}&nbsp;</th>
                         <th style="text-align:right;color:forestgreen">{{manualTotalINR |number : 2}}&nbsp;</th>
 
-
+                        <th style="text-align:center;">&nbsp;</th>
                         <th style="text-align:center;">&nbsp;</th>
                     </tr>
                 </tfoot>
@@ -1910,7 +1911,7 @@
             </h4>
             <hr style="float:left; width:100%; margin:5px 0px" />*@
 
-            <div class="collapse in" id="ItemDetail1234" style="float:left; width:100%">
+            <div class="collapse in" id="ItemDetail1234" style="float:left; margin-top:26px; width:100%">
 
                 <table class="table-bordered table-condensed table-hover selectTable" fixed-header id="ItemTable" style="width:100%; margin-right:10px; height:180px">
 
@@ -1980,8 +1981,8 @@
                 </table>
                 <div class="pull-right" style="margin-right:60px; margin-top:5px">
                     <p class="text-right"></p>
-                    <h4 permission="usertype:O"> Total : <span style="width:160px; float:right; text-align:right" >{{manualTableSum() + accountTableSum()}}</span> </h4>
-                    <h4 permission="usertype:UO"> Total : <span style="width:160px; float:right; text-align:right" >{{excelTableItemSum() + accountTableSum()}}</span> </h4>
+                    <h4 permission="usertype:O"> Total : <span style="width:160px; float:right; text-align:right" >{{(manualTableSum() + accountTableSum()) | number : 2}}</span> </h4>
+                    <h4 permission="usertype:UO"> Total : <span style="width:160px; float:right; text-align:right" >{{(excelTableItemSum() + accountTableSum()) | number : 2}}</span> </h4>
 
                 </div>
             </div>
@@ -1992,36 +1993,7 @@
 
 
 
-    @*
-        <div class="col-sm-2 statusBody" style="padding:0px;">
-            <div class="lightblue bluebrdr flexcontainer" style="padding:0px 10px">
-                <h3 class="AddBill">Add to Bill</h3>
-
-
-
-                <div>
-                    <input class="pull-right reportSearch" type="search" placeholder="search" name="lastname" ng-change="searchPO()" ng-model="search" style="height:30px;">
-                </div>
-
-                <div class="PurchaseBox" ng-repeat="data in polist | filter:search ">
-                    <h3>{{data.supliersName}}</h3>
-                    <small>{{data.date | date: "dd/MM/yyyy"}}</small>
-                    <strong>{{data.no}} </strong>
-
-                    <br /><strong>Amount Rs {{data.amount |number : fractionSize}} </strong><br />
-                    <ul class="Purchasefooter list-unstyled">
-                        <li ng-click="addtoBill($index)"><strong><i class="fa fa-long-arrow-left"></i> Add</strong></li>
-                        <li><a ui-sref="Customer.PdfView({po:data.no,enq:2})">View</a></li>
-                    </ul>
-
-                </div>
-
-
-
-
-            </div>
-        </div>
-    *@
+  
     <div class="flexfooter scroll">
         <span class="pull-left">
 
@@ -2053,231 +2025,6 @@
 
 </div>
 
-<div class="ProductInformationBox">
-    <div class="ProductDiv">
-        <div class="productHeader">
-            Product/Service information
-            <i class="fa fa-times pull-right cursor" ng-click="closeproductInfo()"></i>
-        </div>
-        <div class="productList">
-            <strong class="selectype" ng-click="AddCategory()">Select a type:</strong>
-            <div class="product" ng-click="ProductFormbtn()">
-                <i class="fa fa-cubes"></i>
-                <div>
-                    <strong>Inventory</strong>
-                    <p>Products you buy and/or sell and that you track quantities of.</p>
-                </div>
-            </div>
-            <div class="product" ng-click="ProductFormbtn()">
-                <i class="fa fa-cube"></i>
-                <div>
-                    <strong>Non-Inventory</strong>
-                    <p>Products you buy and/or sell but don’t need to (or can’t) track quantities of, for example, nuts and bolts used in an installation.</p>
-                </div>
-            </div>
 
-            <div class="product" ng-click="ProductFormbtn()">
-                <i class="fa fa-gear"></i>
-                <div>
-                    <strong>Service</strong>
-                    <p>Services that you provide to customers, for example, landscaping or tax preparation services.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="ProductFormDiv" style="display:none; padding:10px">
-            <div class="productName">
-                <i class="fa fa-cubes"></i>
-                <h4 ng-click="AddCategory()">Inventory</h4>
-                <em ng-click="Backproductlist()">Change type</em>
-            </div>
-
-            <div class="col-sm-12 form-group">
-                <label>Name</label>
-                <textarea class="form-control"></textarea>
-            </div>
-
-            <div class="col-sm-12 form-group">
-                <label>SKU</label>
-                <input type="text" class="form-control" />
-            </div>
-
-            <div class="col-sm-12 form-group" style="border-bottom:1px solid #ccc; padding-bottom:20px">
-                <label>Category</label>
-                <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
-                           ui-select-focuser
-                           theme="selectize">
-                    <ui-select-match placeholder="Select Suppliers">{{ $select.selected.company }}</ui-select-match>
-
-                    <ui-select-choices repeat="person in supliers  | filter: $select.search">
-                        <div>
-                            <span ng-model="supplier1" ng-bind-html="person.company | highlight: $select.search"></span>
-                        </div>
-
-
-                    </ui-select-choices>
-                </ui-select>
-
-                <div id="AddCategoryBox" class="popupbox" style="width:94%">
-                    <div class="dijitDialogTitle" style="font-size:18px;">
-                        New category
-                        <i class="fa fa-times-circle cursor pull-right" title="close" ng-click="popuclose()"></i>
-                    </div>
-                    <div class="form-content">
-                        <div class="form-group">
-                            <label><span class="red">*</span>Name</label>
-                            <input type="text" class="form-control">
-                        </div>
-
-                        <div class="form-footer">
-                            <button type="button" class="btn btn-sm btn-primary">Save</button>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-
-            <div class="col-sm-12 form-group">
-                <div class="col-sm-6">
-                    <label>Initial quantity on hand*</label>
-                </div>
-                <div class="col-sm-6">
-                    <input type="text" class="form-control" />
-                </div>
-
-            </div>
-
-
-
-            <div class="col-sm-12 form-group">
-                <div class="col-sm-6">
-                    <label style="float:left; width:100%; margin-bottom:0px">As of date*</label>
-                    <a>What’s the as of date?</a>
-                </div>
-                <div class="col-sm-6">
-                    <input type="text" class="form-control" id="asofdate" placeholder="dd/mm/yyyy" />
-                </div>
-
-            </div>
-
-
-            <div class="col-sm-12 form-group" style="border-bottom:1px solid #ccc; padding-bottom:10px">
-                <div class="col-sm-6">
-                    <label style="float:left; width:100%; margin-bottom:0px">Low stock alert</label>
-                    <a>What's the low stock alert?</a>
-                </div>
-                <div class="col-sm-6">
-                    <input type="text" class="form-control" />
-                </div>
-
-            </div>
-
-
-            <div class="col-sm-12 form-group" style="border-bottom:1px solid #ccc; padding-bottom:20px">
-                <label style="float:left; width:100%">Inventory asset account</label>
-                <div class="btn-group" style="width:100%">
-                    <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" style="width:100%; color:#000 !important; text-align:left;">
-                        Inventory Asset
-                        <i class="fa fa-sort pull-right" style="margin-top:3px"></i>
-                    </button>
-
-                    <ul class="dropdown-menu my parentaccount" style="width:100%;">
-                        <li>
-                            <a href="#">Inventory Asset</a>
-                        </li>
-
-                    </ul>
-
-                </div>
-
-
-            </div>
-
-
-            <div style="border-bottom:1px solid #ccc; padding-bottom:15px; float:left; width:100%">
-
-                <div class="col-sm-12 form-group">
-                    <label style="float:left; width:100%">Sales information</label>
-                    <textarea class="form-control" placeholder="Description on purchase form"></textarea>
-
-                </div>
-
-
-                <div class="col-sm-6 form-group">
-                    <label style="float:left; width:100%">Sales price/rate</label>
-                    <input type="text" class="form-control" style="text-align:right" />
-
-                </div>
-
-
-                <div class="col-sm-6 form-group">
-                    <label style="float:left; width:100%">Income account</label>
-                    <div class="btn-group" style="width:100%">
-                        <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" style="width:100%; color:#000 !important; text-align:left;">
-                            Sales of Product Income
-                            <i class="fa fa-sort pull-right" style="margin-top:3px"></i>
-                        </button>
-
-                        <ul class="dropdown-menu my Incomeaccount" style="width:100%;">
-                            <li>
-                                <a href="#">Sales of Product Income</a>
-                            </li>
-
-                        </ul>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div style="border-bottom:1px solid #D6EDEE; padding:15px 0px; float:left; width:100%">
-
-                <div class="col-sm-12 form-group">
-                    <label style="float:left; width:100%">Purchasing information</label>
-                    <textarea class="form-control" placeholder="Description on purchase form"></textarea>
-
-                </div>
-
-
-                <div class="col-sm-6 form-group">
-                    <label style="float:left; width:100%">Cost</label>
-                    <input type="text" class="form-control" style="text-align:right" />
-
-                </div>
-
-
-                <div class="col-sm-6 form-group">
-                    <label style="float:left; width:100%">Expense account</label>
-                    <div class="btn-group" style="width:100%">
-                        <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" style="width:100%; color:#000 !important; text-align:left;">
-                            Inventory Shrinkage
-                            <i class="fa fa-sort pull-right" style="margin-top:3px"></i>
-                        </button>
-
-                        <ul class="dropdown-menu my Expenseaccount" style="width:100%;">
-                            <li>
-                                <a href="#">Inventory Shrinkage</a>
-                            </li>
-                            <li>
-                                <a href="#">Cost of sales</a>
-                            </li>
-                        </ul>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="productfooter" style="display:none">
-            <button type="button" class="btn btn-primary btn-sm pull-right" ng-click="closeproductInfo()">Save and close</button>
-        </div>
-    </div>
-</div>
 
 
