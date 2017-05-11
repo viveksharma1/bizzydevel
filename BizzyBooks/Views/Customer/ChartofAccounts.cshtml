@@ -12,11 +12,11 @@
     <div class="panel-heading" style="height:84px">
         <strong class="heading" style="margin-top: 15px; float: left;">Chart of Accounts</strong>
         <div class="pull-right" style="margin-top:17px;">
-            <div style="width: 350px; float: left; margin-right: 10px;">
-                <ui-select multiple ng-model="company.selected" ui-select-focuser theme="bootstrap" close-on-select="true" title="Choose a color" on-select="getCompcode($item.CompanyId)">
-                    <ui-select-match>{{$item.CompanyName}}</ui-select-match>
-                    <ui-select-choices repeat="company in companyList | filter:$select.search">
-                        {{company.CompanyName}}
+            <div permission="usertype:UO" style="width: 350px; float: left; margin-right: 10px;">
+                <ui-select multiple ng-model="company.selected"  theme="bootstrap"  title="Choose a color" on-remove="removeCompCode($item.CompanyId)" on-select="getCompcode($item.CompanyId)">
+                    <ui-select-match >{{$item.CompanyName}}</ui-select-match>
+                    <ui-select-choices repeat="data in companyList | filter:$select.search">
+                        {{data.CompanyName}}
                     </ui-select-choices>
                 </ui-select>
             </div>
@@ -32,7 +32,7 @@
         </div>
     </div>
 <div class="col-sm-12" style="padding:10px">
-    <input type="text" class="form-control" placeholder="Filter by name" ng-model="search"  style="width:250px; float:left"/>
+    <input type="text" class="form-control pull-right fa fa-search" placeholder="Search" ng-model="search"  style="width:250px;border-color:#1D4B8F;border-width:2px; float:left"/>
     @*<div class="pull-right" style="margin-top:5px">
         <i class="fa fa-plus fa-2x cursor"ng-click="Accountbtn()"id="NewCustomerCreate" title="Create Account"></i>
        
@@ -58,25 +58,27 @@
         </div>
     </div>
     <create-account value="myValue"> </create-account>
-    <table class="table-bordered table-condensed account-hover " style="margin-top:10px; width:100%; float:left;table-layout:fixed">
+    <table class="table table-condensed account-hover " fixed-header style="margin-top:10px; width:100%; height:490px; float:left;table-layout:fixed">
         <thead>
-            <tr>
-                <th>NAME</th>
-                <th>GROUP</th>
+            <tr class="bar">
+                <th style="width:30px;color:#1D4B8F">&nbsp;</th>
+                <th style="color:#1D4B8F">NAME</th>
+                <th style="color:#1D4B8F">GROUP</th>
                 
-                <th style="text-align:right">BALANCE</th>              
-                <th style="text-align:right">ACTION</th>
+                <th style="text-align:right;color:#1D4B8F">BALANCE</th>              
+                <th style="text-align:right;color:#1D4B8F">ACTION</th>
             </tr>
         </thead>
         <tbody>
             <tr ng-repeat="data in account |filter:search">
-                <td>{{data.accountName}}</td>
+                <td style="color:#1474AE"><b>{{$index + 1}}.</b></td>
+                <td style="color:#1D4B8F"><b>{{data.accountName}}</b></td>
                 <td>{{data.Under}} <span style="color:forestgreen">({{data.type}})</span></td>
              
-                <td style="text-align:right" ><b>{{data.balance}}</b></td>
-               
+                <td style="text-align:right" ><b>{{data.balance | number:2  }}  <em style="color:red">{{data.bType}}</em></b></td>
+
                 <td style="text-align:right; width:150px">
-                    <button type="button" class="editbtn"><a ui-sref="Customer.accountHistory({accountId:data._id,balanceType:data.balanceType})" style="font-weight:bold;color:#228D95">Account History</a></button>
+                    <button type="button" class="editbtn"><a ui-sref="Customer.accountHistory({accountId:data._id,balanceType:data.balanceType})" style="font-weight:bold;color:#1D4B8F">Account History</a></button>
                     <class class="linkseparator" style="margin-top:4px; margin-right:0px"></class>
                     <div class="btn-group editcaret">
                         <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>
@@ -84,8 +86,8 @@
 
                             <li class="cursor"><a ng-click="Accountbtn(data._id)">Edit</a></li>
                             <li class="cursor"><a ng-click="deleteAccountPopup(data._id)">Delete</a></li>
-                            
-                           
+
+
                         </ul>
 
                     </div>
@@ -93,8 +95,8 @@
             </tr>
         </tbody>
     </table>
-   
-   
+
+
 
 </div>
 
@@ -114,20 +116,20 @@
                     <input type="text" ng-model="groupName" class="form-control" />
                 </div>
                 <div class="col-sm-12 form-group padding5" style="margin:20px 0px;">
-                    
-                    
+
+
                         <select style="width:200px;height:300px"
                                 class="js-example-basic-single">
                             <option value="AL">Alabama</option>
 
                             <option value="WY">Wyoming</option>
                         </select>
-                  
+
                 </div>
             </div>
-           
 
-           
+
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>

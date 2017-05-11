@@ -36,11 +36,15 @@
         <div class="lightblue bluebrdr content" style="padding:10px 0px">
             <div class="col-sm-4 padding" style="padding-left:10px !important">
 
-                <h4 class="tabheading font_11">Supplier</h4>
+                <h4 class="tabheading font_11">Supplier<span class="pull-right"style="color:forestgreen"><i class="fa fa-rupee"></i> {{supplierBalance}}</span></h4>
                 <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
                            ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';" on-select="bindSupplierDetail($select.selected)"
                            theme="selectize">
-                    <ui-select-match placeholder="Select Suppliers">{{ $select.selected.accountName}}</ui-select-match>
+                    <ui-select-match placeholder="Select Suppliers">
+                        <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                            {{ $select.selected.accountName || $select.search }}
+                        </span>
+                    </ui-select-match>
 
                     <ui-select-choices repeat="person in supliers  | filter: $select.search">
                         <div>
@@ -73,7 +77,7 @@
 
                     <h4 class="tabheading font_11">Expense Date</h4>
                     <div class='input-group date'id="expenseDate">
-                        <input type='text' class="form-control" ng-model="expenseDate" id="expenseDate" />
+                        <input type='text' class="form-control" ng-init="expenseDate = 'expenseDate'" id="expenseDate" />
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
@@ -81,7 +85,7 @@
 
                     <h4 class="tabheading font_11" style="margin-top:17px !important;">Due Date</h4>
                     <div class='input-group date'id='expenseDueDate'>
-                        <input type='text' class="form-control" ng-model="expenseDueDate" id='expenseDueDate' />
+                        <input type='text' class="form-control" ng-init="expenseDueDate = 'expenseDueDate'" id='expenseDueDate' />
                         <span class="input-group-addon active">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
@@ -234,10 +238,8 @@
                                                theme="selectize">
 
                                         <ui-select-match placeholder="ACCOUNT">
-                                            <span class="selectuiTable" style="width:97%">
-                                                <span>{{ $select.selected.accountName || $select.search }} </span>
-                                                <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
-
+                                            <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                                {{ $select.selected.accountName || $select.search }}
                                             </span>
                                         </ui-select-match>
 
@@ -314,9 +316,8 @@
                                                    theme="selectize">
 
                                             <ui-select-match placeholder="ACCOUNT" >
-                                                <span class="selectuiTable" style="width:97%">
-                                                    <span>{{ $select.selected.accountName || $select.search }}</span>
-                                                    <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
+                                                <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                                    {{ $select.selected.accountName || $select.search }}
                                                 </span>
 
                                             </ui-select-match>
@@ -389,9 +390,9 @@
                                        theme="selectize" style="width:220px">
 
                                 <ui-select-match placeholder="ACCOUNT">
-                                    <div>
-                                        <span>{{ $select.selected.accountName || $select.search }}</span>
-                                    </div>
+                                    <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                        {{ $select.selected.accountName || $select.search }}
+                                    </span>
 
                                 </ui-select-match>
 

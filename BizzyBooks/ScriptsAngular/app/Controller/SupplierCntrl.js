@@ -21,13 +21,7 @@ myApp.controller('SupplierCntrl', ['$scope', '$http', '$timeout', '$stateParams'
 
         $scope.enq = data;
         $('#moreEmployeeModal').modal('show');
-        $http.get(config.api + "transactions" + "?filter[where][ordertype]=ENQUIRY" + "&filter[where][no]=" + $scope.enq).then(function (response) {
-            $scope.supplierList = response.data[0].sentSupplier;
-
-            console.log($scope.supplierList)
-
-
-        });
+       
     }
 
     if (localStorage.VAT_TIN_NO == "undefined") {
@@ -64,75 +58,41 @@ myApp.controller('SupplierCntrl', ['$scope', '$http', '$timeout', '$stateParams'
     $scope.admin = localStorage['adminrole'];
     $scope.Role = localStorage['adminrole'];
 
-    $scope.paginationTable = function (url2, globalUrl) {
-        $scope.url2 = url2;
-        $scope.globalUrl = globalUrl;
-
-        $http.get(config.login + 'getTransactionData/'+ localStorage.CompanyId + '?role=' + localStorage["usertype"]).then(function (response) {
-            $scope.InventoryList = response.data;
-            console.log(response);
-            for (var i = 0; i < $scope.InventoryList.length; i++) {
-                $scope.InventoryList[i].supplier = localStorage[$scope.InventoryList[i].supplier];
-
-            }
-           
-            console.log($scope.InventoryList)
-            $(".loader").hide()
-
-
+    //get purchase invoice  data
+    $scope.getPurchaseInvoice = function () {
+        $http.get(config.login + 'getTransactionData/'+ localStorage.CompanyId + '?role=' + localStorage["usertype"] + "&type=Purchase Invoice").then(function (response) {
+            $scope.purchaseInvoiceTable = response.data;
+            for (var i = 0; i < $scope.purchaseInvoiceTable.length; i++) {
+                $scope.purchaseInvoiceTable[i].supplier = localStorage[$scope.purchaseInvoiceTable[i].supplier];
+            }         
         });
-       
-
-
-
-        //-----------------------Pagination start for Employee List
-
-
-
-
+    }  
+    //get expense data
+    $scope.getExpense = function () {
+        $http.get(config.login + 'getTransactionData/' + localStorage.CompanyId + '?role=' + localStorage["usertype"] + "&type=EXPENSE").then(function (response) {
+            $scope.expenseTable = response.data;
+            $scope.expenseCount = $scope.expenseTable.length
+                for (var i = 0; i < $scope.expenseTable.length; i++) {
+                    $scope.expenseTable[i].supplier = localStorage[$scope.expenseTable[i].supplier];
+                }
+            });  
     }
-
-    //suppliers peginations
-
-    $scope.pagination1 = function (url2, globalUrl) {
-        $scope.url2 = url2;
-        $scope.globalUrl = globalUrl;
-        $http.get(config.api + $scope.url2 + "?filter[where][compCode]=" + localStorage.CompanyId + "&filter[limit]=10&filter[skip]=0").then(function (response) {
-            $scope.InventoryList = response.data;
-            $(".loader").hide()
-        });
-        var compFilter = "&where[compCode]=" + localStorage.CompanyId
-        var url = config.api + $scope.globalUrl + compFilter;
-       
-        $http.get(url).then(function (response) {
-            $scope.TotalCount = response.data.count;
+    //get supplier data
+    $scope.getSupplier = function () {
+        $http.get(config.login + "getSupplierAccount/" + localStorage.CompanyId).then(function (response) {
+            $scope.supplierList = response.data
         });
     }
-
-    //pagination for suppliers
-
-
-
-
-    //order table
-
-
-    $scope.order = function (data) {
-
-        $scope.orderData = data;
-
-
-
-    }
-
+    $scope.getPurchaseInvoice();
+    $scope.getSupplier();
+    $scope.getExpense();
+    
     $scope.SuppliersTablebtn = function () {
-
         $(".loader").show()
         $scope.url3 = "getSupplierAccount"
         $scope.globalUrl4 = "suppliers/count"
         $scope.InventoryList = [];
         $scope.getSupplier();
-
         $('#example').show();
         $('#PurchaseOrderTable').hide();
         $('#EnquiryTable').hide();
@@ -142,18 +102,8 @@ myApp.controller('SupplierCntrl', ['$scope', '$http', '$timeout', '$stateParams'
 
 
 
-    $scope.OpenBillTable = function (status) {
-        $(".loader").show()
-        $scope.InventoryList = [];
-        $scope.newStatus = "&filter[where][status]=" + status;
-        $scope.newStatus1 = "&[where][status]=" + status;
-
-        $scope.url2 = "transactions?filter[where][ordertype]=BILL" + $scope.newStatus
-        $scope.globalUrl = "transactions/count?where[ordertype]=BILL" + $scope.newStatus1;
-        $scope.paginationTable()
-
-
-
+    $scope.OpenBillTable = function () {
+        $scope.getPurchaseInvoice()
         $('#OpenBill').show();
         $('#PurchaseOrderTable').hide();
         $('#EnquiryTable').hide();
@@ -171,19 +121,10 @@ myApp.controller('SupplierCntrl', ['$scope', '$http', '$timeout', '$stateParams'
     },
      
     $scope.EnquiryTablebtn = function (status) {
-
         $scope.InventoryList = [];
         $(".loader").show()
         $scope.newStatus = "&filter[where][status]=" + status;
         $scope.newStatus1 = "&[where][status]=" + status;
-
-        $scope.url2 = "transactions?filter[where][ordertype]=ENQUIRY"  +$scope.newStatus
-        $scope.globalUrl = "transactions/count?where[ordertype]=ENQUIRY" + $scope.newStatus1;
-
-        $scope.paginationTable($scope.url2, $scope.globalUrl)
-       
-        
-
         $('#PaidBillTable').hide();
         $('#OpenBill').hide();
         $('#PurchaseOrderTable').hide();
@@ -195,23 +136,8 @@ myApp.controller('SupplierCntrl', ['$scope', '$http', '$timeout', '$stateParams'
 
 
   
-    $scope.PurchaseOrderTable = function (status) {
-        
-        $scope.newStatus = "&filter[where][status]=" + status;
-        $scope.newStatus1 = "&[where][status]=" + status;
-        $scope.InventoryList = [];
-        $(".loader").show()
-        $scope.url2 = "transactions?filter[where][ordertype]=PO" + $scope.newStatus
-        $scope.globalUrl = "transactions/count?where[ordertype]=PO" + $scope.newStatus1;
-
-        $scope.paginationTable($scope.url2, $scope.globalUrl);
-
-
-
-
-
-
-
+    $scope.ExpenseTable = function (status) {
+        $scope.getExpense()
         $('#example').hide();
         $('#PurchaseOrderTable').show();
         $('#EnquiryTable').hide();
@@ -244,351 +170,16 @@ myApp.controller('SupplierCntrl', ['$scope', '$http', '$timeout', '$stateParams'
     }
 
 
-    //get suppliers count
-
-    $scope.getSupplier = function () {
-        $http.get(config.login + "getSupplierAccount/" + localStorage.CompanyId).then(function (response) {
-            $scope.InventoryList = response.data
-
-        });
-    }
-  
-    $http.get(config.login + "getSupplierCount/" + localStorage.CompanyId).then(function (response) {
-        $scope.suppliersCount = response.data.count;
-        console.log(response.data);
-    });
-
-    //get bill count
-    $http.get(config.api + "transactions" + "/count" +  "?filter[where][compCode]=" + localStorage.CompanyId).then(function (response) {
-        $scope.billCount = response.data;
-    });
-
-    // Get enquiry count
-
-    $http.get(config.api + "transactions" + "/count" + "?where[ordertype]=" + "ENQUIRY" + "&[where][status]=" + "OPEN" + "&where[compCode]=" + localStorage.CompanyId).then(function (response) {
-
-        $scope.enquiryCount = response.data;
-    });
-
-    //get purchase order count 
-
-    $http.get(config.api + "transactions" + "/count" + "?where[ordertype]=" + "PO" + "&[where][status]=" + "OPEN" + "&where[compCode]=" + localStorage.CompanyId).then(function (response) {
-
-        $scope.purchaseCount = response.data;
-    });
-
-    //get supplier
-
-    $http.get(config.api + "suppliers").then(function (response) {
-
-        // $scope.suppliers = [];
-        $scope.suppliers = response.data;
-
-    });
-
-    //get PO
-    $http.get(config.api + "transactions" + "?filter[where][ordertype]=PO" + "&where[compCode]=" + localStorage.CompanyId).then(function (response) {
-
-        // $scope.purchaseOrder = [];
-        $scope.purchaseOrder = response.data;
-
-
-    });
-
-    //get bill
-
-    $http.get(config.api + "transactions" + "?filter[where][ordertype]=" + "BILL" + "&where[compCode]=" + localStorage.CompanyId).then(function (response) {
-        // $scope.enquiries = [];
-
-        $scope.bill = response.data;
-
-
-    });
-
-    //get enquiry
-
-    $http.get(config.api + "transactions" + "?filter[where][ordertype]=" + "ENQUIRY" + "&filter[where][status]=" + "OPEN" + "&where[compCode]=" + localStorage.CompanyId).then(function (response) {
-
-        // $scope.enquiries = response.data;
-
-    });
-
-    $scope.viewPo = function (data) {
-        $location.path('#/Customer/PdfView' + data);
-    }
-
-
-
-
-    //PDF VIEW
-
-
+    //get suppliers coun
+   
     $scope.GRNDetail = function (data) {
         $('#GRNDetailDiv').slideDown();
         $scope.EnqNo = data;
-        $http.get(config.api + "transactions" + "?filter[where][no]=" + $scope.EnqNo).then(function (response) {
-            $scope.itemDetail = response.data[0].itemDetail;
-            $scope.suppliersName = response.data[0].supliersName;
-            $scope.date = response.data[0].date;
-            $scope.no = response.data[0].no;
-        });
-    }
-
-
-    $scope.poView = function (data) {
-        $('#poView').slideDown();
-        $scope.poNo = data
-        var data = {
-            no: $scope.poNo
-        };
-
-        $http.post(config.api + "transactions" + "/getPo", data, { headers: { 'tokan': localStorage['token'] } }).then(function (response) {
-
-            $scope.data = response.data.code
-            $scope.suppliersName = $scope.data.supliersName;
-            $scope.email = $scope.data.email;
-            $scope.date = $scope.data.date;
-            $scope.billDueDate = $scope.data.billDueDate;
-            $scope.no = $scope.data.no;
-            $scope.amount = $scope.data.amount;
-
-            $scope.adminAmount = $scope.data.adminAmount;
-            $scope.itemDetail = [];
-            $scope.itemDetail = $scope.data.itemDetail;
-            $scope.exchangeRate = $scope.data.exchangeRate;
-
-            var total = 0
-            $scope.fobtotal = 0;
-            $scope.ciftotal = 0;
-            for (var i = 0; i < $scope.itemDetail.length; i++) {
-                var product = Number($scope.itemDetail[i]);
-                total += Number($scope.itemDetail[i].netweight);
-                $scope.fobtotal += Number($scope.itemDetail[i].fob);
-                $scope.ciftotal += Number($scope.itemDetail[i].cif);
-            }
-            $scope.totalweight = total;
-        })
-
-        $http.get(config.api + "suppliers" + "?filter[where][company]=" + $scope.suppliersName).then(function (response) {
-
-
-            $scope.suppliersAdd = response.data;
-            $scope.suppliersdata1 = $scope.suppliersAdd[0].billingAddress[0].street
-            $scope.taxRegNo = $scope.suppliersAdd[0].taxInfo[0].taxRegNo
-        });
-    }
-
-
-
-    //bill view
-
-
-    $scope.billView = function (data) {
-        $('#billView').slideDown();
-        $scope.poNo = data
-        var data = {
-            no: $scope.poNo
-        };
-
-        $http.post(config.api + "transactions" + "/getPo", data, { headers: { 'tokan': localStorage['token'] } }).then(function (response) {
-
-            $scope.data = response.data.code
-            $scope.suppliersName = $scope.data.supliersName;
-            $scope.email = $scope.data.email;
-            $scope.date = $scope.data.date;
-            $scope.billDueDate = $scope.data.billDueDate;
-            $scope.no = $scope.data.no;
-            $scope.amount = $scope.data.amount;
-
-            $scope.adminAmount = $scope.data.amount;
-            $scope.itemDetail = [];
-            $scope.itemDetail = $scope.data.itemDetail;
-            $scope.exchangeRate = $scope.data.exchangeRate;
-
-            var total = 0
-            $scope.fobtotal = 0;
-            $scope.ciftotal = 0;
-            for (var i = 0; i < $scope.itemDetail.length; i++) {
-                var product = Number($scope.itemDetail[i]);
-                total += Number($scope.itemDetail[i].netweight);
-                $scope.fobtotal += Number($scope.itemDetail[i].fob);
-                $scope.ciftotal += Number($scope.itemDetail[i].cif);
-            }
-            $scope.totalweight = total;
-        })
-
-        $http.get(config.api + "suppliers" + "?filter[where][company]=" + $scope.suppliersName).then(function (response) {
-
-
-            $scope.suppliersAdd = response.data;
-            $scope.suppliersdata1 = $scope.suppliersAdd[0].billingAddress[0].street
-            $scope.taxRegNo = $scope.suppliersAdd[0].taxInfo[0].taxRegNo
-        });
-    }
-
-    // HTML to PDF file by Harpal Singh
-    $scope.generatePDF = function () {
-        kendo.drawing.drawDOM($("#upperdivId")).then(function (group) {
-            kendo.drawing.pdf.saveAs(group, "Converted PDF.pdf");
-        });
-    }
-
-    //get total PO Amount
-
-    $http.post(config.api + "transactions" + "/totalpoAmount", { headers: { 'tokan': localStorage['token'] } }).then(function (response) {
-        $scope.totalpoAmount = response.data;
-    });
-
-
-
-
-
-
-    //get suppliers data 
-
-    $http.get(config.api + "suppliers").then(function (response) {
-        $(".sk-wave").hide()
-        // $scope.suppliers = [];
-        $scope.suppliers = response.data;
-
-    });
-    $scope.createAccount = function () {
-        var accountData = {
-            compCode: localStorage.CompanyId,
-            accountName: $scope.company.toUpperCase(),
-            Under: $scope.groupMasters.selected.name,
-            type: $scope.groupMasters.selected.type,
-            balance: $scope.balance,
-            credit: 0,
-            debit: 0,        
-            openingBalance: $scope.openingBalance,
-            balanceType: $scope.groupMasters.selected.balanceType
-        }
-
-        $http.post(config.login + "createAccount", accountData).then(function (response) {
-        });
-    }
-
-
-    //create New Suppliers
-
-    $scope.createNewSupplier = function () {
-        
-        var data = {
-            compCode:localStorage.CompanyId,
-            email: $scope.email,
-            company: $scope.company.toUpperCase(),
-            phone: $scope.phone,
-            mobile: $scope.mobile,
-           
-            openingBalance: $scope.openingBalance,
-           
-          
-            billingAddress: [
-              {
-                  street: $scope.street,
-                  city: $scope.city,
-                  state: $scope.state,
-                  postalCode: $scope.postalCode,
-                  country: $scope.country
-              }
-            ],
-            shippingAddress: [
-              {
-
-                  street: $scope.street1,
-                  city: $scope.city1,
-                  state: $scope.state1,
-                  postalCode: $scope.postalCode1,
-                  country: $scope.country1
-              }
-            ],
-            taxInfo: [
-              {
-                  taxRegNo: $scope.taxRegNo,
-                  cstRegNo: $scope.cstRegNo,
-                  panNo: $scope.panNo,
-                  range: $scope.Range,
-                  division: $scope.division,
-                  address: $scope.address,
-                  commisionerate: $scope.commisionerate,
-                  ceRegionNo: $scope.ceRegionNo,
-                  eccCodeNo: $scope.eccCodeNo,
-                  iecNo: $scope.iecNo,
-
-
-              }
-            ],
-            
-            notes: $scope.notes,
-            compCode: localStorage.CompanyId,
-            account: {
-                group: $scope.groupMasters.selected.name,
-
-            }
-            
-            
-
-
-        }
        
-       
-        if (!data.company == '') {        
-            $http.post(config.login + "createSupplier", data).then(function (response) {
-                if (response.status == "200") {
-                    showSuccessToast("Supplier Save Succesfully");
-                    $scope.createAccount();
-                    $scope.email = null,
-           $scope.company = null,
-           $scope.phone = null,
-           $scope.mobile = null,
-           $scope.fax = null,
-
-
-                 $scope.street = null,
-                 $scope.city = null,
-                 $scope.state = null,
-                 $scope.postalCode = null,
-
-
-                 $scope.street1 = null,
-                 $scope.city1 = null,
-                 $scope.state1 = null,
-                 $scope.postalCode1 = null,
-
-
-                 $scope.taxRegNo = null,
-                 $scope.cstReg = null,
-                 $scope.panNo = null,
+    }
 
 
 
-                 $scope.paymentMethod = null,
-                 $scope.terme = null,
-                 $scope.deliveryMethod = null,
-                 $scope.openingBalance = null,
-                 $scope.asOf = null,
-                 $scope.notes = null
-
-                }
-            });
-           
-        } else {
-
-            showWarningToast("Please Fill Required Field");
-        }
-
-
-
-    };
-
-    // Pagination
-
-    // var url = config.api + globalUrl + "&filter[limit]=10&filter[skip]=0";
-
-
-
-    //pagination starts here
 
     $scope.itemsPerPage = 10;
     $scope.currentPage = 0;
@@ -754,22 +345,7 @@ myApp.controller('SupplierCntrl', ['$scope', '$http', '$timeout', '$stateParams'
         $scope.billDate1 = data.date
         $('#addInventryModal').modal('show');
     }
-
-
-    $scope.addEnventory = function () {
-        var data = {
-            Inventory: $scope.billtable1,
-            inventoryNo: $scope.billNo1,
-            supliersName: $scope.supplier1,
-            date: $scope.billDate1
-        }
-        $http.post(config.api + "Inventories", data).then(function (response) {
-        })
-    }
-    //geting sent supplier count
-
-
-
+   
     if (localStorage["type1"] == "PO") {
        
         $scope.InventoryList = [];
@@ -834,18 +410,36 @@ myApp.controller('SupplierCntrl', ['$scope', '$http', '$timeout', '$stateParams'
     //delete voucher
         $scope.deleteVoucherModal = function (id) {
             $scope.voId = id
-            $('#deleteModal').modal('show');
+            swal({
+                title: "Are you sure?",
+                text: "You will not be able to recover this Invoice !",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete",
+                cancelButtonText: "Cancel",
+                closeOnConfirm: false,
+                closeOnCancel: true
+            },
+               function (isConfirm) {
+                   if (isConfirm) {
+                       $scope.deleteVoucher();
+                      
+              } 
+});
         }
         $scope.deleteVoucher = function () {
+            $rootScope.$broadcast('event:progress', { message: "Please wait while processing.." });
             $http.get(config.login + "deleteVoucher/" + $scope.voId).then(function (response) {
                 console.log(response);
                 if (response.data == "Voucher Deleted") {
-                    showSuccessToast("Invoice Deleted Succesfully");
+                    $rootScope.$broadcast('event:success', { message: "Invoice Deleted Succesfully" });
                     $state.reload();
                 }
                 else {
-                    showErrorToast(response.data);
+                    $rootScope.$broadcast('event:error', { message: response.data });
                 }
+                return response.data
             });
         }
     $scope.uploadFile = function () {

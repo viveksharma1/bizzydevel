@@ -247,6 +247,8 @@ myApp.controller('HomeCntrl', ['$state', '$http', '$rootScope', '$scope', 'confi
         $scope.toDate = d;
         localStorage.fromDate = $scope.fromDate;
         localStorage.toDate = $scope.toDate;
+
+        console.log("data in home", $scope.fromDate, $scope.toDate)
         //var _sDate =new  getDate($scope._fDate);
         //var _eDate = getDate($scope._tDate);
         $rootScope.$broadcast('date-changed', { fromDate: $scope.fromDate, toDate: $scope.toDate });
@@ -254,10 +256,12 @@ myApp.controller('HomeCntrl', ['$state', '$http', '$rootScope', '$scope', 'confi
 
    }
 
+
     //localStorage.fromDate = moment().subtract(30, 'days').format('MM/DD/YYYY'); 
     //localStorage.toDate = moment().format('MM/DD/YYYY'); moment()
     setDate($scope._fDate, localStorage.fromDate);
     setDate($scope._tDate, localStorage.toDate);
+
     $scope.fromDate = new Date(localStorage.fromDate);
     $scope.toDate = new Date(localStorage.toDate);
     

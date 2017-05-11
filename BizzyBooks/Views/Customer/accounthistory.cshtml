@@ -3,7 +3,7 @@
     ViewBag.Title = "accountHistory";
     Layout = null;
 }
-<div class="panel lightblue bluebrdr ">
+<div class="panel lightblue bluebrdr content">
 
 
 
@@ -17,6 +17,17 @@
 
         </div>
         <button type="button" class="btn btn-xs  btn-success" id="HideLedger">Hide</button>
+
+        <div class="pull-right" >
+            <div permission="usertype:UO" style="width: 350px; float: left; margin-right: 10px;">
+                <ui-select multiple ng-model="company.selected" theme="bootstrap" title="Choose a color" on-remove="removeCompCode($item.CompanyId)" on-select="getCompcode($item.CompanyId)">
+                    <ui-select-match>{{$item.CompanyName}}</ui-select-match>
+                    <ui-select-choices repeat="data in companyList | filter:$select.search">
+                        {{data.CompanyName}}
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </div>
         @*<div class="totalIncomeSection  card accordion">
                 <span style="font-size: 120%; color: #1E294B; "> <b>{{credit-debit |number : fractionSize}}</b></span>
                 <div class="subheading">Ending Balance</div>
@@ -37,7 +48,7 @@
     <table style="border:1px solid #e3e3e3; background-color:#FDFEFE; width:100%; height:auto;" class="table-bordered table-condensed " cellpadding="0" cellspacing="0">
         <tr>
             <td style="padding:10px; text-align:center">
-                <h1 style="border-bottom:3px solid #807C7B; font-size:20px;padding-left:100px; width:100%;font-weight:bold; padding-bottom:10px; text-transform:uppercase; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">{{accountName}}</h1>
+                <h1 style="border-bottom:3px solid #807C7B; font-size:20px;padding-left:95px; width:95%;font-weight:bold; padding-bottom:10px; text-transform:uppercase; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">{{accountName}}</h1>
                 <strong>Account History</strong>
                 <p style="font-size:12px; line-height:20px">
                     As Of <span ng-bind="currentDate | date :'dd/MM/yyyy'"></span>
@@ -77,11 +88,11 @@
 
                             </td>
                             <td style="text-align:right;font:bold; padding:5px;font-family: 'Gill Sans MT', 'Trebuchet MS', sans-serif">
-                                <strong>{{data.debit}}</strong>
+                                <strong>{{data.debit |number : fractionSize}}</strong>
 
                             </td>
                             <td style="text-align:right;font:bold; padding:5px">
-                                <strong> {{data.credit}}</strong>
+                                <strong> {{data.credit |number : fractionSize}}</strong>
 
                             </td>
 
@@ -99,8 +110,8 @@
 
                         </tr>
                         <tr>
-                            <th style="padding:5px; text-align:right; font-weight:normal" colspan="4">Current Total</th>
-                            <th style="text-align:right;  padding:5px">{{debit}}</th>
+                            <th class="tablepadding2"style="padding:5px;  text-align:right; font-weight:normal" colspan="4">Current Total</th>
+                            <th style="text-align:right;  padding:5px">{{debit |number : fractionSize}}</th>
                             <th style="text-align:right;  padding:5px">{{credit}}</th>
 
                         </tr>

@@ -230,6 +230,7 @@ var myApp = angular
             requiresAuthentication: true,
             permissions: 'Float.add.Customers.Sales Invoice.active',
             params: {
+                type: "Sales Invoice",
                 voId: null,
             }
 
@@ -328,14 +329,12 @@ var myApp = angular
         });
 
         $stateProvider.state("Customer.accountHistory", {
-            url: "/accountHistory/:accountId/:fromDate/:toDate/:closingBalance",
+            url: "/accountHistory/:accountId/:balanceType",
             templateUrl: "Customer/accountHistory",
             controller: "accountHistoryCntrl",
             params: {
                 accountId: null,
-                fromDate: null,
-                toDate: null,
-                closingBalance:null
+                balanceType: null
             }
         });
         // new controller
@@ -384,11 +383,15 @@ var myApp = angular
           });
 
         $stateProvider.state("Customer.JournalEntry", {
-            url: "/JournalEntry",
+            url: "/JournalEntry/:voId",
             templateUrl: "Customer/JournalEntry",
             controller: "JournalEntryCntrl",
             requiresAuthentication: true,
-            permissions: 'Float.add.Customers.Journal Entry.active'
+            permissions: 'Float.add.Customers.Journal Entry.active',
+            params: {
+                voId: null,
+                type: 'Journal Entry',
+            }
 
         });
 
@@ -590,7 +593,7 @@ myApp.run(['authService', '$location', '$rootScope', 'localStorageService', '$st
     };
     if (!localStorage.fromDate)
     {
-        var d = new Date(moment(new Date()).subtract(30, 'days'));
+        var d = new Date(moment(new Date()).subtract(1, 'year'));
         d.setHours(0, 0, 0, 0);
        localStorage.fromDate=d;
     }
@@ -665,8 +668,8 @@ myApp.run(['authService', '$location', '$rootScope', 'localStorageService', '$st
         if (args && args.message)
             var message = args.message;
         //SweetAlert.progress(message);
-        //SweetAlert.success('Success!', message);
-        SweetAlertSuccess(message)
+        SweetAlert.success('Success!', message);
+      //  SweetAlertSuccess(message)
 
     });
     $rootScope.$on('event:error', function (event, args) {
@@ -805,23 +808,15 @@ myApp.run(['authService', '$location', '$rootScope', 'localStorageService', '$st
 //]);
 
 
-  myApp.factory('myService', function ($http) {
-      var url = "http://bizzy-book-api.azurewebsites.net/api/"
-      var http = {
-          postSuppliers: function (webService, data) {
-              var promise = $http.post(url + webService, data).then(function (response) {
-                  return response.data;
-              });     
-              return promise;
-          },
-          getSuppliers: function () {
-          var promise = $http.get(url+"suppliers").then(function (response) {
-              return response.data;
-          });
-          return promise;
-      }
-      };
-      return http;
+myApp.service('myService', function ($http) {
+    return {
+        getOpeningBalance: function (url, CompanyId) {
+            return $http.post(url, CompanyId,function (response) {
+                console.log(JSON.stringify(response));
+                return response.data;
+            });
+        }
+    };  
   });
 
   myApp.directive('onlyDigits', function () {
@@ -1139,7 +1134,7 @@ myApp.run(['$templateCache', function ($templateCache) {
     $templateCache.put('selectize/choices.tpl.html', [
       '<div ng-show="$select.open"',
       '  class="ui-select-choices group-tree selectize-dropdown single">',
-      '  <div  class="ui-select-breadcrumbs cursor"  ng-click="add($select.type,$select.search);"ng-show="$select.addnew==1" >',
+      '  <div  class="ui-select-breadcrumbs cursor"  "ng-show="$select.addnew==1" >',
       '    <span   class="ui-breadcrumb"',
            '       <span><label class="badge cursor" style="color:white"tabindex="2"ng-keyup="$event.keyCode == 13 ? add($select.type,$select.search) : null"aria-hidden="false"><i class="fa fa-plus"></i> Add</label> <span class="pull-right text-warning">{{$select.search }}</span></span>',
       '    </span>',

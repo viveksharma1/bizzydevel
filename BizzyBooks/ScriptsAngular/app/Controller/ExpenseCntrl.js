@@ -11,17 +11,19 @@
         $scope.popuclose = function () {
             $('#form-popoverPopup').hide();
         }
-
-        $('#Paymentdate').datepicker("setDate", new Date());
-
         var files, res;
-
         document.getElementById("uploadBtn").onchange = function (e) {
             e.preventDefault();
 
         }
         document.getElementById('uploadBtn').onchange = uploadOnChange;
+        $scope.clear = function ($event, $select) {
+            $event.stopPropagation();
+            $select.selected = null;
+            $select.search = undefined;
 
+            $timeout(function () { $select.activate() }, 300);
+        }
         function uploadOnChange() {
             var filename = this.value;
             var lastIndex = filename.lastIndexOf("\\");
@@ -81,7 +83,16 @@
         $scope.add3 = function () {
             $('#formaccount').modal('show');
         }
+        $scope.paymentTerm = function () {
+            var days = 0;
+            if ($scope.paymentDays)
+                days = $scope.paymentDays;
+            var expenseDate = getDate($scope.expenseDate);
+            if (expenseDate)
+                setDate($scope.expenseDueDate, moment(expenseDate).add(days, 'days'));
+        }
         $('#expenseDate').datepicker();
+        $('#expenseDueDate').datepicker();
         $scope.accounts = {};
         $scope.supplier = {};
         $scope.tdsRate = {};
@@ -90,18 +101,11 @@
         $scope.idSelectedVote = null;
         //get supplier data
 
-        $scope.paymentTerm = function () {
-            $scope.expenseDueDate = moment($scope.expenseDate, "DD/MM/YYYY").add($scope.paymentDays, 'days').format('DD/MM/YYYY');
-        }
-       
-      $scope.dateFormat = function (date) {
-          var res = date.split("/");
-          var month = res[1];
-          var days = res[0]
-          var year = res[2]
-          var date = month + '/' + days + '/' + year;
-          return date;
-        }
+        //$scope.paymentTerm = function () {
+        //    $scope.expenseDueDate = moment($scope.expenseDate, "DD/MM/YYYY").add($scope.paymentDays, 'days').format('DD/MM/YYYY');
+        //}
+
+        
       
      $scope.getSupplier = function () {
            $http.get(config.login + "getSupplierAccount/" + localStorage.CompanyId).then(function (response) {
@@ -136,11 +140,13 @@
                         $scope.tdsRate = { selected: { accountName: localStorage[expenseData.tdsAccountId], id: expenseData.tdsAccountId } };
                         $scope.applyTdsRate(expenseData.tdsRate);
                         $scope.getSupplierDetail(localStorage[expenseData.supliersId]);
-                        $scope.expenseDueDate = $filter('date')(expenseData.billDueDate, 'dd/MM/yyyy');
-                        $scope.expenseDate = $filter('date')(expenseData.date, 'dd/MM/yyyy');
+                        //$scope.expenseDueDate = $filter('date')(expenseData.billDueDate, 'dd/MM/yyyy');
+                        //$scope.expenseDate = $filter('date')(expenseData.date, 'dd/MM/yyyy');
+                        setDate($scope.expenseDueDate, expenseData.billDueDate);
+                        setDate($scope.expenseDate, expenseData.date);
                         $scope.expenseId = expenseData.expenseId
                         $scope.paymentDays = expenseData.paymentDays
-                        $scope.id = response.data.expenseData.id
+                        $scope.id = expenseData.id
                         $scope.accountTableSum();
                         $scope.itemTableSum();
                     });
@@ -160,7 +166,26 @@
             $scope.email = $scope.supliersDetail[0].email;
         });
     }
+    function calculateOpenningBalnce(data, balanceType) {
+        var balance;
+        if (balanceType == 'credit' && data.credit) {
+            balance = Number(data.credit) - Number(data.debit)
+        }
+        if (balanceType == 'debit') {
+            balance = Number(data.debit) - Number(data.credit)
+        }
+        return balance
+    }
     $scope.bindSupplierDetail = function (data) {
+        var balanceType = data.balanceType
+        var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
+        myService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
+            if (response.data.openingBalance) {
+                $scope.supplierBalance = calculateOpenningBalnce(response.data.openingBalance, balanceType)
+            } else {
+                $scope.purchaseLedgerBalance = '';
+            }
+        })
         $scope.email = data.email
         $scope.shippingAddress = data.billingAddress[0].street
         console.log(data)
@@ -183,7 +208,6 @@
         }
         $scope.totalcharges1 = total.toFixed(2);
         $scope.totalcharges = Number($scope.totalcharges1)
-
         return $scope.totalcharges;
     }
     
@@ -256,22 +280,31 @@
         // save Expense new 
          $scope.saving = false;
          $scope.saveExpenceNew = function () {
+             var expenseDate = getDate($scope.expenseDate);
+             var expenseDueDate = getDate($scope.expenseDueDate);
              if ($scope.supplier.selected == undefined || $scope.supplier.selected == null) {
-                 showErrorToast("Please select Supplier");
+                 $rootScope.$broadcast('event:error', { message: "Please Select Supplier" });
                  return;
              }
-
-             if (!$scope.expenseDate) {
-                 showErrorToast("Expense date is not valid");
+             if (!expenseDate) {
+                 $rootScope.$broadcast('event:error', { message: "Invoice date is not valid" });
+                 return;
+             }
+             if (!expenseDueDate) {
+                 $rootScope.$broadcast('event:error', { message: "Invoice due date is not valid" });
                  return;
              }
 
              if (!$scope.expenseId) {
-                 showErrorToast("Please Enter Expense No");
+                 $rootScope.$broadcast('event:error', { message: "Please type Invoice No" });
+                 return;
+             }
+             if ($scope.accountTable.length == 0 && $scope.itemTable.length == 0) {
+                 $rootScope.$broadcast('event:error', { message: "Please Select Item" });
                  return;
              }
 
-             $scope.saving = true;
+             $rootScope.$broadcast('event:progress', { message: "Please wait while processing.." });
              if (!$scope.tdsamount) {
                  $scope.netAmount = Number($scope.itemTableSum()) + Number($scope.accountTableSum())
              } else {
@@ -280,15 +313,17 @@
              var data = {
                  type: "EXPENSE",
                  state: "OPEN",
-                 date: $scope.dateFormat($scope.expenseDate),
+                 date: expenseDate,
                  amount: $scope.netAmount,
                  compCode: localStorage.CompanyId,
                  role: localStorage['usertype'],
                  refNo: $stateParams.no,
                  no: $scope.expenseId,
-                 vochNo:$scope.expenseId,
+                 vochNo: $scope.expenseId,
+                 balance: $scope.netamount,
                  transactionData: {
                      compCode: localStorage.CompanyId,
+                     email:$scope.email,
                      no: $scope.expenseId,
                      expenseId: $scope.expenseId,
                      refNo: $stateParams.no,
@@ -297,10 +332,10 @@
                      id: $scope.id,
                      role: localStorage['usertype'],
                      currency: $scope.currency,
-                     date: $scope.dateFormat($scope.expenseDate),
-                     billDueDate: $scope.dateFormat($scope.expenseDueDate),
+                     date: expenseDate,
+                     billDueDate: expenseDueDate,
                      paymentDays: $scope.paymentDays,
-                     balance: $scope.netamount,
+                     balance: $scope.netAmount,
                      adminBalance: $scope.netamount,
                      adminAmount: $scope.netamount,
                      accountTable: $scope.accountTable,
@@ -313,11 +348,12 @@
              }
              $http.post(config.login + "saveExpensetest/" + $stateParams.expenceId, data).then(function (response) {
                  if (response.status == 200) {
-                     $scope.saving = false;
-                     showSuccessToast("Expense Save Succesfully");
+                     $rootScope.$broadcast('event:success', { message: "Expense Created" });
                      $stateParams.expenceId = response.data
                      $state.go('Customer.Expense', { expenceId: response.data });
                      
+                 } else {
+                     $rootScope.$broadcast('event:error', { message: "Error while creating Expense" });
                  }
               
         });
