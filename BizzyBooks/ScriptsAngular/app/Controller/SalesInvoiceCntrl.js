@@ -799,6 +799,7 @@
             console.log($scope.itemTable);
             setCheckValue(false, $scope.filterList);
             gTotal();
+            updateItemTable();
         } else {
             showErrorToast("Error! Aggregate SaleQty is greater the net weight for some items");
         }
@@ -1190,9 +1191,9 @@
         var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
         commonService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
             if (response.data.openingBalance) {
-                $scope.salesAccountType = Math.abs(calculateOpenningBalnce(response.data.openingBalance, data.balanceType))
+                $scope.salesAccountBalance = Math.abs(calculateOpenningBalnce(response.data.openingBalance, data.balanceType))
             } else {
-                $scope.salesAccountType = 0.00;
+                $scope.salesAccountBalance = 0.00;
             }
         });
         //$scope.email = data.email

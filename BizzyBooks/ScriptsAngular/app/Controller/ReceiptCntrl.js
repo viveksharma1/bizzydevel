@@ -1,10 +1,21 @@
-﻿myApp.controller('ReceiptCntrl', ['$scope', '$q', '$http', '$timeout', '$rootScope', '$state', '$stateParams', 'config', '$filter', 'FileUploader', 'sharedFactory', '$uibModal', 'SweetAlert', function ($scope, $q, $http, $timeout, $rootScope, $state, $stateParams, config, $filter, FileUploader, sharedFactory, $uibModal, SweetAlert) {
+﻿myApp.controller('ReceiptCntrl', ['$scope', '$q', '$http', '$timeout', '$rootScope', '$state', '$stateParams', 'config', '$filter', 'FileUploader', 'sharedFactory', '$uibModal', 'SweetAlert','commonService', function ($scope, $q, $http, $timeout, $rootScope, $state, $stateParams, config, $filter, FileUploader, sharedFactory, $uibModal, SweetAlert,commonService) {
 
     $.fn.datepicker.defaults.format = "dd/mm/yyyy";
     //localStorage["type1"] = "PAYMENT"
     $(".my a").click(function (e) {
         e.preventDefault();
     });
+    $scope.clear = function ($event, $select) { ///ui select clear.
+        $event.stopPropagation();
+        //to allow empty field, in order to force a selection remove the following line
+        $select.selected = null;
+        //reset search query
+        $select.search = undefined;
+        //focus and open dropdown
+        $timeout(function () {
+            $select.activate();
+        }, 200);
+    }
     $scope.goBack = function (retain) {
         if ($rootScope.$previousState.name.length == 0 || $rootScope.$previousState==$state.current || $stateParams.noBackTrack) {
             window.history.back();
@@ -13,7 +24,7 @@
         //if (!retain)
         //    sharedFactory.info = null;
         //window.history.back();
-    },
+    }
     $(":file").filestyle({ buttonName: "btn-sm btn-info" });
     $scope.Accountbtn = function (id,type) {
         if (type) {
@@ -98,19 +109,22 @@
     //    var date = month + '/' + days + '/' + year;
     //    return date;
     //}
-    $scope.getSupplier = function () {
-        $http.get(config.login + "getPartytAccount/" + localStorage.CompanyId).then(function (response) {
-            $scope.partyAccounts = response.data;
-            angular.copy($scope.partyAccounts, $scope.badlaAccounts);
-            console.log($scope.partyAccounts);
-        });
+    function getAccounts() {
+        $scope.getSupplier = function () {
+            $http.get(config.login + "getPartytAccount/" + localStorage.CompanyId).then(function (response) {
+                $scope.partyAccounts = response.data;
+                angular.copy($scope.partyAccounts, $scope.badlaAccounts);
+                console.log($scope.partyAccounts);
+            });
+        }
+        $scope.getAccount = function () {
+            $http.get(config.login + "getPaymentAccount/" + localStorage.CompanyId).then(function (response) {
+                $scope.bankAccounts = response.data
+                console.log($scope.bankAccounts);
+            });
+        }
     }
-    $scope.getAccount = function () {
-        $http.get(config.login + "getPaymentAccount/" + localStorage.CompanyId).then(function (response) {
-            $scope.bankAccounts = response.data
-            console.log($scope.bankAccounts);
-        });
-    }
+    getAccounts();
     //$scope.getBadlaAccount = function () {
     //    //http://localhost:4000/api/accounts?filter[where][compCode]=COM2016123456780&filter[where][ancestor]=SUNDRY%20DEBTORS
     //    $http.get(config.api + "accounts?filter[where][compCode]=" + localStorage.CompanyId + "&filter[where][ancestor]=SUNDRY DEBTORS").then(function (response) {
@@ -127,15 +141,24 @@
     $scope.itemChecked = [];
     var type = $stateParams.type;
     console.log(type);
-    $scope.partyAccountSelected = function () {
+    $scope.partyAccountSelected = function (data) {
         if ($scope.partyAccount.selected && $scope.partyAccount.selected.id) {
-            if (localStorage['usertype'] == 'O') {
+            //if (localStorage['usertype'] == 'O') {
                getAllBill($scope.partyAccount.selected.id);
-            }
-            else {
-               getAllBill($scope.partyAccount.selected.id);
-            }
+            //}
+            //else {
+            //   getAllBill($scope.partyAccount.selected.id);
+            //}
         }
+        $scope.salesAccountType = data.balanceType == 'debit' ? " (Dr.) " : " (Cr.)";
+        var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
+        commonService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
+            if (response.data.openingBalance) {
+                $scope.salesAccountBalance = Math.abs(calculateOpenningBalnce(response.data.openingBalance, data.balanceType))
+            } else {
+                $scope.salesAccountBalance = 0.00;
+            }
+        });
 
     };
     if (sharedFactory.info != null) {
@@ -156,7 +179,7 @@
    
     //}
     function getAllBill(id) {
-        $http.get(config.login + "getVoucherData" + "?customerId=" + id).then(function (response) {
+        $http.get(config.login + "getVouchersforReceipt" + "?customerId=" + id + "&role=" + localStorage.usertype).then(function (response) {
             $scope.paymentData = response.data
             angular.copy($scope.paymentData, $scope.paidData);
             checkPaymentBills();
@@ -208,7 +231,7 @@
         $http.post(config.login + 'deleteReceipt?id=' + $stateParams.voId, data)
                             .then(function (response) {
                                 if (response.data.err) {
-                                    $rootScope.$broadcast('event:error', { message: "Error while creating receipt: " + response.data.err });
+                                    $rootScope.$broadcast('event:error', { message: "Error while deleting receipt: " + response.data.err });
                                 } else {
                                     showSuccessToast("Receipt deleted.");
                                     $scope.goBack();// $state.reload();
@@ -263,7 +286,7 @@
                     partyAccountId: $scope.badlaAccount.selected.id,
                     date: badlaDate,// $scope.dateFormat($scope.badlaDate),
                     conditons: {
-                        dayTotal: $scope.totaldays,
+                        dayTotal: $scope.dayTotal,
                         dayInterest: $scope.dayInterest,
                         dayDiff: $scope.dayDiff,
                         perTotal: $scope.perTotal,
@@ -281,6 +304,7 @@
                 vochNo: $scope.paymentNo,
                 state: "PAID",
                 remark: $scope.remarks,
+                visible: $scope.visible,
                 vo_payment: {
                     bankAccountId: $scope.bankAccount.selected.id,
                     partyAccountId: $scope.partyAccount.selected.id,
@@ -310,6 +334,7 @@
                     $scope.goBack(true);
                 }
                 else {
+                    
                     $rootScope.$broadcast('event:progress', { message: "Please wait while processing.."});
                     //SweetAlert.swal("In Progress", "", "loading");
                     //spinner.start();
@@ -430,8 +455,7 @@
             //$scope.itemChecked[i].isOld = true;
         }
     }
-
-
+    
     function fillRosemateData(){
         $scope.bankAccount = { selected: sharedFactory.info.cashAccount.selected };
         if(sharedFactory.info.paymentDate)
@@ -481,7 +505,7 @@
             $scope.chkBadla = true;
             setDate($scope.badlaDate, badlaInfo.data);
             //$scope.badlaDate = $filter('date')(badlaInfo.data, 'dd/MM/yyyy');
-            $scope.badlaAccount = { selected: { id: badlaInfo.partyAccountId } };
+            $scope.badlaAccount = { selected: { accountName: localStorage[data.vo_payment.bankAccountId],id: badlaInfo.partyAccountId } };
             $scope.badlaAmount = badlaInfo.amount;
             $scope.dayTotal = badlaInfo.conditons.dayTotal;
             $scope.dayInterest = badlaInfo.conditons.dayInterest;
@@ -612,7 +636,7 @@
 
     
     
-    $scope.selectLineItem = function (itemData, force) {
+    $scope.selectLineItem = function (itemData, force, payAmount, oldPayAmount) {
         if ($scope.totalPaidAmount && $scope.totalPaidAmount > 0) {
             if (itemData) {
                 var item = {};
@@ -629,15 +653,27 @@
                     for (var i = 0; i < $scope.itemChecked.length; i++) {
                         if ($scope.itemChecked[i].id == itemData.id) {
 
-                            $scope.balanceAmtReceipt = $scope.balanceAmtReceipt + Number($scope.itemChecked[i].amountPaid);
-                            $scope.itemChecked.splice(i, 1);
+                            //$scope.balanceAmtReceipt = $scope.balanceAmtReceipt + Number($scope.itemChecked[i].amountPaid);
+
+                            $scope.balanceAmtReceipt += oldPayAmount ? Number(oldPayAmount) :payAmount?Number(payAmount): Number($scope.itemChecked[i].amountPaid);
+                            //if (itemData.old) {
+                            //    $scope.balanceAmtReceipt += Number(oldPayAmount);// - Number(payAmount);
+                            //} else {
+                            //    $scope.balanceAmtReceipt = $scope.balanceAmtReceipt + Number($scope.itemChecked[i].amountPaid);
+                            //}
                             //if (force) {
                             itemData.select = false;
                             itemData.interest = 0;
+                            if (itemData.old && !force) {
+                                itemData.balance += Number($scope.itemChecked[i].amountPaid);
+                                itemData.old = false;
+                            }
                             if (!force) {
                                 //itemData.balance += Number(itemData.amountPaid);
                                 itemData.amountPaid = 0;
+
                             }
+                            $scope.itemChecked.splice(i, 1);
                             //}
                         }
                     }
@@ -706,7 +742,7 @@
     }
     $scope.amountChange = function (item, payAmount, oldPayAmount) {
         if(payAmount!=null)
-        $scope.selectLineItem(item, true);
+            $scope.selectLineItem(item, true,payAmount,oldPayAmount);
 
         if ($scope.itemChecked.length > 0) {
             for (var i = 0; i < $scope.itemChecked.length; i++) {
@@ -740,8 +776,10 @@
                 }
            }
         }
-        if (payAmount == null)
-            $scope.selectLineItem(item, true);
+        if (payAmount == null) {
+            $scope.selectLineItem(item, true, payAmount, oldPayAmount);
+            item.old = false;
+        }
         calculateTotal(false);
     };
     function paymentDateChange() {
@@ -799,5 +837,22 @@
         }
 
     };
-
+    $scope.badlaState = function () {
+        return $scope.itemChecked > 1;
+    }
+    $scope.$on("event:accountReferesh", function (event, args) {
+        // Refresh accounts...
+        getAccounts();
+    });
+    $scope.cashAccountSelected = function (data) {
+        $scope.cashAccountType = data.balanceType == 'debit' ? " (Dr.) " : " (Cr.)";
+        var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
+        commonService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
+            if (response.data.openingBalance) {
+                $scope.cashAccountBalance = Math.abs(calculateOpenningBalnce(response.data.openingBalance, data.balanceType))
+            } else {
+                $scope.cashAccountBalance = 0.00;
+            }
+        });
+    }
 }]);

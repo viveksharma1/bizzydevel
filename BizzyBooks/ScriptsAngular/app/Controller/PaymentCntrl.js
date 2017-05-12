@@ -1,16 +1,27 @@
-﻿myApp.controller('PaymentCntrl', ['$scope', '$http', '$stateParams', '$timeout', 'commonService', '$rootScope', '$state', 'config', '$filter', 'FileUploader', 'sharedFactory', function ($scope, $http, $stateParams, $timeout, commonService, $rootScope, $state, config, $filter, FileUploader, sharedFactory) {
+﻿myApp.controller('PaymentCntrl', ['$scope', '$http', '$stateParams', '$timeout', 'commonService', '$rootScope', '$state', 'config', '$filter', 'FileUploader', 'sharedFactory', 'commonService', function ($scope, $http, $stateParams, $timeout, commonService, $rootScope, $state, config, $filter, FileUploader, sharedFactory, commonService) {
 
     $.fn.datepicker.defaults.format = "dd/mm/yyyy";
     //localStorage["type1"] = "PAYMENT"
     $(".my a").click(function (e) {
         e.preventDefault();
     });
-    $scope.goBack = function () {
-        if ($rootScope.$previousState.name.length == 0 || $rootScope.$previousState == $state.current) {
+    $scope.clear = function ($event, $select) { ///ui select clear.
+        $event.stopPropagation();
+        //to allow empty field, in order to force a selection remove the following line
+        $select.selected = null;
+        //reset search query
+        $select.search = undefined;
+        //focus and open dropdown
+        $timeout(function () {
+            $select.activate();
+        }, 200);
+    }
+    $scope.goBack = function (retain) {
+        if ($rootScope.$previousState.name.length == 0 || $rootScope.$previousState == $state.current || $stateParams.noBackTrack) {
             window.history.back();
         } else
             $state.go($rootScope.$previousState);
-    },
+    }
     $(":file").filestyle({ buttonName: "btn-sm btn-info" });
     $scope.Accountbtn = function (id, type) {
         if (type) {
@@ -27,13 +38,11 @@
                 $scope.myValue = null;
             }
         }
-        //$('#formaccount').modal('show');
     };
     $scope.add = function (type, value) {
         $('#formaccount').modal('show');
         $scope.myValue = { accountName: value };
     }
-    //$('#paymentdate').datepicker("setDate", new Date());
 
     $('#paymentdate').datepicker().on('changeDate', function (ev) {
         $('.datepicker').hide();
@@ -85,21 +94,21 @@
     $scope.getVoucherCount = function () {
         $http.get(config.api + "voucherTransactions/count" + "?[where][type]="+type).then(function (response) {
             $scope.paymentNo = response.data.count + 1
-           
         });
     }
-    $scope.getSupplier = function () {
-        $http.get(config.login + "getSupplierAccount/" + localStorage.CompanyId).then(function (response) {
-            $scope.partyAccounts = response.data
-            
-        });
+    function getAccounts() {
+        $scope.getSupplier = function () {
+            $http.get(config.login + "getSupplierAccount/" + localStorage.CompanyId).then(function (response) {
+                $scope.partyAccounts = response.data
+            });
+        }
+        $scope.getAccount = function () {
+            $http.get(config.login + "getPaymentAccount/" + localStorage.CompanyId).then(function (response) {
+                $scope.bankAccounts = response.data
+            });
+        }
     }
-    $scope.getAccount = function () {
-        $http.get(config.login + "getPaymentAccount/" + localStorage.CompanyId).then(function (response) {
-            $scope.bankAccounts = response.data
-            
-        });
-    }
+    getAccounts();
     $scope.currency1 = function (currency) {
         resetToInitial();
         //if (currency == "Rupee") {
@@ -115,33 +124,28 @@
         var access_key = 'af072eeb3d8671688ff6eaa83c8dbcb8';
         var url = 'http://apilayer.net/api/live?access_key=' + access_key;
         $http.get(url).then(function (response) {
-            //$scope.data = response.data;
             $scope.ExchangeRate = response.data.quotes.USDINR.toFixed(2);
             $scope.ExchangeRateINR = Number($scope.ExchangeRate)
-            //$scope.ExchangeRateIDR = $scope.ExchangeRate1
         });
 
     }
     "get open invoice"
-    $scope.getOpenInvoice = function () {
+    $scope.getOpenInvoice = function (data) {
         if ($scope.partyAccount.selected && $scope.partyAccount.selected.id) {
-            if (localStorage['usertype'] == 'O') {
-                var fields = '&filter[fields][adminAmount]=false&filter[fields][adminBalance]=false&[filter][where][balance][gt]=0'
-                getAllBill($scope.partyAccount.selected.id, fields);
-            }
-            else {
-                var fields = '&filter[fields][amount]=false&filter[fields][balance]=false&[filter][where][adminBalance][gt]=0'
-                getAllBill($scope.partyAccount.selected.id, fields);
-            }
+            getAllBill($scope.partyAccount.selected.id);
         }
-
-
+        $scope.salesAccountType = data.balanceType == 'debit' ? " (Dr.) " : " (Cr.)";
+        var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
+        commonService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
+            if (response.data.openingBalance) {
+                $scope.salesAccountBalance = Math.abs(calculateOpenningBalnce(response.data.openingBalance, data.balanceType))
+            } else {
+                $scope.salesAccountBalance = 0.00;
+            }
+        });
     }
-
-
     if (sharedFactory.info != null) {
         $scope.mode = "return";
-        //$scope.purInfo = sharedFactory.info;
         setDate($scope.paymentdate);
         $scope.currency = "Dollar";
         $scope.exchangeRate();
@@ -173,7 +177,7 @@
     }
     function getBalanceAmtReceipt(amount) {
         if ($scope.totalPaidAmount && $scope.totalPaidAmount > 0) {
-            var nextBal = $scope.balanceAmtReceipt - Number(amount);
+            var nextBal = Number( ($scope.balanceAmtReceipt - Number(amount)).toFixed(2));
             if (nextBal >= 0) {
                 $scope.balanceAmtReceipt = nextBal;
             } else {
@@ -182,7 +186,7 @@
             }
         }
 
-        return amount;
+        return amount? Number(amount.toFixed(2)):amount;
     }
     function addBalanceAmtReceipt(amount) {
         if ($scope.totalPaidAmount && $scope.totalPaidAmount > 0) {
@@ -191,27 +195,27 @@
 
     }
     $scope.amountChange = function (item, payAmount, oldPayAmount) {
-        $scope.selectLineItem(item, true);
+        if (payAmount != null)
+            $scope.selectLineItem(item, true, payAmount, oldPayAmount);
 
         if ($scope.itemChecked.length > 0) {
             for (var i = 0; i < $scope.itemChecked.length; i++) {
                 if (item) {
                     if ($scope.itemChecked[i].id == item.id) {
+                        if ($scope.itemChecked[i].old)
+                            $scope.itemChecked[i].balance += Number(oldPayAmount) - Number(payAmount);
                         if ($scope.itemChecked[i].balance - payAmount >= 0) {
                             payAmount = getBalanceAmtReceipt(payAmount);
                             $scope.itemChecked[i].amountPaid = payAmount;
-                            //var interest = getIneterest(item, payAmount);
-                            //$scope.itemChecked[i].interest = interest;
-                            //item.interest = interest;
+                            item.balance = $scope.itemChecked[i].balance;
                             item.amountPaid = payAmount;
                         } else {
                             if (oldPayAmount && oldPayAmount.length > 0) {
                                 var payAmount = getBalanceAmtReceipt(item.balance);
                                 item.amountPaid = payAmount;
                                 $scope.itemChecked[i].amountPaid = payAmount;
-                                //var interest = getIneterest(item, payAmount);
-                                //$scope.itemChecked[i].interest = interest;
-                                //item.interest = interest;
+                                item.balance = $scope.itemChecked[i].balance;
+                                
                             }
 
                         }
@@ -219,6 +223,10 @@
                     }
                 }
             }
+        }
+        if (payAmount == null) {
+            $scope.selectLineItem(item, true, payAmount, oldPayAmount);
+            item.old = false;
         }
         calculateTotal(false);
     };
@@ -231,47 +239,40 @@
     }
 
 
-    $scope.selectLineItem = function (itemData, force) {
+    $scope.selectLineItem = function (itemData, force, payAmount, oldPayAmount) {
+        if (!($scope.totalPaidAmount && $scope.totalPaidAmount > 0)) {
+            showErrorToast("Please enter paid amount.");
+            itemData.select = false;
+            return
+        }
         if (itemData) {
-            if (!((itemData.invoiceType == "Domestic" && $scope.currency == "Rupee") || (itemData.invoiceType == "Import" && $scope.currency == "Dollar"))) {
-                showErrorToast("Please select correct type of bill.");
-                itemData.select = false;
-                return;
-            }
-            //if (!(itemData.invoiceType == "Import" && $scope.currency == "Dollar")) {
+            //if (!((itemData.invoiceType == "Domestic" && $scope.currency == "Rupee") || (itemData.invoiceType == "Import" && $scope.currency == "Dollar"))) {
             //    showErrorToast("Please select correct type of bill.");
             //    itemData.select = false;
             //    return;
             //}
-            if (!($scope.totalPaidAmount && $scope.totalPaidAmount > 0)) {
-                showErrorToast("Please enter paid amount.");
-                itemData.select = false;
-                return
-            }
+            
             var item = {};
             if (itemData.select && !force) {
                 itemData.amountPaid = getBalanceAmtReceipt(itemData.balance);
-                //getIneterest(itemData, itemData.amountPaid, true);
-                //itemData.balance = 0;
                 angular.copy(itemData, item);
                 $scope.itemChecked.push(item);
                 console.log($scope.itemChecked);
             } else {
-                //$scope.selectAllItem = false;
-                //angular.copy(itemData, item);
                 for (var i = 0; i < $scope.itemChecked.length; i++) {
                     if ($scope.itemChecked[i].id == itemData.id) {
-
-                        $scope.balanceAmtReceipt = $scope.balanceAmtReceipt + Number($scope.itemChecked[i].amountPaid);
-                        $scope.itemChecked.splice(i, 1);
-                        //if (force) {
+                        $scope.balanceAmtReceipt += oldPayAmount ? Number(oldPayAmount) : payAmount ? Number(payAmount) : Number($scope.itemChecked[i].amountPaid);
+                        //$scope.balanceAmtReceipt = $scope.balanceAmtReceipt + Number($scope.itemChecked[i].amountPaid);
                         itemData.select = false;
-                        //itemData.interest = 0;
+                        if (itemData.old && !force) {
+                            itemData.balance += Number($scope.itemChecked[i].amountPaid);
+                            itemData.old = false;
+                        }
                         if (!force) {
-                            //itemData.balance += Number(itemData.amountPaid);
                             itemData.amountPaid = 0;
                         }
-                        //}
+                        $scope.itemChecked.splice(i, 1);
+
                     }
                 }
                 if (force && Number(itemData.amountPaid) > 0) {
@@ -290,60 +291,26 @@
 
     }
     function calculateTotal(last) {
-        $scope.totalInvoiceAmount = 0;
+        //$scope.totalInvoiceAmount = 0;
+        var total = 0;
         if ($scope.itemChecked.length > 0) {
             angular.forEach($scope.itemChecked, function (item) {
-                $scope.totalInvoiceAmount = $scope.totalInvoiceAmount + item.amountPaid;
-
-                //item.roi = item.invoiceData.roi;
-                //item.paymentDays = item.invoiceData.paymentDays;
+                total += item.amountPaid;
                 if (last && !item.old) {
                     item.balance = item.balance - item.amountPaid >= 0 ? item.balance - item.amountPaid : 0;
                     item.old = true;
-                    //if (!$scope.isInterest)
-                    //    item.interest = 0;
-                    //delete item.invoiceData;
                 }
 
             });
         } else {
-            $scope.totalInvoiceAmount = 0;
+            total = 0;
         }
+        $scope.totalInvoiceAmount = Number(total.toFixed(2));
+
     }
-    //$scope.createPaymentData = function (role) {
-    //    if (role == 'O') {
-    //        for (var i = 0; i < $scope.transaction.length; i++) {
-    //            $scope.paymentData.push({
-    //                date: $scope.transaction[i].date, billDueDate: $scope.transaction[i].dueDate, id: $scope.transaction[i].id, amount: $scope.transaction[i].amount, no: $scope.transaction[i].vochNo
-    //                , ordertype: $scope.transaction[i].type, balance: $scope.transaction[i].balance
-    //            });
-    //        }
-
-    //    }
-    //    if (role == 'UO') {
-    //        for (var i = 0; i < $scope.transaction.length; i++) {
-    //            $scope.paymentData.push({
-    //                date: $scope.transaction[i].date, billDueDate: $scope.transaction[i].dueDate, id: $scope.transaction[i].id, amount: $scope.transaction[i].amount, no: $scope.transaction[i].vochNo
-    //                , ordertype: $scope.transaction[i].type, balance: $scope.transaction[i].balance
-    //            });
-    //        }
-    //    }
-
-    //    $scope.paidData = $scope.transaction;
-
-       
-    //}
-   
-    //$scope.getAllBill = function (id) {
-    //    $http.get(config.login + "getVoucherData" + "?customerId=" + id).then(function (response) {
-    //        $scope.paymentData = response.data
-    //        angular.copy($scope.paymentData, $scope.paidData);
-    //        checkPaymentBills();
-    //    });
-    //}
     function getAllBill(supliersId, fields) {
         if (supliersId){
-            $http.get(config.login + "getAllTransaction/"+ supliersId).then(function (response) {
+            $http.get(config.login + "getVouchersforPayment?customerId=" + supliersId + "&role=" + localStorage.usertype).then(function (response) {
                 if (response) {
                     $scope.paymentData = response.data
                     //angular.copy($scope.paymentData, $scope.paidData);
@@ -359,33 +326,24 @@
         }
     }
     function checkPaymentBills() {
+        removeDuplicate();
         Array.prototype.push.apply($scope.paymentData, $scope.itemChecked);
         angular.copy($scope.paymentData, $scope.paidData);
     }
-    
-    //var savepaymentamount;
-    //$scope.payBill = function (amount,balance, index, paymentamount, id) {
-
-        
-    //    if (savepaymentamount == paymentamount) {
-    //        return;
-    //    }
-    //    else {
-    //        if (balance >= paymentamount && paymentamount > 0) {
-    //            if (amount == balance) {
-    //                var paidAmount = Number(amount - paymentamount);
-    //            }
-    //            else {
-    //                var paidAmount = Number(balance - paymentamount);
-    //            }
-    //            $scope.paidData[index].balance = paidAmount;
-    //            $scope.paidData[index].amountPaid = paymentamount;
-    //        }
-    //    }
-    //    console.log($scope.paidData)
-    //    var savepaymentamount = paymentamount;
-    //    $scope.paidDataTotal = paidData;
-    //}
+    function removeReceiptById(id) {
+        for (var i = 0; i < $scope.paymentData.length; i++) {
+            if ($scope.paymentData[i].id == id) {
+                $scope.paymentData.splice(i, 1);
+                return;
+            }
+        }
+    }
+    function removeDuplicate() {
+        for (var i = 0; i < $scope.itemChecked.length; i++) {
+            removeReceiptById($scope.itemChecked[i].id);
+            //$scope.itemChecked[i].isOld = true;
+        }
+    }
     $scope.deletePayment = function () {
         var data = {
             compCode: localStorage.CompanyId,
@@ -394,8 +352,12 @@
         }
         $http.post(config.login + 'deletePayment?id=' + $stateParams.voId, data)
                             .then(function (response) {
-                                showSuccessToast("Payment deleted.");
-                                $scope.goBack();// $state.reload();
+                                if (response.data.err) {
+                                    $rootScope.$broadcast('event:error', { message: "Error while deleting: " + response.data.err });
+                                } else {
+                                    showSuccessToast("Payment deleted.");
+                                    $scope.goBack();// $state.reload();
+                                }
 
                             });
     }
@@ -435,6 +397,7 @@
             vochNo: $scope.paymentNo,
             state: "PAID",
             remark: $scope.remarks,
+            visible: $scope.visible,
             vo_payment: {
                 bankAccountId: $scope.bankAccount.selected.id,
                 partyAccountId: $scope.partyAccount.selected.id,
@@ -447,8 +410,6 @@
                 attachements: attachements
             },
         }
-
-
         if (sharedFactory.info != null) {
             data.compCode = sharedFactory.info.selectedCompany2.CompanyId;
             data.vo_payment.companyName = sharedFactory.info.selectedCompany2.CompanyName;// localStorage[data.compCode];
@@ -462,10 +423,24 @@
         } else {
             $http.post(config.login + 'payment?id=' + $stateParams.voId, data)
                      .then(function (response) {
+                         if (response.data.err) {
+                             $rootScope.$broadcast('event:error', { message: "Error while creating receipt: " + response.data.err });
+                         } else {
+                             $rootScope.$broadcast('event:success', { message: "Payment Received." });
+                             //SweetAlert.swal("Done", "Receipt Created.", "success")
+                             //showSuccessToast("Receipt Created.");
+                             $state.go('Customer.Receipt', null, { location: false, reload: true });
+                             //showSuccessToast("Payment Received.");
+                             //$state.reload();
+                         }
 
-                         showSuccessToast("Payment Received.");
-                         $state.reload();
-
+                     }, function (err) {
+                         console.log(err);
+                         //SweetAlert.swal("Error", "Error while creating receiipt", "error");
+                         //SweetAlertError();
+                         $rootScope.$broadcast('event:error', { message: "Error while creating payment" });
+                         //spinner.stop();
+                         //res.reject();
                      });
         }
 
@@ -563,7 +538,21 @@
         return false;
     };
    
-    
+    $scope.$on("event:accountReferesh", function (event, args) {
+        // Refresh accounts...
+        getAccounts();
+    });
+    $scope.cashAccountSelected = function (data) {
+        $scope.cashAccountType = data.balanceType == 'debit' ? " (Dr.) " : " (Cr.)";
+        var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
+        commonService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
+            if (response.data.openingBalance) {
+                $scope.cashAccountBalance = Math.abs(calculateOpenningBalnce(response.data.openingBalance, data.balanceType))
+            } else {
+                $scope.cashAccountBalance = 0.00;
+            }
+        });
+    }
 
    
    

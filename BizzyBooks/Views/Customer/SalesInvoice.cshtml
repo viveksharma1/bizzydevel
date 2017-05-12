@@ -72,7 +72,7 @@
                         <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
                                    ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';"
                                    theme="selectize" on-select="supplierSelected($select.selected);">
-                            <ui-select-match placeholder="Select Buyer">
+                            <ui-select-match style="width:100%" placeholder="Select Buyer">
                             <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
                                    {{ $select.selected.accountName || $select.search }}
                             </span></ui-select-match>
@@ -91,7 +91,7 @@
                         <ui-select ui-tree-select ng-model="supplier2.selected" 
                                    ui-select-focuser ng-init="$select.addnew=1;$select.type='consignee'"
                                    theme="selectize" on-select="supplier2Selected($select.selected);">
-                            <ui-select-match placeholder="Select Consignee">
+                            <ui-select-match style="width:100%" placeholder="Select Consignee">
                                 <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
                                     {{ $select.selected.accountName || $select.search }}
                                 </span>
@@ -181,7 +181,7 @@
                         <ui-select ng-model="salesAccount.selected" id="countryCode" ui-select-focuser ng-init="$select.addnew=1;$select.type='account';"
                                    theme="selectize" on-select="bindSalesAccountDetail($select.selected)">
 
-                            <ui-select-match placeholder="Choose an account">
+                            <ui-select-match style="width:100%"  placeholder="Choose an account">
                                 <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
                                     {{ $select.selected.accountName || $select.search }}
                                 </span>
@@ -305,7 +305,6 @@
                     <input type="text" ng-model="termsDelivery" class="form-control" />
                 </div>
                 <div ng-repeat="data in receipts | limitTo:1">
-
                     <small style="float:right; margin:10px 0px"><span class="text-primary cursor" id="myPopover" pop-over datas="receipts">{{receiptCount}} reciept </span> made</small>
                 </div>
                     <div class="pull-right" style="text-align:left;  margin-top:10px">
@@ -437,11 +436,11 @@
                                             <ui-select ng-model="godown.selected" id="countryCode"
                                                        ui-select-focuser
                                                        theme="selectize">
-                                                <ui-select-match allow-clear="true" placeholder="">
-                                                    <span class="selectuiTable" style="width:100% !important">
-                                                        <span>{{ $select.selected._id.GODOWN}}</span>
-                                                        <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
+                                                <ui-select-match width="100%" allow-clear="true" placeholder="">
+                                                    <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                                        {{ $select.selected._id.GODOWN || $select.search }}
                                                     </span>
+
                                                 </ui-select-match>
 
                                                 <ui-select-choices repeat="invoice in ItemList| unique:'_id.GODOWN'|filter: $select.search "  ng-init="$select.hide=!invoice._id.GODOWN" >
@@ -458,12 +457,13 @@
                                             <ui-select ng-model="description.selected" id="spnDescription"
                                                        ui-select-focuser
                                                        theme="selectize">
-                                                <ui-select-match allow-clear="true" placeholder="">
-                                                    <span class="selectuiTable" style="width:100% !important">
-                                                        <span>{{ $select.selected._id.DESCRIPTION}}</span>
-                                                        <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
+                                                <ui-select-match width="100%" allow-clear="true" placeholder="">
+                                                    <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                                        {{ $select.selected._id.DESCRIPTION || $select.search }}
                                                     </span>
+
                                                 </ui-select-match>
+                                                
 
                                                 <ui-select-choices repeat="invoice in ItemList  | unique:'_id.DESCRIPTION'|filter: $select.search">
                                                     <div>
@@ -482,13 +482,12 @@
                                             <ui-select ng-model="remarks.selected" id="countryCode"
                                                        ui-select-focuser
                                                        theme="selectize">
-                                                <ui-select-match allow-clear="true" placeholder="">
-                                                    <span class="selectuiTable" style="width:100% !important">
-                                                        <span>{{ $select.selected._id.RRMARKS}}</span>
-                                                        <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
+                                                <ui-select-match width="100%" allow-clear="true" placeholder="">
+                                                    <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                                        {{ $select.selected._id.RRMARKS || $select.search }}
                                                     </span>
-                                                </ui-select-match>
 
+                                                </ui-select-match>
                                                 <ui-select-choices repeat="invoice in ItemList  | unique:'_id.RRMARKS'|filter: $select.search">
                                                     <div>
                                                         @*<span ng-model="remarks" ng-bind-html="invoice.RRMARKS | highlight: $select.search">{{invoice.RRMARKS}}</span>*@
@@ -505,11 +504,11 @@
                                             <ui-select ng-model="rgno.selected" 
                                                        ui-select-focuser
                                                        theme="selectize">
-                                                <ui-select-match allow-clear="true" placeholder="">
-                                                    <span class="selectuiTable" style="width:100% !important">
-                                                        <span>{{ $select.selected._id.rgNo}}</span>
-                                                        <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
+                                                <ui-select-match width="100%" allow-clear="true" placeholder="">
+                                                    <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                                        {{ $select.selected._id.rgNo || $select.search }}
                                                     </span>
+                                                    
                                                 </ui-select-match>
 
                                                 <ui-select-choices repeat="invoice in ItemList  | unique:'_id.rgNo'|filter: $select.search">
@@ -526,12 +525,13 @@
                                             <ui-select ng-model="exciseDuty.selected"
                                                        ui-select-focuser
                                                        theme="selectize">
-                                                <ui-select-match allow-clear="true" placeholder="">
-                                                    <span class="selectuiTable" style="width:100% !important">
-                                                        <span>{{ $select.selected._id.exciseDuty}}</span>
-                                                        <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
+                                                <ui-select-match width="100%" allow-clear="true" placeholder="">
+                                                    <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                                        {{ $select.selected._id.exciseDuty || $select.search }}
                                                     </span>
+
                                                 </ui-select-match>
+                                                
 
                                                 <ui-select-choices repeat="invoice in ItemList  | unique:'_id.exciseDuty'|filter: $select.search">
                                                     <div>
@@ -547,12 +547,13 @@
                                             <ui-select ng-model="SAD.selected"
                                                        ui-select-focuser
                                                        theme="selectize">
-                                                <ui-select-match allow-clear="true" placeholder="">
-                                                    <span class="selectuiTable" style="width:100% !important">
-                                                        <span>{{ $select.selected._id.SAD}}</span>
-                                                        <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
+                                                <ui-select-match width="100%" allow-clear="true" placeholder="">
+                                                    <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                                        {{ $select.selected._id.SAD || $select.search }}
                                                     </span>
+
                                                 </ui-select-match>
+                                                
 
                                                 <ui-select-choices repeat="invoice in ItemList  | unique:'_id.SAD'|filter: $select.search">
                                                     <div>
@@ -568,13 +569,12 @@
                                             <ui-select ng-model="NETWEIGHT.selected"
                                                        ui-select-focuser
                                                        theme="selectize">
-                                                <ui-select-match allow-clear="true" placeholder="">
-                                                    <span class="selectuiTable" style="width:100% !important">
-                                                        <span>{{ $select.selected._id.NETWEIGHT}}</span>
-                                                        <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
+                                                <ui-select-match width="100%" allow-clear="true" placeholder="">
+                                                    <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                                        {{ $select.selected._id.NETWEIGHT || $select.search }}
                                                     </span>
-                                                </ui-select-match>
 
+                                                </ui-select-match>
                                                 <ui-select-choices repeat="invoice in ItemList  | unique:'_id.NETWEIGHT'|filter: $select.search">
                                                     <div>
                                                         <span style="color:forestgreen">{{invoice._id.NETWEIGHT}}</span>
