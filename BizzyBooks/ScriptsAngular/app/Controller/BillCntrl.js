@@ -189,13 +189,13 @@
         var netweight = 0;
         var totalAmountINR = 0;
         for (var i = 0; i < $scope.billtable.length; i++) {
-            manualTotal += Number($scope.billtable[i].TOTALAMOUNT.toFixed(2));
+            manualTotal += Number($scope.billtable[i].TOTALAMOUNT);
             netweight += Number($scope.billtable[i].NETWEIGHT);
             totalAmountINR += Number($scope.billtable[i].AMOUNTINR.toFixed(2));
         }
         $scope.totalAmountINR = Number(totalAmountINR.toFixed(2));
         $scope.manualTotalINR = Number(totalAmountINR)
-        $scope.manualTotal = Number(manualTotal);
+        $scope.manualTotal = Number(manualTotal.toFixed(2));
         $scope.netweight = Number(netweight);
         return $scope.totalAmountINR
     }
@@ -381,6 +381,17 @@
     //get Bill data
     $scope.supplier = {};
     $scope.getSupplier();
+    function  checkSalesInventory(invId){ 
+        var url = config.login + "checkSalesInventory/" + invId
+        myService.checkSalesInventory(url).then(function (response) {
+            if (response.data.status == 'Can Not Update') {
+                console.log("checkSalesInventory", response.data.status)
+                $rootScope.$broadcast('event:error', { message: response.data.status });
+            }
+            else 
+                return;
+        })
+    }
     $scope.getBilldata = function (billNo, fields) {
         $scope.field = fields
         $http.get(config.api + 'voucherTransactions/' + billNo)
@@ -471,12 +482,9 @@
     // save bill 
     $scope.saving = false;
     $scope.saveBill = function (index) {   
-        // $scope.saving = true;
-      
         var date = getDate($scope.billDate);
         var billDueDate = getDate($scope.billDueDate);
         var actualDate = getDate($scope.actualDate);
-        console.log($scope.billNo)
         if ($scope.billNo == undefined) {
             $rootScope.$broadcast('event:error', { message: "Please type Invoice No" });
             return;
@@ -506,8 +514,12 @@
             $rootScope.$broadcast('event:error', { message: "Invoice actual date is not valid" });
             return;
         }
+        if ($stateParams.billNo != null) {
+            alert("dsds")
+            checkSalesInventory($stateParams.billNo);
+        }
        
-        $rootScope.$broadcast('event:progress', { message: "Please wait while processing.." });
+       // $rootScope.$broadcast('event:progress', { message: "Please wait while processing.." });
         var purchaseAmount;
        
         if (authService.userHasPermission('usertype:O')) {

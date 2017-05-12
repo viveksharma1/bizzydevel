@@ -15,6 +15,13 @@
         $scope.myValue = { accountName: value };
         $scope.getSupplier();
     }
+
+    $scope.clear = function ($event, $select) {
+        $event.stopPropagation();
+        $select.selected = null;
+        $select.search = undefined;
+        $timeout(function () { $select.activate() }, 300);
+    }
    // edit account
     $scope.Accountbtn = function (id, type) {
         if (type) {
@@ -33,9 +40,21 @@
         }
     };
 
-    //get all account
+    $scope.isDisabled = false;
+    $scope.isDisabled1 = false;
+    $scope.selectBox = function(type) {
+        if (type == "interest") {
+            $scope.isDisabled = false;
+            $scope.isDisabled1 = true;
+            
+        }
+        if (type == "perKg") {
+            $scope.isDisabled1 = false;
+                $scope.isDisabled = true;
+            }
+        }
     
-   
+    //get all account
     function getAccount() {
         $http.get(config.api + "accounts").then(function (response) {
             if (response.data.length > 0) {
@@ -61,6 +80,7 @@
         $http.get(config.api + "voucherTransactions/" + $stateParams.voId).then(function (response) {
             $scope.settlementData = response.data
             console.log($scope.settlementData)
+            $scope.invoiceNo =  $scope.settlementData.invoiceNo
             $scope.supplierName = localStorage[$scope.settlementData.supplier];
             $scope.supplierName = localStorage[$scope.settlementData.supplier];
             $scope.vatAccount.selected = $scope.settlementData.vatAccount
@@ -73,6 +93,8 @@
         getCount();
     }
     $scope.saveSettlement = function () {
+
+        $rootScope.$broadcast('event:progress', { message: "Please wait while processing.." });
         if ($scope.settlementData.vatPerKg) {
             $scope.settlementData.ledgerDataFirst = { amount: $scope.settlementData.vatAmountPerKg, accountId: $scope.settlementData.supplier }
         }
@@ -93,10 +115,12 @@
         $scope.settlementData.otaxAccount = $scope.otaxAccount.selected.id
         delete $scope.settlementData._id;
         
+        // get count of purchaseSettelment
         $http.post(config.login + "purchaseSettelment/" + $stateParams.voId, $scope.settlementData).then(function (response) {
             if (response.data) {
                 $stateParams.voId = response.data.id
                 console.log(response.data);
+                $rootScope.$broadcast('event:success', { message: "Purchase Settelment Done" });
                 $state.go('Customer.PurchaseInvoiceSattlement', { voId: response.data.id });
 
             }
@@ -104,25 +128,27 @@
         });
         console.log($scope.settlementData)     
     }
+    // calculate interest
     $scope.calculateinterest = function (rate,amount) {
         $scope.settlementData.interestAmount = ((Number(amount) * rate) / 100).toFixed(2);
         $scope.settlementData.totalDedvatAmount = Number($scope.settlementData.vatAmount) > Number($scope.settlementData.interestAmount) ? $scope.settlementData.interestAmount : $scope.settlementData.vatAmount
-        $scope.settlementData.totalDedExciseAmount = $scope.settlementData.interestAmount < $scope.settlementData.vatAmount ? 0 : $scope.settlementData.interestAmount - $scope.settlementData.totalDedvatAmount
+        $scope.settlementData.totalDedExciseAmount = $scope.settlementData.interestAmount > $scope.settlementData.vatAmount ? $scope.settlementData.interestAmount - $scope.settlementData.totalDedvatAmount: 0 
         console.log($scope.totalDedvatAmount); 
     }
     
+   
+
     $scope.getInvoice = function (invoiceNo) {
         $http.post(config.login + "voucherTransactionsExist/" + $scope.invoiceNo).then(function (response) {
             if (response.data.count > 0) {
-              
-                //showErrorToast("Invoice No  Exist");
-                $stateParams.voId = response.data.id
-                
+                $rootScope.$broadcast('event:success', { message: "Purchase  Sattlement Exist.." });
+                $stateParams.voId = response.data.id;
                 $state.go('Customer.PurchaseInvoiceSattlement', { voId: response.data.id });
                 $state.reload();
                 
             }
-            else if(response.data.count == 0) {
+            else if (response.data.count == 0) {
+                $rootScope.$broadcast('event:progress', { message: "Please wait getting invoice.." });
                 $http.get(config.login + "getInvoiceSett/" + invoiceNo).then(function (response) {
                     console.log(response.data)
                     if (response.data.length > 0) {
@@ -131,8 +157,10 @@
                         $scope.settlementData.totalQty = calculateTotalQty($scope.settlementData.totalLineItemData)
                         console.log($scope.settlementData.totalQty)
                         $scope.supplierName = localStorage[$scope.settlementData.supplier];
+                        swal.close();
                     } else if (response.data.status =="Not Found") {
-                        showErrorToast("Invoice No Does not Exist");
+                        $rootScope.$broadcast('event:error', { message: "Invoice No Does not Exist" });
+                       
                     }
                 });
             }

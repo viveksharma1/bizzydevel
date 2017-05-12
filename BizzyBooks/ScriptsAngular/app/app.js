@@ -815,7 +815,13 @@ myApp.service('myService', function ($http) {
                 console.log(JSON.stringify(response));
                 return response.data;
             });
-        }
+        },
+        checkSalesInventory: function (url, invId) {
+        return $http.get(url,function (response) {
+            console.log(JSON.stringify(response));
+            return response.data;
+        });
+    }
     };  
   });
 

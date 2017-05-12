@@ -23,8 +23,14 @@
             else {
                 remarks = '';
             }
+            if ($scope.ledgerData[i].particular1) {
+                var particular1 =  " & "+ localStorage[$scope.ledgerData[i].particular1]
+            }
+            else {
+                particular1 = '';
+            }
             $scope.ledgerData[i].accountName = localStorage[$scope.ledgerData[i].accountName]
-            $scope.ledgerData[i].particulars = localStorage[$scope.ledgerData[i].particular] + remarks
+            $scope.ledgerData[i].particulars = localStorage[$scope.ledgerData[i].particular] + remarks + particular1
             if ($scope.ledgerData[i].credit) {
                 credit += Number($scope.ledgerData[i].credit);
             }
