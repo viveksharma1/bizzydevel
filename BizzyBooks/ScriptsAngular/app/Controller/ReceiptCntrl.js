@@ -411,9 +411,27 @@
     //             });
     }
     function checkPaymentBills() {
+        removeDuplicate();
         Array.prototype.push.apply($scope.paymentData, $scope.itemChecked);
         angular.copy($scope.paymentData, $scope.paidData);
     }
+
+    function removeReceiptById(id) {
+        for (var i = 0; i < $scope.paymentData.length; i++) {
+            if ($scope.paymentData[i].id == id) {
+                $scope.paymentData.splice(i, 1);
+                return;
+            }
+        }
+    }
+    function removeDuplicate() {
+        for (var i = 0; i < $scope.itemChecked.length; i++) {
+            removeReceiptById($scope.itemChecked[i].id);
+            //$scope.itemChecked[i].isOld = true;
+        }
+    }
+
+
     function fillRosemateData(){
         $scope.bankAccount = { selected: sharedFactory.info.cashAccount.selected };
         if(sharedFactory.info.paymentDate)
@@ -669,32 +687,42 @@
 
 
         }else{
-
-            var days = getDays(item);
-            var dayCal = days - Number(item.invoiceData.paymentDays == undefined ? 0 : item.invoiceData.paymentDays);
-            if (localStorage.usertype == 'O') {
-                dayCal = dayCal < 0 ? 0 : dayCal;
+            try{
+                var days = getDays(item);
+                var dayCal = days - Number(item.invoiceData.paymentDays == undefined ? 0 : item.invoiceData.paymentDays);
+                if (localStorage.usertype == 'O') {
+                    dayCal = dayCal < 0 ? 0 : dayCal;
+                }
+                ret= Number((payAmount * (item.invoiceData.roi /100/30) * dayCal).toFixed(2));
+            } catch (e) {
+                console.log(e);
+                ret = 0;
             }
-            ret= Number((payAmount * (item.invoiceData.roi /100/30) * dayCal).toFixed(2));
+            
             
         }
         if (inline) item.interest = ret;
         else return ret;
     }
     $scope.amountChange = function (item, payAmount, oldPayAmount) {
+        if(payAmount!=null)
         $scope.selectLineItem(item, true);
 
         if ($scope.itemChecked.length > 0) {
             for (var i = 0; i < $scope.itemChecked.length; i++) {
                 if (item) {
                     if ($scope.itemChecked[i].id == item.id) {
+                        if ($scope.itemChecked[i].old) 
+                            $scope.itemChecked[i].balance += Number(oldPayAmount) - Number(payAmount);
                         if ($scope.itemChecked[i].balance - payAmount >= 0) {
                             payAmount = getBalanceAmtReceipt(payAmount);
                             $scope.itemChecked[i].amountPaid = payAmount;
                             var interest = getIneterest(item, payAmount);
                             $scope.itemChecked[i].interest = interest;
                             item.interest = interest;
+                            item.balance = $scope.itemChecked[i].balance;
                             item.amountPaid = payAmount;
+                            
                         } else {
                             if (oldPayAmount && oldPayAmount.length > 0) {
                                 var payAmount=getBalanceAmtReceipt(item.balance);
@@ -703,6 +731,7 @@
                                 var interest = getIneterest(item, payAmount);
                                 $scope.itemChecked[i].interest = interest;
                                 item.interest = interest;
+                                item.balance = $scope.itemChecked[i].balance;
                             }
                                 
                         }
@@ -711,6 +740,8 @@
                 }
            }
         }
+        if (payAmount == null)
+            $scope.selectLineItem(item, true);
         calculateTotal(false);
     };
     function paymentDateChange() {

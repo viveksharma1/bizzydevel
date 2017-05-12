@@ -156,50 +156,52 @@
                         <button ng-click="setCustomerType('Buyer')" type="button" ng-class="{active: customerType=='Buyer'}" class="btn btn-xs btn-default">Buyer</button>
                     </div>
                 </div>
-                <h4 class="tabheading font_11">Sales Ledger <span class="pull-right" style="color:forestgreen"><i class="fa fa-rupee"></i> {{salesAccountBalance}} <em style="color:red">{{salesAccountType}}</em></span></h4>
 
-                @*<h4 class="tabheading font_11 pull-left" style="width:100%; ">Sales Ledger </h4>*@
-                @*<ui-select ng-model="groupMasters.selected.name" id="countryCode" ui-select-focuser
-                           theme="selectize">
+                <div class="col-sm-12 padding">
+                    <h4 class="tabheading font_11">Sales Ledger <span class="pull-right" style="color:forestgreen"><i class="fa fa-rupee"></i> {{salesAccountBalance}} <em style="color:red">{{salesAccountType}}</em></span></h4>
 
-                    <ui-select-match placeholder="Choose an account">{{$select.selected.name}}</ui-select-match>
-                    <ui-select-header>Top of the list!</ui-select-header>
-                    <ui-select-choices repeat="person in groupMaster  | filter: $select.search">
-                        <div>
-                            <span style="color:black" ng-model="supplier1" ng-bind-html="person.name | highlight: $select.search">{{person.type}}</span>
-                            <span style="color:forestgreen">({{person.type}})</span>
-                        </div>
+                    @*<h4 class="tabheading font_11 pull-left" style="width:100%; ">Sales Ledger </h4>*@
+                    @*<ui-select ng-model="groupMasters.selected.name" id="countryCode" ui-select-focuser
+                       theme="selectize">
 
-
-                    </ui-select-choices>
-                </ui-select>*@
-                <div class="content">
+                <ui-select-match placeholder="Choose an account">{{$select.selected.name}}</ui-select-match>
+                <ui-select-header>Top of the list!</ui-select-header>
+                <ui-select-choices repeat="person in groupMaster  | filter: $select.search">
+                    <div>
+                        <span style="color:black" ng-model="supplier1" ng-bind-html="person.name | highlight: $select.search">{{person.type}}</span>
+                        <span style="color:forestgreen">({{person.type}})</span>
+                    </div>
 
 
-                    <ui-select ng-model="salesAccount.selected" id="countryCode" ui-select-focuser ng-init="$select.addnew=1;$select.type='account';"
-                               theme="selectize" on-select="bindSalesAccountDetail($select.selected)">
-
-                        <ui-select-match placeholder="Choose an account">
-                            <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
-                                {{ $select.selected.accountName || $select.search }}
-                            </span>
-                        </ui-select-match>
-                        <ui-select-choices repeat="person in salesAccounts  | filter: $select.search">
-                            <div>
-                                @*<span style="color:black" ng-bind-html="account.name | highlight: $select.search">{{account.type}}</span>*@
-                                <span style="color:forestgreen">{{person.accountName}}</span>
-                            </div>
+                </ui-select-choices>
+            </ui-select>*@
+                    <div class="content">
 
 
-                        </ui-select-choices>
-                    </ui-select>
+                        <ui-select ng-model="salesAccount.selected" id="countryCode" ui-select-focuser ng-init="$select.addnew=1;$select.type='account';"
+                                   theme="selectize" on-select="bindSalesAccountDetail($select.selected)">
+
+                            <ui-select-match placeholder="Choose an account">
+                                <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                    {{ $select.selected.accountName || $select.search }}
+                                </span>
+                            </ui-select-match>
+                            <ui-select-choices repeat="person in salesAccounts  | filter: $select.search">
+                                <div>
+                                    @*<span style="color:black" ng-bind-html="account.name | highlight: $select.search">{{account.type}}</span>*@
+                                    <span style="color:forestgreen">{{person.accountName}}</span>
+                                </div>
+
+
+                            </ui-select-choices>
+                        </ui-select>
                     </div>
 
                     <div class="col-sm-6" style="padding-left:0px; padding-right:6px">
 
                         <h4 class="tabheading font_11">Invoice Date</h4>
                         <div class='input-group'>
-                            <input type='text' ng-blur="paymentTerm()" class="form-control" ng-init="billDate='InvoiceDate'"  id='InvoiceDate' placeholder="dd/mm/yyyy" />
+                            <input type='text' ng-blur="paymentTerm()" class="form-control" ng-init="billDate='InvoiceDate'" id='InvoiceDate' placeholder="dd/mm/yyyy" />
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
@@ -207,15 +209,15 @@
 
                         <h4 class="tabheading font_11">Due Date</h4>
                         <div class='input-group'>
-                            <input type='text' class="form-control" ng-init="billDueDate='DueDate'"  id='DueDate' placeholder="dd/mm/yyyy" />
+                            <input type='text' class="form-control" ng-init="billDueDate='DueDate'" id='DueDate' placeholder="dd/mm/yyyy" />
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
                         </div>
                         <h4 class="tabheading font_11">Date & time of issue</h4>
                         <div class="col-sm-6" style="padding:0px">
-                            <div class='input-group' >
-                                <input type='text' class="form-control" ng-init="billIssueDate='IssueDate'"  id='IssueDate' placeholder="dd/mm/yyyy" />
+                            <div class='input-group'>
+                                <input type='text' class="form-control" ng-init="billIssueDate='IssueDate'" id='IssueDate' placeholder="dd/mm/yyyy" />
                                 <span class="input-group-addon" style="padding:6px 6px">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
@@ -228,8 +230,8 @@
                                     <span class="fa fa-clock-o"></span>
                                 </span>
                             </div>
-                            </div>
                         </div>
+                    </div>
 
                     <div class="col-sm-6" style="padding:0px">
 
@@ -245,8 +247,8 @@
                     </span>
                 </div>*@
 
-                     
-                       
+
+
                         <div class="col-sm-6" style="padding:0px">
                             <h4 class="tabheading font_11">Order Date</h4>
                             <div class='input-group'>
@@ -255,7 +257,7 @@
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
                             </div>
-          
+
                         </div>
                         <div class="col-sm-6" style="padding:0px; padding-left:4px">
                             <h4 class="tabheading font_11">Order No.</h4>
@@ -280,8 +282,8 @@
                             </div>
                         </div>
 
-                        </div>
-
+                    </div>
+                    </div>
 
 
                 </div>
@@ -306,7 +308,7 @@
 
                     <small style="float:right; margin:10px 0px"><span class="text-primary cursor" id="myPopover" pop-over datas="receipts">{{receiptCount}} reciept </span> made</small>
                 </div>
-                    <div class="pull-right" style="text-align:left">
+                    <div class="pull-right" style="text-align:left;  margin-top:10px">
                         <div class="col-sm-4 pull-right padding">
                             <h4 class="tabheading font_11" style="float:left; width:100%; margin-top:0px !important">Delivery Challan no.</h4>
                             <input type="text" class="form-control pull-right" id="billNo" ng-model="billNo" />
