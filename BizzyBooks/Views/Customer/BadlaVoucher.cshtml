@@ -4,31 +4,7 @@
     Layout = null;
 }
 
-
-
-<script type="text/ng-template" id="/ui-tree-select.html">
-    <ui-select ng-model="model.$selected"
-               ui-select-focuser
-               theme="selectize">
-        <ui-select-match placeholder="Select a group">
-            {{ $select.selected.title }}
-        </ui-select-match>
-        <ui-select-choices repeat="group in groups | filter: $select.search">
-            <div>
-                <span ng-bind-html="group.title | highlight: $select.search"></span>
-                <!--<span ng-bind-html="'('+group.size+' users)'"></span>
-                <a href
-                  ng-show="group.parent"
-                  class="goto-child-group"
-                  ng-click="loadChildGroupsOf(group, $select)">
-                  <i class="fa fa-angle-right"></i>
-                </a>-->
-            </div>
-        </ui-select-choices>
-    </ui-select>
-</script>
-
-<div class="FlexPopup" style="display:block" ng-init="model = {}">
+<div class="FlexPopup" style="display:block">
     <div class="flexheader lightblue  ">
         <label style="float:left;padding:15px ">
 
@@ -59,17 +35,15 @@
         <div class="lightblue bluebrdr content" style="padding:10px 10px; margin-bottom:10px">
             <div class="col-sm-5 padding">
                 <div class="col-sm-3 padding">
-
                     <h4 class="tabheading font_11">Invoice Ref.</h4>
                     <input ng-model="billInfo.vochNo" type="text" class="form-control" disabled />
-
                 </div>
 
 
                 <div class="col-sm-3 padding">
 
                     <h4 class="tabheading font_11">Invoice Date</h4>
-                    <input ng-model="invoiceDate" type='text' class="form-control" disabled />
+                    <input ng-model="invoiceDate|date:'dd/MM/yyyy'" type='text' class="form-control" disabled />
 
                 </div>
                 @*<div class="col-sm-3 padding">
@@ -100,7 +74,7 @@
                     <div class="col-sm-3 padding">
 
                         <h4 class="tabheading font_11">Due Date</h4>
-                        <input ng-model="dueDate" type="text" class="form-control" disabled style="width:100px" />
+                        <input ng-model="dueDate|date:'dd/MM/yyyy'" type="text" class="form-control" disabled style="width:100px" />
                     </div>
                 </div>
 
@@ -187,7 +161,7 @@
             <div class="col-sm-2">
                 <label>Date of Badla</label>
                 <div class='input-group'>
-                    <input type='text' ng-model="badlaDate" class="form-control" id='BadlaDate' disabled />
+                    <input type='text' ng-model="voucherData.date|date:'dd/MM/yyyy'" class="form-control" id='BadlaDate' disabled />
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
@@ -213,15 +187,15 @@
                     <tbody>
                         <tr>
                             <td class="tablepadding"><strong>DAYS</strong></td>
-                            <td class="tablepadding"><input ng-model="dayTotal"  type="number" class="form-control" /></td>
-                            <td class="tablepadding"><input ng-model="dayInterest" type="text" class="form-control" /></td>
-                            <td class="tablepadding"><input ng-model="dayDiff" type="text" class="form-control" /></td>
+                            <td class="tablepadding"><input ng-model="badlaInfo.dayTotal"  type="number" class="form-control" /></td>
+                            <td class="tablepadding"><input ng-model="badlaInfo.dayInterest" type="text" class="form-control" /></td>
+                            <td class="tablepadding"><input ng-model="badlaInfo.dayDiff" type="text" class="form-control" /></td>
                         </tr>
                         <tr>
                             <td class="tablepadding"><strong>INTEREST (%)</strong></td>
-                            <td class="tablepadding"><input ng-model="perTotal" type="text" class="form-control" /></td>
-                            <td class="tablepadding"><input ng-model="perInterest" type="text" class="form-control" /></td>
-                            <td class="tablepadding"><input ng-model="perDiff" type="text" class="form-control" /></td>
+                            <td class="tablepadding"><input ng-model="badlaInfo.perTotal" type="text" class="form-control" /></td>
+                            <td class="tablepadding"><input ng-model="badlaInfo.perInterest" type="text" class="form-control" /></td>
+                            <td class="tablepadding"><input ng-model="badlaInfo.perDiff" type="text" class="form-control" /></td>
                         </tr>
 
                     </tbody>
