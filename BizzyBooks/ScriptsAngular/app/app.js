@@ -153,8 +153,9 @@ var myApp = angular
             templateUrl: "Customer/Receipt",
             controller: "ReceiptCntrl",
             params: {
-                type:'Receipt',
-                voId: null
+                type: 'Receipt',
+                noBackTrack:false,
+                voId: null,
             }
 
         });
@@ -232,6 +233,7 @@ var myApp = angular
             params: {
                 type: "Sales Invoice",
                 voId: null,
+                noBackTrack:false
             }
 
         });
@@ -501,9 +503,13 @@ var myApp = angular
       
 
         $stateProvider.state("Customer.ContraEntry", {
-            url: "/ContraEntry",
+            url: "/ContraEntry/:voId",
             templateUrl: "Customer/ContraEntry",
-            controller: "ContraEntryCntrl"
+            controller: "ContraEntryCntrl",
+            params: {
+                voId: null,
+                type: 'Contra Entry',
+            }
 
         });
 
@@ -626,7 +632,8 @@ myApp.run(['authService', '$location', '$rootScope', 'localStorageService', '$st
             //    $state.go("/");
                 //$location.path(ngAuthSettings.defaultRoute);
         } else {
-            $rootScope.$previousState = fromState;
+            if (!fromParams.noBackTrack)
+                $rootScope.$previousState = fromState;
         }
         //if (next.route != undefined) {
         //    var path = authService.getUserPermission(next.route, next.fallback);
@@ -808,23 +815,6 @@ myApp.run(['authService', '$location', '$rootScope', 'localStorageService', '$st
 //]);
 
 
-myApp.service('myService', function ($http) {
-    return {
-        getOpeningBalance: function (url, CompanyId) {
-            return $http.post(url, CompanyId,function (response) {
-                console.log(JSON.stringify(response));
-                return response.data;
-            });
-        },
-        checkSalesInventory: function (url, invId) {
-        return $http.get(url,function (response) {
-            console.log(JSON.stringify(response));
-            return response.data;
-        });
-    }
-    };  
-  });
-
   myApp.directive('onlyDigits', function () {
       return {
           require: 'ngModel',
@@ -846,7 +836,35 @@ myApp.service('myService', function ($http) {
           }
       };
   });
- 
+  myApp.directive('popOver', function ($compile, $templateCache) {
+      var getTemplate = function () {
+          //$templateCache.put('templateId.html', 'This is the content of the template');
+          return $templateCache.get("popover_template.html");
+      }
+      return {
+          restrict: "A",
+          transclude: true,
+          template: "<span ng-transclude></span>",
+          link: function (scope, element, attrs) {
+              var popOverContent;
+              if (scope.datas) {
+                  var html = getTemplate();
+                  popOverContent = $compile(html)(scope);
+                  var options = {
+                      content: popOverContent,
+                      placement: "bottom",
+                      html: true,
+                      title: scope.title
+                  };
+                  $(element).popover(options);
+              }
+          },
+          scope: {
+              datas: '=',
+              title: '@'
+          }
+      };
+  });
 
 //myApp.directive('uiTreeInvoice', [
 //  'groupFactory',
@@ -1140,7 +1158,7 @@ myApp.run(['$templateCache', function ($templateCache) {
     $templateCache.put('selectize/choices.tpl.html', [
       '<div ng-show="$select.open"',
       '  class="ui-select-choices group-tree selectize-dropdown single">',
-      '  <div  class="ui-select-breadcrumbs cursor"  "ng-show="$select.addnew==1" >',
+      '  <div  class="ui-select-breadcrumbs cursor"  ng-click="add($select.type,$select.search)" ng-show="$select.addnew==1" >',
       '    <span   class="ui-breadcrumb"',
            '       <span><label class="badge cursor" style="color:white"tabindex="2"ng-keyup="$event.keyCode == 13 ? add($select.type,$select.search) : null"aria-hidden="false"><i class="fa fa-plus"></i> Add</label> <span class="pull-right text-warning">{{$select.search }}</span></span>',
       '    </span>',

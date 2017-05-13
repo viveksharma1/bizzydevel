@@ -1,4 +1,4 @@
-﻿myApp.controller('VoucherTransactionsCntrl', ['$scope', '$http', '$timeout', '$stateParams', 'myService', '$rootScope', '$state', 'config', '$filter', function ($scope, $http, $timeout, $stateParams, myService, $rootScope, $state, config, $filter) {
+﻿myApp.controller('VoucherTransactionsCntrl', ['$scope', '$http', '$timeout', '$stateParams', 'commonService', '$rootScope', '$state', 'config', '$filter', function ($scope, $http, $timeout, $stateParams, commonService, $rootScope, $state, config, $filter) {
 
 
     $(".my a").click(function (e) {
@@ -58,6 +58,9 @@
         if (voType == 'Journal Entry') {
 
             $state.go('Customer.JournalEntry', { voId: id });
+        }
+        if (voType == 'Contra Entry') {
+            $state.go('Customer.ContraEntry', { voId: id });
         }
 
 

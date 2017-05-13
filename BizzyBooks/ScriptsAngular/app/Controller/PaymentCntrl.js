@@ -1,4 +1,4 @@
-﻿myApp.controller('PaymentCntrl', ['$scope', '$http', '$stateParams', '$timeout', 'myService', '$rootScope', '$state', 'config', '$filter', 'FileUploader', 'sharedFactory', function ($scope, $http, $stateParams, $timeout, myService, $rootScope, $state, config, $filter, FileUploader, sharedFactory) {
+﻿myApp.controller('PaymentCntrl', ['$scope', '$http', '$stateParams', '$timeout', 'commonService', '$rootScope', '$state', 'config', '$filter', 'FileUploader', 'sharedFactory', function ($scope, $http, $stateParams, $timeout, commonService, $rootScope, $state, config, $filter, FileUploader, sharedFactory) {
 
     $.fn.datepicker.defaults.format = "dd/mm/yyyy";
     //localStorage["type1"] = "PAYMENT"

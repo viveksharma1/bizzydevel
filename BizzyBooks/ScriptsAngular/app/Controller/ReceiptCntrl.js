@@ -5,12 +5,8 @@
     $(".my a").click(function (e) {
         e.preventDefault();
     });
-
-
-
-
     $scope.goBack = function (retain) {
-        if ($rootScope.$previousState.name.length == 0 || $rootScope.$previousState==$state.current) {
+        if ($rootScope.$previousState.name.length == 0 || $rootScope.$previousState==$state.current || $stateParams.noBackTrack) {
             window.history.back();
         }else
             $state.go($rootScope.$previousState);
@@ -211,8 +207,15 @@
         }
         $http.post(config.login + 'deleteReceipt?id=' + $stateParams.voId, data)
                             .then(function (response) {
-                                showSuccessToast("Receipt deleted.");
-                                $scope.goBack();// $state.reload();
+                                if (response.data.err) {
+                                    $rootScope.$broadcast('event:error', { message: "Error while creating receipt: " + response.data.err });
+                                } else {
+                                    showSuccessToast("Receipt deleted.");
+                                    $scope.goBack();// $state.reload();
+                                }
+                            }, function (err) {
+                                console.log(err);
+                                $rootScope.$broadcast('event:error', { message: "Error while deleting receipt" });
 
                             });
     }
@@ -313,18 +316,22 @@
                     //var res = $q.defer();
                     $http.post(config.login + 'receipt?id=' + $stateParams.voId, data)
                              .then(function (response) {
-                                 $rootScope.$broadcast('event:success', { message: "Receipt Created" });
-                                 //SweetAlert.swal("Done", "Receipt Created.", "success")
-                                 //showSuccessToast("Receipt Created.");
-                                 $state.go('Customer.Receipt', null, { location: false, reload: true });
-                                 //spinner.stop();
-                                 //res.reject();
-                                 //res.resolve();
+                                 if (response.data.err) {
+                                     $rootScope.$broadcast('event:error', { message: "Error while creating receipt: "+response.data.err });
+                                 } else {
+                                     $rootScope.$broadcast('event:success', { message: "Receipt Created" });
+                                     //SweetAlert.swal("Done", "Receipt Created.", "success")
+                                     //showSuccessToast("Receipt Created.");
+                                     $state.go('Customer.Receipt', null, { location: false, reload: true });
+                                     //spinner.stop();
+                                     //res.reject();
+                                     //res.resolve();
+                                 }
                              }, function (err) {
                                  console.log(err);
                                  //SweetAlert.swal("Error", "Error while creating receiipt", "error");
                                  //SweetAlertError();
-                                 $rootScope.$broadcast('event:error', { message: "Error while creating receiipt" });
+                                 $rootScope.$broadcast('event:error', { message: "Error while creating receipt" });
                                  //spinner.stop();
                                  //res.reject();
                              });

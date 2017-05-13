@@ -1,4 +1,4 @@
-﻿myApp.controller('PurchaseOrderCntrl', ['$scope', '$http', '$stateParams', '$timeout', 'myService', '$rootScope', '$state', 'config', 'DTOptionsBuilder', 'DTDefaultOptions', function ($scope, $http, $stateParams, $timeout, myService,$rootScope, $state, config, DTOptionsBuilder, DTDefaultOptions) {
+﻿myApp.controller('PurchaseOrderCntrl', ['$scope', '$http', '$stateParams', '$timeout', 'commonService', '$rootScope', '$state', 'config', 'DTOptionsBuilder', 'DTDefaultOptions', function ($scope, $http, $stateParams, $timeout, commonService,$rootScope, $state, config, DTOptionsBuilder, DTDefaultOptions) {
 
   
    

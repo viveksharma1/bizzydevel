@@ -1,0 +1,15 @@
+﻿<span ng-transclude>
+    <table style='width:100%'>
+        <tr>
+            <th>Date</th>
+            <th>Amount Paid</th>
+            <th>Voch No.</th>
+        </tr>
+        <tr ng-repeat='data in datas' class="cursor" ui-sref="Customer.MakePayment({voId:data.id})">
+            <td style="color:forestgreen">{{data.date|date:'dd/MM/yyyy'}}</td>
+            <td>Rs{{data.amount}}</td>
+            <td>{{data.vochNo}}</td>
+        </tr>
+        <tr></tr>
+    </table>
+</span>

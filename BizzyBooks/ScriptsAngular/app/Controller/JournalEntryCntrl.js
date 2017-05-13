@@ -1,4 +1,4 @@
-﻿myApp.controller('JournalEntryCntrl', ['$scope', '$http', '$timeout', '$stateParams', 'myService', '$rootScope', '$state', 'config', '$filter', function ($scope, $http, $timeout, $stateParams, myService, $rootScope, $state, config, $filter) {
+﻿myApp.controller('JournalEntryCntrl', ['$scope', '$http', '$timeout', '$stateParams', 'commonService', '$rootScope', '$state', 'config', '$filter', function ($scope, $http, $timeout, $stateParams, commonService, $rootScope, $state, config, $filter) {
 
     $(document).ready(function () {
 
@@ -147,6 +147,40 @@
 
     if ($stateParams.voId) {
         getjournal($stateParams.voId);
+    }
+
+
+    $scope.deleteVoucherModal = function () {
+        swal({
+            title: "Are you sure?",
+            text: "You will not be able to recover this voucher !",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, delete",
+            cancelButtonText: "Cancel",
+            closeOnConfirm: false,
+            closeOnCancel: true
+        },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        $scope.deleteVoucher();
+
+                    }
+                });
+    }
+    $scope.deleteVoucher = function () {
+        $rootScope.$broadcast('event:progress', { message: "Please wait while processing.." });
+        $http.get(config.login + "deleteJournalAndContra/" + $stateParams.billNo).then(function (response) {
+            if (response.data == "Deleted") {
+                $rootScope.$broadcast('event:success', { message: "Contra No " + $scope.no + " Deleted Succesfully" });
+                window.history.back();
+                $state.reload();
+            }
+            else {
+                $rootScope.$broadcast('event:error', { message: response.data });
+            }
+        });
     }
       
 }]);

@@ -1,4 +1,4 @@
-﻿myApp.controller('SalesInvoiceSattlementCntrl', ['$scope', '$http', '$timeout', '$stateParams', 'myService', '$rootScope', '$state', 'config', '$filter', function ($scope, $http, $timeout, $stateParams, myService, $rootScope, $state, config, $filter) {
+﻿myApp.controller('SalesInvoiceSattlementCntrl', ['$scope', '$http', '$timeout', '$stateParams', 'commonService', '$rootScope', '$state', 'config', '$filter', function ($scope, $http, $timeout, $stateParams, commonService, $rootScope, $state, config, $filter) {
 
     $(".my a").click(function (e) {
         e.preventDefault();
@@ -14,6 +14,13 @@
         $('#formaccount').modal('show');
         $scope.myValue = { accountName: value };
         $scope.getSupplier();
+    }
+
+    $scope.clear = function ($event, $select) {
+        $event.stopPropagation();
+        $select.selected = null;
+        $select.search = undefined;
+        $timeout(function () { $select.activate() }, 300);
     }
     // edit account
     $scope.Accountbtn = function (id, type) {
@@ -33,9 +40,21 @@
         }
     };
 
+    $scope.isDisabled = false;
+    $scope.isDisabled1 = false;
+    $scope.selectBox = function (type) {
+        if (type == "interest") {
+            $scope.isDisabled = false;
+            $scope.isDisabled1 = true;
+
+        }
+        if (type == "perKg") {
+            $scope.isDisabled1 = false;
+            $scope.isDisabled = true;
+        }
+    }
+
     //get all account
-
-
     function getAccount() {
         $http.get(config.api + "accounts").then(function (response) {
             if (response.data.length > 0) {
@@ -45,6 +64,10 @@
             }
         });
     }
+    $scope.$on("event:accountReferesh", function (event, args) {
+        // Refresh accounts...
+        getAccount();
+    });
     getAccount();
     $scope.otaxAccount = {}
     $scope.vatAccount = {}
@@ -61,8 +84,8 @@
         $http.get(config.api + "voucherTransactions/" + $stateParams.voId).then(function (response) {
             $scope.settlementData = response.data
             console.log($scope.settlementData)
-            $scope.supplierName = localStorage[$scope.settlementData.supplier];
-            $scope.supplierName = localStorage[$scope.settlementData.supplier];
+            $scope.invoiceNo = $scope.settlementData.invoiceNo
+            $scope.customerName = localStorage[$scope.settlementData.customer];
             $scope.vatAccount.selected = $scope.settlementData.vatAccount
             $scope.vatAccount = { selected: { accountName: localStorage[$scope.settlementData.vatAccount], id: $scope.settlementData.vatAccount } };
             $scope.otaxAccount = { selected: { accountName: localStorage[$scope.settlementData.otaxAccount], id: $scope.settlementData.otaxAccount } };
@@ -73,6 +96,8 @@
         getCount();
     }
     $scope.saveSettlement = function () {
+
+        $rootScope.$broadcast('event:progress', { message: "Please wait while processing.." });
         if ($scope.settlementData.vatPerKg) {
             $scope.settlementData.ledgerDataFirst = { amount: $scope.settlementData.vatAmountPerKg, accountId: $scope.settlementData.supplier }
         }
@@ -93,10 +118,12 @@
         $scope.settlementData.otaxAccount = $scope.otaxAccount.selected.id
         delete $scope.settlementData._id;
 
+        // get count of purchaseSettelment
         $http.post(config.login + "purchaseSettelment/" + $stateParams.voId, $scope.settlementData).then(function (response) {
             if (response.data) {
                 $stateParams.voId = response.data.id
                 console.log(response.data);
+                $rootScope.$broadcast('event:success', { message: "Purchase Settelment Done" });
                 $state.go('Customer.PurchaseInvoiceSattlement', { voId: response.data.id });
 
             }
@@ -104,35 +131,39 @@
         });
         console.log($scope.settlementData)
     }
+    // calculate interest
     $scope.calculateinterest = function (rate, amount) {
         $scope.settlementData.interestAmount = ((Number(amount) * rate) / 100).toFixed(2);
-        $scope.settlementData.totalDedvatAmount = Number($scope.settlementData.vatAmount) > Number($scope.settlementData.interestAmount) ? $scope.settlementData.interestAmount : $scope.settlementData.vatAmount
-        $scope.settlementData.totalDedExciseAmount = $scope.settlementData.interestAmount < $scope.settlementData.vatAmount ? 0 : $scope.settlementData.interestAmount - $scope.settlementData.totalDedvatAmount
+        $scope.settlementData.totalDedvatAmount = Number($scope.settlementData.vatAmount) > Number($scope.settlementData.interestAmount) ? Number(Number($scope.settlementData.interestAmount).toFixed(2)) : Number(Number($scope.settlementData.vatAmount).toFixed(2))
+        $scope.settlementData.totalDedExciseAmount = Number($scope.settlementData.interestAmount) > Number($scope.settlementData.vatAmount) ? ($scope.settlementData.interestAmount - $scope.settlementData.totalDedvatAmount).toFixed(2) : 0
         console.log($scope.totalDedvatAmount);
     }
+
+
 
     $scope.getInvoice = function (invoiceNo) {
         $http.post(config.login + "voucherTransactionsExist/" + $scope.invoiceNo).then(function (response) {
             if (response.data.count > 0) {
-
-                //showErrorToast("Invoice No  Exist");
-                $stateParams.voId = response.data.id
-
+                $rootScope.$broadcast('event:success', { message: "Purchase  Sattlement Exist.." });
+                $stateParams.voId = response.data.id;
                 $state.go('Customer.PurchaseInvoiceSattlement', { voId: response.data.id });
                 $state.reload();
 
             }
             else if (response.data.count == 0) {
-                $http.get(config.login + "getInvoiceSett/" + invoiceNo).then(function (response) {
+                $rootScope.$broadcast('event:progress', { message: "Please wait getting invoice.." });
+                $http.get(config.login + "getSalesInvoice/" + invoiceNo).then(function (response) {
                     console.log(response.data)
                     if (response.data.length > 0) {
                         $scope.settlementData = response.data[0];
                         getCount();
                         $scope.settlementData.totalQty = calculateTotalQty($scope.settlementData.totalLineItemData)
                         console.log($scope.settlementData.totalQty)
-                        $scope.supplierName = localStorage[$scope.settlementData.supplier];
+                        $scope.customerName = localStorage[$scope.settlementData.customer];
+                        swal.close();
                     } else if (response.data.status == "Not Found") {
-                        showErrorToast("Invoice No Does not Exist");
+                        $rootScope.$broadcast('event:error', { message: "Invoice No Does not Exist" });
+
                     }
                 });
             }
@@ -159,12 +190,13 @@
             var qty = 0;
             var excise = 0;
             for (var i = 0; i < data.length; i++) {
-                qty += data[i].NETWEIGHT;
-                excise += Number(data[i].dutyAmount);
+                qty += Number(data[i].itemQty);
+                excise += Number(data[i].dutyPerUnit);
             }
-            $scope.settlementData.exciseAmount = excise
-            console.log($scope.excise)
-            return qty;
+            if (excise) {
+                $scope.settlementData.exciseAmount = (excise * qty).toFixed(2)
+            }
+            return Number(qty.toFixed(2));
         }
         else {
             return
@@ -176,6 +208,85 @@
         return localStorage["supplierId"];
     }
 
+    function calculateOpenningBalnce(data, balanceType) {
+        var balance;
+        if (balanceType == 'credit' && data.credit) {
+            balance = Number(data.credit) - Number(data.debit)
+        }
+        if (balanceType == 'debit') {
+            balance = Number(data.debit) - Number(data.credit)
+        }
+        return balance
+    }
+    $scope.bindVatAccountDetail = function (data) {
+        console.log(data.balanceType)
+        var balanceType = data.balanceType
+        if (data.balanceType == 'debit') {
+            $scope.supplierType = " (Dr.) "
+        } else {
+            $scope.supplierType = " (Cr.)"
+        }
+        var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
+        commonService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
+            if (response.data.openingBalance) {
+                $scope.vatAccountBalance = Math.abs(calculateOpenningBalnce(response.data.openingBalance, balanceType))
+            } else {
+                $scope.vatAccountBalance = 0.00;
+            }
+        })
+    }
+    $scope.bindOTaxAccountDetail = function (data) {
+        console.log(data.balanceType)
+        var balanceType = data.balanceType
+        if (data.balanceType == 'debit') {
+            $scope.supplierType = " (Dr.) "
+        } else {
+            $scope.supplierType = " (Cr.)"
+        }
+        var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
+        commonService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
+            if (response.data.openingBalance) {
+                $scope.oTaxBalance = Math.abs(calculateOpenningBalnce(response.data.openingBalance, balanceType))
+            } else {
+                $scope.oTaxBalance = 0.00;
+            }
+        })
+    }
 
 }]);
 
+myApp.directive('salesInfo', function ($compile, $templateCache) {
+    var getTemplate = function () {
+        //$templateCache.put('templateId.html', 'This is the content of the template');
+        //console.log($templateCache.get("addItem_template.html"));
+        return $templateCache.get("salesInfo_template.html");
+    }
+    return {
+
+        restrict: "A",
+        transclude: true,
+        template: "<span ng-transclude></span>",
+        link: function (scope, element, attrs) {
+            var popOverContent;
+            if (true) {
+                //console.log(itemtype)
+                var html = getTemplate();
+                popOverContent = $compile(html)(scope);
+                var options = {
+                    content: popOverContent,
+                    placement: "bottom",
+                    html: true,
+                    title: scope.title,
+                };
+                $(element).popover(options);
+            }
+        },
+        scope: {
+            billdata: '=',
+            exciseData: '='
+
+        }
+
+
+    };
+});

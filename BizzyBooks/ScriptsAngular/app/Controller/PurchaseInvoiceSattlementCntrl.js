@@ -1,4 +1,4 @@
-﻿myApp.controller('PurchaseInvoiceSattlementCntrl', ['$scope', '$http', '$timeout', '$stateParams', 'myService', '$rootScope', '$state', 'config', '$filter', 'authService', function ($scope, $http, $timeout, $stateParams, myService, $rootScope, $state, config, $filter, authService) {
+﻿myApp.controller('PurchaseInvoiceSattlementCntrl', ['$scope', '$http', '$timeout', '$stateParams', 'commonService', '$rootScope', '$state', 'config', '$filter', 'authService', function ($scope, $http, $timeout, $stateParams, commonService, $rootScope, $state, config, $filter, authService) {
 
     $(".my a").click(function (e) {
         e.preventDefault();
@@ -64,6 +64,10 @@
             }
         });
     }
+    $scope.$on("event:accountReferesh", function (event, args) {
+        // Refresh accounts...
+        getAccount();
+    });
     getAccount();
     $scope.otaxAccount = {}
     $scope.vatAccount = {}
@@ -203,7 +207,50 @@
     $scope.bindSupplierName = function(supplierId) {
         return localStorage["supplierId"];
     }
-
+    function calculateOpenningBalnce(data, balanceType) {
+        var balance;
+        if (balanceType == 'credit' && data.credit) {
+            balance = Number(data.credit) - Number(data.debit)
+        }
+        if (balanceType == 'debit') {
+            balance = Number(data.debit) - Number(data.credit)
+        }
+        return balance
+    }
+    $scope.bindVatAccountDetail = function (data) {
+        console.log(data.balanceType)
+        var balanceType = data.balanceType
+        if (data.balanceType == 'debit') {
+            $scope.supplierType = " (Dr.) "
+        } else {
+            $scope.supplierType = " (Cr.)"
+        }
+        var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
+        commonService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
+            if (response.data.openingBalance) {
+                $scope.vatAccountBalance = Math.abs(calculateOpenningBalnce(response.data.openingBalance, balanceType))
+            } else {
+                $scope.vatAccountBalance = 0.00;
+            }
+        })
+    }
+    $scope.bindOTaxAccountDetail = function (data) {
+        console.log(data.balanceType)
+        var balanceType = data.balanceType
+        if (data.balanceType == 'debit') {
+            $scope.supplierType = " (Dr.) "
+        } else {
+            $scope.supplierType = " (Cr.)"
+        }
+        var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
+        commonService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
+            if (response.data.openingBalance) {
+                $scope.oTaxBalance = Math.abs(calculateOpenningBalnce(response.data.openingBalance, balanceType))
+            } else {
+                $scope.oTaxBalance = 0.00;
+            }
+        })
+    }
   
 }]);
 

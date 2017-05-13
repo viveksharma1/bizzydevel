@@ -1,5 +1,5 @@
-﻿myApp.controller('ExpenseCntrl', ['$scope', '$http', '$stateParams', '$timeout', '$rootScope', '$state', 'myService', 'config','$filter',
-    function ($scope, $http, $stateParams, $timeout, $rootScope, $state, myService, config, $filter) {
+﻿myApp.controller('ExpenseCntrl', ['$scope', '$http', '$stateParams', '$timeout', '$rootScope', '$state', 'commonService', 'config','$filter','FileUploader',
+function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonService, config, $filter,FileUploader) {
         $.fn.datepicker.defaults.format = "dd/mm/yyyy";
         $(".my a").click(function (e) {
             e.preventDefault();
@@ -12,11 +12,7 @@
             $('#form-popoverPopup').hide();
         }
         var files, res;
-        document.getElementById("uploadBtn").onchange = function (e) {
-            e.preventDefault();
-
-        }
-        document.getElementById('uploadBtn').onchange = uploadOnChange;
+     
         $scope.clear = function ($event, $select) {
             $event.stopPropagation();
             $select.selected = null;
@@ -106,7 +102,21 @@
         //}
 
         
-      
+        //bind file attachement
+        $scope.oldAttachment = null;
+        function bindAttachments(attachments, callback) {
+            if (attachments) {
+                angular.forEach(attachments, function (item) {
+                    $scope.oldAttachment = item;
+
+                    item.file.isOld = true;
+                    uploader.addToQueue(item.file);
+
+                });
+            }
+            if (callback)
+                callback();
+        }
      $scope.getSupplier = function () {
            $http.get(config.login + "getSupplierAccount/" + localStorage.CompanyId).then(function (response) {
                $scope.supliers = response.data
@@ -117,6 +127,11 @@
              $scope.account = response.data
          });
      }
+     $scope.$on("event:accountReferesh", function (event, args) {
+         // Refresh accounts...
+         $scope.getSupplier();
+         $scope.getExpenseAccount();
+     });
      $scope.getExpenseAccount();
      $scope.getSupplier();
         
@@ -146,6 +161,11 @@
                         setDate($scope.expenseDate, expenseData.date);
                         $scope.expenseId = expenseData.expenseId
                         $scope.paymentDays = expenseData.paymentDays
+                        $scope.attachements = expenseData.attachements;
+                        $scope.narration = response.data.narration
+                        bindAttachments(expenseData.attachements, function () {
+                            $scope.oldAttachment = null;
+                        });
                         $scope.id = expenseData.id
                         $scope.accountTableSum();
                         $scope.itemTableSum();
@@ -179,7 +199,7 @@
     $scope.bindSupplierDetail = function (data) {
         var balanceType = data.balanceType
         var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
-        myService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
+        commonService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
             if (response.data.openingBalance) {
                 $scope.supplierBalance = calculateOpenningBalnce(response.data.openingBalance, balanceType)
             } else {
@@ -305,6 +325,11 @@
              }
 
              $rootScope.$broadcast('event:progress', { message: "Please wait while processing.." });
+             var queue = uploader.queue;
+             var attachements = [];
+             angular.forEach(queue, function (fileItem) {
+                 attachements.push({ title: fileItem.title, cdnPath: fileItem.cdnPath, file: fileItem.file })
+             });
              if (!$scope.tdsamount) {
                  $scope.netAmount = Number($scope.itemTableSum()) + Number($scope.accountTableSum())
              } else {
@@ -321,6 +346,7 @@
                  no: $scope.expenseId,
                  vochNo: $scope.expenseId,
                  balance: $scope.netamount,
+                 narration: $scope.narration,
                  transactionData: {
                      compCode: localStorage.CompanyId,
                      email:$scope.email,
@@ -343,7 +369,8 @@
                      amount: $scope.netAmount,
                      tdsamount: $scope.tdsamount,
                      tdsRate: $scope.tdsrate,
-                     tdsAccountId: $scope.tdsAccountId
+                     tdsAccountId: $scope.tdsAccountId,
+                     attachements: attachements,
                  }
              }
              $http.post(config.login + "saveExpensetest/" + $stateParams.expenceId, data).then(function (response) {
@@ -391,5 +418,65 @@
              $scope.getSupplier();
              
          }
+
+         $scope.downloadAttachments = function () {
+             var zip = new JSZip();
+             angular.forEach($scope.attachements, function (item) {
+                 var path = item.cdnPath.substring(item.cdnPath.lastIndexOf('/') + 1);
+                 var url = config.login + "getfile?path=" + path;
+                 var filename = item.file.name.replace(/.*\//g, "");
+                 zip.file(filename, urlToPromise(url), { binary: true });
+             });
+             zip.generateAsync({ type: "blob" }, function updateCallback(metadata) {
+                 var msg = "progression : " + metadata.percent.toFixed(2) + " %";
+                 if (metadata.currentFile) {
+                     msg += ", current file = " + metadata.currentFile;
+                 }
+                 console.log(msg);
+             })
+             .then(function callback(blob) {
+                 // see FileSaver.js
+                 saveAs(blob, $stateParams.voId + ".zip");
+             }, function (e) {
+             });
+
+             return false;
+         };
+         $(":file").filestyle({ buttonName: "btn-sm btn-info" });
+         var type = $stateParams.type;
+         var uploader = $scope.uploader = new FileUploader({
+             url: config.login + "upload"
+         });
+
+        // FILTERS
+
+         uploader.filters.push({
+             name: 'customFilter',
+             fn: function (item /*{File|FileLikeObject}*/, options) {
+                 return this.queue.length < 10;
+             }
+         });
+
+        // CALLBACKS
+         uploader.onAfterAddingFile = function (fileItem) {
+             if (fileItem.isOld && $scope.oldAttachment) {
+                 fileItem.title = $scope.oldAttachment.title;
+                 fileItem.cdnPath = $scope.oldAttachment.cdnPath;
+             } else {
+                 console.info('onAfterAddingFile', fileItem);
+                 if ($scope.filename) {
+                     fileItem.title = $scope.filename;
+                     $scope.filename = null;
+                 } else {
+                     uploader.removeFromQueue(fileItem);// = null;
+                     fileItem = {};
+                 }
+             }
+
+         };
+         uploader.onSuccessItem = function (fileItem, response, status, headers) {
+             console.info('onSuccessItem', fileItem, response, status, headers);
+             fileItem.cdnPath = response.name;
+         };
     
 }]);

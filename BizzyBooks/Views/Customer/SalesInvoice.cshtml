@@ -3,7 +3,9 @@
     ViewBag.Title = "SalesInvoice";
     Layout = null;
 }
-
+<script type="text/ng-template" id="popover_template.html">
+    <table style='width:100%'><tr><th>Date</th><th>Amount</th><th>Voch No.</th></tr><tr ng-repeat='data in datas' class="cursor" ui-sref="Customer.Receipt({voId:data.id,noBackTrack:true})" ><td style="color:forestgreen">{{data.date|date:'dd/MM/yyyy'}}</td><td>Rs{{data.amount}}</td><td>{{data.vochNo}}</td></tr><tr></tr></table>
+</script>
 
 @*<script type="text/ng-template" id="/ui-tree-select.html">
     <ui-select ng-model="model.$selected"
@@ -65,11 +67,11 @@
                 <create-account value="myValue"> </create-account>
                 <div class="col-sm-12 padding">
                     <div ng-show="customerType=='Buyer'">
-                        <h4 class="tabheading font_11">Buyer</h4>
+                        <h4 class="tabheading font_11">Buyer <span class="pull-right" style="color:forestgreen"><i class="fa fa-rupee"></i> {{buyerBalance}} <em style="color:red">{{buyerType}}</em></span></h4>
 
                         <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
                                    ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';"
-                                   theme="selectize" on-select="supplierSelected();">
+                                   theme="selectize" on-select="supplierSelected($select.selected);">
                             <ui-select-match placeholder="Select Buyer">
                             <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
                                    {{ $select.selected.accountName || $select.search }}
@@ -85,10 +87,10 @@
                         </ui-select>
                     </div>
                     <div ng-show="customerType=='Consignee'">
-                        <h4 class="tabheading font_11">Consignee</h4>
+                        <h4 class="tabheading font_11">Consignee <span class="pull-right" style="color:forestgreen"><i class="fa fa-rupee"></i> {{consigneeBalance}} <em style="color:red">{{consigneeType}}</em></span></h4>
                         <ui-select ui-tree-select ng-model="supplier2.selected" 
                                    ui-select-focuser ng-init="$select.addnew=1;$select.type='consignee'"
-                                   theme="selectize" on-select="supplier2Selected();">
+                                   theme="selectize" on-select="supplier2Selected($select.selected);">
                             <ui-select-match placeholder="Select Consignee">
                                 <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
                                     {{ $select.selected.accountName || $select.search }}
@@ -154,7 +156,9 @@
                         <button ng-click="setCustomerType('Buyer')" type="button" ng-class="{active: customerType=='Buyer'}" class="btn btn-xs btn-default">Buyer</button>
                     </div>
                 </div>
-                <h4 class="tabheading font_11 pull-left" style="width:100%; ">Sales Ledger </h4>
+                <h4 class="tabheading font_11">Sales Ledger <span class="pull-right" style="color:forestgreen"><i class="fa fa-rupee"></i> {{salesAccountBalance}} <em style="color:red">{{salesAccountType}}</em></span></h4>
+
+                @*<h4 class="tabheading font_11 pull-left" style="width:100%; ">Sales Ledger </h4>*@
                 @*<ui-select ng-model="groupMasters.selected.name" id="countryCode" ui-select-focuser
                            theme="selectize">
 
@@ -173,7 +177,7 @@
 
 
                     <ui-select ng-model="salesAccount.selected" id="countryCode" ui-select-focuser ng-init="$select.addnew=1;$select.type='account';"
-                               theme="selectize">
+                               theme="selectize" on-select="bindSalesAccountDetail($select.selected)">
 
                         <ui-select-match placeholder="Choose an account">
                             <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
@@ -298,23 +302,26 @@
                     <h4 class="tabheading font_11" style="width:100%; margin-top:0px !important; text-align:left">Terms of Delivery</h4>
                     <input type="text" ng-model="termsDelivery" class="form-control" />
                 </div>
-                <small style="float:right; margin:10px 0px"><span class="text-primary cursor" id="myPopover" data-toggle="popover" data-placement="left">1 reciept </span> made on 12/march/2017</small>
-                <div class="pull-right" style="text-align:left">
-                    <div class="col-sm-4 pull-right padding">
-                        <h4 class="tabheading font_11" style="float:left; width:100%; margin-top:0px !important">Delivery Challan no.</h4>
-                        <input type="text" class="form-control pull-right" id="billNo" ng-model="billNo" />
-                    </div>
-                    <div class="col-sm-4 pull-right padding">
-                        <h4 class="tabheading font_11" style="float:left; width:100%; margin-top:0px !important">Excise Invoice no.</h4>
-                        <input type="text" class="form-control pull-right" id="billNo" ng-model="exciseInvoiceNo" />
-                    </div>
-                    <div class="col-sm-4 pull-right padding">
-                        <h4 class="tabheading font_11" style="float:left; width:100%; margin-top:0px !important">Comm. Invoice no.</h4>
-                        <input type="text" class="form-control pull-right" id="billNo" ng-model="comInvoiceNo" />
-                    </div>
-                
+                <div ng-repeat="data in receipts | limitTo:1">
+
+                    <small style="float:right; margin:10px 0px"><span class="text-primary cursor" id="myPopover" pop-over datas="receipts">{{receiptCount}} reciept </span> made</small>
                 </div>
-            </div>
+                    <div class="pull-right" style="text-align:left">
+                        <div class="col-sm-4 pull-right padding">
+                            <h4 class="tabheading font_11" style="float:left; width:100%; margin-top:0px !important">Delivery Challan no.</h4>
+                            <input type="text" class="form-control pull-right" id="billNo" ng-model="billNo" />
+                        </div>
+                        <div class="col-sm-4 pull-right padding">
+                            <h4 class="tabheading font_11" style="float:left; width:100%; margin-top:0px !important">Excise Invoice no.</h4>
+                            <input type="text" class="form-control pull-right" id="billNo" ng-model="exciseInvoiceNo" />
+                        </div>
+                        <div class="col-sm-4 pull-right padding">
+                            <h4 class="tabheading font_11" style="float:left; width:100%; margin-top:0px !important">Comm. Invoice no.</h4>
+                            <input type="text" class="form-control pull-right" id="billNo" ng-model="comInvoiceNo" />
+                        </div>
+
+                    </div>
+                </div>
 
 
             <div id="ammountAlert" class="modal fade" role="dialog">
@@ -628,6 +635,7 @@
                                                 <th style="text-align:center;">Excise per unit</th>
                                                 <th style="text-align:center;">SAD per unit</th>
                                                 <th style="text-align:center">Net Wt</th>
+                                                <th style="text-align:center">Balance</th>
                                                 <th style="text-align:center">Sale Qty</th>
                                                 <th style="text-align:right">Rate</th>
                                                 <th style="text-align:right">AMOUNT(&#8377;)</th>
@@ -643,8 +651,9 @@
                                                 <td> {{item.exciseDuty/item.NETWEIGHT |number : fractionSize}}</td>
                                                 <td width="105"> {{item.SAD/item.NETWEIGHT |number : fractionSize}}</td>
                                                 <td width="105"> {{item.NETWEIGHT |number : fractionSize}}</td>
+                                                <td width="105"> {{item.BALANCE |number : fractionSize}}</td>
                                                 <td style="text-align:right" width="150">
-                                                    <input type="text" ng-change="qtyChange(item,item.itemQty,'{{item.itemQty}}');" ng-model="item.itemQty " ng-init="item.itemQty = item.itemQty || item.NETWEIGHT"
+                                                    <input type="text" ng-change="qtyChange(item,item.itemQty,'{{item.itemQty}}');" ng-model="item.itemQty " ng-init="item.itemQty = item.itemQty || item.BALANCE"
                                                            class="form-control text-right" />
                                                 </td>
                                                 <td style="text-align:right" width="150">
@@ -679,7 +688,7 @@
                                 <table class="table-bordered table-condensed table-hover table" style="font-size:13px !important;">
                                     <tfoot ng-hide="isCart">
                                         <tr style="background:#F0EEEE">
-                                           <th style="text-align:right" colspan="6" width="105"><button ng-hide="isCart" class="btn btn-xs btn-warning" ng-click="addToItemCart()" style="margin-right:5px">Add to Cart</button></th>
+                                           <th style="text-align:right" colspan="7" width="105"><button ng-hide="isCart" class="btn btn-xs btn-warning" ng-click="addToItemCart()" style="margin-right:5px">Add to Cart</button></th>
                                             <th style="text-align:center" width="105">Total</th>
                                             <th style="text-align:right" width="150">{{totalQty}}</th>
                                             <th style="text-align:right" width="150"></th>
@@ -695,19 +704,10 @@
 
                 </div>
             </div>
-
-
-
-
-
             <hr style="float:left; width:100%; margin-bottom:10px; margin-top: 10px;" />
-
-
             <div class="collapse in" id="ItemDetail3" ng-init="role = admin">
-
                 <table class="table-bordered table-condensed table-hover table" fixed-header id="ItemTable" style="height:180px">
                     <thead>
-
                         <tr style="background:#ddd">
                             <th style="width:50px">S.No.</th>
                             <th>Description</th>
@@ -721,12 +721,7 @@
 
                         </tr>
                     </thead>
-
-
-
                     <tbody>
-
-
                         <tr ng-repeat="item in itemTable">
                             <td style="text-align:center" width="50">{{$index +1}}</td>
                             <td class="Count" width="450">{{item.DESCRIPTION}}</td>

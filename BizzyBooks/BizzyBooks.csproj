@@ -369,6 +369,7 @@
     <Content Include="fonts\scss\_variables.scss" />
     <Content Include="js\waitMe.js" />
     <Content Include="js\xlsx.js" />
+    <Content Include="paymentLog.html" />
     <Content Include="ScriptsAngular\Angular\._ion.sound.min.js" />
     <Content Include="ScriptsAngular\Angular\angluar.ieCors.js" />
     <Content Include="ScriptsAngular\Angular\angular-datatables.js" />
@@ -465,6 +466,7 @@
     <Content Include="ScriptsAngular\app\orderApp.js" />
     <Content Include="ScriptsAngular\app\Controller\_LoginCntrl.js" />
     <Content Include="ScriptsAngular\app\Services\authService.js" />
+    <Content Include="ScriptsAngular\app\Services\commonService.js" />
     <Content Include="ScriptsAngular\app\_app.js" />
     <Content Include="ScriptsAngular\app\app.js" />
     <Content Include="ScriptsAngular\app\Controller\LoginCntrl.js" />

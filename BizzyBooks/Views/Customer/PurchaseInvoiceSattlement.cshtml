@@ -182,17 +182,19 @@
                 <hr />
                 <div class="col-sm-2">
                     <h4 class="tabheading font_11">VAT Amount</h4>
-                    <input type="text" class="form-control" ng-model="settlementData.totalDedvatAmount"/>
+                    <input type="text" class="form-control" ng-model="settlementData.totalDedvatAmount" />
                 </div>
                 <div class="col-sm-4">
-                    <h4 class="tabheading font_11">VAT Account</h4>
+                    <h4 class="tabheading font_11">VAT Account<span class="pull-right" style="color:forestgreen"><i class="fa fa-rupee"></i> {{vatAccountBalance |number : fractionSize}} <em style="color:red">{{supplierType}}</em></span></h4>
                     <create-account value="myValue"> </create-account>
                     <ui-select ui-tree-select ng-model="vatAccount.selected" id="countryCode"
-                               ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';" 
-                               theme="selectize">
-                        <ui-select-match placeholder="Select Suppliers"><span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
-    {{ $select.selected.accountName || $select.search }}
-</span></ui-select-match>
+                               ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';"
+                               theme="selectize" on-select="bindVatAccountDetail($select.selected)">
+                        <ui-select-match placeholder="Select Suppliers">
+                            <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                {{ $select.selected.accountName || $select.search }}
+                            </span>
+                        </ui-select-match>
 
                         <ui-select-choices repeat="person in account  | filter: $select.search">
                             <div>
@@ -207,16 +209,18 @@
 
                 <div class="col-sm-3">
                     <h4 class="tabheading font_11">Excise Amount</h4>
-                    <input type="text" class="form-control" ng-model="settlementData.totalDedExciseAmount"/>
+                    <input type="text" class="form-control" ng-model="settlementData.totalDedExciseAmount" />
                 </div>
                 <div class="col-sm-3">
-                    <h4 class="tabheading font_11">OT Tax Account</h4>
+                    <h4 class="tabheading font_11">OT Tax Account<span class="pull-right" style="color:forestgreen"><i class="fa fa-rupee"></i> {{oTaxBalance |number : fractionSize}} <em style="color:red">{{supplierType}}</em></span></h4>
                     <ui-select ui-tree-select ng-model="otaxAccount.selected" id="countryCode"
                                ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';"
-                               theme="selectize">
-                        <ui-select-match placeholder="Select Suppliers"><span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
-    {{ $select.selected.accountName || $select.search }}
-</span></ui-select-match>
+                               theme="selectize" on-select="bindOTaxAccountDetail($select.selected)">
+                        <ui-select-match placeholder="Select Suppliers">
+                            <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                {{ $select.selected.accountName || $select.search }}
+                            </span>
+                        </ui-select-match>
 
                         <ui-select-choices repeat="person in account  | filter: $select.search">
                             <div>

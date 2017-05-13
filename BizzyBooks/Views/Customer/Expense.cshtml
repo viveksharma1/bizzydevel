@@ -375,8 +375,8 @@
                     <div class="col-sm-3 padding">
 
                         <div class="form-group">
-                            <h4 class="tabheading">Memo</h4>
-                            <textarea class="form-control" style="height:80px"></textarea>
+                            <h4 class="tabheading">Narration</h4>
+                            <textarea class="form-control" ng-model="narration" style="height:80px"></textarea>
                         </div>
                     </div>
 
@@ -415,80 +415,82 @@
 
                 <hr style="float:left; width:100%; margin:5px 0px" />
 
-                <div class="col-sm-12" style="margin-bottom:20px">
-                    @*<div class="col-sm-4 padding">
+                <div class="col-sm-8" style="margin-bottom:20px">
+                    <div class="col-sm-12">
 
-                    <div class="form-group">
-                        <h4 class="tabheading">Attachments</h4>
-                        <div class="attachmets">
-                            <input type="file" id="uploadBtn" multiple="multiple" name="browsefile">
-                            <div>
-                                <i class="fa fa-plus"></i>
-                                <p>Add file</p>
+                        <div class="form-group">
+                            <h4 style="margin-top: 15px; margin-bottom:10px;">
+                                <i class="fa fa-caret-right"></i> Attachments
+                                <small ng-show="isShow == true" ng-click="downloadAttachments();" class="text-primary cursor dwn">(<i class="fa fa-download"></i> Download all files)</small>
+                            </h4>
+                            <div class="col-sm-5 padding5">
+                                <input type="text" class="form-control" ng-model="filename" placeholder="Title" />
                             </div>
-                        </div>
+                            <div class="col-sm-5 padding5">
+                                @*<input type="file" class="filestyle" id="uploadBtn" data-buttonName="btn-info">*@
+                                <input type="file" nv-file-select="" uploader="uploader" />
+                            </div>
+                            <div ng-show="uploader.queue.length>0" style="float:left; width:100%; padding:10px 10px; border-bottom:1px dotted #ccc;">
+                                <table class="table" width="100">
+                                    <thead>
+                                        <tr>
+                                            <th width="50%">Title</th>
+                                            <th width="50%">Name</th>
+                                            <th ng-show="uploader.isHTML5">Size</th>
+                                            <th ng-show="uploader.isHTML5">Progress</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="item in uploader.queue">
+                                            <td><strong>{{ item.title}}</strong></td>
+                                            <td><strong>{{ item.file.name }}</strong></td>
+                                            <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
+                                            <td ng-show="uploader.isHTML5">
+                                                <div class="progress" style="margin-bottom: 0;">
+                                                    <div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
+                                                </div>
+                                            </td>
+                                            <td class="text-center">
+                                                <span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                                                <span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                                                <span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                                            </td>
+                                            <td nowrap>
+                                                <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">
+                                                    <span class="glyphicon glyphicon-upload"></span>
+                                                </button>
+                                                <button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading">
+                                                    <span class="glyphicon glyphicon-ban-circle"></span>
+                                                </button>
+                                                <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
+                                                    <span class="glyphicon glyphicon-trash"></span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
 
 
-                    </div>
-                </div>
-                <div id="upload_prev" class="upload_prev"></div>*@
 
-
-
-                    <ul ng-repeat="data in datapath">
-                        <li>
-                            <span> <a href="" style="font-size:medium" class="pointer fa fa-file-pdf-o" aria-hidden="true"> <b ng-click="getfile(data)">{{data.replace("server/boot/uploads/"+ billNo,'')}}</b></a></span>
-                            <i class="fa fa-times" aria-hidden="true" ng-click="deletefile(data,$index)"></i>
-                        </li>
-                    </ul>
-
-                    <div class="col-sm-12" style="padding:0px">
-                        <div class="col-sm-6" style="padding:0px">
-
-                            <div class="form-group">
-                                <h4 style="margin-top: 15px; margin-bottom:10px;">
-                                    <i class="fa fa-caret-right"></i> Attachments
-                                    <small class="text-primary cursor dwn">(<i class="fa fa-download"></i> Download all files)</small>
-                                </h4>
-
-                                @*<div class="attachmets">*@
-                                @*<input type="file" id="uploadBtn" multiple="multiple" name="browsefile">*@
-                                @*<div id="uploadAttchments">
-                                    <i class="fa fa-plus"></i>
-                                    <p>Add file</p>
-                                </div>
-                            </div>*@
-                                <div class="col-sm-5 padding5">
-                                    <input type="text" class="form-control" id="NameInput" placeholder="Title" />
-                                </div>
-                                <div class="col-sm-5 padding5">
-                                    @*<input type="file" class="form-control" id="id=" uploadBtn" />*@
-                                    <input type="file" class="filestyle" id="uploadBtn" data-buttonName="btn-info">
-                                </div>
-
-                                <div class="col-sm-2 padding5">
-                                    <button type="button" class="btn btn-sm btn-primary Attechmentdetail" style="width:100%">Add</button>
-                                </div>
-
-
-                                <div style="float:left; width:100%; padding:10px 10px; border-bottom:1px dotted #ccc;" class="filenameDiv">
-
-
-                                    <div class="col-sm-5 padding5" style="word-break:break-all">
-                                        <strong id="name"></strong>
+                            </div>
+                            <div ng-show="uploader.queue.length>0">
+                                <div>
+                                    Queue progress:
+                                    <div class="progress" style="">
+                                        <div class="progress-bar" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }"></div>
                                     </div>
-
-                                    <div class="col-sm-5 padding5 cursor" style="word-break:break-all">
-                                        <a id="type" class="cursor"></a>
-                                    </div>
-
-                                    <div class="col-sm-2">
-                                        <i class="fa fa-times pull-right text-danger" id="removeattachment"></i>
-                                    </div>
-
-
-
                                 </div>
+                                <button type="button" class="btn btn-success btn-s" ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length">
+                                    <span class="glyphicon glyphicon-upload"></span> Upload all
+                                </button>
+                                <button type="button" class="btn btn-warning btn-s" ng-click="uploader.cancelAll()" ng-disabled="!uploader.isUploading">
+                                    <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
+                                </button>
+                                <button type="button" class="btn btn-danger btn-s" ng-click="uploader.clearQueue()" ng-disabled="!uploader.queue.length">
+                                    <span class="glyphicon glyphicon-trash"></span> Remove all
+                                </button>
                             </div>
                         </div>
                     </div>

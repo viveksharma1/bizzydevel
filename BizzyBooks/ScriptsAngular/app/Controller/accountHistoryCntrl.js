@@ -255,15 +255,14 @@
         }
         if (voType == 'Purchase Settelment') {
 
-            $state.go('Customer.PurchaseInvoiceSattlement', { voId: id });
+            $state.go('Customer.PurchaseInvoiceSattlement', { voId: id }); 
         }
         if (voType == 'Journal Entry') {
-
             $state.go('Customer.JournalEntry', { voId: id });
         }
-
-
-
+        if (voType == 'Contra Entry') {
+            $state.go('Customer.ContraEntry', { voId: id });
+        }
     }
 
     $('.btnhover button').click(function () {

@@ -1,4 +1,4 @@
-﻿myApp.controller('BillCntrl', ['$scope', '$http', '$timeout', '$stateParams', 'myService', '$rootScope', '$state', 'config', '$filter', 'authService', function ($scope, $http, $timeout, $stateParams, myService, $rootScope, $state, config, $filter, authService) {
+﻿myApp.controller('BillCntrl', ['$scope', '$http', '$timeout', '$stateParams', 'commonService', '$rootScope', '$state', 'config', '$filter', 'authService', 'FileUploader', function ($scope, $http, $timeout, $stateParams, commonService, $rootScope, $state, config, $filter, authService, FileUploader) {
     $scope.manualTotal = 0;
     $scope.CIFTOTAL1 = 0;
     $scope.role = localStorage["usertype"];
@@ -104,15 +104,8 @@
     $('#actualDate').datepicker();
 
     var files, res;
-    document.getElementById("uploadBtn").onchange = function (e) {
-        e.preventDefault();
-    };
-    document.getElementById('uploadBtn').onchange = uploadOnChange;
-    $http.get(config.api + "accounts").then(function (response) {
-        $scope.purchaseAccount = response.data;
-    });
+    
     $scope.purchaseAccounts = {};
-  
     $scope.unit = "KG";
     $scope.weightUnit = function (data) {
     }
@@ -160,7 +153,21 @@
             $("#curr").show()
         }
     }
+    // bind file 
+    $scope.oldAttachment = null;
+    function bindAttachments(attachments, callback) {
+        if (attachments) {
+            angular.forEach(attachments, function (item) {
+                $scope.oldAttachment = item;
 
+                item.file.isOld = true;
+                uploader.addToQueue(item.file);
+
+            });
+        }
+        if (callback)
+            callback();
+    }
     $scope.accountTableSum = function () {
         var amount = 0;
         for (var i = 0; i < $scope.accountTable.length; i++) {
@@ -368,6 +375,25 @@
             $scope.supliers = response.data
         });
     }
+    $scope.getPurchaseAccount = function () {
+        $http.get(config.login + "getpurchaseAccount/" + localStorage.CompanyId).then(function (response) {
+            $scope.purchaseAccount = response.data
+        });
+    }
+    $scope.getExpenseAccount = function () {
+        $http.get(config.login + "getExpenseAccount/" + localStorage.CompanyId).then(function (response) {
+            $scope.expenseAccount = response.data
+        });
+    }
+    $scope.$on("event:accountReferesh", function (event, args) {
+        // Refresh accounts...
+        $scope.getSupplier();
+        $scope.getpurchaseAccount();
+        $scope.getExpenseAccount();
+    });
+    $scope.getSupplier();
+    $scope.getPurchaseAccount();
+    $scope.getExpenseAccount();
     $scope.getSupplierDetail = function (name) {
         $scope.supliersDetail = []
         $http.get(config.api + "accounts" + "?filter[where][compCode]=" + localStorage.CompanyId + "&filter[where][accountName]=" + name).then(function (response) {
@@ -380,16 +406,13 @@
 
     //get Bill data
     $scope.supplier = {};
-    $scope.getSupplier();
     function  checkSalesInventory(invId){ 
         var url = config.login + "checkSalesInventory/" + invId
-        myService.checkSalesInventory(url).then(function (response) {
-            if (response.data.status == 'Can Not Update') {
+        commonService.checkSalesInventory(url).then(function (response) {
+            if (response.data.status == "can not update") {
                 console.log("checkSalesInventory", response.data.status)
-                $rootScope.$broadcast('event:error', { message: response.data.status });
-            }
-            else 
-                return;
+                $rootScope.$broadcast('event:error', { message: response.data.status });       
+            }              
         })
     }
     $scope.getBilldata = function (billNo, fields) {
@@ -430,6 +453,11 @@
                         setDate($scope.billDate, billData.date);
                         setDate($scope.billDueDate, billData.billDueDate);
                         setDate($scope.actualDate, billData.actualDate);
+                        $scope.attachements = billData.attachements;
+                        $scope.narration = response.data.narration
+                        bindAttachments(billData.attachements, function () {
+                            $scope.oldAttachment = null;
+                        });
                         $('#invoiceExist').modal('hide');
                       
                     });
@@ -437,6 +465,7 @@
     $scope.deleteBtn = false
     if ($stateParams.billNo) {
         $scope.deleteBtn = true
+        $scope.isShow = true
         if (localStorage['usertype'] == 'O') {
             $scope.getBilldata($stateParams.billNo, '?filter[fields][itemDetail]=false&filter[fields][adminAmount]=false&filter[fields][adminBalance]=false');
         }
@@ -481,137 +510,150 @@
 
     // save bill 
     $scope.saving = false;
-    $scope.saveBill = function (index) {   
-        var date = getDate($scope.billDate);
-        var billDueDate = getDate($scope.billDueDate);
-        var actualDate = getDate($scope.actualDate);
-        if ($scope.billNo == undefined) {
-            $rootScope.$broadcast('event:error', { message: "Please type Invoice No" });
-            return;
-        }
-        if ($scope.billtable.length == 0 && $scope.billtable1.length  == 0) {
-            $rootScope.$broadcast('event:error', { message: "Please Select Item" });
-            return;
-        }
-        if ($scope.supplier.selected == undefined || $scope.supplier.selected == null) {
-            $rootScope.$broadcast('event:error', { message: "Please select supplier" });
-            return;
-        }
-        if ($scope.purchaseAccounts.selected == undefined || $scope.purchaseAccounts.selected == null) {
-            $rootScope.$broadcast('event:error', { message: "Please select Purchase ledger Account" });
-            return;
-        }
-
-        if (!date) {
-            $rootScope.$broadcast('event:error', { message: "Invoice date is not valid" });
-            return;
-        }
-        if (!billDueDate) {
-            $rootScope.$broadcast('event:error', { message: "Invoice due date is not valid" });
-            return;
-        } 
-        if (!actualDate) {
-            $rootScope.$broadcast('event:error', { message: "Invoice actual date is not valid" });
-            return;
-        }
-        if ($stateParams.billNo != null) {
-            alert("dsds")
-            checkSalesInventory($stateParams.billNo);
-        }
-       
-       // $rootScope.$broadcast('event:progress', { message: "Please wait while processing.." });
-        var purchaseAmount;
-       
-        if (authService.userHasPermission('usertype:O')) {
-            var totalAmountINR = $scope.manualTableSum() + $scope.accountTableSum();
-            purchaseAmount = $scope.manualTableSum()
-        }
-        if (authService.userHasPermission('usertype:UO')) {
-            purchaseAmount = $scope.excelTableItemSum();
-            var totalAmountINR = $scope.excelTableItemSum() + $scope.accountTableSum()
-        }
-        if ($scope.assesableValue) {
-            $scope.billtable[$scope.tableIndex].assesableValue = $scope.assesableValue;
-            $scope.billtable[$scope.tableIndex].exciseDuty = $scope.exciseDuty1;
-            $scope.billtable[$scope.tableIndex].dutyAmount = $scope.dutyAmount;
-            $scope.billtable[$scope.tableIndex].SAD = $scope.SAD1;
-            $scope.billtable[$scope.tableIndex].totalDutyAmt = $scope.totalDutyAmt;
-            $scope.billtable[$scope.tableIndex].actualDate = $scope.actualDate;
-            $scope.billtable[$scope.tableIndex].customData = $scope.customDatanew
-            $scope.billtable[$scope.tableIndex].purchaseRate = (Number($scope.assesableValue) / Number($scope.billtable[$scope.tableIndex].NETWEIGHT)).toFixed(2);
-            $scope.billtable[$scope.tableIndex].dutyPerUnit = (Number($scope.exciseDuty1) / Number($scope.billtable[$scope.tableIndex].NETWEIGHT)).toFixed(2);
-            $scope.billtable[$scope.tableIndex].sadPerUnit = (Number($scope.SAD1) / Number($scope.billtable[$scope.tableIndex].NETWEIGHT)).toFixed(2);
-            $scope.sumtotalcustomData();
-        }
-        if ($scope.exciseAssessableValue) {
-            for (var i = 0; i < $scope.billtable.length; i++) {
-                $scope.billtable[i].assesableValue = $scope.exciseAssessableValue * $scope.billtable[i].NETWEIGHT;
-                $scope.billtable[i].exciseDuty = $scope.exciseDutyPerUnit * $scope.billtable[i].NETWEIGHT;
-                $scope.billtable[i].dutyAmount = $scope.exciseRate * $scope.billtable[i].NETWEIGHT;
-                $scope.billtable[i].SAD = $scope.exciseSAD * $scope.billtable[i].NETWEIGHT;
-                $scope.billtable[i].actualDate = $scope.actualDate;
+    
+        $scope.saveBill = function (index) {
+            var date = getDate($scope.billDate);
+            var billDueDate = getDate($scope.billDueDate);
+            var actualDate = getDate($scope.actualDate);
+            if ($scope.billNo == undefined) {
+                $rootScope.$broadcast('event:error', { message: "Please type Invoice No" });
+                return;
             }
-        }
-        var data = {
-            type: type,
-            state: "OPEN",
-            date: date,
-            amount: $scope.totalAmountINR.toFixed(2),
-            compCode: localStorage.CompanyId,
-            role: localStorage['usertype'],
-            no: $scope.billNo,
-            vochNo: $scope.billNo,
-            transactionData: {
-                compCode: localStorage.CompanyId,
-                supliersId: $scope.supplier.selected.id,
-                email: $scope.email,
-                role: localStorage['usertype'],
-                currency: $scope.currency,
-                date: date,
-                billDueDate: billDueDate,
-                actualDate: actualDate,
-                ordertype: "BILL",
-                no: $scope.billNo,
-                status: ["OPEN"],
-                paymentDays: $scope.paymentDays,
-                itemDetail: $scope.billtable1,
-                manualLineItem: $scope.billtable,
-                accountlineItem: $scope.accountTable,
-                purchaseAccountId: $scope.purchaseAccounts.selected.id,
-                adminAmount: $scope.totalAmountINR.toFixed(2),
-                adminBalance: $scope.totalAmountINR.toFixed(2),
-                purchaseAmount: purchaseAmount,
-                amount: totalAmountINR,
-                balance: totalAmountINR,
-                totalWeight: $scope.totalWeight,
-                ExchangeRate: $scope.ExchangeRateINR,
-                supCode: $scope.supplier.selected.supCode,
-                billId: $scope.id,
-                invoiceType: $scope.invoiceType,
-                customPaymentInfo: {
-                    status: "pending",
-                    amount: 0,
-                    paymentDate: '',
-                    bankAccount: '',
-                    partyAccount: '',
-                    voRefId: ''
+            if ($scope.billtable.length == 0 && $scope.billtable1.length == 0) {
+                $rootScope.$broadcast('event:error', { message: "Please Select Item" });
+                return;
+            }
+            if ($scope.supplier.selected == undefined || $scope.supplier.selected == null) {
+                $rootScope.$broadcast('event:error', { message: "Please select supplier" });
+                return;
+            }
+            if ($scope.purchaseAccounts.selected == undefined || $scope.purchaseAccounts.selected == null) {
+                $rootScope.$broadcast('event:error', { message: "Please select Purchase ledger Account" });
+                return;
+            }
+
+            if (!date) {
+                $rootScope.$broadcast('event:error', { message: "Invoice date is not valid" });
+                return;
+            }
+            if (!billDueDate) {
+                $rootScope.$broadcast('event:error', { message: "Invoice due date is not valid" });
+                return;
+            }
+            if (!actualDate) {
+                $rootScope.$broadcast('event:error', { message: "Invoice actual date is not valid" });
+                return;
+            }
+            $rootScope.$broadcast('event:progress', { message: "Please wait while processing.." });
+            var queue = uploader.queue;
+            var attachements = [];
+            angular.forEach(queue, function (fileItem) {
+                attachements.push({ title: fileItem.title, cdnPath: fileItem.cdnPath, file: fileItem.file })
+            });
+            var purchaseAmount;
+
+            if (authService.userHasPermission('usertype:O')) {
+                var totalAmountINR = $scope.manualTableSum() + $scope.accountTableSum();
+                purchaseAmount = $scope.manualTableSum()
+            }
+            if (authService.userHasPermission('usertype:UO')) {
+                purchaseAmount = $scope.excelTableItemSum();
+                var totalAmountINR = $scope.excelTableItemSum() + $scope.accountTableSum()
+            }
+            if ($scope.assesableValue) {
+                $scope.billtable[$scope.tableIndex].assesableValue = $scope.assesableValue;
+                $scope.billtable[$scope.tableIndex].exciseDuty = $scope.exciseDuty1;
+                $scope.billtable[$scope.tableIndex].dutyAmount = $scope.dutyAmount;
+                $scope.billtable[$scope.tableIndex].SAD = $scope.SAD1;
+                $scope.billtable[$scope.tableIndex].totalDutyAmt = $scope.totalDutyAmt;
+                $scope.billtable[$scope.tableIndex].actualDate = $scope.actualDate;
+                $scope.billtable[$scope.tableIndex].customData = $scope.customDatanew
+                $scope.billtable[$scope.tableIndex].purchaseRate = (Number($scope.assesableValue) / Number($scope.billtable[$scope.tableIndex].NETWEIGHT)).toFixed(2);
+                $scope.billtable[$scope.tableIndex].dutyPerUnit = (Number($scope.exciseDuty1) / Number($scope.billtable[$scope.tableIndex].NETWEIGHT)).toFixed(2);
+                $scope.billtable[$scope.tableIndex].sadPerUnit = (Number($scope.SAD1) / Number($scope.billtable[$scope.tableIndex].NETWEIGHT)).toFixed(2);
+                $scope.sumtotalcustomData();
+            }
+            if ($scope.exciseAssessableValue) {
+                for (var i = 0; i < $scope.billtable.length; i++) {
+                    $scope.billtable[i].assesableValue = $scope.exciseAssessableValue * $scope.billtable[i].NETWEIGHT;
+                    $scope.billtable[i].exciseDuty = $scope.exciseDutyPerUnit * $scope.billtable[i].NETWEIGHT;
+                    $scope.billtable[i].dutyAmount = $scope.exciseRate * $scope.billtable[i].NETWEIGHT;
+                    $scope.billtable[i].SAD = $scope.exciseSAD * $scope.billtable[i].NETWEIGHT;
+                    $scope.billtable[i].actualDate = $scope.actualDate;
                 }
             }
-        }
-        $http.post(config.login + "saveBillTest/" + $stateParams.billNo, data).then(function (response) {
-            if (response.status == 200) {
-                $scope.saving = false;
-                $rootScope.$broadcast('event:success', { message: "Purchase Invoice Created" });
-                
-                $stateParams.billNo = response.data
-                $state.go('Customer.Bill', { billNo: response.data });
-                
+            var data = {
+                type: type,
+                state: "OPEN",
+                date: date,
+                amount: $scope.totalAmountINR.toFixed(2),
+                compCode: localStorage.CompanyId,
+                role: localStorage['usertype'],
+                no: $scope.billNo,
+                vochNo: $scope.billNo,
+                narration:$scope.narration,
+                transactionData: {
+                    compCode: localStorage.CompanyId,
+                    supliersId: $scope.supplier.selected.id,
+                    email: $scope.email,
+                    role: localStorage['usertype'],
+                    currency: $scope.currency,
+                    date: date,
+                    billDueDate: billDueDate,
+                    actualDate: actualDate,
+                    ordertype: "BILL",
+                    no: $scope.billNo,
+                    status: ["OPEN"],
+                    paymentDays: $scope.paymentDays,
+                    itemDetail: $scope.billtable1,
+                    manualLineItem: $scope.billtable,
+                    accountlineItem: $scope.accountTable,
+                    purchaseAccountId: $scope.purchaseAccounts.selected.id,
+                    adminAmount: Number($scope.totalAmountINR.toFixed(2)),
+                    adminBalance: Number($scope.totalAmountINR.toFixed(2)),
+                    purchaseAmount: Number(purchaseAmount),
+                    amount: Number(totalAmountINR),
+                    balance: Number(totalAmountINR),
+                    totalWeight: $scope.totalWeight,
+                    ExchangeRate: $scope.ExchangeRateINR,
+                    supCode: $scope.supplier.selected.supCode,
+                    billId: $scope.id,
+                    invoiceType: $scope.invoiceType,
+                    attachements: attachements,
+                    customPaymentInfo: {
+                        status: "pending",
+                        amount: 0,
+                        paymentDate: '',
+                        bankAccount: '',
+                        partyAccount: '',
+                        voRefId: ''
+                    }
+                }
             }
-            else {
-                $rootScope.$broadcast('event:error', { message: "Error while creating receiipt" });
-            }
-        });
-    };
+            var url = config.login + "checkSalesInventory/" + $stateParams.billNo
+            commonService.checkSalesInventory(url).then(function (response) {
+                if (response.data.status == "can not update") {
+                    console.log("checkSalesInventory", response.data.status)
+                    $rootScope.$broadcast('event:error', { message: response.data.status });
+                } else {
+                    $http.post(config.login + "saveBillTest/" + $stateParams.billNo, data).then(function (response) {
+                        if (response.status == 200) {
+                            $scope.saving = false;
+                            $rootScope.$broadcast('event:success', { message: "Purchase Invoice Created" });
+
+                            $stateParams.billNo = response.data
+                            $state.go('Customer.Bill', { billNo: response.data });
+
+                        }
+                        else {
+                            $rootScope.$broadcast('event:error', { message: "Error while creating receiipt" });
+                        }
+                    });
+                }
+            })
+          
+        };
+    
 
     // exel line item upload
     
@@ -1087,7 +1129,7 @@
             $scope.supplierType = " (Cr.)"
         }
         var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
-        myService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
+        commonService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
             if (response.data.openingBalance) {
                 $scope.supplierBalance = Math.abs(calculateOpenningBalnce(response.data.openingBalance, balanceType))
             } else {
@@ -1105,7 +1147,7 @@
             $scope.purchaseType = " (Cr.)"
         }
         var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
-        myService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
+        commonService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
             if (response.data.openingBalance) {
                 $scope.purchaseLedgerBalance = calculateOpenningBalnce(response.data.openingBalance, balanceType)
             }
@@ -1200,7 +1242,31 @@
             }
         });
     }
-   
+
+    //down load attachment
+    $scope.downloadAttachments = function () {
+        var zip = new JSZip();
+        angular.forEach($scope.attachements, function (item) {
+            var path = item.cdnPath.substring(item.cdnPath.lastIndexOf('/') + 1);
+            var url = config.login + "getfile?path=" + path;
+            var filename = item.file.name.replace(/.*\//g, "");
+            zip.file(filename, urlToPromise(url), { binary: true });
+        });
+        zip.generateAsync({ type: "blob" }, function updateCallback(metadata) {
+            var msg = "progression : " + metadata.percent.toFixed(2) + " %";
+            if (metadata.currentFile) {
+                msg += ", current file = " + metadata.currentFile;
+            }
+            console.log(msg);
+        })
+        .then(function callback(blob) {
+            // see FileSaver.js
+            saveAs(blob, $stateParams.voId + ".zip");
+        }, function (e) {
+        });
+
+        return false;
+    };
     //get existing bill
     $scope.getExistingBill = function (billNo) {
         $http.get(config.login + "isVoucherExist/" + billNo).then(function (response) {
@@ -1211,37 +1277,47 @@
             return;      
         });
     }
+
+    $(":file").filestyle({ buttonName: "btn-sm btn-info" });
+    var type = $stateParams.type;
+    var uploader = $scope.uploader = new FileUploader({
+        url: config.login + "upload"
+    });
+
+    // FILTERS
+
+    uploader.filters.push({
+        name: 'customFilter',
+        fn: function (item /*{File|FileLikeObject}*/, options) {
+            return this.queue.length < 10;
+        }
+    });
+
+    // CALLBACKS
+    uploader.onAfterAddingFile = function (fileItem) {
+        if (fileItem.isOld && $scope.oldAttachment) {
+            fileItem.title = $scope.oldAttachment.title;
+            fileItem.cdnPath = $scope.oldAttachment.cdnPath;
+        } else {
+            console.info('onAfterAddingFile', fileItem);
+            if ($scope.filename) {
+                fileItem.title = $scope.filename;
+                $scope.filename = null;
+            } else {
+                uploader.removeFromQueue(fileItem);// = null;
+                fileItem = {};
+            }
+        }
+
+    };
+    uploader.onSuccessItem = function (fileItem, response, status, headers) {
+        console.info('onSuccessItem', fileItem, response, status, headers);
+        fileItem.cdnPath = response.name;
+    };
+
 }]);
 
-myApp.directive('popOver', function ($compile, $templateCache) {
-    var getTemplate = function () {
-        $templateCache.put('templateId.html', 'This is the content of the template');
-        return $templateCache.get("popover_template.html");
-    }
-    return {
-        restrict: "A",
-        transclude: true,
-        template: "<span ng-transclude></span>",
-        link: function (scope, element, attrs) {
-            var popOverContent;
-            if (scope.friends) {
-                var html = getTemplate();
-                popOverContent = $compile(html)(scope);
-                var options = {
-                    content: popOverContent,
-                    placement: "bottom",
-                    html: true,
-                    title: scope.title
-                };
-                $(element).popover(options);
-            }
-        },
-        scope: {
-            friends: '=',
-            title: '@'
-        }
-    };
-});
+
 
 myApp.directive('addItem', function ($compile, $templateCache) {
     var getTemplate = function () {

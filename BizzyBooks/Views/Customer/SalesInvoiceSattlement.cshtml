@@ -5,10 +5,10 @@
 }
 
 
-<script type="text/ng-template" id="billInfo_template.html">
+<script type="text/ng-template" id="salesInfo_template.html">
     <span>
 
-        <label style="color:#73A91B" ng-repeat="data in billdata.accountData">{{data.accountName}} <b style="color:#000"> {{data.amount}}</b> </label> <br>
+        <label style="color:#73A91B" ng-repeat="data in billdata.accountData">{{data.account.accountName}} <b style="color:#000"> {{data.amount}}</b> </label> <br>
 
 
 
@@ -42,7 +42,7 @@
     <div class="flexheader lightblue  ">
         <label style="float:left;padding:15px ">
 
-            <strong><span style="font-size:20px;  color:#585655">Purchase Settlement</span></strong>
+            <strong><span style="font-size:20px;  color:#585655">Sales Settlement</span></strong>
         </label>
 
         <label style="float:right;padding:15px">
@@ -78,7 +78,7 @@
                 <div class="col-sm-3 padding">
 
                     <h4 class="tabheading font_11">Supplier</h4>
-                    <input type="text" class="form-control" ng-model="supplierName" disabled />
+                    <input type="text" class="form-control" ng-model="customerName" disabled />
 
                 </div>
 
@@ -86,7 +86,7 @@
                 <div class="col-sm-1 padding">
 
                     <h4 class="tabheading font_11">Invoice Dt.</h4>
-                    <input type="text" class="form-control" ng-model="settlementData.date" disabled />
+                    <input type="text" class="form-control" ng-model="settlementData.date | date" disabled />
 
                 </div>
 
@@ -104,7 +104,7 @@
 
                 </div>
                 <div class="col-sm-1 padding">
-                    <button type="button" style="margin-top:26px" class="btn btn-sm btn-primary" bill-Info billdata="settlementData" exciseData="settlementData">view</button>
+                    <button type="button" style="margin-top:26px" class="btn btn-sm btn-primary" sales-Info billdata="settlementData" exciseData="settlementData">view</button>
 
                 </div>
             </div>
@@ -144,35 +144,35 @@
         </div>
         <div class="col-sm-6">
             <div class="Settelmentbox">
-                <h3><input type="radio" ng-model="type" name="deduction" class="Settelment_Radio" /> Interest Deduction</h3>
+                <h3><input type="radio" ng-model="type" name="deduction" ng-click="selectBox('interest')" class="Settelment_Radio" /> Interest Deduction</h3>
                 <hr />
                 <div class="col-sm-6">
                     <h4 class="tabheading font_11">Interest</h4>
-                    <input type="text" class="form-control" ng-blur="calculateinterest(settlementData.interest,settlementData.totalAmount)" ng-model="settlementData.interest" />
+                    <input type="text" class="form-control" ng-blur="calculateinterest(settlementData.interest,settlementData.totalAmount)" ng-model="settlementData.interest" ng-disabled="isDisabled" />
                 </div>
                 <div class="col-sm-6">
                     <h4 class="tabheading font_11">Interest Amount</h4>
-                    <input type="text" class="form-control" ng-model="settlementData.interestAmount" />
+                    <input type="text" class="form-control" ng-model="settlementData.interestAmount" ng-disabled="isDisabled" />
                 </div>
             </div>
         </div>
 
         <div class="col-sm-6">
             <div class="Settelmentbox">
-                <h3><input type="radio" name="deduction" ng-click="selectionBox(" dedPerKg")" class="Settelment_Radio" /> Ded/Kg</h3>
+                <h3><input type="radio" name="deduction" ng-click="selectBox('perKg')" class="Settelment_Radio" /> Ded/Kg</h3>
                 <hr />
                 <div class="col-sm-4">
                     <h4 class="tabheading font_11">Vat ded/kg</h4>
-                    <input type="text" class="form-control" ng-model="settlementData.vatPerKg" />
+                    <input type="text" class="form-control" ng-model="settlementData.vatPerKg" ng-disabled="isDisabled1" />
                 </div>
                 <div class="col-sm-4">
                     <h4 class="tabheading font_11">Excise ded/kg</h4>
-                    <input type="text" class="form-control" ng-model="settlementData.excisePerKg" />
+                    <input type="text" class="form-control" ng-model="settlementData.excisePerKg" ng-disabled="isDisabled1" />
                 </div>
 
                 <div class="col-sm-4">
                     <h4 class="tabheading font_11">Total ded/kg</h4>
-                    <input type="text" class="form-control" ng-blur="vatDedPerkg()" ng-model="settlementData.totalDedPerKg" />
+                    <input type="text" class="form-control" ng-blur="vatDedPerkg()" ng-model="settlementData.totalDedPerKg" ng-disabled="isDisabled1" />
                 </div>
 
             </div>
@@ -187,12 +187,16 @@
                     <input type="text" class="form-control" ng-model="settlementData.totalDedvatAmount" />
                 </div>
                 <div class="col-sm-4">
-                    <h4 class="tabheading font_11">VAT Account</h4>
+                    <h4 class="tabheading font_11">VAT Account<span class="pull-right" style="color:forestgreen"><i class="fa fa-rupee"></i> {{vatAccountBalance |number : fractionSize}} <em style="color:red">{{supplierType}}</em></span></h4>
                     <create-account value="myValue"> </create-account>
                     <ui-select ui-tree-select ng-model="vatAccount.selected" id="countryCode"
                                ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';"
-                               theme="selectize">
-                        <ui-select-match placeholder="Select Suppliers">{{ $select.selected.accountName }}</ui-select-match>
+                               theme="selectize" on-select="bindVatAccountDetail($select.selected)">
+                        <ui-select-match placeholder="Select Suppliers">
+                            <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                {{ $select.selected.accountName || $select.search }}
+                            </span>
+                        </ui-select-match>
 
                         <ui-select-choices repeat="person in account  | filter: $select.search">
                             <div>
@@ -210,11 +214,15 @@
                     <input type="text" class="form-control" ng-model="settlementData.totalDedExciseAmount" />
                 </div>
                 <div class="col-sm-3">
-                    <h4 class="tabheading font_11">OT Tax Account</h4>
+                    <h4 class="tabheading font_11">OT Tax Account<span class="pull-right" style="color:forestgreen"><i class="fa fa-rupee"></i> {{oTaxBalance |number : fractionSize}}<em style="color:red">{{supplierType}}</em></span></h4>
                     <ui-select ui-tree-select ng-model="otaxAccount.selected" id="countryCode"
                                ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';"
-                               theme="selectize">
-                        <ui-select-match placeholder="Select Suppliers">{{ $select.selected.accountName }}</ui-select-match>
+                               theme="selectize" on-select="bindOTaxAccountDetail($select.selected)">
+                        <ui-select-match placeholder="Select Suppliers">
+                            <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                {{ $select.selected.accountName || $select.search }}
+                            </span>
+                        </ui-select-match>
 
                         <ui-select-choices repeat="person in account  | filter: $select.search">
                             <div>
@@ -258,16 +266,6 @@
 
 
 </div>
-
-
-
-
-
-
-
-
-
-
 
 
 
