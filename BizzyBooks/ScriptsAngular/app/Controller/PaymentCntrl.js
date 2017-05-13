@@ -91,11 +91,7 @@
         fileItem.cdnPath = //response.container + "/" +
             response.name;
     };
-    $scope.getVoucherCount = function () {
-        $http.get(config.api + "voucherTransactions/count" + "?[where][type]="+type).then(function (response) {
-            $scope.paymentNo = response.data.count + 1
-        });
-    }
+    
     function getAccounts() {
         $scope.getSupplier = function () {
             $http.get(config.login + "getSupplierAccount/" + localStorage.CompanyId).then(function (response) {
@@ -159,14 +155,21 @@
         setDate($scope.paymentdate);
         $scope.currency = "Dollar";
         $scope.exchangeRate();
+        
     }
     $scope.getAccount();
     $scope.getSupplier();
-    $scope.getVoucherCount();
+
+    if ($scope.mode != "edit") getVoucherCount();
 
     $scope.paidAmountChanged= function () {
         resetToInitial();
     };
+    function getVoucherCount() {
+        $http.get(config.api + "voucherTransactions/count" + "?[where][type]=" + type).then(function (response) {
+            $scope.paymentNo = response.data.count + 1
+        });
+    }
     function resetToInitial() {
         if ($scope.itemChecked.length > 0) {
             $scope.itemChecked = [];
@@ -429,7 +432,7 @@
                              $rootScope.$broadcast('event:success', { message: "Payment Received." });
                              //SweetAlert.swal("Done", "Receipt Created.", "success")
                              //showSuccessToast("Receipt Created.");
-                             $state.go('Customer.Receipt', null, { location: false, reload: true });
+                             $state.go('Customer.Payment', null, { location: false, reload: true });
                              //showSuccessToast("Payment Received.");
                              //$state.reload();
                          }
@@ -461,7 +464,7 @@
             //fillreceipt info
             fillData(sharedFactory.info.payments[sharedFactory.info.selectedPaymentIndex]);
         } else {
-            $scope.getOpenInvoice();
+            $scope.getOpenInvoice($scope.partyAccount);
         }
     }
   
@@ -488,7 +491,7 @@
             $scope.oldAttachment = null;
         });
         calculateTotal(false);
-        $scope.getOpenInvoice();
+        $scope.getOpenInvoice($scope.partyAccount);
     }
     
 
