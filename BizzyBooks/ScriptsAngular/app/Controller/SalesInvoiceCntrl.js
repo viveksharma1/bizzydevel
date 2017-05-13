@@ -192,28 +192,28 @@
         //$scope.sales
     }
 
-    $scope.refreshAccountTable = function ($select) {
-        var search = $select.search,
-          list = angular.copy($select.items),
-          FLAG = -1;
-        list = list.filter(function (item) {
-            return item.id !== FLAG;
-        });
-        if (!search) {
-            //use the predefined list
-            $select.items = list;
-        }
-        else {
-            //manually add user input and set selection
-            var userInputItem = {
-                id: FLAG,
-                name: search
-            };
-            $select.items = [userInputItem].concat(list);
-            // $scope.account.push({ accountName: $scope.accounts.selected.accountName });
+    //$scope.refreshAccountTable = function ($select) {
+    //    var search = $select.search,
+    //      list = angular.copy($select.items),
+    //      FLAG = -1;
+    //    list = list.filter(function (item) {
+    //        return item.id !== FLAG;
+    //    });
+    //    if (!search) {
+    //        //use the predefined list
+    //        $select.items = list;
+    //    }
+    //    else {
+    //        //manually add user input and set selection
+    //        var userInputItem = {
+    //            id: FLAG,
+    //            name: search
+    //        };
+    //        $select.items = [userInputItem].concat(list);
+    //        // $scope.account.push({ accountName: $scope.accounts.selected.accountName });
 
-        }
-    }
+    //    }
+    //}
 
     $scope.clear = function ($event, $select) { ///ui select clear.
         $event.stopPropagation();
@@ -299,6 +299,7 @@
                       $scope.totalAmount = response.data.amount;
                       $scope.intRate = response.data.invoiceData.roi;
                       $scope.modeTransport = response.data.invoiceData.modeTransport;
+                      $scope.vehicleNo = response.data.invoiceData.vehicleNo;
                       $scope.rdi = response.data.invoiceData.rdi;
                       $scope.itemTable = response.data.invoiceData.billData;
                       angular.copy($scope.itemTable, $scope.itemTableTemp);
@@ -355,7 +356,6 @@
     if ($stateParams.voId) {
         $scope.hasVoId = true;
         $scope.getInvoiceData($stateParams.voId);
-        //$scope.getReceipts($stateParams.voId);
         $scope.billNoValid = true;
         $scope.comInvoiceNoValid = true;
         $scope.exciseInvoiceNoValid = true;
@@ -367,7 +367,7 @@
                 "GODOWN": $scope.godown.selected ? $scope.godown.selected._id.GODOWN : $scope.godown.selected,
                 "DESCRIPTION": $scope.description.selected ? $scope.description.selected._id.DESCRIPTION : $scope.description.selected,
                 "RRMARKS": $scope.remarks.selected ? $scope.remarks.selected._id.RRMARKS : $scope.remarks.selected,
-                "rgNo": $scope.rgno.selected ? $scope.remarks.selected._id.rgNo : $scope.rgno.selected,
+                "rgNo": $scope.rgno.selected ? $scope.rgno.selected._id.rgNo : $scope.rgno.selected,
                 "exciseDuty": $scope.exciseDuty.selected ? $scope.exciseDuty.selected._id.exciseDuty : $scope.exciseDuty.selected,
                 "SAD": $scope.SAD.selected ? $scope.SAD.selected._id.SAD : $scope.SAD.selected,
                 "NETWEIGHT": $scope.NETWEIGHT.selected ? $scope.NETWEIGHT.selected._id.NETWEIGHT : $scope.NETWEIGHT.selected,
@@ -467,12 +467,12 @@
         $http.get(config.api + "accounts" + "?filter[where][id]=" + id).then(function (response) {
             if (isConsignee) {
                 $scope.supliersDetail2 = response.data;
-                console.log(response.data)
+                console.log(response.data);
                 $scope.shippingAddress2 = response.data[0].shippingAddress[0].street;
                 $scope.email2 = response.data[0].email;
             }else{
                 $scope.supliersDetail = response.data;
-                console.log(response.data)
+                console.log(response.data);
                 $scope.shippingAddress = response.data[0].shippingAddress[0].street;
                 $scope.email = response.data[0].email;
             }
@@ -494,7 +494,7 @@
     }
     $scope.getSupplier();
     getSalesAccounts();
-    getTaxAccounts()
+    getTaxAccounts();
     
     
        
@@ -928,6 +928,7 @@
         //$scope.billRemovalDate = null;
         $scope.intRate = null;
         $scope.modeTransport = null;
+        $scope.vehicleNo = null;
         $scope.narration = null;
         $scope.orderNo = null;
         setDate($scope.orderDate, '');
