@@ -29,15 +29,12 @@
 <div class="FlexPopup" style="display:block" >
     <div class="flexheader lightblue  ">
         <label style="float:left;padding:15px ">
-
             <strong><span style="font-size:20px;  color:#585655" ng-click="demo3()">Receipt</span></strong>
-
-               
-          
         </label>
-
+        
         <label style="float:right;padding:15px">
             <span style="float:left; font-size:18px; margin-top:-2px">
+                <input permission="usertype:O" ng-model="visible" ng-init="visible=true"type="checkbox" />
                 <label style="color:#000">State :</label>
                 <span class="dropdown my" style="width:auto; margin-right:20px;">
                     <a href="#" class="dropdown-toggle stagesdrpdwn" data-toggle="dropdown" style="color:#ff9800">Closed<span class="caret" style="margin-top:0px;color:#000"></span></a>
@@ -60,7 +57,7 @@
         <div class="lightblue bluebrdr content" style="padding:10px 10px">
 
             <div class="col-lg-5 padding">
-                <div class="col-sm-4 padding">
+                <div class="col-sm-3 padding">
                     <h4 class="tabheading">Receipt No.</h4>
                     <input type="text" ng-model="paymentNo" class="form-control" disabled />
                 </div>
@@ -77,19 +74,23 @@
                 </div>
                 <create-account value="myValue"> </create-account>
                 <div class="col-sm-7 padding">
-                    <h4 class="tabheading">Bank/Cash</h4>
+                    @*<h4 class="tabheading">Bank/Cash</h4>*@
+                    <h4 class="tabheading font_11">Bank/Cash <span class="pull-right" style="color:forestgreen"><i class="fa fa-rupee"></i> {{cashAccountBalance}} <em style="color:red">{{cashAccountType}}</em></span></h4>
                     <ui-select  ng-model="bankAccount.selected" id="countryCode"
-                               ui-select-focuser  ng-init="$select.addnew=1;$select.type='buyer';"
+                               ui-select-focuser  on-select="cashAccountSelected($select.selected);" ng-init="$select.addnew=1;$select.type='buyer';"
                                theme="selectize" >
                        
 
-                    <ui-select-match placeholder="Select Account" >
-                        <span class="selectuiTable">
+                    <ui-select-match style="width:100%" placeholder="Select Account" >
+                        <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                            {{ $select.selected.accountName || $select.search }}
+                        </span>
+                        @*<span class="selectuiTable">
                             <span>{{ $select.selected.accountName || $select.search }}</span>
                             <a class="btn btn-xs btn-link pull-right"><i class="glyphicon glyphicon-remove"></i></a>
-                        </span>
+                        </span>*@
                     </ui-select-match>
-                    <ui-select-choices repeat="person in bankAccounts  | filter: $select.search" refresh="refreshResults($select)" refresh-delay="2">
+                    <ui-select-choices repeat="person in bankAccounts  | filter: $select.search" >
                         <div>
                             <span ng-bind-html="person.accountName | highlight: $select.search"></span>
                         </div>
@@ -97,15 +98,19 @@
                     </ui-select>
                 </div>
 
-                <div class="col-sm-6 padding" >
-                    <create-account value="myValue"> </create-account>
-                    <h4 class="tabheading" >Party Name</h4>
-                    <ui-select ui-tree-select on-select="partyAccountSelected();" ng-model="partyAccount.selected" id="countryCode"
+                <div class="col-sm-7 padding" >
+                    @*<create-account value="myValue"> </create-account>*@
+                    @*<h4 class="tabheading" >Party Name</h4>*@
+                    <h4 class="tabheading font_11">Party Name <span class="pull-right" style="color:forestgreen"><i class="fa fa-rupee"></i> {{salesAccountBalance}} <em style="color:red">{{salesAccountType}}</em></span></h4>
+                    <ui-select ui-tree-select on-select="partyAccountSelected($select.selected);" ng-model="partyAccount.selected" id="countryCode"
                                ui-select-focuser  ng-init="$select.addnew=1;$select.type='buyer';"
                                theme="selectize">
-                        <ui-select-match placeholder="Select Customers">
+                        <ui-select-match style="width:100%" placeholder="Select Customers">
+                            <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                {{ $select.selected.accountName || $select.search }}
+                            </span>
                             
-                            <span >{{ $select.selected.accountName || $select.search }}</span>
+                            @*<span >{{ $select.selected.accountName || $select.search }}</span>*@
                            
                         </ui-select-match>
 
@@ -124,29 +129,29 @@
                     <input type="number" step="0.01" ng-change="totalPaidAmountChanged();" ng-model="totalPaidAmount"class="form-control" />
                   
                 </div>
-                <div class="col-sm-3 padding">
+                <div class="col-sm-2 padding">
                    <h4 class="tabheading">Bal.</h4>
                     <input type="text" class="form-control" value="{{balanceAmtReceipt}}" disabled />
                 </div>
                 <div permission="usertype:O" class="col-sm-7 padding">
                     <label>
-                        <input ng-model="isInterest" type="checkbox"> Interest
+                        <input ng-model="isInterest" type="checkbox"/> Interest 
                     </label>
-                    </div>
+                </div>
 
             </div>
 
             <div  permission="usertype:UO"  class="col-sm-4 pull-right" style="padding:10px; background:rgba(139, 195, 74, 0.09)">
                 <div class="col-sm-6 padding">
-                    <h4 style="margin:0px 0px 10px 0px; font-size:14px; font-weight:bold" class="text-primary"><input ng-model="chkBadla" ng-click="selectbadla()" ng-disabled="itemChecked.length!=1" type="checkbox" /> Badla Payment</h4>
+                    <h4 style="margin:0px 0px 10px 0px; font-size:14px; font-weight:bold" class="text-primary"><input ng-model="chkBadla" ng-click="selectbadla()" ng-disabled="badlaState()" type="checkbox" /> Badla Payment</h4>
                 </div>
                 <div class="col-sm-6 padding">
                     @*<h4 class="tabheading">Rs.</h4>*@
-                    <input ng-disabled="itemChecked.length!=1" type="number" step="0.01" placeholder="Badla Amount" ng-model="badlaAmount" id="badlaamnt" class="form-control" />
+                    <input ng-disabled="badlaState()" type="number" step="0.01" placeholder="Badla Amount" ng-model="badlaAmount" id="badlaamnt" class="form-control" />
                 </div>
                 <div class="col-sm-7 padding5">
                     <label>Badla Party</label>
-                    <ui-select ng-disabled="itemChecked.length!=1" ui-tree-select ng-model="badlaAccount.selected" id="countryCode"
+                    <ui-select ng-disabled="badlaState()" ui-tree-select ng-model="badlaAccount.selected" id="countryCode"
                                ui-select-focuser ng-init="$select.addnew=1;$select.type='badla';"
                                theme="selectize">
                         <ui-select-match placeholder="Select Badla Party">{{ $select.selected.accountName }}</ui-select-match>
@@ -163,7 +168,7 @@
                 <div class="col-sm-5 padding5">
                     <label>Date of Badla</label>
                     <div class='input-group'>
-                        <input ng-disabled="itemChecked.length!=1" ng-init="badlaDate='badlaDate'" type='text' class="form-control" id='badlaDate' />
+                        <input ng-disabled="badlaState()" ng-init="badlaDate='badlaDate'" type='text' class="form-control" id='badlaDate' />
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
@@ -182,15 +187,15 @@
                     <tbody>
                         <tr>
                             <td style="vertical-align:middle"><strong>DAYS</strong></td>
-                            <td><input ng-disabled="itemChecked.length!=1" type="number" ng-model="dayTotal" placeholder="days" class="form-control" /></td>
-                            <td><input ng-disabled="itemChecked.length!=1" type="number" ng-model="dayInterest" placeholder="days" class="form-control" /></td>
-                            <td><input ng-disabled="itemChecked.length!=1" type="number" ng-model="dayDiff" placeholder="days" class="form-control" /></td>
+                            <td><input ng-disabled="badlaState()" type="number" ng-model="dayTotal" placeholder="days" class="form-control" /></td>
+                            <td><input ng-disabled="badlaState()" type="number" ng-model="dayInterest" placeholder="days" class="form-control" /></td>
+                            <td><input ng-disabled="badlaState();" type="number" ng-model="dayDiff" placeholder="days" class="form-control" /></td>
                         </tr>
                         <tr>
                             <td style="vertical-align:middle"><strong>INTEREST (%)</strong></td>
-                            <td><input ng-disabled="itemChecked.length!=1" type="number" ng-model="perTotal" placeholder="%" step="0.01" class="form-control" /></td>
-                            <td><input ng-disabled="itemChecked.length!=1" type="number" ng-model="perInterest" placeholder="%" step="0.01" class="form-control" /></td>
-                            <td><input ng-disabled="itemChecked.length!=1" type="number" ng-model="perDiff" placeholder="%" step="0.01" class="form-control" /></td>
+                            <td><input ng-disabled="badlaState();" type="number" ng-model="perTotal" placeholder="%" step="0.01" class="form-control" /></td>
+                            <td><input ng-disabled="badlaState()" type="number" ng-model="perInterest" placeholder="%" step="0.01" class="form-control" /></td>
+                            <td><input ng-disabled="badlaState()" type="number" ng-model="perDiff" placeholder="%" step="0.01" class="form-control" /></td>
                         </tr>
 
                     </tbody>
@@ -313,7 +318,7 @@
                             <td class="text-right">{{data.amount}}</td>
                             <td class="text-right">{{data.interest}}</td>
                             <td class="text-right">{{data.balance}}</td>
-                            <td class="text-right"><input type="number" step="0.01" ng-change="amountChange(data,data.amountPaid,'{{data.amountPaid}}');" @*ng-blur="payBill(data.amount,data.balance,$index,data.amountPaid,data.id)"*@ ng-model="data.amountPaid" class="form-control" /></td>
+                            <td class="text-right"><input ng-disabled="data.old" type="number" step="0.01" ng-change="amountChange(data,data.amountPaid,'{{data.amountPaid}}');" @*ng-blur="payBill(data.amount,data.balance,$index,data.amountPaid,data.id)"*@ ng-model="data.amountPaid" class="form-control" /></td>
                         </tr>
 
 
@@ -394,7 +399,7 @@
                     <div class="form-group">
                         <h4 style="margin-top: 15px; margin-bottom:10px;">
                             <i class="fa fa-caret-right"></i> Attachments
-                            <small ng-show="editMode" ng-click="downloadAttachments();"  class="text-primary cursor dwn">(<i class="fa fa-download"></i> Download all files)</small>
+                            <small ng-show="mode=='edit'" ng-click="downloadAttachments();"  class="text-primary cursor dwn">(<i class="fa fa-download"></i> Download all files)</small>
                         </h4>
                         <div class="col-sm-5 padding5">
                             <input type="text" class="form-control" ng-model="filename" placeholder="Title" />

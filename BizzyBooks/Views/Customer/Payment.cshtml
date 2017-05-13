@@ -13,6 +13,7 @@
 
         <label style="float:right;padding:15px">
             <span style="float:left; font-size:18px; margin-top:-2px">
+                <input permission="usertype:O" ng-model="visible" ng-init="visible=true" type="checkbox" />
                 <label style="color:#000">State :</label>
                 <span class="dropdown my" style="width:auto; margin-right:20px;">
                     <a href="#" class="dropdown-toggle stagesdrpdwn" data-toggle="dropdown" style="color:#ff9800">Closed<span class="caret" style="margin-top:0px;color:#000"></span></a>
@@ -39,7 +40,16 @@
                     <h4 class="tabheading">Payment no.</h4>
                     <input type="text" ng-model="paymentNo" class="form-control" value="3" disabled />
                 </div>
+                <div class="col-sm-2 padding">
+                    <h4 class="tabheading">Payment Date</h4>
 
+                    <div class='input-group date'>
+                        <input type='text' class="form-control" ng-init="paymentdate='paymentdate'" id="paymentdate" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
                 <div class="col-sm-1 padding pull-right">
                     <h4 class="tabheading text-right">Currency</h4>
                     <select ng-model="currency" ng-change="currency1(currency)" class="form-control">
@@ -50,12 +60,17 @@
             </div>
             <create-account value="myValue"> </create-account>
             <div class="col-lg-12 padding">
-                <div class="col-sm-4 padding">
-                    <h4 class="tabheading">Bank/Cash</h4>
+                <div class="col-sm-3 padding">
+                    <h4 class="tabheading font_11">Bank/Cash <span class="pull-right" style="color:forestgreen"><i class="fa fa-rupee"></i> {{cashAccountBalance}} <em style="color:red">{{cashAccountType}}</em></span></h4>
+                    @*<h4 class="tabheading">Bank/Cash</h4>*@
                     <ui-select ui-tree-select ng-model="bankAccount.selected" id="countryCode"
-                               ui-select-focuser ng-init="$select.addnew=1;$select.type='badla';"
+                               ui-select-focuser on-select="cashAccountSelected($select.selected);" ng-init="$select.addnew=1;$select.type='badla';"
                                theme="selectize">
-                        <ui-select-match placeholder="Select Account">{{ $select.selected.accountName }}</ui-select-match>
+                        <ui-select-match style="width:100%" placeholder="Select Account">
+                            <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                {{ $select.selected.accountName || $select.search }}
+                            </span>
+                        </ui-select-match>
 
                         <ui-select-choices repeat="person in bankAccounts  | filter: $select.search">
                             <div>
@@ -67,16 +82,7 @@
                     </ui-select>
                 </div>
 
-                <div class="col-sm-2 padding">
-                    <h4 class="tabheading">Payment Date</h4>
-
-                    <div class='input-group date'>
-                        <input type='text' class="form-control" ng-init="paymentdate='paymentdate'"  id="paymentdate"/>
-                        <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-calendar"></span>
-                        </span>
-                    </div>
-                </div>
+                
 
                 <div class="col-sm-2 padding5 pull-right">
 
@@ -97,12 +103,17 @@
             </div>
 
             <div class="col-lg-12 padding">
-                <div class="col-sm-4 padding">
-                    <h4 class="tabheading">Party Name</h4>
-                    <ui-select ui-tree-select ng-model="partyAccount.selected" on-select = "getOpenInvoice()" id="countryCode"
+                <div class="col-sm-3 padding">
+                    @*<h4 class="tabheading">Party Name</h4>*@
+                    <h4 class="tabheading font_11">Party Name <span class="pull-right" style="color:forestgreen"><i class="fa fa-rupee"></i> {{salesAccountBalance}} <em style="color:red">{{salesAccountType}}</em></span></h4>
+                    <ui-select ui-tree-select ng-model="partyAccount.selected" on-select = "getOpenInvoice($select.selected)" id="countryCode"
                                ui-select-focuser ng-init="$select.addnew=1;$select.type='party';"
                                theme="selectize">
-                        <ui-select-match placeholder="Select Suppliers">{{ $select.selected.accountName }}</ui-select-match>
+                        <ui-select-match style="width:100%" placeholder="Select Suppliers">
+                            <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                {{ $select.selected.accountName || $select.search }}
+                            </span>
+                        </ui-select-match>
 
                         <ui-select-choices repeat="person in partyAccounts  | filter: $select.search">
                             <div>
@@ -113,16 +124,24 @@
                         </ui-select-choices>
                     </ui-select>
                 </div>
+                <div class="col-sm-1 padding">
+                    <h4 class="tabheading">Rs.</h4>
+                    <input type="number" step="0.01" ng-change="paidAmountChanged();" ng-model="totalPaidAmount" class="form-control" />
 
+                </div>
+                <div class="col-sm-1 padding">
+                    <h4 class="tabheading">Bal.</h4>
+                    <input type="text" class="form-control" value="{{balanceAmtReceipt}}" disabled />
+                </div>
 
-                <div class="pull-right" >
+                @*<div>
                     <h4 class="tabheading pull-left" style="padding-left:70px">Bal.</h4>
                     <input type="text" class="form-control" style="width: 110px;  margin-left: 10px; float: right;" value="{{balanceAmtReceipt}}" disabled />
                 </div>
-                <div class="pull-right">
+                <div >
                     <h4 class="tabheading pull-left" style="padding-left:70px">Amount</h4>
                     <input type="number" step="0.01" ng-change="paidAmountChanged();" ng-model ="totalPaidAmount"  class="form-control" style="width: 110px;  margin-left: 10px; float: right;" />
-                </div>
+                </div>*@
                 
 
             </div>
@@ -159,7 +178,7 @@
                             
                             <td class="text-right">{{data.amount}}</td>
                             <td class="text-right">{{data.balance}}</td>
-                            <td class="text-right"><input type="number" step="0.01" ng-change="amountChange(data,data.amountPaid,'{{data.amountPaid}}');" ng-model="data.amountPaid" class="form-control" /></td>
+                            <td class="text-right"><input ng-disabled="data.old" type="number" step="0.01" ng-change="amountChange(data,data.amountPaid,'{{data.amountPaid}}');" ng-model="data.amountPaid" class="form-control" /></td>
                         </tr>
 
                         

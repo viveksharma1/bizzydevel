@@ -26,28 +26,28 @@
                         
                         $scope.badlaAccount = localStorage[response.data.vo_badla.badlaAccountId];//, id: response.data.vo_badla.badlaAccountId } };
 
-                        $scope.badlaDate = $filter('date')(response.data.date, 'dd/MM/yyyy');
-                        $scope.dueDate = $filter('date')($scope.billInfo.duedate, 'dd/MM/yyyy');
-                        $scope.invoiceDate = $filter('date')($scope.billInfo.date, 'dd/MM/yyyy');
+                        //$scope.badlaDate = $filter('date')(response.data.date, 'dd/MM/yyyy');
+                        //$scope.dueDate = $filter('date')($scope.billInfo.duedate, 'dd/MM/yyyy');
+                        //$scope.invoiceDate = $filter('date')($scope.billInfo.date, 'dd/MM/yyyy');
                         //console.log(response.data.vo_payment.bankAccount);
                         //$scope.partyAccount = { selected: { accountName: localStorage[response.data.vo_payment.partyAccountId], id: response.data.vo_payment.partyAccountId } };
 
                         //$scope.paymentdate = $filter('date')(response.data.date, 'dd/MM/yyyy');
                         //fill badla info if exists
 
-                        var badlaInfo = response.data.vo_badla;
-                        if (badlaInfo) {
-                            //$scope.chkBadla = true;
-                            //$scope.badlaDate = $filter('date')(badlaInfo.data, 'dd/MM/yyyy');
-                            //$scope.badlaAccount = { selected: { id: badlaInfo.partyAccountId } };
-                            //$scope.badlaAmount = badlaInfo.amount;
-                            $scope.dayTotal = badlaInfo.conditons.dayTotal;
-                            $scope.dayInterest = badlaInfo.conditons.dayInterest;
-                            $scope.dayDiff = badlaInfo.conditons.dayDiff;
-                            $scope.perTotal = badlaInfo.conditons.perTotal;
-                            $scope.perInterest = badlaInfo.conditons.perInterest;
-                            $scope.perDiff = badlaInfo.conditons.perDiff;
-                        }
+                        $scope.badlaInfo = response.data.vo_badla.conditons;
+                        //if (badlaInfo) {
+                        //    //$scope.chkBadla = true;
+                        //    //$scope.badlaDate = $filter('date')(badlaInfo.data, 'dd/MM/yyyy');
+                        //    //$scope.badlaAccount = { selected: { id: badlaInfo.partyAccountId } };
+                        //    //$scope.badlaAmount = badlaInfo.amount;
+                        //    $scope.dayTotal = badlaInfo.conditons.dayTotal;
+                        //    $scope.dayInterest = badlaInfo.conditons.dayInterest;
+                        //    $scope.dayDiff = badlaInfo.conditons.dayDiff;
+                        //    $scope.perTotal = badlaInfo.conditons.perTotal;
+                        //    $scope.perInterest = badlaInfo.conditons.perInterest;
+                        //    $scope.perDiff = badlaInfo.conditons.perDiff;
+                        //}
 
 
                     });
