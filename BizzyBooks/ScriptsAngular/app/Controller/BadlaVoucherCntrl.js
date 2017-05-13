@@ -10,7 +10,7 @@
         window.history.back();
     }
 
-    $('#BadlaDate').datepicker();
+    //$('#BadlaDate').datepicker();
     //$('#interestDate').datepicker();
 
     function getVoucherInfo(id) {
@@ -20,15 +20,15 @@
 
                         $scope.voucherData = response.data;
                         $scope.state = response.data.state;
-                        $scope.billInfo = response.data.vo_badla.billDetail[0];
+                        $scope.billInfo = response.data.vo_badla.length > 0 ? response.data.vo_badla.billDetail[0] : {};
                         $scope.amount = response.data.amount
                         $scope.paymentNo = response.data.vochNo
                         
                         $scope.badlaAccount = localStorage[response.data.vo_badla.badlaAccountId];//, id: response.data.vo_badla.badlaAccountId } };
 
-                        //$scope.badlaDate = $filter('date')(response.data.date, 'dd/MM/yyyy');
-                        //$scope.dueDate = $filter('date')($scope.billInfo.duedate, 'dd/MM/yyyy');
-                        //$scope.invoiceDate = $filter('date')($scope.billInfo.date, 'dd/MM/yyyy');
+                        $scope.badlaDate = $filter('date')(response.data.date, 'dd/MM/yyyy');
+                        $scope.dueDate = $filter('date')(response.data.duedate, 'dd/MM/yyyy');
+                        $scope.invoiceDate = $filter('date')($scope.billInfo.date, 'dd/MM/yyyy');
                         //console.log(response.data.vo_payment.bankAccount);
                         //$scope.partyAccount = { selected: { accountName: localStorage[response.data.vo_payment.partyAccountId], id: response.data.vo_payment.partyAccountId } };
 
@@ -36,6 +36,7 @@
                         //fill badla info if exists
 
                         $scope.badlaInfo = response.data.vo_badla.conditons;
+                        calculateTotal();
                         //if (badlaInfo) {
                         //    //$scope.chkBadla = true;
                         //    //$scope.badlaDate = $filter('date')(badlaInfo.data, 'dd/MM/yyyy');
@@ -52,7 +53,14 @@
 
                     });
     }
-
+    function calculateTotal() {
+        var total = 0;
+        for (var i = 0; i < $scope.voucherData.paymentLog.length; i++) {
+            total += $scope.voucherData.paymentLog[i].interest;
+        }
+        
+        $scope.totalInterest = total;
+    }
     if ($stateParams.voId) {
         getVoucherInfo($stateParams.voId);
     }
