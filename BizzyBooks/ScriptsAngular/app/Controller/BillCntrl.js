@@ -441,6 +441,13 @@
                         if (response.data.accountlineItem) {
                             $scope.accountTableSum();
                         }
+                        if (response.data.paymentLog) {
+                            $scope.receiptCount = response.data.paymentLog.length;
+                            $scope.receipts = response.data.paymentLog;
+                        } else {
+                            $scope.receiptCount = null;
+                            $scope.receipts = [];
+                        }
                         $scope.paymentDays = billData.paymentDays
                         $scope.paymentLog = { data: "dfdgd" };
                         $scope.billNo = billData.no
@@ -553,12 +560,14 @@
             var purchaseAmount;
 
             if (authService.userHasPermission('usertype:O')) {
-                var totalAmountINR = $scope.manualTableSum() + $scope.accountTableSum();
+                var amount = $scope.manualTableSum() + $scope.accountTableSum();
                 purchaseAmount = $scope.manualTableSum()
+                var totalAmountINR = 0
             }
             if (authService.userHasPermission('usertype:UO')) {
                 purchaseAmount = $scope.excelTableItemSum();
                 var totalAmountINR = $scope.excelTableItemSum() + $scope.accountTableSum()
+                var amount = 0;
             }
             if ($scope.assesableValue) {
                 $scope.billtable[$scope.tableIndex].assesableValue = $scope.assesableValue;
@@ -612,8 +621,8 @@
                     adminAmount: Number($scope.totalAmountINR.toFixed(2)),
                     adminBalance: Number($scope.totalAmountINR.toFixed(2)),
                     purchaseAmount: Number(purchaseAmount),
-                    amount: Number(totalAmountINR),
-                    balance: Number(totalAmountINR),
+                    amount: Number(amount),
+                    balance: Number(amount),
                     totalWeight: $scope.totalWeight,
                     ExchangeRate: $scope.ExchangeRateINR,
                     supCode: $scope.supplier.selected.supCode,
@@ -692,13 +701,14 @@
                                 var exchangeRate = "exchangeRate"
                                 if (obj1 == "NETWEIGHT") {
                                     $scope.netweight = Number(XL_row_object[key][obj]);
+                                    retObj["BALANCE"] = Number(XL_row_object[key][obj]);
                                 }
                                 if (obj1 == "TOTALPRICE") {
                                     $scope.totalprice = Number(XL_row_object[key][obj]);
                                     retObj["TOTALAMOUNTUSD"] = $scope.netweight * $scope.totalprice;
                                 }
 
-                                if (obj1 == "FOBUNITPRICEUSD" || obj1 == "CIFUNITPRICE" || obj1 == "NETWEIGHT" || obj1 == "TOTALPRICE" || obj1 == "LENGTH" || obj1 == "WIDTH" || obj1 == "THICKNESS" || obj1 == "GROSSWT") {
+                                if (obj1 == "FOBUNITPRICEUSD" || obj1 == "CIFUNITPRICE" || obj1 == "NETWEIGHT" || obj1 == "TOTALPRICE"  || obj1 == "GROSSWT") {
                                     retObj[obj1] = Number(XL_row_object[key][obj]);
                                 }
                                 else {
@@ -862,6 +872,12 @@
         $scope.SAD1 = data.SAD1
     }
     // save custom data 
+    $scope.getVoucherCount = function () {
+        $http.get(config.api + "voucherTransactions/count" + "?[where][type]=" + "Payment").then(function (response) {
+            $scope.paymentNo = response.data.count + 1
+        });
+    }
+    $scope.getVoucherCount();
     $scope.customPymentStatus = function () {
         if ($stateParams.billNo) {
             if ($scope.customPaymentInfo) {
@@ -880,28 +896,51 @@
     $scope.paymentAccounts = {}
     $scope.partyAccount = {}
     $scope.customPayement = function () {
-        var customPayementDate = $scope.dateFormat($scope.customPayementDate);
+       // var customPayementDate = $scope.dateFormat($scope.customPayementDate);
+        var customPayementDate = getDate($scope.customPayementDate);
         var data = {
             compCode: localStorage.CompanyId,
+            role: localStorage['usertype'],
             type: "Payment",
             date: customPayementDate,
             amount: $scope.customAmount,
             refNo: $scope.billNo,
+            vochNo: $scope.paymentNo,
             state: "PAID",
             remark: $scope.customReamarks,
+            visible: true,
             vo_payment: {
                 bankAccountId: $scope.paymentAccounts.selected.id,
                 partyAccountId: $scope.partyAccount.selected.id,
                 paymentAmount: $scope.customAmount,
-                currency: '',
+                currency: 'Rupee',
                 exchangeRate: 0,
                 remarks: $scope.customReamarks,
                 billDetail: [{}]
             },
             role: localStorage['adminrole']
-        }
-        $http.post(config.login + "payement", data).then(function (response) {
-        });
+        };
+        $http.post(config.login + 'payment?id=null' , data)
+                      .then(function (response) {
+                          if (response.data.err) {
+                              $rootScope.$broadcast('event:error', { message: "Error while creating Payment: " + response.data.err });
+                          } else {
+                              $rootScope.$broadcast('event:success', { message: "Payment Done." });
+                              //SweetAlert.swal("Done", "Receipt Created.", "success")
+                              //showSuccessToast("Receipt Created.");
+                              $state.go('Customer.Receipt', null, { location: false, reload: true });
+                              //showSuccessToast("Payment Received.");
+                              //$state.reload();
+                          }
+
+                      }, function (err) {
+                          console.log(err);
+                          //SweetAlert.swal("Error", "Error while creating receiipt", "error");
+                          //SweetAlertError();
+                          $rootScope.$broadcast('event:error', { message: "Error while creating payment" });
+                          //spinner.stop();
+                          //res.reject();
+                      });
     }
 
     $scope.sumtotalcustomData = function () {

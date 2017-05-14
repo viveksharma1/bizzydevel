@@ -424,9 +424,9 @@
             $http.post(config.login + 'payment?id=' + $stateParams.voId, data)
                      .then(function (response) {
                          if (response.data.err) {
-                             $rootScope.$broadcast('event:error', { message: "Error while creating receipt: " + response.data.err });
+                             $rootScope.$broadcast('event:error', { message: "Error while creating Payment: " + response.data.err });
                          } else {
-                             $rootScope.$broadcast('event:success', { message: "Payment Received." });
+                             $rootScope.$broadcast('event:success', { message: "Payment Done." });
                              //SweetAlert.swal("Done", "Receipt Created.", "success")
                              //showSuccessToast("Receipt Created.");
                              $state.go('Customer.Receipt', null, { location: false, reload: true });

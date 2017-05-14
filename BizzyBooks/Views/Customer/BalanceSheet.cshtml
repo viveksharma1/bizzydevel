@@ -31,11 +31,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td class="tablepadding2"><strong>Capital Assets</strong></td>
-                                <td class="tablepadding2" style="text-align:right"><strong>8,44,85,848.63</strong></td>
+                            <tr ng-repeat="data in reportDataCr">
+                                <td class="tablepadding2"><strong>{{data.account}}</strong></td>
+                                <td class="tablepadding2" style="text-align:right"><strong>{{data.amount}}</strong></td>
                             </tr>
-                            <tr>
+                            @*<tr>
                                 <td class="tablepadding2"><strong>Loans</strong></td>
                                 <td class="tablepadding2" style="text-align:right"><strong>11,95,29,037.30</strong></td>
                             </tr>
@@ -50,7 +50,7 @@
                                     <p style="margin-bottom:0px;  padding-left:20px;"><em>Current Period <span class="pull-right" style="border-bottom:1px solid #e3e3e3">34,22,205.48</span></em></p>
                                 </td>
                                 <td class="tablepadding2" style="text-align:right; vertical-align:top"><strong>34,22,205.48</strong></td>
-                            </tr>
+                            </tr>*@
 
 
 
@@ -58,7 +58,7 @@
                         <tfoot style="border-top:1px solid #e3e3e3; background:#F0EEEE; padding:5px 0px; font-size:16px; color:#000">
                             <tr>
                                 <th class="tablepadding2">Total</th>
-                                <th class="tablepadding2" style="text-align:right">33,35,93,578.95</th>
+                                <th class="tablepadding2" style="text-align:right">{{totalCredit}}</th>
                             </tr>
                         </tfoot>
                     </table>
@@ -73,21 +73,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td class="tablepadding2"><strong>Fixed Assets</strong></td>
-                                <td class="tablepadding2" style="text-align:right"><strong>45,97,830.00</strong></td>
+                            <tr ng-repeat="data in reportDataDr">
+                                <td class="tablepadding2"><strong>{{data.account}}</strong></td>
+                                <td class="tablepadding2" style="text-align:right"><strong>{{data.amount}}</strong></td>
                             </tr>
-                            <tr>
+                            @*<tr>
                                 <td class="tablepadding2"><strong>Current Assets</strong></td>
                                 <td class="tablepadding2" style="text-align:right"><strong>32,89,95,748.95</strong></td>
-                            </tr>
+                            </tr>*@
 
 
                         </tbody>
                         <tfoot style="border-top:1px solid #e3e3e3; background:#F0EEEE; padding:5px 0px; font-size:16px; color:#000">
                             <tr>
                                 <th class="tablepadding2">Total</th>
-                                <th class="tablepadding2" style="text-align:right">33,35,93,578.95</th>
+                                <th class="tablepadding2" style="text-align:right">{{totalDebit}}</th>
                             </tr>
                         </tfoot>
                     </table>

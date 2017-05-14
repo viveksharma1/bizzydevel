@@ -9070,7 +9070,7 @@ main {
     -webkit-font-smoothing: antialiased; font-size:16px; text-align:right
 }
 #UploadOpeningStock .modal-dialog{width:30%;}
-.Settelmentbox{border:2px solid rgba(101, 110, 121, 0.4); padding:5px; float:left; width:100%; border-radius:5px; min-height:160px; margin-bottom:20px;}
+.Settelmentbox{border:2px solid rgba(101, 110, 121, 0.4); min-height:190px; padding:5px; float:left; width:100%; border-radius:5px;margin-bottom:20px;}
 .Settelmentbox h3{background: #f5f5f5; font-size:20px; color:#337ab7;
     padding: 10px;
     margin: 0px;
