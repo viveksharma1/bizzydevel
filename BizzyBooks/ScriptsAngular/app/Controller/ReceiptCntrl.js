@@ -223,6 +223,7 @@
         }
     }
     $scope.deleteReceipt = function () {
+        $rootScope.$broadcast('event:progress', { message: "Please wait while processing.." });
         var data = {
             compCode: localStorage.CompanyId,
             type: type,
@@ -472,7 +473,7 @@
             //fillreceipt info
             fillData(sharedFactory.info.receipts[sharedFactory.info.selectedReceiptIndex]);
         } else {
-            $scope.partyAccountSelected();
+            $scope.partyAccountSelected($scope.partyAccount);
         }
     }
     function getPaymentdata(id) {
@@ -516,7 +517,7 @@
         }
 
         calculateTotal(false);
-        $scope.partyAccountSelected();
+        $scope.partyAccountSelected($scope.partyAccount);
     }
     //var Promise = window.Promise;
     //if (!Promise) {
@@ -707,8 +708,6 @@
         if (item.type == 'Badla Voucher') {
 
             var badlaCondition=item.vo_badla.conditons;
-
-
             var days = getDays(item);
             var days2 =days- badlaCondition.dayTotal;
             var days3 = Math.max(days - badlaCondition.dayInterest,0);
@@ -789,37 +788,10 @@
         })
         
     }
-    //function applyRate(rate, item) {
-    //        if ($scope.itemChecked.length > 0) {
-
-    //            for (var i = 0; i < $scope.itemChecked.length; i++) {
-    //                if (item) {
-    //                    if ($scope.itemChecked[i].id == item.id) {
-    //                        $scope.itemChecked[i].itemRate = rate
-    //                        $scope.itemChecked[i].itemAmount = item.itemAmount;
-    //                        if (item.itemQty)
-    //                            $scope.itemChecked[i].itemQty = item.itemQty;
-    //                        break;
-    //                    }
-    //                } else {
-    //                    $scope.itemChecked[i].itemRate = rate
-    //                    $scope.itemChecked[i].itemAmount = rate * Number($scope.itemChecked[i].itemQty);
-    //                    $scope.itemChecked[i].select = true;
-    //                }
-
-    //            }
-    //            if ($scope.selectAllItem && !item)
-    //                angular.copy($scope.itemChecked, $scope.filterList);
-    //            sumItemTable($scope.itemChecked);
-    //        }
-
-
-    //}
     function clearBadlaBox() {
         $scope.badlaAmount = null;
         $scope.badlaAccount = { seleced: {} };//badlaAmount
         setDate($scope.badlaDate);
-        //$scope.badlaDate = $filter('date')(new Date(), 'dd/MM/yyyy');
         $scope.dayTotal = null;
         $scope.dayInterest = null;
         $scope.dayDiff = null;

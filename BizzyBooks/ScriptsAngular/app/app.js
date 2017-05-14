@@ -371,6 +371,7 @@ var myApp = angular
             permissions: 'Float.add.Customers.General Invoice.active',
             params: {
                 voId: null,
+                type: 'General Invoice'
             }
         });
           $stateProvider.state("Customer.RosemateVoucher", {
