@@ -8,6 +8,9 @@
         display: none;
     }
 </style>
+<script type="text/ng-template" id="popover_template.html">
+    <table style='width:100%'><tr><th>Date</th><th>Amount</th><th>Voch No.</th></tr><tr ng-repeat='data in datas' class="cursor" ui-sref="Customer.Receipt({voId:data.id,noBackTrack:true})"><td style="color:forestgreen">{{data.date|date:'dd/MM/yyyy'}}</td><td>Rs{{data.amount}}</td><td>{{data.vochNo}}</td></tr><tr></tr></table>
+</script>
 <script type="text/ng-template" id="exciseInfo_template.html">
     <span >
         <label style="color:#73A91B"> Assesable Value:</label> <b> {{excisedata.assesableValue}}</b><br>
@@ -24,11 +27,7 @@
     </div>
    
 </script>
-<script type="text/ng-template" id="popover_template.html">
-    <table style='width:100%'><tr><th>Date</th><th>Amount Paid</th><th>Voch No.</th></tr><tr ng-repeat='data in datas' class="cursor" ui-sref="Customer.MakePayment({voId:data.id})"><td style="color:forestgreen">{{data.date}}</td><td>Rs{{data.amount}}</td><td>{{data.vochNo}}</td></tr><tr></tr></table>
 
-    
-</script>
 
 <div class="FlexPopup" style="display:block" ng-init="model = {}">
     <div class="flexheader lightblue">
@@ -250,13 +249,11 @@
                     <span permission="usertype:UO" class="balancedue"><small><i class="fa fa-rupee" style="color:#9E9E9E"></i></small> {{(excelTableItemSum() + accountTableSum()) | number : 2}}</span>
                     
                 </div>
+                <div ng-repeat="data in receipts | limitTo:1">
+                    <small style="float:right; margin:10px 0px"><span class="text-primary cursor" id="myPopover" pop-over datas="receipts">{{receiptCount}} Payment </span> made</small>
+                </div>
                
                 <div class="pull-right col-sm-12 text-right">
-                   
-                   
-                    <div ng-repeat="data in paymentLog | limitTo:1">
-                        <small style="float:right; width:100%; margin:10px 0px"> <a class="cursor"  pop-over datas="paymentLog" , title="Payment Log">{{paymentLog.length}} Payment Made</a></small>
-                      </div>
                   
                     <h4 class="tabheading font_11">INVOICE NO.</h4>
                     <input type="text" class="form-control pull-right" ng-blur="getExistingBill(billNo)"id="billNo" ng-model="billNo" style="width:100px" />
@@ -1335,7 +1332,7 @@
                     </div>
                     <div class="modal-body">
                         <div class='input-group date'  id='customPayementDate' >
-                            <input type='text' class="form-control" ng-model="customPayementDate"/>
+                            <input type='text' class="form-control" ng-init="customPayementDate = 'customPayementDate'" id="customPayementDate"/>
                             <span class="input-group-addon datepicker">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
