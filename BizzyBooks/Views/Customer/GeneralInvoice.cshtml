@@ -600,65 +600,70 @@
                                     </tr>
 
                                 </table>
-                                <table class="table-condensed border-dark " fixed-header style="font-size:13px !important; width:100%;height:700px">
-                                    <thead>
+                                <div style="float:left;width:100%; height:650px; overflow:auto">
+                                    <table class="table-condensed border-dark table" style="font-size:13px !important; width:100%;">
+                                        <thead>
 
-                                        <tr style="background:#F0EEEE" >
-                                            <th style="text-align:center" ><input type="checkbox" ng-click="selectAllLineItem(filterList)" ng-model="selectAllItem"/></th>
-                                            <th style="text-align:center">Inv.No</th>
-                                            <th style="text-align:center">Category</th>
-                                            <th style="text-align:center">Sheet No.</th>
-                                           
-                                            @*<th style="text-align:center">Date</th>*@
-                                            <th style="text-align:center">Lot Wt</th>
-                                            <th style="text-align:center">Locat.</th>
-                                            <th style="text-align:center">Grade</th>
-                                            <th style="text-align:center">Finish</th>
-                                            <th style="text-align:center">Thick.</th>
-                                            <th style="text-align:center">Width</th>
-                                            <th style="text-align:center">Length</th>
-                                            <th style="text-align:center">Net Wt</th>
-                                            <th style="text-align:center">Gross Wt</th>
-                                            <th style="text-align:center">PCS</th>
-                                            <th style="text-align:center">Balance</th>
-                                            @*<th style="text-align:center">Remarks  </th>*@
-                                            <th style="text-align:center">Sale Qty</th>
-                                            <th style="text-align:right">Rate</th>
-                                            <th style="text-align:right">Amount(&#8377;)</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr ng-repeat="item in filterList| filter:search">
-                                            <td style="text-align:center"><input  ng-model="item.select" ng-click="selectLineItem(item)"type="checkbox" /></td>
-                                            <td> {{item.no}}</td>
-                                            <td> {{item.SUBCATEGORY}}</td>
-                                            <td> {{item.COILSHEETNO}}</td>
-                                            @*<td> {{item.INCOMINGDATE}}</td>*@
-                                            <td> {{item.LotWeight}}</td>
-                                            <td> {{item.LOCATION}}</td>
-                                            <td> {{item.GRADE}}</td>
-                                            <td> {{item.FINISH}}</td>
-                                            <td> {{item.THICKNESS}}</td>
-                                            <td> {{item.WIDTH}}</td>
-                                            <td> {{item.LENGTH}}</td>
-                                            <td> {{item.NETWEIGHT}}</td>
-                                            <td> {{item.GROSSWT}}</td>
-                                            <td> {{item.PCS/LENGTHINMTRS}}</td>
-                                            <td width="105"> {{item.BALANCE |number : fractionSize}}</td>
-                                            <td style="text-align:right" width="150">
-                                                <input type="text" ng-change="qtyChange(item,item.itemQty,'{{item.itemQty}}');" ng-model="item.itemQty " ng-init="item.itemQty = item.itemQty || item.BALANCE"
-                                                       class="form-control text-right" />
-                                            </td>
-                                            <td style="text-align:right" width="150">
-                                                <input type="number" step="0.01" ng-change="rateChange(item,item.itemRate);" ng-model="item.itemRate" class="form-control text-right" />
-                                            </td>
-                                            <td style="text-align:right" width="100">
-                                                {{item.itemAmount}} 
-                                            </td>
-                                        </tr>
-                                       
+                                            <tr style="background:#F0EEEE">
+                                                <th style="text-align:center" width="50"><input type="checkbox" ng-click="selectAllLineItem(filterList)" ng-model="selectAllItem" /></th>
+                                                <th style="text-align:center">Inv.No</th>
+                                                <th style="text-align:center">Category</th>
+                                                <th style="text-align:center">Sheet No.</th>
 
-                                    </tbody>
+                                                @*<th style="text-align:center">Date</th>*@
+                                                <th style="text-align:center">Lot Wt</th>
+                                                <th style="text-align:center">Locat.</th>
+                                                <th style="text-align:center">Grade</th>
+                                                <th style="text-align:center">Finish</th>
+                                                <th style="text-align:center">Thick.</th>
+                                                <th style="text-align:center">Width</th>
+                                                <th style="text-align:center">Length</th>
+                                                <th style="text-align:center">Net Wt</th>
+                                                <th style="text-align:center">Gross Wt</th>
+                                                <th style="text-align:center">PCS</th>
+                                                <th style="text-align:center">Balance</th>
+                                                @*<th style="text-align:center">Remarks  </th>*@
+                                                <th style="text-align:center">Sale Qty</th>
+                                                <th style="text-align:right">Rate</th>
+                                                <th style="text-align:right">Amount(&#8377;)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="item in filterList| filter:search">
+                                                <td style="text-align:center"><input ng-model="item.select" ng-click="selectLineItem(item)" type="checkbox" /></td>
+                                                <td> {{item.no}}</td>
+                                                <td> {{item.SUBCATEGORY}}</td>
+                                                <td> {{item.COILSHEETNO}}</td>
+                                                @*<td> {{item.INCOMINGDATE}}</td>*@
+                                                <td> {{item.LotWeight}}</td>
+                                                <td> {{item.LOCATION}}</td>
+                                                <td> {{item.GRADE}}</td>
+                                                <td> {{item.FINISH}}</td>
+                                                <td> {{item.THICKNESS}}</td>
+                                                <td> {{item.WIDTH}}</td>
+                                                <td> {{item.LENGTH}}</td>
+                                                <td> {{item.NETWEIGHT}}</td>
+                                                <td> {{item.GROSSWT}}</td>
+                                                <td> {{item.PCS/LENGTHINMTRS}}</td>
+                                                <td width="105"> {{item.BALANCE |number : fractionSize}}</td>
+                                                <td style="text-align:right" width="150">
+                                                    <input type="text" ng-change="qtyChange(item,item.itemQty,'{{item.itemQty}}');" ng-model="item.itemQty " ng-init="item.itemQty = item.itemQty || item.BALANCE"
+                                                           class="form-control text-right" />
+                                                </td>
+                                                <td style="text-align:right" width="150">
+                                                    <input type="number" step="0.01" ng-change="rateChange(item,item.itemRate);" ng-model="item.itemRate" class="form-control text-right" />
+                                                </td>
+                                                <td style="text-align:right" width="100">
+                                                    {{item.itemAmount}}
+                                                </td>
+                                            </tr>
+
+
+                                        </tbody>
+                                        
+                                    </table>
+                                </div>
+                                <table class="table-condensed border-dark table">
                                     <tfoot ng-hide="isCart">
                                         <tr style="background:#F0EEEE">
                                             <th style="text-align:center"></th>
@@ -675,15 +680,13 @@
                                             <th style="text-align:center"></th>
                                             <th style="text-align:center"></th>
                                             <th style="text-align:center"></th>
-                                            <th style="text-align:center">Total</th>
-                                            <th style="text-align:center">{{totalQty}}</th>
-                                            <th style="text-align:right"></th>
-                                            <th style="text-align:right">{{totalAmount}}(&#8377;)</th>
+                                            <th style="text-align:center; width:80px">Total</th>
+                                            <th style="text-align:center; width:80px">{{totalQty}}</th>
+                                            <th style="text-align:right; width:50px"></th>
+                                            <th style="text-align:right; width:80px">{{totalAmount}}(&#8377;)</th>
                                         </tr>
                                     </tfoot>
                                 </table>
-
-                                
                             </div>
 
                         </div>
