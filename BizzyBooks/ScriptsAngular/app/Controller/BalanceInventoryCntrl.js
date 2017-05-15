@@ -9,6 +9,22 @@
     $scope.goBack = function () {
         window.history.back();
     }
+    //$scope.clear = function ($event, $select) {
+    //    $event.stopPropagation();
+    //    //to allow empty field, in order to force a selection remove the following line
+    //    $select.selected = undefined;
+    //    //reset search query
+    //    $select.search = undefined;
+    //    //focus and open dropdown
+    //    $select.activate();
+    //}
+    $scope.clear = function ($event, $select) {
+        $event.stopPropagation();
+        $select.selected = undefined;
+        $select.search = undefined;
+
+        $timeout(function () { $select.activate() }, 200);
+    }
 
     $http.get(config.api + "Inventories?filter[where][visible]=false&filter[limit]=20").then(function (response) {
         $scope.ItemList2 = response.data;

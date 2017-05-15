@@ -13,14 +13,21 @@
         $('#UploadOpeningStock').modal('show');
     }
 
+    //$scope.clear = function ($event, $select) {
+    //    $event.stopPropagation();
+    //    //to allow empty field, in order to force a selection remove the following line
+    //    $select.selected = undefined;
+    //    //reset search query
+    //    $select.search = undefined;
+    //    //focus and open dropdown
+    //    $select.activate();
+    //}
     $scope.clear = function ($event, $select) {
         $event.stopPropagation();
-        //to allow empty field, in order to force a selection remove the following line
         $select.selected = undefined;
-        //reset search query
         $select.search = undefined;
-        //focus and open dropdown
-        $select.activate();
+
+        $timeout(function () { $select.activate() }, 200);
     }
     $http.get(config.api + "Inventories?filter[where][visible]=true&filter[limit]=20").then(function (response) {
         $scope.ItemList2 = response.data;

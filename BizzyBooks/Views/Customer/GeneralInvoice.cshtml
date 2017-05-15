@@ -652,11 +652,11 @@
                                                 <td> {{item.GROSSWT}}</td>
                                                 <td> {{item.PCS/LENGTHINMTRS}}</td>
                                                 <td width="105"> {{item.BALANCE |number : fractionSize}}</td>
-                                                <td style="text-align:right" width="150">
+                                                <td style="text-align:right" width="180">
                                                     <input type="text" ng-change="qtyChange(item,item.itemQty,'{{item.itemQty}}');" ng-model="item.itemQty " ng-init="item.itemQty = item.itemQty || item.BALANCE"
                                                            class="form-control text-right" />
                                                 </td>
-                                                <td style="text-align:right" width="150">
+                                                <td style="text-align:right" width="180">
                                                     <input type="number" step="0.01" ng-change="rateChange(item,item.itemRate);" ng-model="item.itemRate" class="form-control text-right" />
                                                 </td>
                                                 <td style="text-align:right" width="100">

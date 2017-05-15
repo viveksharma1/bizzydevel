@@ -1,6 +1,8 @@
 ﻿myApp.controller('GeneralInvoiceCntrl', ['$scope', '$http', '$timeout', '$rootScope', '$state', 'config', '$stateParams', '$filter', 'FileUploader', 'commonService', 'SweetAlert', function ($scope, $http, $timeout, $rootScope, $state, config, $stateParams, $filter, FileUploader, commonService, SweetAlert) {
 
-
+    if ($rootScope.$previousState == $state.current && $stateParams.voId == null) {
+        window.history.back();
+    }
     $(".my a").click(function (e) {
         e.preventDefault();
     });
@@ -192,7 +194,7 @@
     $scope.clear = function ($event, $select) { ///ui select clear.
         $event.stopPropagation();
         //to allow empty field, in order to force a selection remove the following line
-        $select.selected = null;
+        $select.selected = undefined;
         //reset search query
         $select.search = undefined;
         //focus and open dropdown
