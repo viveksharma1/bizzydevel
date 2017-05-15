@@ -35,36 +35,63 @@
         //console.log($scope.ItemList);
         //$scope.ItemCount = response.data.length;
     });
-
-    $scope.remarks = {};
+    $scope.invoiceno = {};
     $scope.godown = {};
     $scope.description = {};
-    $scope.invoiceno = {};
+    $scope.remarks = {};
+    $scope.rgno = {};
+    $scope.exciseDuty = {};
+    $scope.SAD = {};
+    $scope.NETWEIGHT = {};
 
     $scope.clearFilter=function(){
-        $scope.remarks = {};
+        $scope.invoiceno = {};
         $scope.godown = {};
         $scope.description = {};
-        $scope.invoiceno = {};
+        $scope.remarks = {};
+        $scope.rgno = {};
+        $scope.exciseDuty = {};
+        $scope.SAD = {};
+        $scope.NETWEIGHT = {};
         $scope.filterList = $scope.ItemList2;
     }
     $scope.applyFilter = function () {
-        var qry = "Inventories?filter[where][visible]=true";
-        if ($scope.invoiceno.selected)
-            qry = qry + "&filter[where][no]=" + $scope.invoiceno.selected._id.no;
-        if ($scope.godown.selected)
-            qry = qry + "&filter[where][GODOWN]=" + $scope.godown.selected._id.GODOWN;
-        if ($scope.description.selected)
-            qry = qry + "&filter[where][DESCRIPTION]=" + $scope.description.selected._id.DESCRIPTION;
-        if ($scope.remarks.selected)
-            qry = qry + "&filter[where][RRMARKS]=" + $scope.remarks.selected._id.RRMARKS;
-
-        $http.get(config.api + qry).then(function (response) {
+        var qry = {
+            "where": {
+                "visible": true,
+                "no":$scope.invoiceno.selected ? $scope.invoiceno.selected._id.no : $scope.invoiceno.selected,
+                "GODOWN": $scope.godown.selected ? $scope.godown.selected._id.GODOWN : $scope.godown.selected,
+                "DESCRIPTION": $scope.description.selected ? $scope.description.selected._id.DESCRIPTION : $scope.description.selected,
+                "RRMARKS": $scope.remarks.selected ? $scope.remarks.selected._id.RRMARKS : $scope.remarks.selected,
+                "rgNo": $scope.rgno.selected ? $scope.rgno.selected._id.rgNo : $scope.rgno.selected,
+                "exciseDuty": $scope.exciseDuty.selected ? $scope.exciseDuty.selected._id.exciseDuty : $scope.exciseDuty.selected,
+                "SAD": $scope.SAD.selected ? $scope.SAD.selected._id.SAD : $scope.SAD.selected,
+                "NETWEIGHT": $scope.NETWEIGHT.selected ? $scope.NETWEIGHT.selected._id.NETWEIGHT : $scope.NETWEIGHT.selected,
+            }
+        }
+        $http.get(config.api + "Inventories?filter=" + encodeURIComponent(JSON.stringify(qry))).then(function (response) {
             $scope.filterList = response.data;
-            //console.log($scope.ItemList);
-            //$scope.ItemCount = response.data.length;
+            //$scope.ItemList2 = response.data;
+            //$scope.filterList = $scope.ItemList2;
         });
     }
+    //$scope.applyFilter = function () {
+    //    var qry = "Inventories?filter[where][visible]=true";
+    //    if ($scope.invoiceno.selected)
+    //        qry = qry + "&filter[where][no]=" + $scope.invoiceno.selected._id.no;
+    //    if ($scope.godown.selected)
+    //        qry = qry + "&filter[where][GODOWN]=" + $scope.godown.selected._id.GODOWN;
+    //    if ($scope.description.selected)
+    //        qry = qry + "&filter[where][DESCRIPTION]=" + $scope.description.selected._id.DESCRIPTION;
+    //    if ($scope.remarks.selected)
+    //        qry = qry + "&filter[where][RRMARKS]=" + $scope.remarks.selected._id.RRMARKS;
+
+    //    $http.get(config.api + qry).then(function (response) {
+    //        $scope.filterList = response.data;
+    //        //console.log($scope.ItemList);
+    //        //$scope.ItemCount = response.data.length;
+    //    });
+    //}
     $scope.itemChecked = [];
     $scope.selectAllLineItem = function (allItemData) {
         if ($scope.selectAll) {

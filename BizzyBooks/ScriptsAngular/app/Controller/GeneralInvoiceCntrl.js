@@ -42,7 +42,7 @@
   
 
     $scope.goBack = function () {
-        if ($rootScope.$previousState.name.length == 0 || $rootScope.$previousState == $state.current) {
+        if ($rootScope.$previousState.name.length == 0 || $rootScope.$previousState == $state.current || $stateParams.noBackTrack) {
             window.history.back();
         } else
             $state.go($rootScope.$previousState);
@@ -332,7 +332,7 @@
     $scope.applyFilter = function () {
         var qry = {
             "where": {
-                "visible": true,
+                "visible": false,
                 "SUBCATEGORY": $scope.subcategory.selected ? $scope.subcategory.selected._id.SUBCATEGORY : $scope.subcategory.selected,
                 "COILSHEETNO": $scope.coilsheetno.selected ? $scope.coilsheetno.selected._id.COILSHEETNO : $scope.coilsheetno.selected,
                 "INCOMINGDATE": $scope.incomingdate.selected ? $scope.incomingdate.selected._id.INCOMINGDATE : $scope.incomingdate.selected,
@@ -1062,7 +1062,7 @@
             } else {
                 $rootScope.$broadcast('event:success', { message: "Invoice Created" });
                 if (!$scope.hasVoId) {
-                    $state.go("Customer.GeneralInvoice", { voId: response.data.id });
+                    $state.go("Customer.GeneralInvoice", { voId: response.data.id,location:false});
                 } else {
                     $state.reload();
                 }
