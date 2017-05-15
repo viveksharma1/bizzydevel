@@ -384,7 +384,8 @@
                     <div class="pull-right" style="width:350px">
                      
                         <label class="subtotal" style="font-size:1.5rem;">Total Amount</label>
-                        <span class="subtotalvalue" style="font-size:1.5rem; font-weight:bold"> {{totaltax + totalcharges   |number : fractionSize}} &#8377;</span>                      
+                        <span class="subtotalvalue" style="font-size:1.5rem; font-weight:bold"> {{totaltax + totalcharges   |number : fractionSize}} &#8377;</span>       
+                        <div class="subtotal" style="text-align:left">
                             <ui-select ui-tree-select ng-model="tdsRate.selected" on-select="applyTdsRate($select.selected.rate)" id="countryCode"
                                        ui-select-focuser
                                        theme="selectize" style="width:220px">
@@ -396,20 +397,21 @@
 
                                 </ui-select-match>
 
-                                <ui-select-choices repeat="person in account  | filter: $select.search" >
+                                <ui-select-choices repeat="person in account  | filter: $select.search">
                                     <div style="color:steelblue">
                                         <span ng-bind-html="person.accountName | highlight: $select.search"></span>
                                     </div>
 
                                 </ui-select-choices>
                             </ui-select>
+                            </div>
                             <span class="subtotalvalue " style="font-size:1.5rem; font-weight:bold"> {{tdsamount  |number : fractionSize}} &#8377;</span>
 
-                        
 
-                        <label class="subtotal  padding5" style="font-size:1.5rem;">Balance due	</label>
-                        <span class="subtotalvalue" style="font-size:1.5rem; font-weight:bold"> {{netTds  |number : fractionSize}} &#8377;</span>
-                    </div>
+
+                            <label class="subtotal  padding5" style="font-size:1.5rem;">Balance due	</label>
+                            <span class="subtotalvalue" style="font-size:1.5rem; font-weight:bold"> {{netTds  |number : fractionSize}} &#8377;</span>
+</div>
 
                 </div>
 

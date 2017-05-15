@@ -1,5 +1,5 @@
 ﻿$(document).ready(function () {
-
+   
 
     $('#menutoggle').click(function () {
         $("#wrapper").toggleClass("toggled");
@@ -13,7 +13,7 @@
         $('#flyout').fadeToggle("slow", "linear");
     })
 
-
+    
     function showSuccessToast(message) {
 
     if (message == undefined)
@@ -115,7 +115,18 @@ $('#reportrange').daterangepicker({
 }, cb);
 
 cb(start, end);
+
+
+    try{
+        $(".flexcontainer").style.height = ($(window).height() - ($('.flexheader ').height() + $('.flexfooter ').height())) + "px";
+    } catch (e) {
+        console.log(e);
+    }
 });
+
+
+
+
 function setDate(inputDateId, val, inputTimeId) {
     $('#' + inputDateId).datepicker('setDate',val? new Date(val):new Date());
     if (inputTimeId)

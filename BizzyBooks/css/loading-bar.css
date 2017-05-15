@@ -30,7 +30,7 @@
   -o-transition: width 350ms;
   transition: width 350ms;
 
-  background: #0b4462;
+  background: darkblue;
   position: fixed;
   z-index: 10002;
   color:#0b4462;

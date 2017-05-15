@@ -7751,9 +7751,10 @@ button.close {
 .flexcontainer {
     float: left;
     width: 100%;
-    height: 580px;
+    height: 100%;
     overflow: auto;
-    padding-bottom:50px
+    
+    padding-bottom:150px
 }
 
 .flexfooter {
