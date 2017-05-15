@@ -329,200 +329,201 @@
                                 </div>
 
 
-                                <div class="col-sm-12 filterBox">
-                                    <h3>Search Filter</h3>
-                                    <div class="form-group">
-                                        <h4 class="tabheading font_11">Sub Category</h4>
-                                        <ui-select ng-model="subcategory.selected"
-                                                   ui-select-focuser
-                                                   theme="selectize" on-select="applyFilter()">
-                                            <ui-select-match allow-clear="true" 
-                                                             placeholder="Select Subcategory">{{ $select.selected._id.SUBCATEGORY }}</ui-select-match>
-                                            <ui-select-choices repeat="invoice in ItemList  | unique:'_id.SUBCATEGORY'|filter: $select.search">
-                                                <div>
-                                                    <span style="color:forestgreen">{{invoice._id.SUBCATEGORY}}</span>
-                                                </div>
+                                <div class="col-sm-12 filterBox" style="padding:0px">
+                                    <h3 style="padding:10px;">Search Filter</h3>
+                                    <div style="height:350px; overflow:auto; padding:5px" class="scrollbar scrollbarAngular">
+                                        <div class="form-group">
+                                            <h4 class="tabheading font_11">Sub Category</h4>
+                                            <ui-select ng-model="subcategory.selected"
+                                                       ui-select-focuser
+                                                       theme="selectize" on-select="applyFilter()">
+                                                <ui-select-match allow-clear="true"
+                                                                 placeholder="Select Subcategory">{{ $select.selected._id.SUBCATEGORY }}</ui-select-match>
+                                                <ui-select-choices repeat="invoice in ItemList  | unique:'_id.SUBCATEGORY'|filter: $select.search">
+                                                    <div>
+                                                        <span style="color:forestgreen">{{invoice._id.SUBCATEGORY}}</span>
+                                                    </div>
 
 
-                                            </ui-select-choices>
-                                        </ui-select>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <h4 class="tabheading font_11">Coil/Sheet No.</h4>
+                                            <ui-select ng-model="coilsheetno.selected"
+                                                       ui-select-focuser
+                                                       theme="selectize" on-select="applyFilter()">
+                                                <ui-select-match allow-clear="true" placeholder="Select Coil/Sheet">{{ $select.selected._id.COILSHEETNO }}</ui-select-match>
+                                                <ui-select-choices repeat="invoice in ItemList  | unique:'_id.COILSHEETNO'|filter: $select.search">
+                                                    <div>
+                                                        <span style="color:forestgreen">{{invoice._id.COILSHEETNO}}</span>
+                                                    </div>
+
+
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <h4 class="tabheading font_11">Incoming Date</h4>
+                                            <ui-select ng-model="incomingdate.selected"
+                                                       ui-select-focuser
+                                                       theme="selectize" on-select="applyFilter()">
+                                                <ui-select-match allow-clear="true" placeholder="Select Incoming Date">{{ $select.selected._id.INCOMINGDATE }}</ui-select-match>
+                                                <ui-select-choices repeat="invoice in ItemList  | unique:'_id.INCOMINGDATE'|filter: $select.search">
+                                                    <div>
+                                                        <span style="color:forestgreen">{{invoice._id.INCOMINGDATE}}</span>
+                                                    </div>
+
+
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <h4 class="tabheading font_11">Lot Weight</h4>
+                                            <ui-select ng-model="lotweight.selected"
+                                                       ui-select-focuser
+                                                       theme="selectize" on-select="applyFilter()">
+                                                <ui-select-match allow-clear="true" placeholder="Select Lot Weight">{{ $select.selected._id.LotWeight }}</ui-select-match>
+                                                <ui-select-choices repeat="invoice in ItemList  | unique:'_id.LotWeight'|filter: $select.search">
+                                                    <div>
+                                                        <span style="color:forestgreen">{{invoice._id.LotWeight}}</span>
+                                                    </div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <h4 class="tabheading font_11">Location</h4>
+                                            <ui-select ng-model="location.selected"
+                                                       ui-select-focuser
+                                                       theme="selectize" on-select="applyFilter()">
+                                                <ui-select-match allow-clear="true" placeholder="Select Location">{{ $select.selected._id.LOCATION }}</ui-select-match>
+                                                <ui-select-choices repeat="invoice in ItemList  | unique:'_id.LOCATION'|filter: $select.search">
+                                                    <div>
+                                                        <span style="color:forestgreen">{{invoice._id.LOCATION}}</span>
+                                                    </div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <h4 class="tabheading font_11">Grade</h4>
+                                            <ui-select ng-model="grade.selected"
+                                                       ui-select-focuser
+                                                       theme="selectize">
+                                                <ui-select-match allow-clear="true" placeholder="Select Grade">{{ $select.selected._id.GRADE }}</ui-select-match>
+                                                <ui-select-choices repeat="invoice in ItemList  | unique:'_id.GRADE'|filter: $select.search">
+                                                    <div>
+                                                        <span style="color:forestgreen">{{invoice._id.GRADE}}</span>
+                                                    </div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <h4 class="tabheading font_11">Finish</h4>
+                                            <ui-select ng-model="finish.selected"
+                                                       ui-select-focuser
+                                                       theme="selectize">
+                                                <ui-select-match allow-clear="true" placeholder="Select Finish">{{ $select.selected._id.FINISH }}</ui-select-match>
+                                                <ui-select-choices repeat="invoice in ItemList  | unique:'_id.FINISH'|filter: $select.search">
+                                                    <div>
+                                                        <span style="color:forestgreen">{{invoice._id.FINISH}}</span>
+                                                    </div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <h4 class="tabheading font_11">Thickness</h4>
+                                            <ui-select ng-model="thickness.selected"
+                                                       ui-select-focuser
+                                                       theme="selectize">
+                                                <ui-select-match allow-clear="true" placeholder="Select Thickness">{{ $select.selected._id.THICKNESS }}</ui-select-match>
+                                                <ui-select-choices repeat="invoice in ItemList  | unique:'_id.THICKNESS'|filter: $select.search">
+                                                    <div>
+                                                        <span style="color:forestgreen">{{invoice._id.THICKNESS}}</span>
+                                                    </div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <h4 class="tabheading font_11">Width</h4>
+                                            <ui-select ng-model="width.selected"
+                                                       ui-select-focuser
+                                                       theme="selectize">
+                                                <ui-select-match allow-clear="true" placeholder="Select Width">{{ $select.selected._id.WIDTH }}</ui-select-match>
+                                                <ui-select-choices repeat="invoice in ItemList  | unique:'_id.WIDTH'|filter: $select.search">
+                                                    <div>
+                                                        <span style="color:forestgreen">{{invoice._id.WIDTH}}</span>
+                                                    </div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <h4 class="tabheading font_11">Length</h4>
+                                            <ui-select ng-model="length.selected"
+                                                       ui-select-focuser
+                                                       theme="selectize">
+                                                <ui-select-match allow-clear="true" placeholder="Select Length">{{ $select.selected._id.LENGTH }}</ui-select-match>
+                                                <ui-select-choices repeat="invoice in ItemList  | unique:'_id.LENGTH'|filter: $select.search">
+                                                    <div>
+                                                        <span style="color:forestgreen">{{invoice._id.LENGTH}}</span>
+                                                    </div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <h4 class="tabheading font_11">Net Weight</h4>
+                                            <ui-select ng-model="netweight.selected"
+                                                       ui-select-focuser
+                                                       theme="selectize">
+                                                <ui-select-match allow-clear="true" placeholder="Select Net Weight">{{ $select.selected._id.NETWEIGHT }}</ui-select-match>
+                                                <ui-select-choices repeat="invoice in ItemList  | unique:'_id.NETWEIGHT'|filter: $select.search">
+                                                    <div>
+                                                        <span style="color:forestgreen">{{invoice._id.NETWEIGHT}}</span>
+                                                    </div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <h4 class="tabheading font_11">Gross Wt</h4>
+                                            <ui-select ng-model="grossweight.selected"
+                                                       ui-select-focuser
+                                                       theme="selectize">
+                                                <ui-select-match allow-clear="true" placeholder="Select Gross Weight">{{ $select.selected._id.GROSSWT }}</ui-select-match>
+                                                <ui-select-choices repeat="invoice in ItemList  | unique:'_id.GROSSWT'|filter: $select.search">
+                                                    <div>
+                                                        <span style="color:forestgreen">{{invoice._id.GROSSWT}}</span>
+                                                    </div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <h4 class="tabheading font_11">PCS/Lenght in MTRS</h4>
+                                            <ui-select ng-model="pcslengthmtr.selected"
+                                                       ui-select-focuser
+                                                       theme="selectize">
+                                                <ui-select-match allow-clear="true" placeholder="Select Gross Weight">{{ $select.selected._id.PCS/LENGTHINMTRS }}</ui-select-match>
+                                                <ui-select-choices repeat="invoice in ItemList  | unique:'_id.PCS/LENGTHINMTRS'|filter: $select.search">
+                                                    <div>
+                                                        <span style="color:forestgreen">{{invoice._id.PCS/LENGTHINMTRS}}</span>
+                                                    </div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+
                                     </div>
-
-                                    <div class="form-group">
-                                        <h4 class="tabheading font_11">Coil/Sheet No.</h4>
-                                        <ui-select ng-model="coilsheetno.selected"
-                                                   ui-select-focuser
-                                                   theme="selectize" on-select="applyFilter()">
-                                            <ui-select-match allow-clear="true" placeholder="Select Coil/Sheet">{{ $select.selected._id.COILSHEETNO }}</ui-select-match>
-                                            <ui-select-choices repeat="invoice in ItemList  | unique:'_id.COILSHEETNO'|filter: $select.search">
-                                                <div>
-                                                    <span style="color:forestgreen">{{invoice._id.COILSHEETNO}}</span>
-                                                </div>
-
-
-                                            </ui-select-choices>
-                                        </ui-select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <h4 class="tabheading font_11">Incoming Date</h4>
-                                        <ui-select ng-model="incomingdate.selected"
-                                                   ui-select-focuser
-                                                   theme="selectize" on-select="applyFilter()">
-                                            <ui-select-match allow-clear="true" placeholder="Select Incoming Date">{{ $select.selected._id.INCOMINGDATE }}</ui-select-match>
-                                            <ui-select-choices repeat="invoice in ItemList  | unique:'_id.INCOMINGDATE'|filter: $select.search">
-                                                <div>
-                                                    <span style="color:forestgreen">{{invoice._id.INCOMINGDATE}}</span>
-                                                </div>
-
-
-                                            </ui-select-choices>
-                                        </ui-select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <h4 class="tabheading font_11">Lot Weight</h4>
-                                        <ui-select ng-model="lotweight.selected"
-                                                   ui-select-focuser
-                                                   theme="selectize" on-select="applyFilter()">
-                                            <ui-select-match allow-clear="true" placeholder="Select Lot Weight">{{ $select.selected._id.LotWeight }}</ui-select-match>
-                                            <ui-select-choices repeat="invoice in ItemList  | unique:'_id.LotWeight'|filter: $select.search">
-                                                <div>
-                                                    <span style="color:forestgreen">{{invoice._id.LotWeight}}</span>
-                                                </div>
-                                            </ui-select-choices>
-                                        </ui-select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <h4 class="tabheading font_11">Location</h4>
-                                        <ui-select ng-model="location.selected"
-                                                   ui-select-focuser
-                                                   theme="selectize" on-select="applyFilter()">
-                                            <ui-select-match allow-clear="true" placeholder="Select Location">{{ $select.selected._id.LOCATION }}</ui-select-match>
-                                            <ui-select-choices repeat="invoice in ItemList  | unique:'_id.LOCATION'|filter: $select.search">
-                                                <div>
-                                                    <span style="color:forestgreen">{{invoice._id.LOCATION}}</span>
-                                                </div>
-                                            </ui-select-choices>
-                                        </ui-select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <h4 class="tabheading font_11">Grade</h4>
-                                        <ui-select ng-model="grade.selected"
-                                                   ui-select-focuser
-                                                   theme="selectize">
-                                            <ui-select-match allow-clear="true" placeholder="Select Grade">{{ $select.selected._id.GRADE }}</ui-select-match>
-                                            <ui-select-choices repeat="invoice in ItemList  | unique:'_id.GRADE'|filter: $select.search">
-                                                <div>
-                                                    <span style="color:forestgreen">{{invoice._id.GRADE}}</span>
-                                                </div>
-                                            </ui-select-choices>
-                                        </ui-select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <h4 class="tabheading font_11">Finish</h4>
-                                        <ui-select ng-model="finish.selected"
-                                                   ui-select-focuser
-                                                   theme="selectize">
-                                            <ui-select-match allow-clear="true" placeholder="Select Finish">{{ $select.selected._id.FINISH }}</ui-select-match>
-                                            <ui-select-choices repeat="invoice in ItemList  | unique:'_id.FINISH'|filter: $select.search">
-                                                <div>
-                                                    <span style="color:forestgreen">{{invoice._id.FINISH}}</span>
-                                                </div>
-                                            </ui-select-choices>
-                                        </ui-select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <h4 class="tabheading font_11">Thickness</h4>
-                                        <ui-select ng-model="thickness.selected"
-                                                   ui-select-focuser
-                                                   theme="selectize">
-                                            <ui-select-match allow-clear="true" placeholder="Select Thickness">{{ $select.selected._id.THICKNESS }}</ui-select-match>
-                                            <ui-select-choices repeat="invoice in ItemList  | unique:'_id.THICKNESS'|filter: $select.search">
-                                                <div>
-                                                    <span style="color:forestgreen">{{invoice._id.THICKNESS}}</span>
-                                                </div>
-                                            </ui-select-choices>
-                                        </ui-select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <h4 class="tabheading font_11">Width</h4>
-                                        <ui-select ng-model="width.selected"
-                                                   ui-select-focuser
-                                                   theme="selectize">
-                                            <ui-select-match allow-clear="true" placeholder="Select Width">{{ $select.selected._id.WIDTH }}</ui-select-match>
-                                            <ui-select-choices repeat="invoice in ItemList  | unique:'_id.WIDTH'|filter: $select.search">
-                                                <div>
-                                                    <span style="color:forestgreen">{{invoice._id.WIDTH}}</span>
-                                                </div>
-                                            </ui-select-choices>
-                                        </ui-select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <h4 class="tabheading font_11">Length</h4>
-                                        <ui-select ng-model="length.selected"
-                                                   ui-select-focuser
-                                                   theme="selectize">
-                                            <ui-select-match allow-clear="true" placeholder="Select Length">{{ $select.selected._id.LENGTH }}</ui-select-match>
-                                            <ui-select-choices repeat="invoice in ItemList  | unique:'_id.LENGTH'|filter: $select.search">
-                                                <div>
-                                                    <span style="color:forestgreen">{{invoice._id.LENGTH}}</span>
-                                                </div>
-                                            </ui-select-choices>
-                                        </ui-select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <h4 class="tabheading font_11">Net Weight</h4>
-                                        <ui-select ng-model="netweight.selected"
-                                                   ui-select-focuser
-                                                   theme="selectize">
-                                            <ui-select-match allow-clear="true" placeholder="Select Net Weight">{{ $select.selected._id.NETWEIGHT }}</ui-select-match>
-                                            <ui-select-choices repeat="invoice in ItemList  | unique:'_id.NETWEIGHT'|filter: $select.search">
-                                                <div>
-                                                    <span style="color:forestgreen">{{invoice._id.NETWEIGHT}}</span>
-                                                </div>
-                                            </ui-select-choices>
-                                        </ui-select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <h4 class="tabheading font_11">Gross Wt</h4>
-                                        <ui-select ng-model="grossweight.selected"
-                                                   ui-select-focuser
-                                                   theme="selectize">
-                                            <ui-select-match allow-clear="true" placeholder="Select Gross Weight">{{ $select.selected._id.GROSSWT }}</ui-select-match>
-                                            <ui-select-choices repeat="invoice in ItemList  | unique:'_id.GROSSWT'|filter: $select.search">
-                                                <div>
-                                                    <span style="color:forestgreen">{{invoice._id.GROSSWT}}</span>
-                                                </div>
-                                            </ui-select-choices>
-                                        </ui-select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <h4 class="tabheading font_11">PCS/Lenght in MTRS</h4>
-                                        <ui-select ng-model="pcslengthmtr.selected"
-                                                   ui-select-focuser
-                                                   theme="selectize">
-                                            <ui-select-match allow-clear="true" placeholder="Select Gross Weight">{{ $select.selected._id.PCS/LENGTHINMTRS }}</ui-select-match>
-                                            <ui-select-choices repeat="invoice in ItemList  | unique:'_id.PCS/LENGTHINMTRS'|filter: $select.search">
-                                                <div>
-                                                    <span style="color:forestgreen">{{invoice._id.PCS/LENGTHINMTRS}}</span>
-                                                </div>
-                                            </ui-select-choices>
-                                        </ui-select>
-                                    </div>
-
-
-                                    <hr style="margin:0px 0px 10px 0px" />
-                                    <span class="pull-right">
+                                  
+                                    <span style="float:left; width:100%; padding:10px; text-align:right">
                                         <button class="btn btn-sm btn-default" ng-click="clearFilter();" type="button">Clear</button>
                                         <button class="btn btn-sm btn-primary" ng-click="applyFilter();" type="button">Search</button>
                                     </span>
@@ -559,7 +560,7 @@
                                     </tr>
 
                                 </table>
-                                <table class="table-condensed border-dark " fixed-header style="font-size:13px !important; width:100%;height:700px">
+                                <table class="table-condensed border-dark " fixed-header style="font-size:13px !important; width:100%;height:400px">
                                     <thead>
 
                                         <tr style="background:#F0EEEE" >
@@ -580,8 +581,8 @@
                                             <th style="text-align:center">Gross Wt</th>
                                             <th style="text-align:center">PCS</th>
                                             @*<th style="text-align:center">Remarks  </th>*@
-                                            <th style="text-align:center">Sale Qty</th>
-                                            <th style="text-align:right">Rate</th>
+                                            <th style="text-align:center; width:100px">Sale Qty</th>
+                                            <th style="text-align:right; width:100px">Rate</th>
                                             <th style="text-align:right">Amount(&#8377;)</th>
                                         </tr>
                                     </thead>
