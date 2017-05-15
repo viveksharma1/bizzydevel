@@ -289,6 +289,8 @@
                   });
     }
 
+  
+
     $scope.pcslengthmtr = {};
     $scope.grossweight = {};
     $scope.netweight = {};
