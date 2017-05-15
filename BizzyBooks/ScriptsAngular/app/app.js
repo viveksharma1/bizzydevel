@@ -243,6 +243,7 @@ var myApp = angular
             controller: "SalesInvoicePDFCntrl",
             params: {
                 voId: null,
+                noBackTrack: false,
             }
 
         });
@@ -254,6 +255,7 @@ var myApp = angular
             controller: "TaxInvoicePDFCntrl",
             params: {
                 voId: null,
+                noBackTrack: false,
             }
 
         });
@@ -264,6 +266,7 @@ var myApp = angular
             controller: "ExciseInvoicePDFCntrl",
             params: {
                 voId: null,
+                noBackTrack: false,
             }
 
         });

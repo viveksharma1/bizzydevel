@@ -831,15 +831,15 @@
 
         if (type == 'Tax Invoice') {
 
-            $state.go('Customer.TaxInvoicePDF', { voId: $stateParams.voId });
+            $state.go('Customer.TaxInvoicePDF', { voId: $stateParams.voId, noBackTrack: true });
         }
         else if (type == 'Excise Invoice') {
 
-            $state.go('Customer.ExciseInvoicePDF', { voId: $stateParams.voId });
+            $state.go('Customer.ExciseInvoicePDF', { voId: $stateParams.voId, noBackTrack:true});
         }
         else if (type == 'Delivery Challan') {
 
-            $state.go('Customer.SalesInvoicePDF', { voId: $stateParams.voId });
+            $state.go('Customer.SalesInvoicePDF', { voId: $stateParams.voId, noBackTrack: true });
         }
     };
 
