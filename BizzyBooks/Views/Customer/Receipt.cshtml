@@ -109,9 +109,6 @@
                             <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
                                 {{ $select.selected.accountName || $select.search }}
                             </span>
-                            
-                            @*<span >{{ $select.selected.accountName || $select.search }}</span>*@
-                           
                         </ui-select-match>
 
                         <ui-select-choices repeat="person in partyAccounts  | filter: $select.search"  >
@@ -154,8 +151,15 @@
                     <ui-select ng-disabled="badlaState()" ui-tree-select ng-model="badlaAccount.selected" id="countryCode"
                                ui-select-focuser ng-init="$select.addnew=1;$select.type='badla';"
                                theme="selectize">
-                        <ui-select-match placeholder="Select Badla Party">{{ $select.selected.accountName }}</ui-select-match>
+                        @*<ui-select-match placeholder="Select Badla Party">
+                        {{ $select.selected.accountName }}
+                        </ui-select-match>*@
 
+                        <ui-select-match style="width:100%" placeholder="Select Badla Party">
+                            <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                {{ $select.selected.accountName || $select.search }}
+                            </span>
+                        </ui-select-match>
                         <ui-select-choices repeat="account in badlaAccounts  | filter: $select.search">
                             <div>
                                 <span ng-bind-html="account.accountName | highlight: $select.search"></span>
@@ -485,7 +489,7 @@
 
         <div class="pull-right">
             @*<button type="button" ng-show="mode!='new'" ng-confirm="Are you sure?" class="btn btn-sm btn-danger" ng-click="deleteReceipt()">Delete</button>*@
-            <button type="button" ng-show="mode!='new'" class="btn btn-sm btn-danger" ng-confirm ng-click="deleteReceipt()">Delete</button>
+            <button type="button" ng-show="mode=='edit'" class="btn btn-sm btn-danger" ng-confirm ng-click="deleteReceipt()">Delete</button>
             <button type="button" class="btn btn-sm btn-primary" ng-click="receivePayment()">Save</button>
             <div class="btn-group dropup">
                 @*

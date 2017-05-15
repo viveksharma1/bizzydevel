@@ -420,6 +420,7 @@
     <Content Include="ScriptsAngular\app\Controller\BankingCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\BillCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\ChartofAccountsCntrl.js" />
+    <Content Include="ScriptsAngular\app\Controller\ContraEntryCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\CreateInventoryCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\CustomerCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\CustomerdetailCntrl.js" />

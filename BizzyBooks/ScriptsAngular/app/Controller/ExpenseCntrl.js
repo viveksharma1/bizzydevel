@@ -163,6 +163,13 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
                         $scope.paymentDays = expenseData.paymentDays
                         $scope.attachements = expenseData.attachements;
                         $scope.narration = response.data.narration
+                        if (response.data.paymentLog) {
+                            $scope.receiptCount = response.data.paymentLog.length;
+                            $scope.receipts = response.data.paymentLog;
+                        } else {
+                            $scope.receiptCount = null;
+                            $scope.receipts = [];
+                        }
                         bindAttachments(expenseData.attachements, function () {
                             $scope.oldAttachment = null;
                         });
@@ -362,8 +369,8 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
                      billDueDate: expenseDueDate,
                      paymentDays: $scope.paymentDays,
                      balance: $scope.netAmount,
-                     adminBalance: $scope.netamount,
-                     adminAmount: $scope.netamount,
+                     adminBalance: $scope.netAmount,
+                     adminAmount: $scope.netAmount,
                      accountTable: $scope.accountTable,
                      itemTable: $scope.itemTable,
                      amount: $scope.netAmount,

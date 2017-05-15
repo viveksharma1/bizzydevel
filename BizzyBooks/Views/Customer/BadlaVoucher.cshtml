@@ -36,7 +36,7 @@
             <div class="col-sm-3 padding">
 
                 <div class="totalIncomeSection card accordion" style="text-align:left; padding:5px 15px">
-                    <h4 style="margin-bottom:5px; font-weight:bold">INTEREST</h4>
+                    @*<h4 style="margin-bottom:5px; font-weight:bold">INTEREST</h4>*@
                     @*<div style="color: #1E294B; width:100%; float:left;">
                         <div class="subheading" style="float: left; margin: 5px 0px; text-transform:capitalize">Rate</div> <b class="pull-right" style="font-size:22px">{{billInfo.roi}}</b>
                     </div>
@@ -46,15 +46,15 @@
                     </div>*@
 
                     <div style="color: #1E294B; width:100%; float:left;">
-                        <div class="subheading" style="float: left; margin:3px 0px;  text-transform:capitalize">Badla Amount</div> <b class="pull-right" style="font-size:22px">2000</b>
+                        <div class="subheading" style="float: left; margin:5px 0px;  text-transform:capitalize">Badla Amount</div> <b class="pull-right" style="font-size:16px">{{voucherData.amount}}</b>
                     </div>
 
                     <div style="color: #1E294B; width:100%; float:left;">
-                        <div class="subheading" style="float: left; margin: 3px 0px;  text-transform:capitalize">Ballance Amount</div> <b class="pull-right" style="font-size:22px">2000</b>
+                        <div class="subheading" style="float: left; margin: 6px 0px;  text-transform:capitalize">Balance Amount</div> <b class="pull-right" style="font-size:16px">{{voucherData.balance}}</b>
                     </div>
 
                     <div style="color: #1E294B; width:100%; float:left;">
-                        <div class="subheading" style="float: left; margin: 3px 0px;  text-transform:capitalize">Interest Rate</div> <b class="pull-right" style="font-size:22px">1%</b>
+                        <div class="subheading" style="float: left; margin: 6px 0px;  text-transform:capitalize">Interest Paid</div> <b class="pull-right" style="font-size:16px">{{totalInterest}}</b>
                     </div>
 
                 </div>
@@ -63,7 +63,7 @@
             </div>
 
 
-            <div class="col-sm-5 padding" style="margin-top:25px">
+            <div class="col-sm-5 padding">
                 <div class="col-sm-3 padding">
                     <h4 class="tabheading font_11">Invoice Ref.</h4>
                     <input ng-model="billInfo.vochNo" type="text" class="form-control" disabled />
@@ -73,7 +73,7 @@
                 <div class="col-sm-3 padding">
 
                     <h4 class="tabheading font_11">Invoice Date</h4>
-                    <input ng-model="invoiceDate|date:'dd/MM/yyyy'" type='text' class="form-control" disabled />
+                    <input ng-bind="billInfo.date | date:'dd/MM/yyyy'" type='text' class="form-control" disabled />
 
                 </div>
                 @*<div class="col-sm-3 padding">
@@ -86,7 +86,7 @@
 
 
 
-                <div class="col-sm-12" style="margin-top:5px; padding:0px;">
+                <div class="col-sm-12" style="padding:0px;">
 
 
                     <div class="col-sm-6 padding">
@@ -104,7 +104,8 @@
                     <div class="col-sm-3 padding">
 
                         <h4 class="tabheading font_11">Due Date</h4>
-                        <input ng-model="dueDate|date:'dd/MM/yyyy'" type="text" class="form-control" disabled style="width:100px" />
+
+                        <input ng-model="dueDate" type="text" class="form-control" disabled style="width:100px" />
                     </div>
                 </div>
 
@@ -112,7 +113,7 @@
 
             
 
-            <div class="col-sm-2 padding text-right pull-right" style="margin-top:95px">
+            <div class="col-sm-2 padding text-right pull-right" style="margin-top:70px">
 
                 <h4 class="tabheading" style="float:right; width:100%; margin-top:0px !important">Badla No.</h4>
                 <input ng-model="voucherData.vochNo" type="text" class="form-control pull-right" disabled style="width:100px" />
@@ -178,7 +179,7 @@
             <div class="col-sm-2">
                 <label>Date of Badla</label>
                 <div class='input-group'>
-                    <input type='text' ng-model="voucherData.date|date:'dd/MM/yyyy'" class="form-control" id='BadlaDate' disabled />
+                    <input type='text' ng-model="badlaDate" class="form-control" id='BadlaDate' disabled />
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
@@ -203,13 +204,13 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td class="tablepadding"><strong>DAYS</strong></td>
+                            <td class="tablepadding">DAYS</td>
                             <td class="tablepadding"><input ng-model="badlaInfo.dayTotal"  type="number" class="form-control" /></td>
                             <td class="tablepadding"><input ng-model="badlaInfo.dayInterest" type="text" class="form-control" /></td>
                             <td class="tablepadding"><input ng-model="badlaInfo.dayDiff" type="text" class="form-control" /></td>
                         </tr>
                         <tr>
-                            <td class="tablepadding"><strong>INTEREST (%)</strong></td>
+                            <td class="tablepadding">INTEREST (%)</td>
                             <td class="tablepadding"><input ng-model="badlaInfo.perTotal" type="text" class="form-control" /></td>
                             <td class="tablepadding"><input ng-model="badlaInfo.perInterest" type="text" class="form-control" /></td>
                             <td class="tablepadding"><input ng-model="badlaInfo.perDiff" type="text" class="form-control" /></td>
@@ -235,11 +236,11 @@
                         
                         </thead>
                         <tbody>
-                         <tr>
-                             <td>12/05/2017</td>
-                             <td style="text-align:right">2000</td>
-                             <td style="text-align:right">1%</td>
-                             <td>76888</td>
+                         <tr ng-repeat="data in voucherData.paymentLog">
+                             <td>{{data.date | date:'dd/MM/yyyy'}}</td>
+                             <td style="text-align:right">{{data.amount |number : fractionSize}}</td>
+                             <td style="text-align:right">{{data.interest |number : fractionSize}}</td>
+                             <td>{{data.vochNo}}</td>
                          </tr>
 
                         </tbody>
@@ -250,7 +251,7 @@
     </div>
 
 
-    <div class="flexfooter">
+    @*<div class="flexfooter">
         <span class="pull-left">
 
             <button type="button" class="btn btn-sm btn-primary">Clear</button>
@@ -269,10 +270,10 @@
                         <li><a href="#">Save and new</a></li>
                         <li><a href="#">Save and share link</a></li>
                     </ul>
-                *@
+                
             </div>
         </div>
-    </div>
+    </div>*@
 
 
 

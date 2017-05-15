@@ -19,58 +19,7 @@
 
         </label>
     </div>
-    <!-- addInventryModal -->
-    @*<div id="addInventryModal7" class="modal fade" role="dialog">
-        <div class="modal-admin">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-
-                <div class="modal-body" style="background-color:#525DB0">
-                    <label style="color:#FFFFFF">Do you want to leave without saving</label>
-                </div>
-
-
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary btn-sm btn bg-purple" data-dismiss="modal" style="float:left">No</button>
-                    <button type="button" class="btn btn-secondary btn-sm btn-success" ng-click="goBack()" data-close="modal">Yes</button>
-                </div>
-            </div>
-
-        </div>
-    </div>
-    <div id="addInventryModal1" class="modal fade" role="dialog">
-        <div class="modal-alert">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-
-                <div class="modal-body fa fa-check-circle fa-1x co-ok" style="background-color:#FFFFFF">
-                    <label style="color:#0A0503">Bill Saved</label>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <div id="billNoAlert" class="modal fade" role="dialog">
-        <div class="modal-alert">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-
-                <div class="modal-body fa fa-warning" style="background-color:#FFFFFF">
-                    <label style="color:#ff0000">Bill No All Ready Exist</label>
-                </div>
-            </div>
-
-        </div>
-    </div>*@
-
-
     <create-account value="myValue"> </create-account>
-
     <div class="flexcontainer">
         <div class="lightblue bluebrdr content" style="padding:10px 0px">
 
@@ -94,14 +43,13 @@
 
             <div class="col-sm-6" style="padding:0px;">
 
-                <div class="col-sm-4 padding pull-right">
+                @*<div class="col-sm-4 padding pull-right">
                     <h4 class="tabheading font_11">Opening Balance</h4>
                     <input type='text' ng-model="purInfo.openingBalance" class="form-control" disabled />
-                </div>
-                <div class="col-sm-6 padding pull-right">
-                    <h4 class="tabheading font_11">Cash</h4>
-
-                    <ui-select ui-tree-select on-select = "cashAccountSelected()"  ng-model="purInfo.cashAccount.selected" id="countryCode"
+                </div>*@
+                <div class="col-sm-6 padding">
+                    <h4 class="tabheading font_11">Cash <span class="pull-right" style="color:forestgreen"><i class="fa fa-rupee"></i> {{cashAccountBalance}} <em style="color:red">{{cashAccountType}}</em></span></h4>
+                    <ui-select ui-tree-select on-select = "cashAccountSelected($select.selected)"  ng-model="purInfo.cashAccount.selected" id="countryCode"
                                ui-select-focuser ng-init="$select.addnew=1;$select.type='cashAccount'"
                                theme="selectize">
                         <ui-select-match class="selectuiTable" placeholder="Select Cash">{{ $select.selected.accountName }}</ui-select-match>
@@ -131,10 +79,6 @@
                                 <tr>
                                     <th class="Rosemate-table" width="150">
                                         <select class="form-control" ng-model="purInfo.selectedCompany1" ng-options="item.CompanyName for item in CompanyList"></select>
-                                        @*<select class="form-control" ng-model="purInfo.selectedCompany1">
-                                <ng-options></ng-options>
-                                <option ng-repeat="company in CompanyList" value="{{company.CompanyId}}">{{company.CompanyName}}</option>
-                            </select>*@
                                     </th>
                                     <th class="Rosemate-table">
                                         <ui-select ui-tree-select ng-model="purInfo.salePartyAccount.selected" id="countryCode" style="height:30px"
@@ -394,6 +338,7 @@
         </span>
 
         <div class="pull-right">
+            <button type="button" ng-show="editMode" class="btn btn-sm btn-danger" ng-confirm ng-click="deleteRosemate()">Delete</button>
             <button type="button" class="btn btn-sm btn-primary" ng-click="saveRosemate()">Save</button>
             <div class="btn-group dropup">
                 @*

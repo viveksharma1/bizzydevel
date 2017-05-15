@@ -3,7 +3,9 @@
     ViewBag.Title = "Expense";
     Layout = null;
 }
-
+<script type="text/ng-template" id="popover_template.html">
+    <table style='width:100%'><tr><th>Date</th><th>Amount</th><th>Voch No.</th></tr><tr ng-repeat='data in datas' class="cursor" ui-sref="Customer.Receipt({voId:data.id,noBackTrack:true})"><td style="color:forestgreen">{{data.date|date:'dd/MM/yyyy'}}</td><td>Rs{{data.amount}}</td><td>{{data.vochNo}}</td></tr><tr></tr></table>
+</script>
 
 <div class="FlexPopup" style="display:block" ng-init="model = {}">
     <div class="flexheader lightblue ">
@@ -108,13 +110,14 @@
                 </div>
 
             </div>
-
+            <div ng-repeat="data in receipts | limitTo:1">
+                <small style="float:right; margin:10px 0px"><span class="text-primary cursor" id="myPopover" pop-over datas="receipts">{{receiptCount}} Payment </span> made</small>
+            </div>
             <div class="col-sm-4 padding text-right pull-right">
                 <p class="text-right">Balance Due</p>
                 <p class="balancedue" style="float:none">&#8377; {{totaltax + totalcharges }}</p>
 
-                <button type="button" class="btn btn-sm btn-default pull-right">Make Payment</button>
-                <small style="float:right; width:100%; margin:10px 0px"><span class="text-primary">1 payment </span> made on 12/march/2017</small>
+                
 
                 <h4 class="tabheading" style="float:right; width:100%; margin-top:0px !important">Expense No</h4>
                 <input type="text" class="form-control pull-right" ng-model="expenseId"  style="width:100px" />
