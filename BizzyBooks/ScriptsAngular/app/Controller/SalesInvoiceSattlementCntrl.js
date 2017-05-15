@@ -49,6 +49,8 @@
 
         }
         if (type == "perKg") {
+            $scope.settlementData.vatPerKg = Number((Number($scope.settlementData.vatAmount) / Number($scope.settlementData.totalQty)).toFixed())
+            $scope.settlementData.excisePerKg = Number((Number($scope.settlementData.exciseAmount) / Number($scope.settlementData.totalQty)).toFixed())
             $scope.isDisabled1 = false;
             $scope.isDisabled = true;
         }
@@ -84,6 +86,7 @@
         $http.get(config.api + "voucherTransactions/" + $stateParams.voId).then(function (response) {
             $scope.settlementData = response.data
             console.log($scope.settlementData)
+           
             $scope.invoiceNo = $scope.settlementData.invoiceNo
             $scope.customerName = localStorage[$scope.settlementData.customer];
             $scope.vatAccount.selected = $scope.settlementData.vatAccount
@@ -119,7 +122,7 @@
         delete $scope.settlementData._id;
 
         // get count of purchaseSettelment
-        $http.post(config.login + "purchaseSettelment/" + $stateParams.voId, $scope.settlementData).then(function (response) {
+        $http.post(config.login + "purchaseSettelment/" + $stateParams.voId + "?type=sales", $scope.settlementData).then(function (response) {
             if (response.data) {
                 $stateParams.voId = response.data.id
                 console.log(response.data);
@@ -142,7 +145,8 @@
 
 
     $scope.getInvoice = function (invoiceNo) {
-        $http.post(config.login + "voucherTransactionsExist/" + $scope.invoiceNo).then(function (response) {
+        var data = { refNo: $scope.invoiceNo }
+        $http.post(config.login + "voucherTransactionsExist", data).then(function (response) {
             if (response.data.count > 0) {
                 $rootScope.$broadcast('event:success', { message: "Purchase  Sattlement Exist.." });
                 $stateParams.voId = response.data.id;
@@ -152,7 +156,7 @@
             }
             else if (response.data.count == 0) {
                 $rootScope.$broadcast('event:progress', { message: "Please wait getting invoice.." });
-                $http.get(config.login + "getSalesInvoice/" + invoiceNo).then(function (response) {
+                $http.get(config.login + "getSalesInvoice?invoiceNo=" + invoiceNo).then(function (response) {
                     console.log(response.data)
                     if (response.data.length > 0) {
                         $scope.settlementData = response.data[0];
@@ -170,19 +174,25 @@
         });
 
     }
-    $scope.vatDedPerkg = function () {
-        var dedPerKg = (Number($scope.settlementData.excisePerKg) + Number($scope.settlementData.vatPerKg)) - Number($scope.settlementData.totalDedPerKg)
-        console.log(dedPerKg);
-        if (Number($scope.settlementData.vatPerKg) > Number(dedPerKg)) {
-            $scope.settlementData.totalDedvatAmount = dedPerKg * $scope.settlementData.totalQty
-            $scope.settlementData.totalDedExciseAmount = 0;
-        }
-        if (Number($scope.settlementData.vatPerKg) < Number(dedPerKg)) {
-            $scope.settlementData.totalDedvatAmount = $scope.settlementData.vatPerKg * $scope.settlementData.totalQty
-            $scope.settlementData.totalDedExciseAmount = Number(dedPerKg) * Number($scope.settlementData.totalQty) - Number($scope.settlementData.totalDedvatAmount)
-        }
+    //$scope.vatDedPerkg = function () {
+    //    var dedPerKg = (Number($scope.settlementData.excisePerKg) + Number($scope.settlementData.vatPerKg)) - Number($scope.settlementData.totalDedPerKg)
+    //    console.log(dedPerKg);
+    //    if (Number($scope.settlementData.vatPerKg) > Number(dedPerKg)) {
+    //        $scope.settlementData.totalDedvatAmount = dedPerKg * $scope.settlementData.totalQty
+    //        $scope.settlementData.totalDedExciseAmount = 0;
+    //    }
+    //    if (Number($scope.settlementData.vatPerKg) < Number(dedPerKg)) {
+    //        $scope.settlementData.totalDedvatAmount = $scope.settlementData.vatPerKg * $scope.settlementData.totalQty
+    //        $scope.settlementData.totalDedExciseAmount = Number(dedPerKg) * Number($scope.settlementData.totalQty) - Number($scope.settlementData.totalDedvatAmount)
+    //    }
 
-        //$scope.settlementData.vatAmountPerKg = totalDedvatAmount
+    //    //$scope.settlementData.vatAmountPerKg = totalDedvatAmount
+
+    //}
+    $scope.vatDedPerkg = function () {
+        $scope.settlementData.totalLessPerKg = Number((Number($scope.settlementData.lessPerKg) * Number($scope.settlementData.totalQty)).toFixed())
+        $scope.settlementData.totalDedvatAmount = Number($scope.settlementData.vatAmount) > Number($scope.settlementData.totalLessPerKg) ? $scope.settlementData.totalLessPerKg : $scope.settlementData.vatAmount
+        $scope.settlementData.totalDedExciseAmount = $scope.settlementData.totalLessPerKg > $scope.settlementData.vatAmount ? $scope.settlementData.totalLessPerKg - $scope.settlementData.totalDedvatAmount : 0
 
     }
     function calculateTotalQty(data) {

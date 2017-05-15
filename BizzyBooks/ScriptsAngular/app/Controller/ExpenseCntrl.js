@@ -287,6 +287,8 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
 
     $scope.itemTable = [];
     // add itemDetail
+    
+    console.log($stateParams.no)
     $scope.addItemDetail = function () {
         var accountData = {
             accountName: $scope.itemAccount.selected.accountName,

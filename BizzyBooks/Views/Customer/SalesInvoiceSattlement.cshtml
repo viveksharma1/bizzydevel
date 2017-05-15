@@ -129,8 +129,8 @@
                 <input type="text" class="form-control pull-right" ng-model="settlementData.voRefNo" disabled style="width:100px" />
 
 
-                <h4 class="tabheading" style="float:right; width:100%; margin-top:0px !important">Ref. No.</h4>
-                <input type="text" class="form-control pull-right" ng-model="settlementData.invoiceNo" disabled style="width:100px" />
+                @*<h4 class="tabheading" style="float:right; width:100%; margin-top:0px !important">Ref. No.</h4>
+                <input type="text" class="form-control pull-right" ng-model="settlementData.invoiceNo" disabled style="width:100px" />*@
             </div>
 
 
@@ -142,7 +142,7 @@
 
 
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-4 padding">
             <div class="Settelmentbox">
                 <h3><input type="radio" ng-model="type" name="deduction" ng-click="selectBox('interest')" class="Settelment_Radio" /> Interest Deduction</h3>
                 <hr />
@@ -157,13 +157,13 @@
             </div>
         </div>
 
-        <div class="col-sm-6">
+        <div class="col-sm-4 padding">
             <div class="Settelmentbox">
                 <h3><input type="radio" name="deduction" ng-click="selectBox('perKg')" class="Settelment_Radio" /> Ded/Kg</h3>
                 <hr />
                 <div class="col-sm-4">
                     <h4 class="tabheading font_11">Vat ded/kg</h4>
-                    <input type="text" class="form-control" ng-model="settlementData.vatPerKg" ng-disabled="isDisabled1" />
+                    <input type="text" class="form-control" ng-blur="calculate()" ng-model="settlementData.vatPerKg" ng-disabled="isDisabled1" />
                 </div>
                 <div class="col-sm-4">
                     <h4 class="tabheading font_11">Excise ded/kg</h4>
@@ -172,21 +172,31 @@
 
                 <div class="col-sm-4">
                     <h4 class="tabheading font_11">Total ded/kg</h4>
-                    <input type="text" class="form-control" ng-blur="vatDedPerkg()" ng-model="settlementData.totalDedPerKg" ng-disabled="isDisabled1" />
+                    <input type="text" class="form-control" ng-model="settlementData.totalDedPerKg" ng-disabled="isDisabled1" />
+                </div>
+
+                <div class="col-sm-6">
+                    <h4 class="tabheading font_11">Less/kg</h4>
+                    <input type="text" class="form-control" ng-blur="vatDedPerkg()" ng-model="settlementData.lessPerKg" ng-disabled="isDisabled1" />
+                </div>
+
+                <div class="col-sm-6">
+                    <h4 class="tabheading font_11">Total Less amy/kg</h4>
+                    <input type="text" class="form-control" ng-blur="vatDedPerkg()" ng-model="settlementData.totalLessPerKg" ng-disabled="isDisabled1" />
                 </div>
 
             </div>
         </div>
 
-        <div class="col-sm-12">
+        <div class="col-sm-4 padding">
             <div class="Settelmentbox">
                 <h3>Total Deduction Amount</h3>
                 <hr />
-                <div class="col-sm-2">
+                <div class="col-sm-4">
                     <h4 class="tabheading font_11">VAT Amount</h4>
                     <input type="text" class="form-control" ng-model="settlementData.totalDedvatAmount" />
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-8">
                     <h4 class="tabheading font_11">VAT Account<span class="pull-right" style="color:forestgreen"><i class="fa fa-rupee"></i> {{vatAccountBalance |number : fractionSize}} <em style="color:red">{{supplierType}}</em></span></h4>
                     <create-account value="myValue"> </create-account>
                     <ui-select ui-tree-select ng-model="vatAccount.selected" id="countryCode"
@@ -209,12 +219,12 @@
                     </ui-select>
                 </div>
 
-                <div class="col-sm-3">
-                    <h4 class="tabheading font_11">Excise Amount</h4>
+                <div class="col-sm-4">
+                    <h4 class="tabheading font_11 content" style="margin-top:0px !important;">Excise Amount</h4>
                     <input type="text" class="form-control" ng-model="settlementData.totalDedExciseAmount" />
                 </div>
-                <div class="col-sm-3">
-                    <h4 class="tabheading font_11">OT Tax Account<span class="pull-right" style="color:forestgreen"><i class="fa fa-rupee"></i> {{oTaxBalance |number : fractionSize}}<em style="color:red">{{supplierType}}</em></span></h4>
+                <div class="col-sm-8">
+                    <h4 class="tabheading font_11 content" style="margin-top:0px !important;">OT Tax Account<span class="pull-right" style="color:forestgreen"><i class="fa fa-rupee"></i> {{oTaxBalance |number : fractionSize}} <em style="color:red">{{supplierType}}</em></span></h4>
                     <ui-select ui-tree-select ng-model="otaxAccount.selected" id="countryCode"
                                ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';"
                                theme="selectize" on-select="bindOTaxAccountDetail($select.selected)">

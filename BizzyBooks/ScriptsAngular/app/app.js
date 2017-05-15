@@ -198,7 +198,7 @@ var myApp = angular
         });
 
         $stateProvider.state("Customer.Expense", {
-            url: "/Expense/:expenceId/:suppliers",
+            url: "/Expense/:expenceId/:no",
             templateUrl: "Customer/Expense",
             controller: "ExpenseCntrl",
             params: {

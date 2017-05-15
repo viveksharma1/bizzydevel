@@ -75,8 +75,8 @@
                     </label>
                     <ul ng-repeat="data in expenseData">
                         <li>
-                            <span>{{data.supliersName}}  </span>
-                            <span class="pull-right"> {{data.amount/NetWeight |number : fractionSize}}</span>
+                            <span>{{data.refNo}}  </span>
+                            <span class="pull-right"> {{data.amount / NetWeight |number : fractionSize}}</span>
                         </li>
 
 
@@ -96,20 +96,7 @@
 
                     </ul>
                 </div>
-                <div class="card border-orange">
-                    <label class="heading active">
-                        UO Expense
-
-                    </label>
-                    <ul ng-repeat="data in taxData">
-                        <li>
-                            <span>{{data.accountName}}  </span>
-                            <span class="pull-right"> {{data.credit/NetWeight |number : fractionSize}}</span>
-                        </li>
-
-
-                    </ul>
-                </div>
+               
                 <div class="card border-blue">
                     <ul>
                         <li>
