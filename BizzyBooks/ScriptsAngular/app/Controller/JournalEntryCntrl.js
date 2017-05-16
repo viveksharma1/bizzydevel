@@ -144,16 +144,18 @@
         })
     }
 
-
+    $scope.deleteBtn = false
     if ($stateParams.voId) {
+        $scope.deleteBtn = true
         getjournal($stateParams.voId);
     }
 
 
+   
     $scope.deleteVoucherModal = function () {
         swal({
             title: "Are you sure?",
-            text: "You will not be able to recover this voucher !",
+            text: "You will not be able to recover this Invoice !",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
@@ -172,8 +174,9 @@
     $scope.deleteVoucher = function () {
         $rootScope.$broadcast('event:progress', { message: "Please wait while processing.." });
         $http.get(config.login + "deleteJournalAndContra/" + $stateParams.billNo).then(function (response) {
-            if (response.data == "Deleted") {
-                $rootScope.$broadcast('event:success', { message: "Contra No " + $scope.no + " Deleted Succesfully" });
+            if (response.data == "deleted") {
+                $rootScope.$broadcast('event:success', { message: "Journal No " + $scope.billNo + " Deleted Succesfully" });
+                $stateParams.billNo = null;
                 window.history.back();
                 $state.reload();
             }
@@ -182,5 +185,5 @@
             }
         });
     }
-      
+
 }]);

@@ -514,7 +514,34 @@
         var date = month + '/' + days + '/' + year;
         return date;
     }
+    //var urlToChangeStream = "" + config.api + "voucherTransactions/change-stream?_format=event-stream";
+    //var src = new EventSource(urlToChangeStream);
+    //src.addEventListener('data', function (msg) {
+    //    var d = JSON.parse(msg.data);
+    //   console.log(d)
+    //    if (d) {
+    //        var username = authService.getAuthentication().username
+    //        var activityType;
+    //        if (d.type == 'create') {
+    //            var activityType = "voucherTransaction" + " " + d.data.vochNo + " " + "Created"
 
+    //       } else if(d.type == 'update'){
+    //           var activityType = "voucherTransaction" + " " + d.data.vochNo + " " + "updated"
+    //        }
+    //        var logData = {
+    //            username: username,
+    //           date: moment().format('MMMM Do YYYY, h:mm:ss a'),
+    //           activityType:activityType,
+    //           vochNo:''
+
+    //        }
+    //        $http.post(config.login + "userActivityLog", logData).then(function (response) {
+    //           return;
+    //       });
+
+    //   }
+    // console.log(d.data);
+    //})
     // save bill 
     $scope.saving = false;
     
