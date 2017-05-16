@@ -1,6 +1,6 @@
 ﻿
 var RoleCheck = "";
-myApp.controller('LoginCntrl', ['$state', '$http', '$rootScope', '$scope', 'config', 'UserService','authService', 'localStorageService', function ($state, $http, $scope, $rootScope, config, UserService,authService, localStorageService) {
+myApp.controller('LoginCntrl', ['$state', '$http', '$rootScope', '$scope', 'config', 'UserService', 'authService', 'localStorageService', 'SweetAlert', function ($state, $http, $scope, $rootScope, config, UserService, authService, localStorageService, SweetAlert) {
     if (localStorage.reload == "true") {
         localStorage.reload = false;
         window.location.reload();
@@ -25,6 +25,7 @@ myApp.controller('LoginCntrl', ['$state', '$http', '$rootScope', '$scope', 'conf
             };
             $http.post(config.login + "login", data).success(function (data, status) {
                 console.log(data.message);
+             
                 if (data.message == "User Not Found") {
                     $('#InvalidModal').modal('show');
                 }
