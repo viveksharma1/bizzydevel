@@ -9,6 +9,22 @@
     $scope.goBack = function () {
         window.history.back();
     }
+    //$scope.clear = function ($event, $select) {
+    //    $event.stopPropagation();
+    //    //to allow empty field, in order to force a selection remove the following line
+    //    $select.selected = undefined;
+    //    //reset search query
+    //    $select.search = undefined;
+    //    //focus and open dropdown
+    //    $select.activate();
+    //}
+    $scope.clear = function ($event, $select) {
+        $event.stopPropagation();
+        $select.selected = undefined;
+        $select.search = undefined;
+
+        $timeout(function () { $select.activate() }, 200);
+    }
 
     $http.get(config.api + "Inventories?filter[where][visible]=false&filter[limit]=20").then(function (response) {
         $scope.ItemList2 = response.data;
@@ -50,40 +66,66 @@
         $scope.filterList = $scope.ItemList2;
     }
     $scope.applyFilter = function () {
-        var qry = "Inventories?filter[where][visible]=false";
-        if ($scope.subcategory.selected)
-            qry = qry + "&filter[where][SUBCATEGORY]=" + $scope.subcategory.selected._id.SUBCATEGORY;
-        if ($scope.coilsheetno.selected)
-            qry = qry + "&filter[where][COILSHEETNO]=" + $scope.coilsheetno.selected._id.COILSHEETNO;
-        if ($scope.incomingdate.selected)
-            qry = qry + "&filter[where][INCOMINGDATE]=" + $scope.incomingdate.selected._id.INCOMINGDATE;
-        if ($scope.lotweight.selected)
-            qry = qry + "&filter[where][LotWeight]=" + $scope.lotweight.selected._id.LotWeight;
-        if ($scope.location.selected)
-            qry = qry + "&filter[where][LOCATION]=" + $scope.location.selected._id.LOCATION;
-        if ($scope.grade.selected)
-            qry = qry + "&filter[where][GRADE]=" + $scope.grade.selected._id.GRADE;
-        if ($scope.finish.selected)
-            qry = qry + "&filter[where][FINISH]=" + $scope.finish.selected._id.FINISH;
-        if ($scope.thickness.selected)
-            qry = qry + "&filter[where][THICKNESS]=" + $scope.thickness.selected._id.THICKNESS;
-        if ($scope.width.selected)
-            qry = qry + "&filter[where][WIDTH]=" + $scope.width.selected._id.WIDTH;
-        if ($scope.length.selected)
-            qry = qry + "&filter[where][LENGTH]=" + $scope.length.selected._id.LENGTH;
-        if ($scope.netweight.selected)
-            qry = qry + "&filter[where][NETWEIGHT]=" + $scope.netweight.selected._id.NETWEIGHT;
-        if ($scope.grossweight.selected)
-            qry = qry + "&filter[where][GROSSWT]=" + $scope.grossweight.selected._id.GROSSWT;
-        if ($scope.pcslengthmtr.selected)
-            qry = qry + "&filter[where][PCS/LENGTHINMTRS]=" + $scope.pcslengthmtr.selected._id.PCS / LENGTHINMTRS;
+        var qry = {
+            "where": {
+                "visible": false,
+                "SUBCATEGORY": $scope.subcategory.selected ? $scope.subcategory.selected._id.SUBCATEGORY : $scope.subcategory.selected,
+                "COILSHEETNO": $scope.coilsheetno.selected ? $scope.coilsheetno.selected._id.COILSHEETNO : $scope.coilsheetno.selected,
+                "INCOMINGDATE": $scope.incomingdate.selected ? $scope.incomingdate.selected._id.INCOMINGDATE : $scope.incomingdate.selected,
+                "LotWeight": $scope.lotweight.selected ? $scope.lotweight.selected._id.LotWeight : $scope.lotweight.selected,
+                "LOCATION": $scope.location.selected ? $scope.location.selected._id.LOCATION : $scope.location.selected,
+                "GRADE": $scope.grade.selected ? $scope.grade.selected._id.GRADE : $scope.grade.selected,
+                "FINISH": $scope.finish.selected ? $scope.finish.selected._id.FINISH : $scope.finish.selected,
+                "THICKNESS": $scope.thickness.selected ? $scope.thickness.selected._id.THICKNESS : $scope.thickness.selected,
+                "WIDTH": $scope.width.selected ? $scope.width.selected._id.WIDTH : $scope.width.selected,
+                "LENGTH": $scope.length.selected ? $scope.length.selected._id.LENGTH : $scope.length.selected,
+                "NETWEIGHT": $scope.netweight.selected ? $scope.netweight.selected._id.NETWEIGHT : $scope.netweight.selected,
+                "GROSSWT": $scope.grossweight.selected ? $scope.grossweight.selected._id.GROSSWT : $scope.grossweight.selected,
+                "PCS/LENGTHINMTRS": $scope.pcslengthmtr.selected ? $scope.pcslengthmtr.selected._id.PCS / LENGTHINMTRS : $scope.pcslengthmtr.selected,
 
-        $http.get(config.api + qry).then(function (response) {
+            }
+        }
+        $http.get(config.api + "Inventories?filter=" + encodeURIComponent(JSON.stringify(qry))).then(function (response) {
             $scope.filterList = response.data;
-            //console.log($scope.ItemList);
-            //$scope.ItemCount = response.data.length;
         });
     }
+    //$scope.applyFilter = function () {
+    //    var qry = "Inventories?filter[where][visible]=false";
+    //    if ($scope.subcategory.selected)
+    //        qry = qry + "&filter[where][SUBCATEGORY]=" + $scope.subcategory.selected._id.SUBCATEGORY;
+    //    if ($scope.coilsheetno.selected)
+    //        qry = qry + "&filter[where][COILSHEETNO]=" + $scope.coilsheetno.selected._id.COILSHEETNO;
+    //    if ($scope.incomingdate.selected)
+    //        qry = qry + "&filter[where][INCOMINGDATE]=" + $scope.incomingdate.selected._id.INCOMINGDATE;
+    //    if ($scope.lotweight.selected)
+    //        qry = qry + "&filter[where][LotWeight]=" + $scope.lotweight.selected._id.LotWeight;
+    //    if ($scope.location.selected)
+    //        qry = qry + "&filter[where][LOCATION]=" + $scope.location.selected._id.LOCATION;
+    //    if ($scope.grade.selected)
+    //        qry = qry + "&filter[where][GRADE]=" + $scope.grade.selected._id.GRADE;
+    //    if ($scope.finish.selected)
+    //        qry = qry + "&filter[where][FINISH]=" + $scope.finish.selected._id.FINISH;
+    //    if ($scope.thickness.selected)
+    //        qry = qry + "&filter[where][THICKNESS]=" + $scope.thickness.selected._id.THICKNESS;
+    //    if ($scope.width.selected)
+    //        qry = qry + "&filter[where][WIDTH]=" + $scope.width.selected._id.WIDTH;
+    //    if ($scope.length.selected)
+    //        qry = qry + "&filter[where][LENGTH]=" + $scope.length.selected._id.LENGTH;
+    //    if ($scope.netweight.selected)
+    //        qry = qry + "&filter[where][NETWEIGHT]=" + $scope.netweight.selected._id.NETWEIGHT;
+    //    if ($scope.grossweight.selected)
+    //        qry = qry + "&filter[where][GROSSWT]=" + $scope.grossweight.selected._id.GROSSWT;
+    //    if ($scope.pcslengthmtr.selected)
+    //        qry = qry + "&filter[where][PCS/LENGTHINMTRS]=" + $scope.pcslengthmtr.selected._id.PCS / LENGTHINMTRS;
+
+    //    $http.get(config.api + qry).then(function (response) {
+    //        $scope.filterList = response.data;
+    //        //console.log($scope.ItemList);
+    //        //$scope.ItemCount = response.data.length;
+    //    });
+
+
+    //}
     $scope.itemChecked = [];
     $scope.selectAllLineItem = function (allItemData) {
         if ($scope.selectAll) {

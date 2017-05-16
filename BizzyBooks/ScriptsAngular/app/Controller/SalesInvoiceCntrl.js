@@ -1,5 +1,7 @@
 ﻿myApp.controller('SalesInvoiceCntrl', ['$scope', '$http', '$timeout', '$rootScope', '$state', 'config', '$stateParams', '$filter', 'FileUploader', 'commonService', 'SweetAlert', function ($scope, $http, $timeout, $rootScope, $state, config, $stateParams, $filter, FileUploader, commonService, SweetAlert) {
-
+    if ($rootScope.$previousState == $state.current && $stateParams.voId == null) {
+        window.history.back();
+    }
     $(".my a").click(function (e) {
         e.preventDefault();
     })
@@ -46,7 +48,7 @@
         format: 'dd/mm/yyyy',
         autoclose: true,
     });
-
+    
     $scope.goBack = function () {
         if ($rootScope.$previousState.name.length == 0 || $rootScope.$previousState == $state.current) {
             window.history.back();
@@ -218,7 +220,7 @@
     $scope.clear = function ($event, $select) { ///ui select clear.
         $event.stopPropagation();
         //to allow empty field, in order to force a selection remove the following line
-        $select.selected = null;
+        $select.selected = undefined;
         //reset search query
         $select.search = undefined;
         //focus and open dropdown
@@ -839,15 +841,15 @@
 
         if (type == 'Tax Invoice') {
 
-            $state.go('Customer.TaxInvoicePDF', { voId: $stateParams.voId });
+            $state.go('Customer.TaxInvoicePDF', { voId: $stateParams.voId, noBackTrack: true });
         }
         else if (type == 'Excise Invoice') {
 
-            $state.go('Customer.ExciseInvoicePDF', { voId: $stateParams.voId });
+            $state.go('Customer.ExciseInvoicePDF', { voId: $stateParams.voId, noBackTrack: true });
         }
         else if (type == 'Delivery Challan') {
 
-            $state.go('Customer.SalesInvoicePDF', { voId: $stateParams.voId });
+            $state.go('Customer.SalesInvoicePDF', { voId: $stateParams.voId, noBackTrack: true });
         }
     };
 
@@ -1076,7 +1078,7 @@
             } else {
                 $rootScope.$broadcast('event:success', { message: "Invoice Created" });
                 if (!$scope.hasVoId) {
-                    $state.go("Customer.SalesInvoice", { voId: response.data.id });
+                    $state.go("Customer.SalesInvoice", { voId: response.data.id }, {location:true});
                 } else {
                     $state.reload();
                 }
