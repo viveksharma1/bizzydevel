@@ -154,7 +154,7 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
                         $scope.supplier = { selected: { accountName: localStorage[expenseData.supliersId], id: expenseData.supliersId } };
                         $scope.tdsRate = { selected: { accountName: localStorage[expenseData.tdsAccountId], id: expenseData.tdsAccountId } };
                         $scope.applyTdsRate(expenseData.tdsRate);
-                        $scope.getSupplierDetail(localStorage[expenseData.supliersId]);
+                        $scope.getSupplierDetail(expenseData.supliersId);
                         //$scope.expenseDueDate = $filter('date')(expenseData.billDueDate, 'dd/MM/yyyy');
                         //$scope.expenseDate = $filter('date')(expenseData.date, 'dd/MM/yyyy');
                         setDate($scope.expenseDueDate, expenseData.billDueDate);
@@ -163,6 +163,7 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
                         $scope.paymentDays = expenseData.paymentDays
                         $scope.attachements = expenseData.attachements;
                         $scope.narration = response.data.narration
+                        $stateParams.no = response.data.refNo
                         if (response.data.paymentLog) {
                             $scope.receiptCount = response.data.paymentLog.length;
                             $scope.receipts = response.data.paymentLog;
@@ -184,13 +185,13 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
         $scope.getExpenseData($stateParams.expenceId)      
     }
 
-    $scope.getSupplierDetail = function (supplierName) {
+    $scope.getSupplierDetail = function (id) {
         $scope.supliersDetail = []
-        $http.get(config.api + "accounts" + "?filter[where][compCode]=" + localStorage.CompanyId + "&filter[where][accountName]=" + supplierName).then(function (response) {
+        $http.get(config.api + "accounts/" + id).then(function (response) {
             $scope.supliersDetail = response.data;
             console.log(response.data)
-            $scope.shippingAddress = $scope.supliersDetail[0].billingAddress[0].street;
-            $scope.email = $scope.supliersDetail[0].email;
+            $scope.shippingAddress = $scope.supliersDetail.billingAddress[0].street;
+            $scope.email = $scope.supliersDetail.email;
         });
     }
     function calculateOpenningBalnce(data, balanceType) {
@@ -256,20 +257,29 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
     $scope.itemAccount = {}
     $scope.accountTable = [];
     $scope.addAccount = function () {
+        if ($scope.accounts == null || $scope.accounts.selected == null) {
+            showErrorToast("please select account");
+            return;
+        }
+        if (isNaN($scope.accountAmount) || $scope.accountAmount == null) {
+            showErrorToast("please enter amount");
+            return;
+        }
         var accountData = {
             accountName: $scope.accounts.selected.accountName,
             accountId: $scope.accounts.selected.id,
             description: $scope.accountDescription,
             amount: $scope.accountAmount
         }
-
-        if ($scope.edit1 == true) {
-            $scope.accountTable[$scope.index] = accountData;
+        if ($scope.idSelectedVote != null) {
+            $scope.accountTable[$scope.idSelectedVote] = accountData;
         } else {
             $scope.accountTable.push(accountData);
         }
-        $scope.edit1 = false;
+        $scope.accountAmount = null;
+        $scope.idSelectedVote = null
         $scope.accountTableSum();
+       
     }
 
     // remove itemDetail
@@ -386,7 +396,7 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
                  if (response.status == 200) {
                      $rootScope.$broadcast('event:success', { message: "Expense Created" });
                      $stateParams.expenceId = response.data
-                     $state.go('Customer.Expense', { expenceId: response.data });
+                     $state.go('Customer.Expense', { expenceId: response.data, no: $stateParams.no }, { location: 'replace' });
                      
                  } else {
                      $rootScope.$broadcast('event:error', { message: "Error while creating Expense" });

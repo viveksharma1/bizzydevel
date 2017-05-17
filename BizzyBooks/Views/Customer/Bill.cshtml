@@ -1805,10 +1805,10 @@
                     </thead>
 
                     <tbody >
-                        <tr ng-repeat="item in accountTable track by $index" class="cursor" ng-click="editAccountTable(item,$index)"ng-class="{selected: $index === selectedAccIndex}" >
-                            <td class="Count" >{{item.accountName}}</td>
+                        <tr ng-repeat="item in accountTable track by $index" class="cursor" ng-class="{selected: $index === selectedAccIndex}" >
+                            <td class="Count" ng-click="editAccountTable(item,$index)">{{item.accountName}}</td>
                             @*<td class="Count">{{item.description}}</td>*@
-                            <td class="Count" style="text-align:right">{{item.amount}}</td>
+                            <td class="Count" style="text-align:right" ng-click="editAccountTable(item,$index)">{{item.amount}}</td>
                             <td class="text-center Count" value="0.00"><a class="edit" title="Edit"> <i class="fa fa-times-circle cursor RemoveTR" style="font-size:16px" ng-click="removeAccountTable($index)"></i></a></td>
                         </tr>
 

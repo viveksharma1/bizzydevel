@@ -263,7 +263,7 @@
     }
     $scope.accountTable = [];
     $scope.addAccount = function () {
-        if ($scope.accounts.selected == undefined) {
+        if ($scope.accounts == null || $scope.accounts.selected == null  ) {
             showErrorToast("please select account");
             return;
         }
@@ -283,6 +283,7 @@
             $scope.accountTable.push(accountData);
         }
         $scope.accountAmount = null;
+        $scope.selectedAccIndex = null
         $scope.accountTableSum();
     }
     $scope.refreshAccountTable = function ($select) {
@@ -321,6 +322,7 @@
     $scope.removeAccountTable = function (index) {
         $scope.accountTable.splice(index, 1);
         $scope.accountTableSum();
+        $scope.selectedAccIndex = null;
     }
     //file upload
     var doc = new jsPDF();
@@ -394,13 +396,14 @@
     $scope.getSupplier();
     $scope.getPurchaseAccount();
     $scope.getExpenseAccount();
-    $scope.getSupplierDetail = function (name) {
+    $scope.getSupplierDetail = function (id) {
         $scope.supliersDetail = []
-        $http.get(config.api + "accounts" + "?filter[where][compCode]=" + localStorage.CompanyId + "&filter[where][accountName]=" + name).then(function (response) {
+        $http.get(config.api + "accounts/" + id).then(function (response) {
             $scope.supliersDetail = response.data;
-            console.log($scope.supliersDetail)
-            $scope.shippingAddress = $scope.supliersDetail[0].billingAddress[0].street;
-            $scope.email = $scope.supliersDetail[0].email;
+            console.log(response.data)
+
+            $scope.shippingAddress = $scope.supliersDetail.billingAddress[0].street;
+            $scope.email = $scope.supliersDetail.email;
         });
     }
 
@@ -455,7 +458,7 @@
                         $scope.email = billData.email
                         $scope.supplier = { selected: { accountName: localStorage[billData.supliersId], id: billData.supliersId } };
                         $scope.purchaseAccounts = { selected: { accountName: localStorage[billData.purchaseAccountId], id: billData.purchaseAccountId } };
-                        $scope.getSupplierDetail(localStorage[billData.supliersId]);
+                        $scope.getSupplierDetail(billData.supliersId);
                         $scope.invoiceType1(billData.invoiceType);
                         setDate($scope.billDate, billData.date);
                         setDate($scope.billDueDate, billData.billDueDate);
@@ -678,7 +681,7 @@
                             $rootScope.$broadcast('event:success', { message: "Purchase Invoice Created" });
 
                             $stateParams.billNo = response.data
-                            $state.go('Customer.Bill', { billNo: response.data });
+                            $state.go('Customer.Bill',{ billNo: response.data},{location: 'replace' });
 
                         }
                         else {

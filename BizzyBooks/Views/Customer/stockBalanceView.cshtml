@@ -6,7 +6,7 @@
 
 
 <div class="FlexPopup" style="display:block" ng-init="model = {}">
-    <div class="flexheader lightblue">
+    <div class="border-aero">
         <label style="float:left;padding:15px ">
 
             <strong><span style="font-size:20px;  color:#585655">View Info</span></strong>
@@ -73,10 +73,12 @@
                         Expense
 
                     </label>
-                    <ul ng-repeat="data in expenseData">
+                  
+                    <label class="pull-right"> Per/Kg </label>
+                    <ul ng-repeat="data in expenseData  track by $index ">
                         <li>
-                            <span>{{data.refNo}}  </span>
-                            <span class="pull-right"> {{data.amount / NetWeight |number : fractionSize}}</span>
+                            <span><b>{{data.accountName}}</b></span>
+                            <span class="pull-right"> ({{data.amount | number : fractionSize}}) <em style="color:darkseagreen"><b>{{data.perKg |number : 2}}</b></em></span>
                         </li>
 
 
@@ -102,7 +104,7 @@
                         <li>
                             <span>
                                 Total Expense
-                                <span class="pull-right"><b>{{tatalExpense/NetWeight |number : fractionSize}}</b></span>
+                                <span class="pull-right"><b>{{totalExpense |number : 2}}</b></span>
                             </span>
                         </li>
                     </ul>
@@ -110,7 +112,7 @@
                         <li>
                             <span>
                                 Total Cost/KG
-                                <span class="pull-right"><b>{{totalCostPerMT |number : fractionSize}}</b></span>
+                                <span class="pull-right"><b>{{costPerKg  |number : 2}}</b></span>
                             </span>
                         </li>
                     </ul>
@@ -227,18 +229,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="info">
-                            <div class="tableCell">
-                                <div class="tableCell labelCell">
-                                    <span class="label">Finish</span>
-                                </div>
-                                <div class="tableCell">
-                                    <span class="value">
-                                        {{Item.FINISH}}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
+                       
                     </div>
 
 
@@ -362,33 +353,9 @@
                             </div>
                         </div>
 
-                        <div class="info">
-                            <div class="tableCell">
-                                <div class="tableCell labelCell">
-                                    <span class="label">Remarks 1</span>
-                                </div>
-                                <div class="tableCell">
-                                    <span class="value">
-                                        {{Item.REMARK1}}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
+                        
 
-
-                        <div class="info">
-                            <div class="tableCell">
-                                <div class="tableCell labelCell">
-                                    <span class="label">Remarks 2</span>
-                                </div>
-                                <div class="tableCell">
-                                    <span class="value">
-                                        {{Item.REMARK2}}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
+                       
                     </div>
 
                 </div>

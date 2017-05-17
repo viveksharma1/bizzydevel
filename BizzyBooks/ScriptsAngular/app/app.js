@@ -603,12 +603,13 @@ myApp.run(['authService', '$location', '$rootScope', 'localStorageService', '$st
     };
     if (!localStorage.fromDate)
     {
-        var d = new Date(moment(new Date()).subtract(1, 'year'));
+        //var d = new Date(moment(new Date()).subtract(1, 'year'));
+        var d = new Date("04/01/2017");
         d.setHours(0, 0, 0, 0);
        localStorage.fromDate=d;
     }
     if (!localStorage.toDate) {
-        var d = new Date();
+        var d = new Date("03/31/2018");
         d.setHours(23, 59, 59, 0);
         localStorage.toDate = d;
     }

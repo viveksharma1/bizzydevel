@@ -23,68 +23,73 @@
         console.log($scope.Item);
         $http.get(config.api + "voucherTransactions/" + $scope.Item.invId).then(function (result) {
             $scope.billDetail = result.data;
-            console.log($scope.billData);
             $scope.supplierName = localStorage[$scope.billDetail.transactionData.supliersId]
         });
         $scope.GRNDetail($scope.Item);
-
     });
 
+    // sum account table in expense
+
+    function getAccountDetail(data) {
+        var accountSum = 0;
+        var itemTableSum = 0
+        var tds = 0;
+        if (data.accountTable.length > 0){
+            var accountData = data.accountTable
+           for (var i = 0; i < accountData.length; i++) {
+               accountSum += Number(accountData[i].amount);
+            }
+        }
+        if (data.itemTable.length > 0){
+            var itemTable = data.itemTable
+            for (var i = 0; i < itemTable.length; i++) {
+                itemTableSum += Number(itemTable[i].amount);
+            }
+        }
+        if (data.tdsamount) {
+            var tds = Number(tdsamount)
+        }
+       
+        return Number(accountSum + itemTableSum + tds);
+    }
+     
+
+    function bindExpense(data) {
+        var expense = [];
+        var totalExpense = 0
+        for (var i = 0; i < data.length; i++) {
+            var obj = {};
+            obj["accountName"] = localStorage[data[i].transactionData.supliersId]
+            obj["amount"] = getAccountDetail(data[i].transactionData)
+            expense.push(obj)
+            obj["perKg"] = Number(expense[i].amount / $scope.NetWeight);
+            totalExpense += expense[i].perKg;
+        }
+        $scope.totalExpense = Number(totalExpense)
+        return expense;
+    }
+     
     $scope.GRNDetail = function (data) {
         $scope.itemData = data;
-
-
-        console.log(data);
-        console.log(data.id);
-        $('#GRNDetailDiv').slideDown();
-
+        $scope.costPerKg = 0
         $scope.billNo = data.no;
         $scope.billId = data.invId;
-        $scope.NetWeight = data.NETWEIGHT;
+        $scope.NetWeight = Number(data.NETWEIGHT);
         $scope.itemAmount1 = Number(data.AMOUNTINR);
         $scope.itemAmountinINR = $filter('currency')($scope.itemAmount1, '₹', 2)
         $scope.costPerMTinINR = $filter('currency')($scope.itemAmount1 / data.NETWEIGHT, '₹', 2)
-
         $http.get(config.api + "voucherTransactions/" + $scope.billId).then(function (response) {
-            console.log(response.data)
             var billdata = response.data.transactionData
             $scope.billData = billdata.manualLineItem[0].totalDutyAmt;
-            console.log($scope.billData)
             $scope.totalDutyAmt = billdata.manualLineItem[0].totalDutyAmt;
             $scope.totalBillAmount = billdata.amount;
-            $scope.totalCustom = (Number($scope.totalDutyAmt) * Number(data.TOTALAMOUNT) * Number(billdata.ExchangeRate)) / Number($scope.totalBillAmount) * Number(data.NETWEIGHT);
+            $scope.totalCustom = ((Number($scope.totalDutyAmt) * (Number(data.TOTALAMOUNT) * Number(billdata.ExchangeRate))) / (Number($scope.totalBillAmount) * Number(data.NETWEIGHT))).toFixed(2);
+            $scope.costPerKg = $scope.costPerKg + Number($scope.totalCustom)
 
         });
         $http.get(config.api + "voucherTransactions" + "?[filter][where][type]=EXPENSE" + "&[filter][where][refNo]=" + $scope.billNo + "&[filter][where][role]=" + "O").then(function (response) {
-            $scope.expenseData = []
-            $scope.expenseData = response.data;
-            console.log(response.data)
-            for (var i = 0; i < $scope.expenseData.length;i++){
-                $scope.expenseData[i].refNo = localStorage[$scope.expenseData[i].transactionData.supliersId]
-            }
-            $scope.supliersName1 = localStorage[response.data[0].transactionData.supliersId]
-            $scope.amount1 = $scope.expenseData.amount;
-            $scope.date1 = $scope.expenseData.date;
-            console.log($scope.expenseData)
-
-            var total = 0;
-            for (var i = 0; i < $scope.expenseData.length; i++) {
-                var product = Number($scope.expenseData[i]);
-                total += Number($scope.expenseData[i].amount);
-            }
-            $scope.tatalExpense = Math.round(total);
-            $scope.totalCostPerMT = ($scope.tatalExpense + $scope.itemAmount1) / $scope.NetWeight
-        })
-
-        $http.get(config.api + "ledgers" + "?[filter][where][refNo]=" + $scope.billNo + "&[filter][where][type]=Direct Expense").then(function (response) {
-
-            $scope.taxData = response.data;
-            console.log(response.data)
-            $scope.supliersName1 = response.data.supliersName;
-            $scope.amount1 = response.data.amount;
-            $scope.date1 = response.data.date;
-            console.log($scope.expenseData)
-
+            $scope.expenseData = bindExpense(response.data)
+            $scope.costPerKg = $scope.costPerKg + $scope.totalExpense;
         })
     }
 

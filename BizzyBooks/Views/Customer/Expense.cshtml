@@ -350,8 +350,8 @@
                             </thead>
 
                             <tbody>
-                                <tr  ng-repeat="item in accountTable track by $index"  class="cursor" ng-click="editAccountTable(item,$index)" ng-class="{selected: $index === idSelectedVote}">
-                                    <td class="Count" ><b>{{item.accountName}}</b></td>
+                                <tr  ng-repeat="item in accountTable track by $index"  class="cursor"  ng-class="{selected: $index === idSelectedVote}">
+                                    <td class="Count"  ng-click="editAccountTable(item,$index)"><b>{{item.accountName}}</b></td>
                                   
                                     <td class="Count" style="text-align:right">{{item.amount}}</td>
                                     <td class="text-right Count" value="0.00"><a class="edit" title="Edit"> <i class="fa fa-times-circle cursor RemoveTR" style="font-size:16px" ng-click="removeAccountLine($index)"></i></a></td>

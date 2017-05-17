@@ -31,37 +31,15 @@
 
         </div>
     </div>
+<create-account value="myValue"> </create-account>
 <div class="col-sm-12" style="padding:10px">
     <input type="text" class="form-control pull-right fa fa-search" placeholder="Search" ng-model="search"  style="width:250px;border-color:#1D4B8F;border-width:2px; float:left"/>
-    @*<div class="pull-right" style="margin-top:5px">
-        <i class="fa fa-plus fa-2x cursor"ng-click="Accountbtn()"id="NewCustomerCreate" title="Create Account"></i>
-       
-    </div>*@
-    <div id="accountAlert" class="modal fade" role="dialog">
-        <div class="modal-admin">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-
-                <div class="modal-body" style="background-color:#525DB0">
-                    <label style="color:#FFFFFF">Do you want to delete</label>
-                </div>
-
-
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary btn-sm btn bg-purple" data-dismiss="modal" style="float:left">No</button>
-                    <button type="button" class="btn btn-secondary btn-sm btn-success" data-dismiss="modal" ng-click="deleteAccount()">Yes</button>
-                </div>
-            </div>
-
-        </div>
-    </div>
-    <create-account value="myValue"> </create-account>
-    <table class="table table-condensed account-hover " fixed-header style="margin-top:10px; width:100%; height:490px; float:left;table-layout:fixed">
+   
+   
+    <table class="table" fixed-header style="margin-top:10px; height:410px; float:left;table-layout:auto;table-layout:fixed; width:100%;">
         <thead>
-            <tr class="bar">
-                <th style="width:30px;color:#1D4B8F">&nbsp;</th>
+            <tr>
+                <th style="width:13px; color:#1D4B8F">&nbsp;</th>
                 <th style="color:#1D4B8F">NAME</th>
                 <th style="color:#1D4B8F">GROUP</th>
                 
@@ -69,8 +47,8 @@
                 <th style="text-align:right;color:#1D4B8F">ACTION</th>
             </tr>
         </thead>
-        <tbody>
-            <tr ng-repeat="data in account |filter:search">
+        <tbody >
+            <tr ng-repeat="data in account | orderBy:'accountName' | filter:search"  >
                 <td style="color:#1474AE"><b>{{$index + 1}}.</b></td>
                 <td style="color:#1D4B8F"><b>{{data.accountName}}</b></td>
                 <td>{{data.Under}} <span style="color:forestgreen">({{data.type}})</span></td>
