@@ -93,6 +93,7 @@
         }
         $http.get(config.api + "Inventories?filter=" + encodeURIComponent(JSON.stringify(qry))).then(function (response) {
             $scope.filterList = response.data;
+            getTotalsum(response.data);
             //$scope.ItemList2 = response.data;
             //$scope.filterList = $scope.ItemList2;
         });
