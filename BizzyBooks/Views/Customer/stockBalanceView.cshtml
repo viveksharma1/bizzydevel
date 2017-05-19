@@ -55,7 +55,7 @@
 
                         <li>
                             <span>Item Amount  </span>
-                            <span class="pull-right">{{Item.AMOUNTINR}}</span>
+                            <span class="pull-right">{{Item.AMOUNTINR |number : 2}}</span>
                         </li>
 
                         <li>
@@ -112,7 +112,7 @@
                         <li>
                             <span>
                                 Total Cost/KG
-                                <span class="pull-right"><b>{{costPerKg  |number : 2}}</b></span>
+                                <span class="pull-right"><b>{{ costPerKg |number : 2}}</b></span>
                             </span>
                         </li>
                     </ul>

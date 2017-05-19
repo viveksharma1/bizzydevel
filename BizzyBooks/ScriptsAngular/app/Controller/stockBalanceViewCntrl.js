@@ -47,7 +47,7 @@
             }
         }
         if (data.tdsamount) {
-            var tds = Number(tdsamount)
+            var tds = Number(data.tdsamount)
         }
        
         return Number(accountSum + itemTableSum + tds);
@@ -77,7 +77,7 @@
         $scope.NetWeight = Number(data.NETWEIGHT);
         $scope.itemAmount1 = Number(data.AMOUNTINR);
         $scope.itemAmountinINR = $filter('currency')($scope.itemAmount1, '₹', 2)
-        $scope.costPerMTinINR = $filter('currency')($scope.itemAmount1 / data.NETWEIGHT, '₹', 2)
+        $scope.costPerMTinINR = $scope.itemAmount1 / data.NETWEIGHT
         $http.get(config.api + "voucherTransactions/" + $scope.billId).then(function (response) {
             var billdata = response.data.transactionData
             $scope.billData = billdata.manualLineItem[0].totalDutyAmt;
@@ -89,7 +89,7 @@
         });
         $http.get(config.api + "voucherTransactions" + "?[filter][where][type]=EXPENSE" + "&[filter][where][refNo]=" + $scope.billNo + "&[filter][where][role]=" + "O").then(function (response) {
             $scope.expenseData = bindExpense(response.data)
-            $scope.costPerKg = $scope.costPerKg + $scope.totalExpense;
+            $scope.costPerKg = $scope.costPerKg + $scope.totalExpense + Number($scope.costPerMTinINR);
         })
     }
 

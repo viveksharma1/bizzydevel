@@ -29,12 +29,27 @@
 
         $timeout(function () { $select.activate() }, 200);
     }
-    $http.get(config.api + "Inventories?filter[where][visible]=true&filter[limit]=20").then(function (response) {
-        $scope.ItemList2 = response.data;
-        $scope.filterList = $scope.ItemList2;
-        //console.log($scope.ItemList);
-        //$scope.ItemCount = response.data.length;
-    });
+
+    function getTotalsum(data) {
+        var NETWEIGHT = 0;
+        var BALANCE = 0;
+        for (var i = 0; i < data.length; i++) {
+            NETWEIGHT += Number(data[i].NETWEIGHT)
+            BALANCE += Number(data[i].BALANCE)
+        }
+        $scope.totalNetWeight = "TOTAL QUANTITY :" + (NETWEIGHT).toFixed(3) 
+        $scope.totalNetBalance = "BALANCE QUANTITY :" + (BALANCE).toFixed(3)
+
+
+    }
+    function getInventory() {
+        $http.get(config.api + "Inventories?filter[where][visible]=true").then(function (response) {
+            $scope.ItemList2 = response.data;
+            $scope.filterList = $scope.ItemList2;
+            getTotalsum(response.data)
+        });
+    }
+    getInventory();
     var qryAgg = 'visible=true&group={"no": "$no","DESCRIPTION":"$DESCRIPTION","GODOWN": "$GODOWN","RRMARKS":"$RRMARKS"}';
     $http.get(config.login + "getAggregateInventories?" + qryAgg).then(function (response) {
         $scope.ItemList = response.data;
@@ -297,23 +312,34 @@
     // stock upload
     function uploadStockInventory(data) {
         $http.post(config.api + "Inventories", data).then(function (response) {
-            console.log(response)
-            $scope.saving = false
+            $rootScope.$broadcast('event:success', { message: $scope.ExeclDataRows.length + " Opening Stock Uploaded Successfully " });
+            getInventory();
         })
     }
+    $http.get(config.api + "Inventories/count" + "?[where][visible]=true").then(function (response) {
+      
+        $scope.count = response.data.count
+        console.log($scope.count);
+    })
     $scope.uploadFile = function () {
-        $scope.saving = true
         $scope.inventoryLedger = [];
         $scope.rows = [];
         $scope.ExeclDataRows = [];
         $scope.Key = [];
         $scope.KeyArray = [];
         var KeyName1;
+        var count = $scope.count
         var file = $scope.myFile;
+        if (!file) {
+            $rootScope.$broadcast('event:error', { message: "Please Choose File" });
+            return;
+        }
         this.parseExcel = function (file) {
+            $rootScope.$broadcast('event:progress', { message: "Please wait while processing.." });
             var reader = new FileReader();
             reader.onload = function (e) {
                 var data = e.target.result;
+                try{
                 var workbook = XLSX.read(data, { type: 'binary' });
                 workbook.SheetNames.forEach(function (sheetName) {
                     // Here is your object
@@ -321,33 +347,56 @@
                     for (key in XL_row_object) {
                         var retObj = {};
                         for (var obj in XL_row_object[key]) {
-
+                           
                             var obj1 = obj.replace(" ", "");
                             retObj[obj1] = XL_row_object[key][obj];
+                           
+                            if (obj1 == "InvoiceNo") {
+                                retObj["no"] = retObj[obj1] = XL_row_object[key][obj];
+                            }
 
+                            if (obj1 == "actualDate") {
+                                retObj["actualDate"] = moment(new Date(retObj[obj1] = XL_row_object[key][obj])).format('MM/DD/YYYY');
+                                console.log(retObj["actualDate"])
+                            }
+                            console.log(retObj[obj1])
+                            retObj["type"] = 'OB';
                             retObj["currentStatus"] = 'open';
                             retObj["visible"] = true;
-                            retObj["no"] = "Opening Balance";
+                           // retObj["no"] = "Opening Balance";
                             retObj["statusTransaction"] = [{ dt: new Date(), status: 'open', remarks: 'inventory added' }];
+                            retObj["rgNo"] = count + 1;
+                            
                             //retObj["assesableValue"] = '0';
                            // retObj["exciseDuty"] = '0';
                             //retObj["dutyAmount"] = '0';
                             //retObj["SAD"] = '0';
                             //retObj["totalDutyAmt"] = '0';
                            
-                           
+                        
                             var Keyobj = [];
                             var KeyName = obj;
                             Keyobj[KeyName1] = KeyName;
                             $scope.Key.push(Keyobj);
                         }
+                        count++
                         $scope.ExeclDataRows.push(retObj);
                         $scope.rows = [];
                         $scope.KeyArray = $scope.Key;
                         $scope.Key = [];
                     }
+                   
                 })
                 uploadStockInventory($scope.ExeclDataRows);
+                $scope.myFile = null;
+                $scope.$apply();
+                } catch (e) {
+                    console.log(e)
+                    $rootScope.$broadcast('event:error', { message: "Unsupported file" });
+                    $scope.myFile = null;
+                    $scope.$apply();
+
+                }
 
             };
             reader.onerror = function (ex) {

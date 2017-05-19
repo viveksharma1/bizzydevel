@@ -159,7 +159,7 @@
 </span>
                     </ui-select-match>
 
-                    <ui-select-choices repeat="person in supliers  | filter: $select.search">
+                    <ui-select-choices repeat="person in supliers  | filter: $select.search | orderBy:'accountName'">
                         <div>
                             <span ng-model="supplier1" ng-bind-html="person.accountName | highlight: $select.search"></span>
                             
@@ -178,7 +178,7 @@
                     <input type="text" ng-model="email" class="form-control" />
 
                     <h4 class="tabheading font_11">Contact</h4>
-                    <input type="text" class="form-control" />
+                    <input type="text" ng-model="mobile"class="form-control" />
                 </div>
             </div>
 
@@ -189,9 +189,13 @@
                 <ui-select ng-model="purchaseAccounts.selected" id="countryCode" ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';"
                            theme="selectize" on-select="bindPurchaseLedgerDetail($select.selected)">
 
-                    <ui-select-match placeholder="Choose an account">{{$select.selected.accountName}}</ui-select-match>
+                    <ui-select-match placeholder="Select Suppliers">
+                        <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                            {{ $select.selected.accountName || $select.search }}
+                        </span>
+                    </ui-select-match>
                     <ui-select-header>Top of the list!</ui-select-header>
-                    <ui-select-choices repeat="person in purchaseAccount  | filter: $select.search">
+                    <ui-select-choices repeat="person in purchaseAccount  | filter: $select.search | orderBy:'accountName'">
                         <div>
                             <span style="color:black" ng-model="supplier1" ng-bind-html="person.name | highlight: $select.search">{{person.type}}</span>
                             <span style="color:black">{{person.accountName}}</span>
@@ -286,11 +290,11 @@
             </h4>
             <div class="pull-right" style="margin-top:10px;">
                 @*Custom btn added by khushboo 04-03*@
-                <button ng-click="MannualEntrybtn()" class="btn  btn-sm"style="font-size:12px;"> Mannual Entry</button>
-                <button ng-click="currencyRate()" id ="curr"  class="btn  btn-sm" style="font-size:12px;"> Currency Rate</button>
+                <button permission="usertype:UO"ng-click="MannualEntrybtn()" class="btn  btn-sm"style="font-size:12px;"> Manual Entry</button>
+                @*<button ng-click="currencyRate()" id ="curr"  class="btn  btn-sm" style="font-size:12px;"> Currency Rate</button>*@
                 <button ng-click="Custombtn()" id ="custom"  class="btn  btn-sm">Custom</button>
                 @*<button  class="btn  btn-sm" ng-click="ExciseDutyModalbtn()"> Excise Duty</button>*@
-                <button ng-click="totalExpense()"  class="btn  btn-sm"> Expense Detail</button>
+                @*<button ng-click="totalExpense()"  class="btn  btn-sm"> Expense Detail</button>*@
 
 
                 @*end*@
@@ -323,121 +327,46 @@
                         <div class="modal-body" style="float:left; width:100%">
                             <div class="col-sm-4">
                                 <div class="form-group">
+                                    
+                                    <input type="text" ng-model="CONTNO"
+                                           class="form-control pull-left" style="width:100px; margin:5px 10px" />
                                     <label>CONT NO</label>
-                                    <ui-select ui-tree-select ng-model="godown.selected.name" id="countryCode" ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';"
-                                               
-                                               theme="selectize" Sstyle="text-overflow: ellipsis">
-
-                                        <ui-select-match>
-                                            <span class="selectuiTable">
-                                                <span>{{ $select.selected.name|| $select.search }}</span>
-                                                <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
-                                            </span>
-                                        </ui-select-match>
-
-                                        <ui-select-choices repeat="person.name as person in GODOWN  | filter: $select.search" refresh="refreshResults($select,'GODOWN')" refresh-delay="2">
-
-                                            <div>
-                                                <span ng-bind-html="person.name | highlight: $select.search"></span>
-                                            </div>
-                                        </ui-select-choices>
-                                    </ui-select>
                                 </div>
                             </div>
 
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label>INCOMING DATE</label>
-                                    <ui-select ui-tree-select ng-model="godown.selected.name" id="countryCode"
-                                               ui-select-focuser
-                                               theme="selectize" Sstyle="text-overflow: ellipsis">
-
-                                        <ui-select-match>
-                                            <span class="selectuiTable">
-                                                <span>{{ $select.selected.name|| $select.search }}</span>
-                                                <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
-                                            </span>
-                                        </ui-select-match>
-
-                                        <ui-select-choices repeat="person.name as person in GODOWN  | filter: $select.search" refresh="refreshResults($select,'GODOWN')" refresh-delay="2">
-
-                                            <div>
-                                                <span ng-bind-html="person.name | highlight: $select.search"></span>
-                                            </div>
-                                        </ui-select-choices>
-                                    </ui-select>
+                                    <input type="text" ng-model="INCOMINGDATE"
+                                           class="form-control pull-left" style="width:100px; margin:5px 10px" />
+                                   
                                 </div>
                             </div>
 
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label>LOT WEIGHT</label>
-                                    <ui-select ui-tree-select ng-model="godown.selected.name" id="countryCode"
-                                               ui-select-focuser
-                                               theme="selectize" Sstyle="text-overflow: ellipsis">
-
-                                        <ui-select-match>
-                                            <span class="selectuiTable">
-                                                <span>{{ $select.selected.name|| $select.search }}</span>
-                                                <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
-                                            </span>
-                                        </ui-select-match>
-
-                                        <ui-select-choices repeat="person.name as person in GODOWN  | filter: $select.search" refresh="refreshResults($select,'GODOWN')" refresh-delay="2">
-
-                                            <div>
-                                                <span ng-bind-html="person.name | highlight: $select.search"></span>
-                                            </div>
-                                        </ui-select-choices>
-                                    </ui-select>
+                                    <input type="text" ng-model="LotWeight"
+                                           class="form-control pull-left" style="width:100px; margin:5px 10px" />
+                                   
                                 </div>
                             </div>
 
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label>LOCATION</label>
-                                    <ui-select ui-tree-select ng-model="godown.selected.name" id="countryCode"
-                                               ui-select-focuser
-                                               theme="selectize" Sstyle="text-overflow: ellipsis">
-
-                                        <ui-select-match>
-                                            <span class="selectuiTable">
-                                                <span>{{ $select.selected.name|| $select.search }}</span>
-                                                <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
-                                            </span>
-                                        </ui-select-match>
-
-                                        <ui-select-choices repeat="person.name as person in GODOWN  | filter: $select.search" refresh="refreshResults($select,'GODOWN')" refresh-delay="2">
-
-                                            <div>
-                                                <span ng-bind-html="person.name | highlight: $select.search"></span>
-                                            </div>
-                                        </ui-select-choices>
-                                    </ui-select>
+                                    <input type="text" ng-model="LOCATION"
+                                           class="form-control pull-left" style="width:100px; margin:5px 10px" />
+                                   
                                 </div>
                             </div>
 
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label>SUB CATEGORY</label>
-                                    <ui-select ui-tree-select ng-model="godown.selected.name" id="countryCode"
-                                               ui-select-focuser
-                                               theme="selectize" Sstyle="text-overflow: ellipsis">
-
-                                        <ui-select-match>
-                                            <span class="selectuiTable">
-                                                <span>{{ $select.selected.name|| $select.search }}</span>
-                                                <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
-                                            </span>
-                                        </ui-select-match>
-
-                                        <ui-select-choices repeat="person.name as person in GODOWN  | filter: $select.search" refresh="refreshResults($select,'GODOWN')" refresh-delay="2">
-
-                                            <div>
-                                                <span ng-bind-html="person.name | highlight: $select.search"></span>
-                                            </div>
-                                        </ui-select-choices>
-                                    </ui-select>
+                                    <input type="text" ng-model="SUBCATEGORY"
+                                           class="form-control pull-left" style="width:100px; margin:5px 10px" />
+                                   
                                 </div>
                             </div>
 
@@ -445,24 +374,9 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label>COIL/SHEET NO</label>
-                                    <ui-select ui-tree-select ng-model="godown.selected.name" id="countryCode"
-                                               ui-select-focuser
-                                               theme="selectize" Sstyle="text-overflow: ellipsis">
-
-                                        <ui-select-match>
-                                            <span class="selectuiTable">
-                                                <span>{{ $select.selected.name|| $select.search }}</span>
-                                                <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
-                                            </span>
-                                        </ui-select-match>
-
-                                        <ui-select-choices repeat="person.name as person in GODOWN  | filter: $select.search" refresh="refreshResults($select,'GODOWN')" refresh-delay="2">
-
-                                            <div>
-                                                <span ng-bind-html="person.name | highlight: $select.search"></span>
-                                            </div>
-                                        </ui-select-choices>
-                                    </ui-select>
+                                    <input type="text" ng-model="COILSHEETNO"
+                                           class="form-control pull-left" style="width:100px; margin:5px 10px" />
+                                   
                                 </div>
                             </div>
 
@@ -470,394 +384,100 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label>GRADE</label>
-                                    <ui-select ui-tree-select ng-model="godown.selected.name" id="countryCode"
-                                               ui-select-focuser
-                                               theme="selectize" Sstyle="text-overflow: ellipsis">
-
-                                        <ui-select-match>
-                                            <span class="selectuiTable">
-                                                <span>{{ $select.selected.name|| $select.search }}</span>
-                                                <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
-                                            </span>
-                                        </ui-select-match>
-
-                                        <ui-select-choices repeat="person.name as person in GODOWN  | filter: $select.search" refresh="refreshResults($select,'GODOWN')" refresh-delay="2">
-
-                                            <div>
-                                                <span ng-bind-html="person.name | highlight: $select.search"></span>
-                                            </div>
-                                        </ui-select-choices>
-                                    </ui-select>
+                                    <input type="text" ng-model="GRADE"
+                                           class="form-control pull-left" style="width:100px; margin:5px 10px" />
+                                   
                                 </div>
                             </div>
 
                             <div class="col-sm-4">
                                 <div class="form-group">
+
                                     <label>FINISH</label>
-                                    <ui-select ui-tree-select ng-model="godown.selected.name" id="countryCode"
-                                               ui-select-focuser
-                                               theme="selectize" Sstyle="text-overflow: ellipsis">
+                                    <input type="text" ng-model="FINISH"
+                                           class="form-control pull-left" style="width:100px; margin:5px 10px" />
+                                   
+                                </div>
+                            </div>
 
-                                        <ui-select-match>
-                                            <span class="selectuiTable">
-                                                <span>{{ $select.selected.name|| $select.search }}</span>
-                                                <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
-                                            </span>
-                                        </ui-select-match>
+                            <div class="col-sm-4">
+                            
+                                <div class="form-group">
+                                    <label>GROSS WT</label>
+                                    <input type="text" ng-model="THICKNESS"
+                                           class="form-control pull-left" style="width:100px; margin:5px 10px" />
 
-                                        <ui-select-choices repeat="person.name as person in GODOWN  | filter: $select.search" refresh="refreshResults($select,'GODOWN')" refresh-delay="2">
-
-                                            <div>
-                                                <span ng-bind-html="person.name | highlight: $select.search"></span>
-                                            </div>
-                                        </ui-select-choices>
-                                    </ui-select>
                                 </div>
                             </div>
 
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <label>THICKNESS</label>
-                                    <ui-select ui-tree-select ng-model="godown.selected.name" id="countryCode"
-                                               ui-select-focuser
-                                               theme="selectize" Sstyle="text-overflow: ellipsis">
 
-                                        <ui-select-match>
-                                            <span class="selectuiTable">
-                                                <span>{{ $select.selected.name|| $select.search }}</span>
-                                                <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
-                                            </span>
-                                        </ui-select-match>
-
-                                        <ui-select-choices repeat="person.name as person in GODOWN  | filter: $select.search" refresh="refreshResults($select,'GODOWN')" refresh-delay="2">
-
-                                            <div>
-                                                <span ng-bind-html="person.name | highlight: $select.search"></span>
-                                            </div>
-                                        </ui-select-choices>
-                                    </ui-select>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-4">
-                                <div class="form-group">
                                     <label>WIDTH</label>
-                                    <ui-select ui-tree-select ng-model="godown.selected.name" id="countryCode"
-                                               ui-select-focuser
-                                               theme="selectize" Sstyle="text-overflow: ellipsis">
-
-                                        <ui-select-match>
-                                            <span class="selectuiTable">
-                                                <span>{{ $select.selected.name|| $select.search }}</span>
-                                                <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
-                                            </span>
-                                        </ui-select-match>
-
-                                        <ui-select-choices repeat="person.name as person in GODOWN  | filter: $select.search" refresh="refreshResults($select,'GODOWN')" refresh-delay="2">
-
-                                            <div>
-                                                <span ng-bind-html="person.name | highlight: $select.search"></span>
-                                            </div>
-                                        </ui-select-choices>
-                                    </ui-select>
+                                    <input type="text" ng-model="WIDTH"
+                                           class="form-control pull-left" style="width:100px; margin:5px 10px" />
+                                  
                                 </div>
                             </div>
 
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label>LENGTH</label>
-                                    <ui-select ui-tree-select ng-model="godown.selected.name" id="countryCode"
-                                               ui-select-focuser
-                                               theme="selectize" Sstyle="text-overflow: ellipsis">
-
-                                        <ui-select-match>
-                                            <span class="selectuiTable">
-                                                <span>{{ $select.selected.name|| $select.search }}</span>
-                                                <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
-                                            </span>
-                                        </ui-select-match>
-
-                                        <ui-select-choices repeat="person.name as person in GODOWN  | filter: $select.search" refresh="refreshResults($select,'GODOWN')" refresh-delay="2">
-
-                                            <div>
-                                                <span ng-bind-html="person.name | highlight: $select.search"></span>
-                                            </div>
-                                        </ui-select-choices>
-                                    </ui-select>
+                                    <input type="text" ng-model="LENGTH"
+                                           class="form-control pull-left" style="width:100px; margin:5px 10px" />
+                                   
                                 </div>
                             </div>
 
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label>NET WEIGHT</label>
-                                    <ui-select ui-tree-select ng-model="godown.selected.name" id="countryCode"
-                                               ui-select-focuser
-                                               theme="selectize" Sstyle="text-overflow: ellipsis">
-
-                                        <ui-select-match>
-                                            <span class="selectuiTable">
-                                                <span>{{ $select.selected.name|| $select.search }}</span>
-                                                <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
-                                            </span>
-                                        </ui-select-match>
-
-                                        <ui-select-choices repeat="person.name as person in GODOWN  | filter: $select.search" refresh="refreshResults($select,'GODOWN')" refresh-delay="2">
-
-                                            <div>
-                                                <span ng-bind-html="person.name | highlight: $select.search"></span>
-                                            </div>
-                                        </ui-select-choices>
-                                    </ui-select>
+                                    <input type="text" ng-model="NETWEIGHT"
+                                           class="form-control pull-left" style="width:100px; margin:5px 10px" />
+                                   
                                 </div>
                             </div>
 
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <label>GROSS WT</label>
-                                    <ui-select ui-tree-select ng-model="godown.selected.name" id="countryCode"
-                                               ui-select-focuser
-                                               theme="selectize" Sstyle="text-overflow: ellipsis">
+                                    <label>THICKNESS</label>
+                                    <input type="text" ng-model="GROSSWT"
+                                           class="form-control pull-left" style="width:100px; margin:5px 10px" />
 
-                                        <ui-select-match>
-                                            <span class="selectuiTable">
-                                                <span>{{ $select.selected.name|| $select.search }}</span>
-                                                <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
-                                            </span>
-                                        </ui-select-match>
-
-                                        <ui-select-choices repeat="person.name as person in GODOWN  | filter: $select.search" refresh="refreshResults($select,'GODOWN')" refresh-delay="2">
-
-                                            <div>
-                                                <span ng-bind-html="person.name | highlight: $select.search"></span>
-                                            </div>
-                                        </ui-select-choices>
-                                    </ui-select>
                                 </div>
                             </div>
 
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label>PCS/m</label>
-                                    <ui-select ui-tree-select ng-model="godown.selected.name" id="countryCode"
-                                               ui-select-focuser
-                                               theme="selectize" Sstyle="text-overflow: ellipsis">
-
-                                        <ui-select-match>
-                                            <span class="selectuiTable">
-                                                <span>{{ $select.selected.name|| $select.search }}</span>
-                                                <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
-                                            </span>
-                                        </ui-select-match>
-
-                                        <ui-select-choices repeat="person.name as person in GODOWN  | filter: $select.search" refresh="refreshResults($select,'GODOWN')" refresh-delay="2">
-
-                                            <div>
-                                                <span ng-bind-html="person.name | highlight: $select.search"></span>
-                                            </div>
-                                        </ui-select-choices>
-                                    </ui-select>
+                                    <input type="text" ng-model="PCSLENGTHINMTRS"
+                                           class="form-control pull-left" style="width:100px; margin:5px 10px" />
+                                    
                                 </div>
                             </div>
 
+                           
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <label>FOB UNIT PRICE USD</label>
-                                    <ui-select ui-tree-select ng-model="godown.selected.name" id="countryCode"
-                                               ui-select-focuser
-                                               theme="selectize" Sstyle="text-overflow: ellipsis">
 
-                                        <ui-select-match>
-                                            <span class="selectuiTable">
-                                                <span>{{ $select.selected.name|| $select.search }}</span>
-                                                <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
-                                            </span>
-                                        </ui-select-match>
-
-                                        <ui-select-choices repeat="person.name as person in GODOWN  | filter: $select.search" refresh="refreshResults($select,'GODOWN')" refresh-delay="2">
-
-                                            <div>
-                                                <span ng-bind-html="person.name | highlight: $select.search"></span>
-                                            </div>
-                                        </ui-select-choices>
-                                    </ui-select>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label>CIF UNIT PRICE</label>
-                                    <ui-select ui-tree-select ng-model="godown.selected.name" id="countryCode"
-                                               ui-select-focuser
-                                               theme="selectize" Sstyle="text-overflow: ellipsis">
-
-                                        <ui-select-match>
-                                            <span class="selectuiTable">
-                                                <span>{{ $select.selected.name|| $select.search }}</span>
-                                                <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
-                                            </span>
-                                        </ui-select-match>
-
-                                        <ui-select-choices repeat="person.name as person in GODOWN  | filter: $select.search" refresh="refreshResults($select,'GODOWN')" refresh-delay="2">
-
-                                            <div>
-                                                <span ng-bind-html="person.name | highlight: $select.search"></span>
-                                            </div>
-                                        </ui-select-choices>
-                                    </ui-select>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label>FREIGHT FORWARDING</label>
-                                    <ui-select ui-tree-select ng-model="godown.selected.name" id="countryCode"
-                                               ui-select-focuser
-                                               theme="selectize" Sstyle="text-overflow: ellipsis">
-
-                                        <ui-select-match>
-                                            <span class="selectuiTable">
-                                                <span>{{ $select.selected.name|| $select.search }}</span>
-                                                <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
-                                            </span>
-                                        </ui-select-match>
-
-                                        <ui-select-choices repeat="person.name as person in GODOWN  | filter: $select.search" refresh="refreshResults($select,'GODOWN')" refresh-delay="2">
-
-                                            <div>
-                                                <span ng-bind-html="person.name | highlight: $select.search"></span>
-                                            </div>
-                                        </ui-select-choices>
-                                    </ui-select>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label>CIF ACTUAL PRICE</label>
-                                    <ui-select ui-tree-select ng-model="godown.selected.name" id="countryCode"
-                                               ui-select-focuser
-                                               theme="selectize" Sstyle="text-overflow: ellipsis">
-
-                                        <ui-select-match>
-                                            <span class="selectuiTable">
-                                                <span>{{ $select.selected.name|| $select.search }}</span>
-                                                <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
-                                            </span>
-                                        </ui-select-match>
-
-                                        <ui-select-choices repeat="person.name as person in GODOWN  | filter: $select.search" refresh="refreshResults($select,'GODOWN')" refresh-delay="2">
-
-                                            <div>
-                                                <span ng-bind-html="person.name | highlight: $select.search"></span>
-                                            </div>
-                                        </ui-select-choices>
-                                    </ui-select>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-4">
-                                <div class="form-group">
                                     <label>TOTAL PRICE</label>
-                                    <ui-select ui-tree-select ng-model="godown.selected.name" id="countryCode"
-                                               ui-select-focuser
-                                               theme="selectize" Sstyle="text-overflow: ellipsis">
-
-                                        <ui-select-match>
-                                            <span class="selectuiTable">
-                                                <span>{{ $select.selected.name|| $select.search }}</span>
-                                                <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
-                                            </span>
-                                        </ui-select-match>
-
-                                        <ui-select-choices repeat="person.name as person in GODOWN  | filter: $select.search" refresh="refreshResults($select,'GODOWN')" refresh-delay="2">
-
-                                            <div>
-                                                <span ng-bind-html="person.name | highlight: $select.search"></span>
-                                            </div>
-                                        </ui-select-choices>
-                                    </ui-select>
+                                    <input type="text" ng-model="TOTALAMOUNTMANUAL"
+                                           class="form-control pull-left" style="width:100px; margin:5px 10px" />
+                                    
                                 </div>
                             </div>
 
 
 
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label>TOTAL AMT($)</label>
-                                    <ui-select ui-tree-select ng-model="godown.selected.name" id="countryCode"
-                                               ui-select-focuser
-                                               theme="selectize" Sstyle="text-overflow: ellipsis">
+                            
 
-                                        <ui-select-match>
-                                            <span class="selectuiTable">
-                                                <span>{{ $select.selected.name|| $select.search }}</span>
-                                                <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
-                                            </span>
-                                        </ui-select-match>
+                           
 
-                                        <ui-select-choices repeat="person.name as person in GODOWN  | filter: $select.search" refresh="refreshResults($select,'GODOWN')" refresh-delay="2">
-
-                                            <div>
-                                                <span ng-bind-html="person.name | highlight: $select.search"></span>
-                                                <span class="pull-right" style="margin:6px 5px 0px 5px"> <i class="fa fa-trash-o"  style="color:red" aria-hidden="true"></i></span>
-                                            </div>
-                                        </ui-select-choices>
-                                    </ui-select>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label>TOTAL AMT(INR)</label>
-                                    <ui-select ui-tree-select ng-model="godown.selected.name" id="countryCode"
-                                               ui-select-focuser
-                                               theme="selectize" style="text-overflow: ellipsis">
-
-                                        <ui-select-match>
-                                            <span class="selectuiTable">
-                                                <span>{{ $select.selected.name|| $select.search }}</span>
-                                                <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
-                                            </span>
-                                        </ui-select-match>
-
-                                        <ui-select-choices repeat="person.name as person in GODOWN  | filter: $select.search" refresh="refreshResults($select,'GODOWN')" refresh-delay="2">
-
-                                            <div>
-                                                <span ng-bind-html="person.name | highlight: $select.search"></span>
-                                            </div>
-                                        </ui-select-choices>
-                                    </ui-select>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label>REMARK</label>
-                                    <ui-select ui-tree-select ng-model="godown.selected.name" id="countryCode"
-                                               ui-select-focuser
-                                               theme="selectize" Sstyle="text-overflow: ellipsis">
-
-                                        <ui-select-match>
-                                            <span class="selectuiTable">
-                                                <span>{{ $select.selected.name|| $select.search }}</span>
-                                                <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
-                                            </span>
-                                        </ui-select-match>
-
-                                        <ui-select-choices repeat="person.name as person in GODOWN  | filter: $select.search" refresh="refreshResults($select,'GODOWN')" refresh-delay="2">
-
-                                            <div>
-                                                <span ng-bind-html="person.name | highlight: $select.search"></span>
-                                            </div>
-                                        </ui-select-choices>
-                                    </ui-select>
-                                </div>
-                            </div>
-
+                            
 
                         </div>
                         <div class="modal-footer" style="float:left; width:100%">
-                            <button type="button" class="btn btn-primary">Add</button>
+                            <button type="button" class="btn btn-primary" ng-click="manualEntry()">Add</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                         </div>
                     </div>
@@ -953,51 +573,110 @@
                 <div class="modal-dialog" style="margin-top:100px">
 
                     <!-- Modal content-->
-                    <div class="modal-content">
-                        <div class="modal-header ">
+                    <div class="modal-content content">
+                        <div class="modal-header content">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                             <h4 class="modal-title">Excise Duty</h4>
                         </div>
-                        <div class="modal-body">
-                            <table class="ExciseTable">
-                                <thead>
+                        <div class="modal-body content" style="padding-bottom:30px;">
+                            <div class="col-sm-7 padding" style="border-right:1px solid #e3e3e3">
+                                <table class="ExciseTable">
+                                    <thead>
+                                        <tr>
+                                            <th>&nbsp;</th>
+                                            <th style="text-align:center">(%)</th>
+                                            <th style="text-align:center">Amount</th>
+                                            <th style="text-align:center">Per Unit </th>
+                                           
+                                        </tr>
+                                    </thead>
                                     <tr>
-                                        <th>&nbsp;</th>
-                                        <th style="text-align:center">(%)</th>
-                                        <th style="text-align:center">Amount</th>
-                                        <th style="text-align:center">Per Unit </th>
+
+                                        <td width="150"><label style="margin-top:-10px; float: left;">Excise Rate</label></td>
+
+                                        <td><input type="text" tab-index=3 ng-model="exciseRate" ng-blur="exciseCalculate()" class="form-control text-right" style="margin-bottom:15px" /></td>
+
+                                        <td><input type="text" tab-index=3 ng-model="exciseDutyAmount" class="form-control text-right" style="margin-bottom:15px" /></td>
+                                        <td><input type="text" tab-index=3 ng-model="exciseDutyPerUnit" class="form-control text-right" style="margin-bottom:15px" /></td>
+                                       
                                     </tr>
-                                </thead>
-                                <tr>
+                                    @*<tr>
+                    <td><label style="margin-top: -10px;float: left;">Duty Per Unit</label></td>
+                    <td><input type="text" tab-index = 4 ng-model="exciseDutyPerUnit" class="form-control" style="margin-bottom:15px" /></td>
 
-                                    <td width="150"><label style="margin-top:-10px; float: left;">Excise Rate</label></td>
+                </tr>*@
+                                    <tr>
+                                        <td><label style="margin-top: -10px;float: left;">SAD (4%) Per Unit</label></td>
+                                        <td><input type="text" tab-index=5 ng-model="sadRate" ng-blur="sadCalculate()" class="form-control text-right" style="margin-bottom:15px" /></td>
+                                        <td><input type="text" tab-index=3 ng-model="sadAmount" class="form-control text-right" style="margin-bottom:15px" /></td>
 
-                                    <td><input type="text"  tab-index = 3 ng-model="exciseRate"ng-blur="exciseCalculate()" class="form-control text-right" style="margin-bottom:15px" /></td>
+                                        <td><input type="text" tab-index=3 ng-model="sadPerUnit" class="form-control text-right" style="margin-bottom:15px" /></td>
+                                       
+                                    </tr>
+                                    <tr>
+                                        <td><label tab-index=6 style="margin-top: -10px;float:  left;">Assessable Value</label></td>
+                                        <td><input tab-index=7 type="text" ng-model="exciseAssessableValue" class="form-control text-right" style="margin-bottom:15px" /></td>
 
-                                    <td><input type="text" tab-index=3 ng-model="exciseDutyAmount" class="form-control text-right" style="margin-bottom:15px" /></td>
-                                    <td><input type="text" tab-index=3 ng-model="exciseDutyPerUnit" class="form-control text-right" style="margin-bottom:15px" /></td>
+                                    </tr>
+                                </table>
+                            </div>
 
-                                </tr>
-                                @*<tr>
-                                    <td><label style="margin-top: -10px;float: left;">Duty Per Unit</label></td>
-                                    <td><input type="text" tab-index = 4 ng-model="exciseDutyPerUnit" class="form-control" style="margin-bottom:15px" /></td>
+                            @*<div class="col-sm-5">
+                                <label class="col-sm-12 padding" style="margin-top:5px">Excise Account</label>
+                                <div class="col-sm-1 padding">
+                                    <input type="checkbox" ng-model="exciseChecked"style="width:25px; height:25px;  margin-top:5px" />
+                                </div>
+                                <div class="col-sm-11">
+                                    <ui-select ui-tree-select ng-model="excise.selected" id="countryCode"
+                                               ui-select-focuser
+                                               theme="selectize">
 
-                                </tr>*@
-                                <tr>
-                                    <td><label style="margin-top: -10px;float: left;">SAD (4%) Per Unit</label></td>
-                                    <td><input type="text" tab-index = 5 ng-model="sadRate" ng-blur="sadCalculate()" class="form-control text-right" style="margin-bottom:15px" /></td>
-                                    <td><input type="text" tab-index=3 ng-model="sadAmount" class="form-control text-right" style="margin-bottom:15px" /></td>
-                                   
-                                    <td><input type="text" tab-index=3 ng-model="sadPerUnit" class="form-control text-right" style="margin-bottom:15px" /></td>
+                                        <ui-select-match placeholder="ACCOUNT">
+                                            <span class="selectuiTable" style="width:100%">
+                                                <span>{{ $select.selected.accountName || $select.search }}</span>
+                                                <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
+                                            </span>
 
-                                </tr>
-                                <tr>
-                                    <td><label tab-index = 6 style="margin-top: -10px;float:  left;">Assessable Value</label></td>
-                                    <td><input tab-index = 7 type="text" ng-model="exciseAssessableValue" class="form-control text-right" style="margin-bottom:15px" /></td>
+                                        </ui-select-match>
 
-                                </tr>
-                            </table>
-                        </div>
+                                        <ui-select-choices repeat="person in account  | filter: $select.search" refresh="refreshAccountTable($select)" refresh-delay="2">
+
+                                            <div>
+                                                <span ng-bind-html="person.accountName | highlight: $select.search"></span>
+                                                <span ng-show="person.accountName" class="pull-right"> <i class="fa fa-pencil-square-o" ng-click="Accountbtn(person.id)" style="color:seagreen" aria-hidden="true"></i></span>
+                                            </div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+
+                                <label class="col-sm-12 padding">SAD Account</label>
+                                <div class="col-sm-1 padding">
+                                    <input type="checkbox" ng-model="sadChecked" style="width:25px; height:25px;  margin-top:4px" />
+                                </div>
+                                <div class="col-sm-11">
+                                    <ui-select ui-tree-select ng-model="sad.selected" id="countryCode"
+                                               ui-select-focuser
+                                               theme="selectize">
+
+                                        <ui-select-match placeholder="ACCOUNT">
+                                            <span class="selectuiTable" style="width:100%">
+                                                <span>{{ $select.selected.accountName || $select.search }}</span>
+                                                <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
+                                            </span>
+
+                                        </ui-select-match>
+
+                                        <ui-select-choices repeat="person in account  | filter: $select.search" refresh="refreshAccountTable($select)" refresh-delay="2">
+
+                                            <div>
+                                                <span ng-bind-html="person.accountName | highlight: $select.search"></span>
+                                                <span ng-show="person.accountName" class="pull-right"> <i class="fa fa-pencil-square-o" ng-click="Accountbtn(person.id)" style="color:seagreen" aria-hidden="true"></i></span>
+                                            </div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                </div>*@
+                            </div>
                         
                     </div>
 
@@ -1055,6 +734,7 @@
                             <tfoot style="font-size: 11px;font-weight: bold; color: #000; background: #e3eaf3; text-transform:uppercase">
                                 <tr>
                                     <th>Total</th>
+
                                     <th style="text-align:right">{{NETWEIGHT1}}</th>
                                     <th style="text-align:right">&nbsp;</th>
                                     <th style="text-align:right">&nbsp;</th>
@@ -1063,7 +743,7 @@
                                     <th style="text-align:right">{{SAD12}}</th>
                                     <th style="text-align:right">{{totalDutyAmt13}}</th>
                                     <th style="text-align:right;">&nbsp;</th>
-                                   
+                              
                                 </tr>
                             </tfoot>
                         </table>
@@ -1410,7 +1090,7 @@
 
         <div class="collapse in scroll-wrapper" id="ItemDetail2" ng-init="role = admin">
             <div style="overflow-x:auto; float:left; width:100%; height:450px">
-                <table class="table table-bordered wordbreak" fixed-header style="border-collapse: collapse; font-size:12px; margin-top:10px; margin-bottom:0px; margin-left:10px; height:285px">
+                <table class="table table-bordered wordbreak table-hover" fixed-header style="border-collapse: collapse; font-size:12px; margin-top:10px; margin-bottom:0px; margin-left:10px; height:285px">
                     <thead>
 
                         <tr>
@@ -1443,7 +1123,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="item in billtable1 | filter:search">
+                        <tr ng-repeat="item in billtable1 | filter:search"class="cursor" ng-click="editItemDetail(item,$index)"  ng-class="{selected: $index === manualIndex}">
                             <td style="word-wrap:break-word !important; word-break:break-all !important"> {{item.CONTNO}} </td>
                             <td style="word-break:break-all !important"> {{item.INCOMINGDATE}} </td>
                             <td style="word-break:break-all !important"> {{item.LotWeight}} </td>
@@ -1591,6 +1271,8 @@
                         <th style="text-align:center"><button class="btn  btn-sm"style="margin-top:18px" ng-click="ExciseDutyModalbtn()"> Excise Duty</button></thstyle="text-align:center">
                         <th style="text-align:center"><button ng-click="addBillLineItem()" class="btn  btn-sm" style="margin-top:18px" >Add</button></th>
                         <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
                     </tr>
                     <tr >
                         <th>GODOWN</th>
@@ -1601,7 +1283,9 @@
                         <th   style="text-align:right" width="100">AMOUNT($)</th>
                       
                         <th  style="text-align:right" width="100">AMOUNT(&#8377;)</th>  
-                        <th> Excise </th>                   
+                        <th > Excise </th>
+                        <th> SAD </th> 
+                        <th style="text-align:right" width="100"> Total </th>                  
                         <th >&nbsp;</th>
                     </tr>
 
@@ -1616,9 +1300,10 @@
                         <td  style="text-align:right">{{item.BASERATE |number : 3}}</td>                       
                         <td  class="Count" style="text-align:right">{{item.TOTALAMOUNT |number : 2}}</td> 
                                                                   
-                        <td class="Count" style="text-align:center">{{item.AMOUNTINR |number : 2}}</td>                     
-                      
-                        <td class="Count" style="text-align:center"><li style="margin-top:1Px"  excise-Info excisedata="item">Excise</li></td>                
+                        <td class="Count" style="text-align:center">{{item.AMOUNTINR |number : 2}}</td>         
+                        <td style="text-align:right">{{item.dutyAmount |number : 2}}</td>     
+                        <td style="text-align:right">{{item.SAD |number : 2}}</td>     
+                        <td class="Count" style="text-align:center"><li style="margin-top:1Px"  excise-Info excisedata="item"></li></td>                
                           <td class="text-center Count" ><a class="edit" title="Edit"> <i class="fa fa-times-circle cursor RemoveTR" style="font-size:11px" ng-click="remove($index)"></i></a></td>     
                         
                     </tr>
@@ -1633,14 +1318,15 @@
 
                 <tfoot>
                     <tr style="background:#F0EEEE">
-                        <th colspan="2">Total</th>
-
+                        <th>Total</th>
+                        <th style="text-align:center;">&nbsp;</th>
                         <th style="text-align:center;">&nbsp;</th>
                         <th style="text-align:right;">{{netweight |number : 2}}&nbsp;</th>
                         <th style="text-align:left;">&nbsp;</th>
                         <th style="text-align:right;color:forestgreen">{{manualTotal |number : 2}}&nbsp;</th>
                         <th style="text-align:right;color:forestgreen">{{manualTotalINR |number : 2}}&nbsp;</th>
-
+                        <th style="text-align:right;color:forestgreen">{{totalExcise |number : 2}}&nbsp;</th>
+                        <th style="text-align:right;color:forestgreen">{{totalSad |number : 2}}&nbsp;</th>
                         <th style="text-align:center;">&nbsp;</th>
                         <th style="text-align:center;">&nbsp;</th>
                     </tr>
@@ -1748,11 +1434,74 @@
 
 
 
-        <div class="col-sm-5 pull-right">
+        <div class="col-sm-5 pull-right padding" style="margin-top:10px">
             @*<h4 data-toggle="collapse" data-target="#ItemDetail1234" class="cursor pull-left" style="margin-top: 15px; margin-bottom: 0px;">
                 <i class="fa fa-caret-right"></i> Account details
             </h4>
             <hr style="float:left; width:100%; margin:5px 0px" />*@
+            <div class="col-sm-12 padding">
+                <label class="col-sm-12 padding" style="margin-top:5px">Excise Account</label>
+                <div class="col-sm-1 padding">
+                    <input type="checkbox" ng-click ="exciseLedgerentry()" ng-model="exciseChecked" style="width:25px; height:25px;  margin-top:5px" />
+                </div>
+                <div class="col-sm-6 padding">
+                    <ui-select ui-tree-select ng-model="excise.selected" id="countryCode"
+                               ui-select-focuser
+                               theme="selectize">
+
+                        <ui-select-match placeholder="ACCOUNT">
+                            <span class="selectuiTable" style="width:100%">
+                                <span>{{ $select.selected.accountName || $select.search }}</span>
+                                <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
+                            </span>
+
+                        </ui-select-match>
+
+                        <ui-select-choices repeat="person in account  | filter: $select.search" refresh="refreshAccountTable($select)" refresh-delay="2">
+
+                            <div>
+                                <span ng-bind-html="person.accountName | highlight: $select.search"></span>
+                                <span ng-show="person.accountName" class="pull-right"> <i class="fa fa-pencil-square-o" ng-click="Accountbtn(person.id)" style="color:seagreen" aria-hidden="true"></i></span>
+                            </div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div class="col-sm-5">
+                    <input type="text" class="form-control"  ng-model="totalExcise" placeholder="Amount" />
+                </div>
+
+                <label class="col-sm-12 padding">SAD Account</label>
+                <div class="col-sm-1 padding">
+                    <input type="checkbox" ng-click ="sadLedgerentry()" ng-model="sadChecked" style="width:25px; height:25px;  margin-top:4px" />
+                </div>
+                <div class="col-sm-6 padding">
+                    <ui-select ui-tree-select ng-model="sad.selected" id="countryCode"
+                               ui-select-focuser
+                               theme="selectize">
+
+                        <ui-select-match placeholder="ACCOUNT">
+                            <span class="selectuiTable" style="width:100%">
+                                <span>{{ $select.selected.accountName || $select.search }}</span>
+                                <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
+                            </span>
+
+                        </ui-select-match>
+
+                        <ui-select-choices repeat="person in account  | filter: $select.search" refresh="refreshAccountTable($select)" refresh-delay="2">
+
+                            <div>
+                                <span ng-bind-html="person.accountName | highlight: $select.search"></span>
+                                <span ng-show="person.accountName" class="pull-right"> <i class="fa fa-pencil-square-o" ng-click="Accountbtn(person.id)" style="color:seagreen" aria-hidden="true"></i></span>
+                            </div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div class="col-sm-5">
+                    <input type="text" class="form-control" ng-model="totalSad"placeholder="Amount" />
+                </div>
+            </div>
+
+
 
             <div class="collapse in" id="ItemDetail1234" style="float:left; margin-top:26px; width:100%">
 
@@ -1773,7 +1522,7 @@
 
                                     </ui-select-match>
 
-                                    <ui-select-choices repeat="person in expenseAccount  | filter: $select.search" @*refresh="refreshAccountTable($select)" refresh-delay="2"*@>
+                                    <ui-select-choices repeat="person in expenseAccount  | filter: $select.search | orderBy:'accountName'" @*refresh="refreshAccountTable($select)" refresh-delay="2"*@>
 
                                         <div>
                                             <span ng-bind-html="person.accountName | highlight: $select.search"></span>

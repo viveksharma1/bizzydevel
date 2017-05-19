@@ -2,7 +2,7 @@
     <div class="modal-dialog">
         <div class="modal-content content">
             <div class="modal-header popupheader content" style="padding:10px 20px">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" ng-click="close()" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <div class="btn-group btn-toggle" style="top: 0px !important;margin-right: 5px;">
@@ -87,7 +87,7 @@
                                 <input ng-model="openingBalance" ng-disabled="isDisabled" type="number" step="0.01" class="form-control" />
                                 
                             </span>
-                            <label> Visible  <input type="checkbox" ng-model="OBalance" class="checkboxcss" /></label>
+                            <!--<label> Visible  <input type="checkbox" ng-model="OBalance" class="checkboxcss" /></label>-->
 
                         </div>
                     </div>
@@ -134,11 +134,45 @@
                                 <div class="form-group col-sm-12 padding5">
                                     <textarea class="form-control" ng-model="street" placeholder="Street"></textarea>
                                 </div>
-                                <div class="form-group col-sm-6 padding5">
-                                    <input type="text" class="form-control" ng-model="city" placeholder="City/Town" />
+                                <div class="col-sm-6 form-group padding5">
+
+                                    <div>
+
+                                        <ui-select ng-model="state.selected" ui-select-focuser id="countryCode" theme="selectize" on-select="getcity($select.selected.ID)">
+
+                                            <ui-select-match placeholder="State" ng-click="clear($event, $select)"><b style="font-size:12px">{{$select.selected.Name}}</b></ui-select-match>
+                                            <ui-select-choices repeat="state in stateData  | filter: $select.search">
+                                                <div>
+                                                    <span style="color:black" ng-bind-html="state.Name | highlight: $select.search"></span>
+
+
+                                                </div>
+
+
+                                            </ui-select-choices>
+                                        </ui-select>
+
+                                    </div>
                                 </div>
-                                <div class="form-group col-sm-6 padding5">
-                                    <input type="text" class="form-control" ng-model="state" placeholder="State" />
+                                <div class="col-sm-6 form-group padding5">
+                                  
+                                    <div>
+
+                                        <ui-select ng-model="city.selected" ui-select-focuser id="countryCode" theme="selectize">
+
+                                            <ui-select-match placeholder="City" ng-click="clear($event, $select)"><b style="font-size:12px">{{$select.selected.city}}</b></ui-select-match>
+                                            <ui-select-choices repeat="city in cityData  | filter: $select.search">
+                                                <div>
+                                                    <span style="color:forestgreen"  ng-bind-html="city.city | highlight: $select.search "></span>
+                                                   
+
+                                                </div>
+
+
+                                            </ui-select-choices>
+                                        </ui-select>
+
+                                    </div>
                                 </div>
                                 <div class="form-group col-sm-6 padding5">
                                     <input type="text" class="form-control" ng-model="postalCode" placeholder="Postal Code" />
@@ -149,7 +183,7 @@
                             </div>
 
                             <div class="col-sm-6 padding">
-                                <h4 class="tabheading">Shipping Address <small class="pull-right" style="line-height:13px"><input type="checkbox" class="pull-left" style="margin:0px" /> Same as billing address</small></h4>
+                                <h4 class="tabheading">Shipping Address <small class="pull-right" style="line-height:13px"><input type="checkbox" ng-click="same()" ng-model="sameAs"class="pull-left" style="margin:0px" /> Same as billing address</small></h4>
                                 <div class="form-group col-sm-12 padding5">
                                     <textarea class="form-control" ng-model="street1" placeholder="Street"></textarea>
                                 </div>

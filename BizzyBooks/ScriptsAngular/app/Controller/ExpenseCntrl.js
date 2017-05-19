@@ -163,7 +163,7 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
                         $scope.paymentDays = expenseData.paymentDays
                         $scope.attachements = expenseData.attachements;
                         $scope.narration = response.data.narration
-                        $stateParams.no = response.data.refNo
+                        $scope.refNo = response.data.refNo
                         if (response.data.paymentLog) {
                             $scope.receiptCount = response.data.paymentLog.length;
                             $scope.receipts = response.data.paymentLog;
@@ -182,7 +182,8 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
 
     if ($stateParams.expenceId) {   
         $scope.supplier = { selected: { company: $stateParams.suppliers } };
-        $scope.getExpenseData($stateParams.expenceId)      
+        $scope.getExpenseData($stateParams.expenceId)
+        $scope.refNo = $stateParams.no
     }
 
     $scope.getSupplierDetail = function (id) {
@@ -190,8 +191,9 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
         $http.get(config.api + "accounts/" + id).then(function (response) {
             $scope.supliersDetail = response.data;
             console.log(response.data)
-            $scope.shippingAddress = $scope.supliersDetail.billingAddress[0].street;
             $scope.email = $scope.supliersDetail.email;
+            $scope.mobile = $scope.supliersDetail.mobile
+            $scope.shippingAddress = $scope.supliersDetail.billingAddress[0].street;
         });
     }
     function calculateOpenningBalnce(data, balanceType) {
@@ -215,8 +217,10 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
             }
         })
         $scope.email = data.email
-        $scope.shippingAddress = data.billingAddress[0].street
-        console.log(data)
+        $scope.mobile = data.mobile
+        $scope.shippingAddress = data.billingAddress[0].
+            
+            console.log(data)
     }
     $scope.accountTableSum = function () {
         var total = 0;
@@ -228,6 +232,18 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
         $scope.totaltax = Number($scope.totaltax1)
         return $scope.totaltax;
     }
+    $scope.Accountbtn = function (id, type) {
+        $('#formaccount').modal('show');
+        if (id != undefined) {
+            $http.get(config.api + "accounts/" + id).then(function (response) {
+                $scope.myValue = response.data;
+                $scope.isAccount = false
+            });
+        }
+        else {
+            $scope.myValue = null;
+        }
+    };
     $scope.itemTableSum = function () {
         var total = 0;
         for (var i = 0; i < $scope.itemTable.length; i++) {
@@ -318,7 +334,7 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
 
         // save Expense new 
          $scope.saving = false;
-         $scope.saveExpenceNew = function () {
+         $scope.saveExpenceNew = function (refNo) {
              var expenseDate = getDate($scope.expenseDate);
              var expenseDueDate = getDate($scope.expenseDueDate);
              if ($scope.supplier.selected == undefined || $scope.supplier.selected == null) {
@@ -361,7 +377,7 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
                  amount: $scope.netAmount,
                  compCode: localStorage.CompanyId,
                  role: localStorage['usertype'],
-                 refNo: $stateParams.no,
+                 refNo: $scope.refNo,
                  no: $scope.expenseId,
                  vochNo: $scope.expenseId,
                  balance: $scope.netamount,
@@ -371,7 +387,7 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
                      email:$scope.email,
                      no: $scope.expenseId,
                      expenseId: $scope.expenseId,
-                     refNo: $stateParams.no,
+                     refNo: $scope.refNo,
                      ordertype: "EXPENSE",
                      supliersId: $scope.supplier.selected.id,
                      id: $scope.id,
@@ -396,7 +412,12 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
                  if (response.status == 200) {
                      $rootScope.$broadcast('event:success', { message: "Expense Created" });
                      $stateParams.expenceId = response.data
-                     $state.go('Customer.Expense', { expenceId: response.data, no: $stateParams.no }, { location: 'replace' });
+                     if (refNo) {
+                         $state.go('Customer.Expense', { expenceId: null, no: refNo }, { location: 'replace' });
+                     } else {
+                         $state.go('Customer.Expense', { expenceId: response.data, no: $stateParams.no }, { location: 'replace' });
+                     }
+                    
                      
                  } else {
                      $rootScope.$broadcast('event:error', { message: "Error while creating Expense" });

@@ -48,7 +48,7 @@
                         </span>
                     </ui-select-match>
 
-                    <ui-select-choices repeat="person in supliers  | filter: $select.search">
+                    <ui-select-choices repeat="person in supliers  | filter: $select.search | orderBy:'accountName'">
                         <div>
                             <span ng-bind-html="person.accountName | highlight: $select.search"></span>
                         </div>
@@ -246,7 +246,7 @@
                                             </span>
                                         </ui-select-match>
 
-                                        <ui-select-choices repeat="person in account  | filter: $select.search" refresh="refreshAccountTable($select)" refresh-delay="2">
+                                        <ui-select-choices repeat="person in account  | filter: $select.search | orderBy:'accountName'" refresh="refreshAccountTable($select)" refresh-delay="2">
 
                                             <div>
                                                 <span ng-bind-html="person.accountName | highlight: $select.search"></span>
@@ -325,7 +325,7 @@
 
                                             </ui-select-match>
 
-                                            <ui-select-choices repeat="person in account  | filter: $select.search" ng-class="{active: $select.isActive(this), disabled: $select.isDisabled(this)}">
+                                            <ui-select-choices repeat="person in account  | filter: $select.search | orderBy:'accountName'" ng-class="{active: $select.isActive(this), disabled: $select.isDisabled(this)}">
 
                                                 <div>
                                                     <span ng-bind-html="person.accountName | highlight: $select.search"></span>
@@ -512,6 +512,7 @@
 
 
             <div class="pull-right">
+                <button type="button" ng-hide="saving" class="btn btn-sm btn-primary " ng-click="saveExpenceNew(refNo)"> Save And New</button>
                 <button type="button" ng-hide="saving" class="btn btn-sm btn-primary " ng-click="saveExpenceNew()"> Save</button>
                 <button class="btn btn-sm btn-success" ng-show="saving" id="loaderbtn" ><i class="fa fa-spin fa-spinner"></i> </button>
                

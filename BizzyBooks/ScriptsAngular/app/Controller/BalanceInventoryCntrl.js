@@ -437,7 +437,7 @@
                     for (key in XL_row_object) {
                         var retObj = {};
                         for (var obj in XL_row_object[key]) {
-
+                      
                             var obj3 = obj.replace(" ", "");
                             var obj2 = obj3.replace(" ", "");
                             var obj4 = obj2.replace(" ", "");
@@ -445,11 +445,9 @@
 
                            
                             var INOUT = "IN/OUT"
-
                             var date = "date"
                             var exchangeRate = "exchangeRate"
                             if (obj1 == "NETWEIGHT") {
-
                                 $scope.netweight = Number(XL_row_object[key][obj]);
                             }
                             if (obj1 == "TOTALPRICE") {

@@ -194,14 +194,23 @@
     $scope.manualTableSum = function () {
         var manualTotal = 0;
         var netweight = 0;
-        var totalAmountINR = 0;
+        var totalAmountINR = 0
+        var AMOUNTPERITEM = 0;
+        var totalSad = 0;
+        var totalExcise = 0;
         for (var i = 0; i < $scope.billtable.length; i++) {
             manualTotal += Number($scope.billtable[i].TOTALAMOUNT);
             netweight += Number($scope.billtable[i].NETWEIGHT);
             totalAmountINR += Number($scope.billtable[i].AMOUNTINR.toFixed(2));
+           // AMOUNTPERITEM += Number($scope.billtable[i].AMOUNTPERITEM.toFixed(2));
+            totalSad += Number(Number($scope.billtable[i].SAD).toFixed(2));
+            totalExcise += Number(Number($scope.billtable[i].dutyAmount).toFixed(2));
         }
         $scope.totalAmountINR = Number(totalAmountINR.toFixed(2));
+        $scope.totalSad = Number(totalSad.toFixed(2));
+        $scope.totalExcise = Number(totalExcise.toFixed(2));
         $scope.manualTotalINR = Number(totalAmountINR)
+        $scope.manualTotalperItem = Number(AMOUNTPERITEM)
         $scope.manualTotal = Number(manualTotal.toFixed(2));
         $scope.netweight = Number(netweight);
         return $scope.totalAmountINR
@@ -402,8 +411,10 @@
             $scope.supliersDetail = response.data;
             console.log(response.data)
 
-            $scope.shippingAddress = $scope.supliersDetail.billingAddress[0].street;
+           
             $scope.email = $scope.supliersDetail.email;
+            $scope.mobile = $scope.supliersDetail.mobile
+            $scope.shippingAddress = $scope.supliersDetail.billingAddress[0].street;
         });
     }
 
@@ -621,6 +632,7 @@
                     $scope.billtable[i].actualDate = $scope.actualDate;
                 }
             }
+            
             var data = {
                 type: type,
                 state: "OPEN",
@@ -694,8 +706,36 @@
         };
     
 
-    // exel line item upload
-    
+    //manual line item entry 
+        $scope.manualIndex = null;
+        $scope.manualEntry = function () {
+            var data = {
+            CONTNO:              $scope.CONTNO,
+            INCOMINGDATE   :     $scope.INCOMINGDATE,
+            LotWeight      :     $scope. LotWeight,
+            LOCATION       :     $scope.LOCATION,
+            SUBCATEGORY    :     $scope.SUBCATEGORY,
+            COILSHEETNO    :     $scope.COILSHEETNO,
+            GRADE          :     $scope.GRADE,
+            FINISH         :     $scope.FINISH,
+            THICKNESS     :      $scope.THICKNESS,
+            WIDTH        :       $scope.WIDTH,
+            LENGTH       :       $scope.LENGTH,
+            NETWEIGHT    :       $scope.NETWEIGHT,
+            GROSSWT       :      $scope.GROSSWT,
+            PCSLENGTHINMTRS:     $scope.PCSLENGTHINMTRS,
+            TOTALAMOUNTINR:      Number($scope.TOTALAMOUNTMANUAL)
+            
+            }
+            if ($scope.manualIndex != null) {
+                $scope.billtable1[$scope.manualIndex] = data;
+            } else {
+                $scope.billtable1.push(data);
+            }
+            $scope.manualIndex = null;
+            
+        }
+    // excel line item upload
     $scope.uploadFile = function () {
         $scope.billtable1 = [];
         $scope.inventoryLedger = [];
@@ -1035,6 +1075,25 @@
         $scope.sadRate = data.sadRate,
         $scope.sadPerUnit = Number((data.SAD / data.NETWEIGHT).toFixed(2))
     }
+
+    $scope.editItemDetail = function (data, index) {
+        $scope.CONTNO =      data.CONTNO 
+        $scope.INCOMINGDATE = data.INCOMINGDATE
+        $scope.LotWeight = data.LotWeight
+        $scope.LOCATION = data.LOCATION
+        $scope.SUBCATEGORY = data.SUBCATEGORY
+        $scope.COILSHEETNO = data.COILSHEETNO
+        $scope.GRADE = data.GRADE
+        $scope.FINISH = data.FINISH
+        $scope.THICKNESS = data.THICKNESS
+        $scope.WIDTH = data.WIDTH
+        $scope.LENGTH = data.LENGTH
+        $scope.NETWEIGHT = data.NETWEIGHT
+        $scope.GROSSWT = data.GROSSWT
+        $scope.PCSLENGTHINMTRS = data.PCSLENGTHINMTRS
+        $scope.TOTALAMOUNTMANUAL = data.TOTALAMOUNTMANUAL
+
+    }
     $scope.exciseCalculate = function () {
         $scope.exciseDutyAmount = Number(((($scope.lineItemnetweight * $scope.lineItemBaseRate) * $scope.exciseRate) / 100).toFixed(2));
         $scope.exciseDutyPerUnit = ($scope.exciseDutyAmount / $scope.lineItemnetweight).toFixed(2);
@@ -1046,6 +1105,7 @@
     }
     $scope.remarks.selected = { name: '' };
     $scope.addBillLineItem = function () {
+        var actualDate = getDate($scope.actualDate);
         $scope.GODOWN.push({ type: "GODOWN", name: $scope.newitem });
         if ($scope.invoiceType == 'Import') {
             var billdata = {
@@ -1056,11 +1116,13 @@
                 BALANCE: $scope.lineItemnetweight,
                 BASERATE: $scope.lineItemBaseRate,
                 TOTALAMOUNT: $scope.lineItemnetweight * $scope.lineItemBaseRate,
+               // AMOUNTPERITEM: $scope.lineItemnetweight * $scope.lineItemBaseRate * $scope.ExchangeRateINR,
                 AMOUNTINR: $scope.lineItemnetweight * $scope.lineItemBaseRate * $scope.ExchangeRateINR,
                 assesableValue: $scope.exciseAssessableValue,
                 exciseDuty: $scope.exciseDutyAmount,
                 dutyAmount: $scope.exciseDutyAmount,
                 SAD: $scope.sadAmount,
+                actualDate:actualDate,
                 totalDutyAmt: '',
                 purchaseRate: '',
                 dutyPerUnit: '',
@@ -1068,6 +1130,17 @@
             }
         }
         if ($scope.invoiceType == 'Domestic') {
+            //var totalamount;
+            //if ($scope.exciseChecked && $scope.sadChecked) {
+            //    totalamount = Number($scope.lineItemnetweight * $scope.lineItemBaseRate) + Number($scope.exciseDutyAmount) + Number($scope.sadAmount);
+            //} else if ($scope.sadChecked) {
+            //    totalamount = Number($scope.lineItemnetweight * $scope.lineItemBaseRate) + Number($scope.sadAmount);
+            //}
+            //else if ($scope.exciseChecked) {
+            //    totalamount = Number($scope.lineItemnetweight * $scope.lineItemBaseRate) + Number($scope.exciseDutyAmount);
+            //} else {
+            //    totalamount = $scope.lineItemnetweight * $scope.lineItemBaseRate;
+            //}
             var billdata = {
                 GODOWN: $scope.godown.selected.name,
                 DESCRIPTION: $scope.description.selected.name,
@@ -1082,12 +1155,14 @@
                 dutyAmount: $scope.exciseDutyAmount,
                 SAD: $scope.sadAmount,
                 totalDutyAmt: '',
+                actualDate: actualDate,
                 exciseRate: $scope.exciseRate,
                 sadRate: $scope.sadRate,
                 purchaseRate: $scope.lineItemBaseRate,
                 dutyPerUnit: $scope.exciseDutyPerUnit,
                 sadPerUnit: (Number($scope.sadAmount) / Number($scope.lineItemnetweight)).toFixed(2)
             }
+            $scope.manualTableSum();
         }
         if ($scope.selectedItemIndex != null) {
             $scope.billtable[$scope.selectedItemIndex] = billdata;
@@ -1110,6 +1185,29 @@
             $scope.bindMasterData(data.type);
         });
     }
+   
+
+    $scope.sad = {}
+    $scope.excise = {}
+    $scope.exciseLedgerentry = function(){  
+        excisetData = {
+            accountName: $scope.excise.selected.accountName,
+            accountId: $scope.excise.selected.id,
+            amount: $scope.totalExcise
+        }
+        $scope.accountTable.push(excisetData)
+
+    }
+     $scope.sadLedgerentry = function(){  
+        excisetData = {
+            accountName: $scope.sad.selected.accountName,
+            accountId: $scope.sad.selected.id,
+            amount: $scope.totalSad
+        }
+        $scope.accountTable.push(excisetData)
+
+    }
+   
     $scope.refreshResults = function ($select, type) {
         var search = $select.search,
           list = angular.copy($select.items),
@@ -1206,7 +1304,9 @@
             }
         })
         $scope.email = data.email
-        //$scope.shippingAddress = data.billingAddress[0].street
+        $scope.mobile = data.mobile
+        $scope.shippingAddress = data.billingAddress[0].street
+       
     }
     $scope.bindPurchaseLedgerDetail = function (data) {
         var balanceType = data.balanceType

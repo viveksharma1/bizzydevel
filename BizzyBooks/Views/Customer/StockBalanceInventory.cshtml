@@ -4,27 +4,7 @@
     Layout = null;
 }
 
-<script type="text/ng-template" id="/ui-tree-select.html">
-    <ui-select ng-model="model.$selected"
-               ui-select-focuser
-               theme="selectize">
-        <ui-select-match placeholder="Select a group">
-            {{ $select.selected.title }}
-        </ui-select-match>
-        <ui-select-choices repeat="group in groups | filter: $select.search">
-            <div>
-                <span ng-bind-html="group.title | highlight: $select.search"></span>
-                <!--<span ng-bind-html="'('+group.size+' users)'"></span>
-                <a href
-                  ng-show="group.parent"
-                  class="goto-child-group"
-                  ng-click="loadChildGroupsOf(group, $select)">
-                  <i class="fa fa-angle-right"></i>
-                </a>-->
-            </div>
-        </ui-select-choices>
-    </ui-select>
-</script>
+
 
 
 
@@ -35,17 +15,7 @@
             <div class="panel-heading">
                 <strong class="heading">Balance Inventory</strong>
 
-                @*<div class="btn-group pull-right">
-                    <button type="button" class="btn btn-primary btn-sm"><a href="" ng-click="UploadOpeningStock()" style="color:#fff">Opening Stock GRN Entry</a></button>
-                    <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="caret" style="border-top-color:#fff !important"></span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a href="#/Customer/Import">Import GRN Entry</a></li>
-
-                    </ul>
-                </div>*@
-                
+               
                 <span id="fileUpload" class="pull-right">
                     <label class="btn btn-default btn-sm" style="height:30px;width:200px">
                        <strong class="text-primary">Opening Stock</strong> (Choose file)
@@ -67,69 +37,18 @@
             </div>
 
             <!-- Modal -->
-            <div id="UploadOpeningStock" class="modal fade" role="dialog">
-                <div class="modal-dialog" style="margin-top:100px">
 
-                    <!-- Modal content-->
-                    <div class="modal-content" style="float:left; width:100%">
-                        <div class="modal-header" style="float:left; width:100%">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Opening Stock GRN Entry</h4>
-                        </div>
-                        <div class="modal-body" style="float:left; width:100%;min-height:100px">
-                            <div class="form-group">
-
-
-                                <div class="col-sm-10 padding5">
-                                    <input type="file" class="filestyle" id="uploadBtn" data-buttonName="btn-info">
-                                </div>
-
-                                <div class="col-sm-2 padding5">
-                                    <button type="button" class="btn btn-sm btn-primary Attechmentdetail" style="width:100%">Add</button>
-                                </div>
-
-
-                                <div style="float:left; width:100%; padding:10px 10px; border-bottom:1px dotted #ccc;" class="filenameDiv">
-
-
-                                    <div class="col-sm-10 padding5 cursor" style="word-break:break-all">
-                                        <a id="type" class="cursor"></a>
-                                    </div>
-
-                                    <div class="col-sm-2">
-                                        <i class="fa fa-times pull-right text-danger" id="removeattachment"></i>
-                                    </div>
-
-
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer" style="float:left; width:100%">
-                            <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary btn-sm">Save</button>
-
-                        </div>
-                    </div>
-
-                </div>
-            </div>
         </div>
 
         <div class="col-sm-12" style="padding:20px 0px">
 
-            <div class="pull-left" style="margin-left:7px;">
-
-                <input type="text" ng-model="search" class="form-control pull-left" style="width:150px;" placeholder="Find inventory" />
-                <span id="InventoryFilter" style="margin-left:5px">
-                    <i class="fa fa-filter tableicon"></i><i class="fa fa-caret-down" style="margin-left:-6px;"></i>
-                </span>
-
-            </div>
-
-
-
-            <div class="btn-group" style="margin-left:9px">
+           
+            <span>
+                <label style="color:#058B27;margin-left:200px">{{totalNetWeight }}</label>
+                <label style="color:#081A96;margin-left:13px"> {{totalNetBalance}}</label>
+            </span>
+            <input type="text" ng-model="search" class="form-control pull-right" style="width:150px;margin-right:8px;margin-bottom:5px" placeholder="Find inventory" />
+            @*<div class="btn-group" style="margin-left:9px">
                 <button type="button" class="btn btn-primary btn-sm"> Action</button>
                 <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="caret" style="border-top-color:#fff !important"></span>
@@ -139,7 +58,14 @@
                     <li><a ng-click="showRemarkBox(itemChecked,true)" class="cursor">Add Remarks</a></li>
                     <li><a ng-click="showAddjustmentBox(itemChecked,true)" class="cursor">Adjustment</a></li>
                 </ul>
-            </div>
+                
+                
+               
+                    
+                   
+                    
+                
+</div>*@
             <div class="col-sm-12 padding" style="padding:10px 0px !important">
                 <div class="col-sm-2 padding">
 
@@ -347,17 +273,17 @@
                             <thead>
                                 <tr>
                                     <th style="text-align:center"><input ng-model="selectAll" ng-click="selectAllLineItem(filterList)" type="checkbox" /></th>
-                                    <th>INVOICE NO</th>
+                                    <th>NO</th>
                                     <th>GODOWN</th>
                                     <th>DESCRIPTION</th>
                                     <th>REMARKS</th>
-                                    <th>ACTUAL DATE</th>
+                                    <th>DATE</th>
                                     <th>RG</th>
-                                    <th>PURCHASE RATE</th>
-                                    <th>DUTY PER UNIT</th>
-                                    <th>SAD PER UNIT</th>
+                                    <th>RATE</th>
+                                    <th>DUTY/UNIT</th>
+                                    <th>SAD/UNIT</th>
                                     <th>QUANTITY</th>
-                                    <th>BALANCE QUANTITY</th>
+                                    <th>BALANCE </th>
                                     <th>Action</th>
 
                                 </tr>
@@ -372,16 +298,15 @@
                                     <td> {{item.GODOWN}}</td>
 
                                     <td> {{item.DESCRIPTION}}</td>
-
                                     <td> {{item.RRMARKS}}</td>
                                     <td> {{item.actualDate}}</td>
-                                    <td> {{item.rgNo}}</td>
-                                    <td> {{item.purchaseRate |number : fractionSize}}</td>
-                                    <td> {{item.dutyPerUnit |number : fractionSize}}</td>
-                                    <td> {{item.sadPerUnit |number : fractionSize}}</td>
+                                    <td> {{$index + 1}}</td>
+                                    <td style="text-align:right"> {{item.purchaseRate |number : 2}}</td>
+                                    <td style="text-align:right"> {{item.dutyPerUnit |number : 3}}</td>
+                                    <td style="text-align:right"> {{item.sadPerUnit |number : 3}}</td>
 
-                                    <td> {{item.NETWEIGHT |number : fractionSize}}</td>
-                                    <td> {{item.NETWEIGHT - item.BALANCE |number : fractionSize}}</td>
+                                    <td style="text-align:right"> {{item.NETWEIGHT |number : 3}}</td>
+                                    <td style="text-align:right"> {{item.BALANCE |number : 3}}</td>
                                     <td style="text-align:right;">
                                         <button type="button" class="editbtn"><a href="" ng-click="showStatusBox(item)">Change Status</a></button>
                                         <class class="linkseparator" style="margin-top:4px; margin-right:0px"></class>
