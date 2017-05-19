@@ -1077,6 +1077,7 @@
     }
 
     $scope.editItemDetail = function (data, index) {
+        $scope.manualIndex = index;
         $scope.CONTNO =      data.CONTNO 
         $scope.INCOMINGDATE = data.INCOMINGDATE
         $scope.LotWeight = data.LotWeight
