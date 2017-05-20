@@ -150,7 +150,7 @@
             <div class="col-sm-4 padding" style="margin-left:10px">
 
                 <h4 class="tabheading font_11">Supplier <span class="pull-right" style="color:forestgreen" ><i class="fa fa-rupee"></i> {{supplierBalance |number : fractionSize}} <em style="color:red">{{supplierType}}</em></span></h4>
-                <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
+                <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode" tabindex="1"
                            ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';" on-select="bindSupplierDetail($select.selected)"
                            theme="selectize" >
                     <ui-select-match placeholder="Select Suppliers">
@@ -186,7 +186,7 @@
 
             <div class="col-sm-4 padding" style="margin-left:10px">
                 <h4 class="tabheading font_11">Purchase Ledger <span class="pull-right" style="color:forestgreen"><i class="fa fa-rupee"></i> {{purchaseLedgerBalance |number : fractionSize}}<em style="color:red">{{purchaseType}}</em></span></h4>
-                <ui-select ng-model="purchaseAccounts.selected" id="countryCode" ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';"
+                <ui-select ng-model="purchaseAccounts.selected" tabindex="2" id="countryCode" ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';"
                            theme="selectize" on-select="bindPurchaseLedgerDetail($select.selected)">
 
                     <ui-select-match placeholder="Select Suppliers">
@@ -211,7 +211,7 @@
 
                     <h4 class="tabheading font_11">Invoice Date</h4>
                     <div class='input-group date' id="billDate">
-                        <input type='text' class="form-control" ng-init="billDate = 'billDate'" id='billDate'  />
+                        <input type='text' class="form-control" tabindex="3" ng-init="billDate = 'billDate'" id='billDate'  />
                         <span class="input-group-addon ">
                             <span class="glyphicon glyphicon-calendar" style="color:forestgreen"></span>
                         </span>
@@ -219,7 +219,7 @@
 
                     <h4 class="tabheading font_11">Due Date</h4>
                     <div class='input-group date' id="billDueDate">
-                        <input type='text' class="form-control" ng-init="billDueDate = 'DueDate'" id='DueDate' />
+                        <input type='text' class="form-control" tabindex="5" ng-init="billDueDate = 'DueDate'" id='DueDate' />
                         <span class="input-group-addon ">
                             <span class="glyphicon glyphicon-calendar" style="color:forestgreen"></span>
                         </span>
@@ -231,13 +231,13 @@
                 <div class="col-sm-6" style="padding:0px">
 
                     <h4 class="tabheading font_11">Payment Days</h4>
-                    <input type='text' ng-blur="paymentTerm()" ng-model="paymentDays"
+                    <input type='text' ng-blur="paymentTerm()" tabindex="4" ng-model="paymentDays"
                            class="form-control" />
 
 
                     <h4 class="tabheading font_11">Actual Date</h4>
                     <div class='input-group date' id='actualDate'>
-                        <input type='text' class="form-control" ng-init="actualDate = 'actualDate'" id="actualDate" />
+                        <input type='text' class="form-control" tabindex="5" ng-init="actualDate = 'actualDate'" id="actualDate" />
                         <span class="input-group-addon datepicker">
                             <span class="glyphicon glyphicon-calendar" style="color:forestgreen"></span>
                         </span>
@@ -260,7 +260,7 @@
                 <div class="pull-right col-sm-12 text-right">
                   
                     <h4 class="tabheading font_11">INVOICE NO.</h4>
-                    <input type="text" class="form-control pull-right" ng-blur="getExistingBill(billNo)"id="billNo" ng-model="billNo" style="width:100px" />
+                    <input type="text" class="form-control pull-right" tabindex="6" ng-blur="getExistingBill(billNo)"id="billNo" ng-model="billNo" style="width:100px" />
                     <div id="invoiceExist" class="modal fade" role="dialog">
                         <div class="modal-dialog modal-sm" style="margin-top:150px">
                             <!-- Modal content-->

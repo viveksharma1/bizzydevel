@@ -39,7 +39,7 @@
             <div class="col-sm-4 padding" style="padding-left:10px !important">
 
                 <h4 class="tabheading font_11">Supplier<span class="pull-right"style="color:forestgreen"><i class="fa fa-rupee"></i> {{supplierBalance}}</span></h4>
-                <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode"
+                <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode" tabindex="1"
                            ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';" on-select="bindSupplierDetail($select.selected)"
                            theme="selectize">
                     <ui-select-match placeholder="Select Suppliers">
@@ -79,7 +79,7 @@
 
                     <h4 class="tabheading font_11">Expense Date</h4>
                     <div class='input-group date'id="expenseDate">
-                        <input type='text' class="form-control" ng-init="expenseDate = 'expenseDate'" id="expenseDate" />
+                        <input type='text' class="form-control" tabindex="2" ng-init="expenseDate = 'expenseDate'" id="expenseDate" />
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
@@ -87,7 +87,7 @@
 
                     <h4 class="tabheading font_11" style="margin-top:17px !important;">Due Date</h4>
                     <div class='input-group date'id='expenseDueDate'>
-                        <input type='text' class="form-control" ng-init="expenseDueDate = 'expenseDueDate'" id='expenseDueDate' />
+                        <input type='text' class="form-control" tabindex="4" ng-init="expenseDueDate = 'expenseDueDate'" id='expenseDueDate' />
                         <span class="input-group-addon active">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
@@ -99,7 +99,7 @@
                 <div class="col-sm-2" style="padding:0px">
 
                     <h4 class="tabheading font_11">Days</h4>
-                    <input type='text'  ng-blur ="paymentTerm()"
+                    <input type='text'  ng-blur ="paymentTerm()" tabindex="3"
                              ng-model="paymentDays" class="form-control" />
 
 
@@ -120,7 +120,7 @@
                 
 
                 <h4 class="tabheading" style="float:right; width:100%; margin-top:0px !important">Expense No</h4>
-                <input type="text" class="form-control pull-right" ng-model="expenseId"  style="width:100px" />
+                <input type="text" class="form-control pull-right" tabindex="4" ng-model="expenseId"  style="width:100px" />
             </div>
       
 
