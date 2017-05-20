@@ -41,12 +41,6 @@
         </div>
 
         <div class="col-sm-12" style="padding:20px 0px">
-
-           
-            <span>
-                <label style="color:#058B27;margin-left:200px">{{totalNetWeight }}</label>
-                <label style="color:#081A96;margin-left:13px"> {{totalNetBalance}}</label>
-            </span>
             <input type="text" ng-model="search" class="form-control pull-right" style="width:150px;margin-right:8px;margin-bottom:5px" placeholder="Find inventory" />
             @*<div class="btn-group" style="margin-left:9px">
                 <button type="button" class="btn btn-primary btn-sm"> Action</button>
@@ -95,7 +89,7 @@
 
                                     </ui-select-match>
 
-                                    <ui-select-choices repeat="invoice in ItemList| unique:'_id.GODOWN'|filter: $select.search ">
+                                    <ui-select-choices repeat="invoice in ItemList| filter: $select.search ">
                                         <div>
                                             <span style="color:forestgreen">{{invoice._id.no}}</span>
                                         </div>
@@ -194,7 +188,7 @@
                                     </ui-select-choices>
                                 </ui-select>
                             </div>
-                            <div class="form-group">
+                            @*<div class="form-group">
                                 <h4 class="tabheading font_11">Excise per unit</h4>
                                 <ui-select ng-model="exciseDuty.selected"
                                            ui-select-focuser
@@ -237,7 +231,7 @@
 
                                     </ui-select-choices>
                                 </ui-select>
-                            </div>
+                            </div>*@
                             <div class="form-group">
                                 <h4 class="tabheading font_11">Net Wt</h4>
                                 <ui-select ng-model="NETWEIGHT.selected"
@@ -321,36 +315,16 @@
 
                                         </div>
                                     </td>
-                                    @*<td>
-                                            <button type="button" class="editbtn" ng-click="GRNDetail(item)">Detail</button>
-                                            <class class="linkseparator" style="margin-top:4px; margin-right:0px">|</class>
-                                            <div class="btn-group editcaret">
-                                                <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>
-                                                <ul class="dropdown-menu editdrpdwn" role="menu" style="top:18px">
-                                                    <li><a href="#/Customer/Invoice">Invoice</a></li>
-
-                                                </ul>
-
-                                            </div>
-                                        </td>*@
+                                  
                                 </tr>
                             </tbody>
                         </table>
-                        @*<div class="pagination-div" style="float:left; width:100%; margin-top:10px;">
-                                <ul class="pagination pull-right" style="margin-top:0px">
-                                    <li ng-class="DisablePrevPage()">
-                                        <a href="" ng-click="prevPage()"> Prev</a>
-                                    </li>
-                                    <li ng-repeat="n in range(ItemList.length)"
-                                        ng-class="{active: n == currentPage}"
-                                        ng-click="setPage(n)">
-                                        <a href="">{{n+1}}</a>
-                                    </li>
-                                    <li ng-class="DisableNextPage()">
-                                        <a href="" ng-click="nextPage()">Next </a>
-                                    </li>
-                                </ul>
-                            </div>*@
+                        <span>
+                            <label class="pull-right" style="color:#081A96;margin-left:13px"> {{totalNetBalance}}</label>
+                            <label class="pull-right" style="color:#058B27;margin-left:50px">{{totalNetWeight }}</label>
+                         
+                        </span>
+                       
                         <!-- ChangeStatusModal -->
                         <div id="ChangeStatusModal" class="modal fade" role="dialog">
                             <div class="modal-dialog modal-sm" style="margin-top:100px">
@@ -452,249 +426,7 @@
 
 
 
-        <div id="ViewInfoDiv" class="FlexPopup HomeWrapper">
-            <div class="flexheader">
-                <ul class="list-unstyled submenu InvoiceMenu" style="float:left">
-                    <li><a href="#"><i class="fa fa-history"></i></a></li>
-                    <li><a href="#"><span>Item Detail</span></a></li>
-                </ul>
-                <ul class="list-unstyled submenu InvoiceMenu">
-                    <li><a href="#"><i class="fa fa-question-circle"></i></a></li>
-                    <li><a href="javascript:void(0);" ng-click="invoiceclose();" id="invoiceclose"><i class="fa fa-times"></i></a></li>
-                </ul>
-            </div>
-            <div class="col-sm-4" style="min-height:560px; border-right:1px solid #808080; padding:0px 8px">
-
-
-
-                <div style="height:600px" class="scrollbar scrollbarAngular">
-                    <div class="card active-sm border-aero padding:5px border-green">
-                        <label class="heading active">
-                            Item Detail
-
-                        </label>
-
-                        <ul>
-
-                            <li>
-                                <span>Qty (KG)  </span>
-                                <span class="pull-right">{{NetWeight}}(KG)</span>
-                            </li>
-                            <li>
-                                <span>INVOICE NO </span>
-                                <span class="pull-right">{{billNo}}</span>
-                            </li>
-
-                            <li>
-                                <span>Item Amount  </span>
-                                <span class="pull-right">{{itemAmountinINR}}</span>
-                            </li>
-
-                            <li>
-                                <span>Cost/KG  </span>
-                                <span class="pull-right">{{costPerMTinINR}}</span>
-                            </li>
-
-
-                        </ul>
-                    </div>
-                    <div class="card border-orange">
-                        <label class="heading active">
-                            Expense
-
-                        </label>
-                        <ul ng-repeat="data in expenseData">
-                            <li>
-                                <span>{{data.supliersName}}  </span>
-                                <span class="pull-right"> {{data.amount/NetWeight |number : fractionSize}}</span>
-                            </li>
-
-
-                        </ul>
-                    </div>
-                    <div class="card border-orange">
-                        <label class="heading active">
-                            Tax & Duties
-
-                        </label>
-                        <ul>
-                            <li>
-                                <span>Custom Per KG </span>
-                                <span class="pull-right"> {{totalCustom |number : fractionSize}}</span>
-                            </li>
-
-
-                        </ul>
-                    </div>
-                    <div class="card border-orange">
-                        <label class="heading active">
-                            UO Expense
-
-                        </label>
-                        <ul ng-repeat="data in taxData">
-                            <li>
-                                <span>{{data.accountName}}  </span>
-                                <span class="pull-right"> {{data.credit/NetWeight |number : fractionSize}}</span>
-                            </li>
-
-
-                        </ul>
-                    </div>
-                    <div class="card border-blue">
-                        <ul>
-                            <li>
-                                <span>
-                                    Total Expense
-                                    <span class="pull-right"><b>{{tatalExpense/NetWeight |number : fractionSize}}</b></span>
-                                </span>
-                            </li>
-                        </ul>
-                        <ul>
-                            <li>
-                                <span>
-                                    Total Cost/KG
-                                    <span class="pull-right"><b>{{totalCostPerMT |number : fractionSize}}</b></span>
-                                </span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    @*
-                                        <ul class="list-unstyled GRNInvoice" ng-repeat="item in taxData">
-                                            <li>
-                                                <label>{{item.accountName}}  <i class="fa fa-minus"></i></label>
-                                                <span>{{item.credit}}</span>
-                                            </li>
-
-
-                                        </ul>
-
-                        <h3 class="GRNHeading">Account <small>(Laibility)</small> <span class="badge">20/08/2016</span></h3>
-                        <ul class="list-unstyled GRNInvoice">
-                            <li>
-                                <label>Vat <i class="fa fa-minus"></i></label>
-                                <span>&nbsp;</span>
-                            </li>
-                            <li>
-                                <label>Tax <i class="fa fa-minus"></i></label>
-                                <span>&nbsp;</span>
-                            </li>
-                            <li>
-                                <label>O Tax <i class="fa fa-minus"></i></label>
-                                <span>&nbsp;</span>
-                            </li>
-
-                        </ul>
-                    *@
-
-                </div>
-            </div>
-
-            <div class="col-sm-8" style="padding:10px">
-                <table class="table-bordered table-condensed table-hover borderless" style="width:100%; background:#fff; margin-bottom:10px">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Due Date</th>
-                            <th>Original Amount</th>
-                            <th>Open Balance</th>
-                            <th>Payment</th>
-                        </tr>
-                    </thead>
-                    <tbody ng-repeat="data in bill">
-
-                        <tr>
-                            <td ng-bind="data.date | date:'dd MMM yyyy'"></td>
-                            <td ng-bind="data.billDueDate | date:'dd MMM yyyy'"></td>
-
-                            <td>{{data.amount |number : fractionSize}}</td>
-                            <td>{{data.balance |number : fractionSize}}</td>
-                            <td><input type="text" id="abc" /></td>
-                        </tr>
-
-
-                    </tbody>
-                </table>
-
-                <div class="card text-right">
-
-                    <div class="pull-right col-sm-7" style="margin-bottom:10px; padding-right:0px">
-                        <label>Total Expense :</label>
-                        <span class="col-sm-3 pull-right" style="padding-right:0px">
-                            <input type="text" class="form-control" />
-                        </span>
-                    </div>
-
-                    <div class="pull-right col-sm-7" style="margin-bottom:10px; padding-right:0px">
-                        <label>Total In :</label>
-                        <span class="col-sm-3 pull-right" style="padding-right:0px">
-                            <input type="text" class="form-control" />
-                        </span>
-                    </div>
-
-                    <div class="pull-right col-sm-7" style="margin-bottom:10px; padding-right:0px">
-                        <label>Total Out :</label>
-                        <span class="col-sm-3 pull-right" style="padding-right:0px">
-                            <input type="text" class="form-control" />
-                        </span>
-                    </div>
-
-                    <div class="pull-right col-sm-7" style="padding-right:0px">
-                        <label>Balance :</label>
-                        <span class="col-sm-3 pull-right" style="padding-right:0px">
-                            <input type="text" class="form-control" />
-                        </span>
-                    </div>
-
-
-                </div>
-
-                <h3 class="GRNHeading" style="font-weight:bold; width:100%; padding-right:10px">
-                    Stock Ledger
-
-                    <div class="btn-group pull-right">
-                        <button type="button" class="btn btn-primary btn-sm"><a href="#/Customer/GRNEntry" style="color:#fff">Action</a></button>
-                        <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="caret" style="border-top-color:#fff !important"></span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a href="#/Customer/Import">Import GRN Entry</a></li>
-
-                        </ul>
-                    </div>
-                </h3>
-
-                <table class="table-bordered table-condensed table-hover borderless" style="width:100%; background:#fff">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Particular</th>
-                            <th>Ref. Type</th>
-                            <th>Ref. Id</th>
-                            <th>In Qty</th>
-                            <th>Out Qty</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                        <tr>
-                            <td>22/feb/2017</td>
-                            <td>Wages</td>
-                            <td>test</td>
-                            <td>897989</td>
-                            <td>22</td>
-                            <td>22</td>
-                        </tr>
-
-
-                    </tbody>
-                </table>
-            </div>
-
-
-
-
-        </div>
+      
 
 
 

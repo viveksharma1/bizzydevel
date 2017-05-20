@@ -76,6 +76,7 @@
         $scope.SAD = {};
         $scope.NETWEIGHT = {};
         $scope.filterList = $scope.ItemList2;
+        getTotalsum($scope.filterList);
     }
     $scope.applyFilter = function () {
         var qry = {

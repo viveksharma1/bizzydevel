@@ -135,14 +135,16 @@
     $("#import").addClass('active')
     $("#dollar").addClass('active')
     $("#kg").addClass('active')
-
+    $scope.domesticExcise = true
     $scope.invoiceType1 = function (invoiceType) {
         $scope.invoiceType = invoiceType;
         if (invoiceType == 'Domestic') {
             $("#rupee").addClass('active')
             $("#dollar").removeClass('active')
             $("#custom").hide();
+           
             $("#curr").hide();
+            $scope.domesticExcise = false
         }
         else {
             $("#dollar").addClass('active')
@@ -151,6 +153,8 @@
             $("#import").addClass('active')
             $("#custom").show()
             $("#curr").show()
+            $scope.domesticExcise = true
+           
         }
     }
     // bind file 
@@ -178,19 +182,29 @@
     }
     $scope.excelTableItemSum = function () {
         var total = 0;
-        var totalweight = 0;
+        var totalweight = 0
+        var manualtotal = 0;
         for (var i = 0; i < $scope.billtable1.length; i++) {
             var product = Number($scope.billtable1[i]);
+            manualtotal += Number($scope.billtable1[i].TOTALAMOUNTINR);
             total += Number($scope.billtable1[i].TOTALAMOUNTUSD);
             totalweight += Number($scope.billtable1[i].NETWEIGHT);
         }
         $scope.totalWeight = Number(totalweight);
-        $scope.TOTALAMOUNTUSD = Math.round(total);
-        if ($scope.ExchangeRateINR) {
-            $scope.totalAmountINR = Number((Number($scope.TOTALAMOUNTUSD) * Number($scope.ExchangeRateINR)).toFixed(2));
+       
+        if ($scope.invoiceType == 'Domestic') {
+            $scope.totalAmountINR = Math.round(manualtotal);
+        }
+        else {
+            $scope.TOTALAMOUNTUSD = Math.round(total);
+            if ($scope.ExchangeRateINR) {
+                $scope.totalAmountINR = Number((Number($scope.TOTALAMOUNTUSD) * Number($scope.ExchangeRateINR)).toFixed(2));
+            }
         }
         return $scope.totalAmountINR
     }
+   
+
     $scope.manualTableSum = function () {
         var manualTotal = 0;
         var netweight = 0;
@@ -413,8 +427,11 @@
 
            
             $scope.email = $scope.supliersDetail.email;
-            $scope.mobile = $scope.supliersDetail.mobile
+           
             $scope.shippingAddress = $scope.supliersDetail.billingAddress[0].street;
+            if ($scope.supliersDetail.phone != undefined) {
+                $scope.mobile = $scope.supliersDetail.mobile == undefined ? $scope.supliersDetail.phone : $scope.supliersDetail.mobile + "," + $scope.supliersDetail.phone
+            }
         });
     }
 
@@ -438,7 +455,7 @@
                         $scope.customPaymentInfo = billData.customPaymentInfo;
                         $scope.accountTable = billData.accountlineItem;
                         if (billData.itemDetail && localStorage["usertype"] == 'UO') {
-                            $scope.billtable1 = billData.itemDetail;
+                            $scope.billtable1 = billData.itemDetail; 
                             $scope.excelTableItemSum();
                             $scope.id = billData.id
                             $scope.totalAmountINR = $scope.excelTableItemSum() + $scope.accountTableSum();
@@ -562,7 +579,7 @@
         $scope.saveBill = function (index) {
             var date = getDate($scope.billDate);
             var billDueDate = getDate($scope.billDueDate);
-            var actualDate = getDate($scope.actualDate);
+            var actualDate = moment(getDate($scope.actualDate)).format("DD/MM/YYYY");
             if ($scope.billNo == undefined) {
                 $rootScope.$broadcast('event:error', { message: "Please type Invoice No" });
                 return;
@@ -616,7 +633,7 @@
                 $scope.billtable[$scope.tableIndex].dutyAmount = $scope.dutyAmount;
                 $scope.billtable[$scope.tableIndex].SAD = $scope.SAD1;
                 $scope.billtable[$scope.tableIndex].totalDutyAmt = $scope.totalDutyAmt;
-                $scope.billtable[$scope.tableIndex].actualDate = $scope.actualDate;
+                $scope.billtable[$scope.tableIndex].actualDate = moment(getDate($scope.actualDate)).format("DD/MM/YYYY");
                 $scope.billtable[$scope.tableIndex].customData = $scope.customDatanew
                 $scope.billtable[$scope.tableIndex].purchaseRate = (Number($scope.assesableValue) / Number($scope.billtable[$scope.tableIndex].NETWEIGHT)).toFixed(2);
                 $scope.billtable[$scope.tableIndex].dutyPerUnit = (Number($scope.exciseDuty1) / Number($scope.billtable[$scope.tableIndex].NETWEIGHT)).toFixed(2);
@@ -629,7 +646,7 @@
                     $scope.billtable[i].exciseDuty = $scope.exciseDutyPerUnit * $scope.billtable[i].NETWEIGHT;
                     $scope.billtable[i].dutyAmount = $scope.exciseRate * $scope.billtable[i].NETWEIGHT;
                     $scope.billtable[i].SAD = $scope.exciseSAD * $scope.billtable[i].NETWEIGHT;
-                    $scope.billtable[i].actualDate = $scope.actualDate;
+                    $scope.billtable[i].actualDate = moment(getDate($scope.actualDate)).format("DD/MM/YYYY");
                 }
             }
             
@@ -729,8 +746,10 @@
             }
             if ($scope.manualIndex != null) {
                 $scope.billtable1[$scope.manualIndex] = data;
+                $scope.excelTableItemSum();
             } else {
                 $scope.billtable1.push(data);
+                $scope.excelTableItemSum();
             }
             $scope.manualIndex = null;
             
@@ -1092,7 +1111,7 @@
         $scope.NETWEIGHT = data.NETWEIGHT
         $scope.GROSSWT = data.GROSSWT
         $scope.PCSLENGTHINMTRS = data.PCSLENGTHINMTRS
-        $scope.TOTALAMOUNTMANUAL = data.TOTALAMOUNTMANUAL
+        $scope.TOTALAMOUNTMANUAL = data.TOTALAMOUNTINR
 
     }
     $scope.exciseCalculate = function () {
@@ -1106,7 +1125,7 @@
     }
     $scope.remarks.selected = { name: '' };
     $scope.addBillLineItem = function () {
-        var actualDate = getDate($scope.actualDate);
+        var actualDate = moment(getDate($scope.actualDate)).format("DD/MM/YYYY");
         $scope.GODOWN.push({ type: "GODOWN", name: $scope.newitem });
         if ($scope.invoiceType == 'Import') {
             var billdata = {
@@ -1267,14 +1286,17 @@
     //delete item 
     $scope.deleteItem = function (id, type, name, index) {
         $http.delete(config.api + "masters/" + id).then(function (response) {
-            $scope.REMARKS = response.data
+            //$scope.REMARKS = response.data
         });
         if (type == "GODOWN") {
-            delete $scope.GODOWN[index].name
+           // delete $scope.GODOWN[index].name
+            $scope.GODOWN.splice(index, 1);
         } else if (type == "REMARKS") {
-            delete $scope.REMARKS[index].name
+           // delete $scope.REMARKS[index].name
+            $scope.REMARKS.splice(index, 1);
         } else if (type == "DESCRIPTION") {
-            delete $scope.DESCRIPTION[index].name
+            //delete $scope.DESCRIPTION[index].name
+            $scope.DESCRIPTION.splice(index, 1);
         }
     }
     function calculateOpenningBalnce(data, balanceType) {
@@ -1289,6 +1311,9 @@
     }
     $scope.bindSupplierDetail = function (data) {
         console.log(data.balanceType)
+        $scope.shippingAddress = ''
+        $scope.email  = ''
+        $scope.mobile = ''
         var balanceType = data.balanceType
        
         if (data.balanceType == 'debit') {
@@ -1305,7 +1330,11 @@
             }
         })
         $scope.email = data.email
-        $scope.mobile = data.mobile
+        if (data.phone != undefined) {
+            $scope.mobile = data.mobile == undefined ? data.phone : data.mobile + "," + data.phone
+        }
+      
+        //$scope.mobile = data.mobile + "," + data.phone?
         $scope.shippingAddress = data.billingAddress[0].street
        
     }

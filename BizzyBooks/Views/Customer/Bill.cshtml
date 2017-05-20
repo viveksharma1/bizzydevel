@@ -219,7 +219,7 @@
 
                     <h4 class="tabheading font_11">Due Date</h4>
                     <div class='input-group date' id="billDueDate">
-                        <input type='text' class="form-control" tabindex="5" ng-init="billDueDate = 'DueDate'" id='DueDate' />
+                        <input type='text' class="form-control" tabindex="4" ng-init="billDueDate = 'DueDate'" id='DueDate' />
                         <span class="input-group-addon ">
                             <span class="glyphicon glyphicon-calendar" style="color:forestgreen"></span>
                         </span>
@@ -231,13 +231,13 @@
                 <div class="col-sm-6" style="padding:0px">
 
                     <h4 class="tabheading font_11">Payment Days</h4>
-                    <input type='text' ng-blur="paymentTerm()" tabindex="4" ng-model="paymentDays"
+                    <input type='text' ng-blur="paymentTerm()" tabindex="5" ng-model="paymentDays"
                            class="form-control" />
 
 
                     <h4 class="tabheading font_11">Actual Date</h4>
                     <div class='input-group date' id='actualDate'>
-                        <input type='text' class="form-control" tabindex="5" ng-init="actualDate = 'actualDate'" id="actualDate" />
+                        <input type='text' class="form-control" tabindex="6" ng-init="actualDate = 'actualDate'" id="actualDate" />
                         <span class="input-group-addon datepicker">
                             <span class="glyphicon glyphicon-calendar" style="color:forestgreen"></span>
                         </span>
@@ -260,7 +260,7 @@
                 <div class="pull-right col-sm-12 text-right">
                   
                     <h4 class="tabheading font_11">INVOICE NO.</h4>
-                    <input type="text" class="form-control pull-right" tabindex="6" ng-blur="getExistingBill(billNo)"id="billNo" ng-model="billNo" style="width:100px" />
+                    <input type="text" class="form-control pull-right" tabindex="7" ng-blur="getExistingBill(billNo)"id="billNo" ng-model="billNo" style="width:100px" />
                     <div id="invoiceExist" class="modal fade" role="dialog">
                         <div class="modal-dialog modal-sm" style="margin-top:150px">
                             <!-- Modal content-->
@@ -322,7 +322,7 @@
                     <div class="modal-content" style="float:left; width:100%">
                         <div class="modal-header" style="float:left; width:100%">
                             <button type="button" class="close active" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Mannual Entry</h4>
+                            <h4 class="modal-title">Manual Entry</h4>
                         </div>
                         <div class="modal-body" style="float:left; width:100%">
                             <div class="col-sm-4">
@@ -1197,8 +1197,8 @@
                         <th > 
                             
                             @*<i class="cursor fa fa-plus" add-item itemtype="GODOWN[0].type"></i>*@
-                            <label class="badge cursor"  add-item itemtype="GODOWN[0].type"><i class="fa fa-plus"></i> Add</label>
-                            <ui-select ui-tree-select  ng-model="godown.selected.name" id="countryCode" 
+                            <label class="badge cursor"  add-item itemtype= GODN ng-init="GODN = 'GODOWN'"><i class="fa fa-plus"></i> Add</label>
+                            <ui-select ui-tree-select  ng-model="godown.selected.name" id="countryCode" tabindex="8"
                                         
                                        theme="selectize" Sstyle="text-overflow: ellipsis">
 
@@ -1220,8 +1220,8 @@
                         </th>
                         <th>
                             @*<i class="cursor fa fa-plus" add-item  itemtype="DESCRIPTION[0].type"></i>*@
-                            <label class="badge cursor" add-item itemtype="DESCRIPTION[0].type"><i class="fa fa-plus"></i> Add</label>
-                            <ui-select ui-tree-select ng-model="description.selected.name" id="countryCode"
+                            <label class="badge cursor" add-item itemtype= "DESC" ng-init="DESC = 'DESCRIPTION'"><i class="fa fa-plus"></i> Add</label>
+                            <ui-select ui-tree-select ng-model="description.selected.name" id="countryCode" tabindex="9"
                                        ui-select-focuser
                                        theme="selectize">
                                 <div>
@@ -1243,8 +1243,8 @@
                         </th>
                         <th>
                             @*<i class="cursor fa fa-plus" add-item itemtype="REMARKS[0].type"></i>*@
-                            <label class="badge cursor" add-item itemtype="REMARKS[0].type"><i class="fa fa-plus"></i> Add</label>
-                            <ui-select ui-tree-select  ng-model="remarks.selected.name" id="countryCode"
+                            <label class="badge cursor" add-item itemtype= "RE" ng-init="RE = 'REMARKS'"><i class="fa fa-plus"></i> Add</label>
+                            <ui-select ui-tree-select  ng-model="remarks.selected.name" id="countryCode" tabindex="10"
                                        ui-select-focuser
                                        theme="selectize">
                                 <ui-select-match placeholder="REMARKS">
@@ -1261,15 +1261,15 @@
                                 </ui-select-choices>
                             </ui-select>
                         </th>
-                        <th><input type="number" id="arshiyaCharge"  step="0.01" ng-model="lineItemnetweight" placeholder="NET WEIGHT" class="form-control text-right" style="margin-top:18px" /></th>
+                        <th><input type="number" id="arshiyaCharge"  step="0.01" ng-model="lineItemnetweight" tabindex="11" placeholder="NET WEIGHT" class="form-control text-right" style="margin-top:18px" /></th>
 
                         <th>
-                            <input type="number" id="arshiyaCharge"
+                            <input type="number" id="arshiyaCharge" tabindex="12"
                                    ng-model="lineItemBaseRate"    step="0.01" placeholder="BASE RATE" class="form-control text-right" style="margin-top:18px" />
                         </th>
                         <th>&nbsp;</th>
-                        <th style="text-align:center"><button class="btn  btn-sm"style="margin-top:18px" ng-click="ExciseDutyModalbtn()"> Excise Duty</button></thstyle="text-align:center">
-                        <th style="text-align:center"><button ng-click="addBillLineItem()" class="btn  btn-sm" style="margin-top:18px" >Add</button></th>
+                        <th style="text-align:center"><button class="btn  btn-sm"style="margin-top:18px" tabindex="13" ng-click="ExciseDutyModalbtn()"> Excise Duty</button></thstyle="text-align:center">
+                        <th style="text-align:center"><button ng-click="addBillLineItem()" tabindex="14" class="btn  btn-sm" style="margin-top:18px" >Add</button></th>
                         <th>&nbsp;</th>
                         <th>&nbsp;</th>
                         <th>&nbsp;</th>
@@ -1285,7 +1285,8 @@
                         <th  style="text-align:right" width="100">AMOUNT(&#8377;)</th>  
                         <th > Excise </th>
                         <th> SAD </th> 
-                        <th style="text-align:right" width="100"> Total </th>                  
+                        @*<th style="text-align:right" width="100"> Total </th>*@                  
+                        <th>&nbsp;</th>
                         <th >&nbsp;</th>
                     </tr>
 
@@ -1303,7 +1304,7 @@
                         <td class="Count" style="text-align:center">{{item.AMOUNTINR |number : 2}}</td>         
                         <td style="text-align:right">{{item.dutyAmount |number : 2}}</td>     
                         <td style="text-align:right">{{item.SAD |number : 2}}</td>     
-                        <td class="Count" style="text-align:center"><li style="margin-top:1Px"  excise-Info excisedata="item"></li></td>                
+                        <td class="Count" style="text-align:center"><i style="margin-top:1Px;color:green"aria-hidden="true" class="fa fa-info fa-2x"  excise-Info excisedata="item"></i></td>                
                           <td class="text-center Count" ><a class="edit" title="Edit"> <i class="fa fa-times-circle cursor RemoveTR" style="font-size:11px" ng-click="remove($index)"></i></a></td>     
                         
                     </tr>
@@ -1344,7 +1345,7 @@
                         <h4 style="margin-top: 15px; margin-bottom:10px;">
                             <i class="fa fa-caret-right"></i> Narration
                         </h4>
-                        <textarea class="form-control" ng-model="narration" style="height:80px"></textarea>
+                        <textarea class="form-control" ng-model="narration" tabindex="22"  style="height:80px"></textarea>
                     </div>
                 </div>
             </div>
@@ -1359,11 +1360,11 @@
                             <small ng-show="isShow == true" ng-click="downloadAttachments();" class="text-primary cursor dwn">(<i class="fa fa-download"></i> Download all files)</small>
                         </h4>
                         <div class="col-sm-5 padding5">
-                            <input type="text" class="form-control" ng-model="filename" placeholder="Title" />
+                            <input type="text" class="form-control" tabindex="23" ng-model="filename" placeholder="Title" />
                         </div>
                         <div class="col-sm-5 padding5">
                             @*<input type="file" class="filestyle" id="uploadBtn" data-buttonName="btn-info">*@
-                            <input type="file" nv-file-select="" uploader="uploader" />
+                            <input type="file" nv-file-select="" tabindex="24" uploader="uploader" />
                         </div>
                         <div ng-show="uploader.queue.length>0" style="float:left; width:100%; padding:10px 10px; border-bottom:1px dotted #ccc;">
                             <table class="table" width="100">
@@ -1439,13 +1440,13 @@
                 <i class="fa fa-caret-right"></i> Account details
             </h4>
             <hr style="float:left; width:100%; margin:5px 0px" />*@
-            <div class="col-sm-12 padding">
+            <div class="col-sm-12 padding" ng-hide="domesticExcise">
                 <label class="col-sm-12 padding" style="margin-top:5px">Excise Account</label>
                 <div class="col-sm-1 padding">
                     <input type="checkbox" ng-click ="exciseLedgerentry()" ng-model="exciseChecked" style="width:25px; height:25px;  margin-top:5px" />
                 </div>
                 <div class="col-sm-6 padding">
-                    <ui-select ui-tree-select ng-model="excise.selected" id="countryCode"
+                    <ui-select ui-tree-select ng-model="excise.selected" id="countryCode" tabindex="15"
                                ui-select-focuser
                                theme="selectize">
 
@@ -1467,7 +1468,7 @@
                     </ui-select>
                 </div>
                 <div class="col-sm-5">
-                    <input type="text" class="form-control"  ng-model="totalExcise" placeholder="Amount" />
+                    <input type="text" class="form-control" tabindex="16"  ng-model="totalExcise" placeholder="Amount" />
                 </div>
 
                 <label class="col-sm-12 padding">SAD Account</label>
@@ -1475,7 +1476,7 @@
                     <input type="checkbox" ng-click ="sadLedgerentry()" ng-model="sadChecked" style="width:25px; height:25px;  margin-top:4px" />
                 </div>
                 <div class="col-sm-6 padding">
-                    <ui-select ui-tree-select ng-model="sad.selected" id="countryCode"
+                    <ui-select ui-tree-select ng-model="sad.selected" id="countryCode" tabindex="17"
                                ui-select-focuser
                                theme="selectize">
 
@@ -1497,7 +1498,7 @@
                     </ui-select>
                 </div>
                 <div class="col-sm-5">
-                    <input type="text" class="form-control" ng-model="totalSad"placeholder="Amount" />
+                    <input type="text" class="form-control" ng-model="totalSad"placeholder="Amount" tabindex="18" />
                 </div>
             </div>
 
@@ -1510,7 +1511,7 @@
                     <thead>
                         <tr style="background:rgb(243, 245, 248)">
                             <th>
-                                <ui-select ui-tree-select ng-model="accounts.selected" id="countryCode"
+                                <ui-select ui-tree-select ng-model="accounts.selected" id="countryCode" tabindex="19"
                                            ui-select-focuser  on-select="applyRate($select.selected.rate)" ng-init="$select.addnew=1;$select.type='buyer';"
                                            theme="selectize">
 
@@ -1539,9 +1540,9 @@
 
                             <th>
                                 <input type="text" id="arshiyaCharge"
-                                       ng-model="accountAmount" placeholder="AMOUNT" only-digits class="form-control text-right" style="margin-top:-5px" />
+                                       ng-model="accountAmount" placeholder="AMOUNT" tabindex="20" only-digits class="form-control text-right" style="margin-top:-5px" />
                             </th>
-                            <th style="text-align:center"><button ng-click="addAccount()" class="btn btn-primary btn-sm">Add</button></th>
+                            <th style="text-align:center"><button ng-click="addAccount()" tabindex="21" class="btn btn-primary btn-sm">Add</button></th>
                         </tr>
 
 
