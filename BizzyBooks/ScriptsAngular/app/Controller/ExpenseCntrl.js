@@ -192,8 +192,11 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
             $scope.supliersDetail = response.data;
             console.log(response.data)
             $scope.email = $scope.supliersDetail.email;
-            $scope.mobile = $scope.supliersDetail.mobile
+           
             $scope.shippingAddress = $scope.supliersDetail.billingAddress[0].street;
+            if ($scope.supliersDetail.phone != undefined) {
+                $scope.mobile = $scope.supliersDetail.mobile == undefined ? $scope.supliersDetail.phone : $scope.supliersDetail.mobile + "," + $scope.supliersDetail.phone
+            }
         });
     }
     function calculateOpenningBalnce(data, balanceType) {
@@ -207,6 +210,9 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
         return balance
     }
     $scope.bindSupplierDetail = function (data) {
+        $scope.shippingAddress = ''
+        $scope.email = data.email = ''
+        $scope.mobile = ''
         var balanceType = data.balanceType
         var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
         commonService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
@@ -217,10 +223,12 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
             }
         })
         $scope.email = data.email
-        $scope.mobile = data.mobile
-        $scope.shippingAddress = data.billingAddress[0].
+        if (data.phone != undefined) {
+            $scope.mobile = data.mobile == undefined ? data.phone : data.mobile + "," + data.phone
+        }
+        $scope.shippingAddress = data.billingAddress[0].street
             
-            console.log(data)
+          
     }
     $scope.accountTableSum = function () {
         var total = 0;

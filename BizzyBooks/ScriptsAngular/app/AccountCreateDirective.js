@@ -8,7 +8,7 @@
             templateUrl: 'CreateAccount.html',
             transclude: true,
             replace: true,
-            controller: ['$scope', '$http','$rootScope', 'config', function ($scope, $http,$rootScope, config) {
+            controller: ['$scope', '$http', '$rootScope', 'config','$timeout', function ($scope, $http, $rootScope, config, $timeout) {
                 $(".my a").click(function (e) {
                     e.preventDefault();
                 });
@@ -47,7 +47,8 @@
                 $scope.getcity(3);
                 var url = "https://www.whizapi.com/api/v2/util/ui/in/indian-states-list?project-app-key=4w9ik1xjvmcg1tn3koke4rk5"
                 $http.get(url).then(function (response) {
-                    $scope.stateData =response.data.Data                    
+                    $scope.stateData = response.data.Data
+                    console.log($scope.stateData)
                 });
                 $scope.same = function () {
                     if ($scope.sameAs == true) {
@@ -91,8 +92,6 @@
                     $scope.phone = null
                     $scope.mobile = null
                   
-                    $scope.city = { selected: { city: null } };
-                    $scope.state = { selected: { city: null } };
                   
                     $scope.street1 = null
                     $scope.city1 = null

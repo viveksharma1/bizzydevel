@@ -50,7 +50,7 @@
             var tds = Number(data.tdsamount)
         }
        
-        return Number(accountSum + itemTableSum + tds);
+        return Number(accountSum + itemTableSum);
     }
      
 

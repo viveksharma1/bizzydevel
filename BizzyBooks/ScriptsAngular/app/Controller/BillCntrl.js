@@ -413,8 +413,11 @@
 
            
             $scope.email = $scope.supliersDetail.email;
-            $scope.mobile = $scope.supliersDetail.mobile
+           
             $scope.shippingAddress = $scope.supliersDetail.billingAddress[0].street;
+            if ($scope.supliersDetail.phone != undefined) {
+                $scope.mobile = $scope.supliersDetail.mobile == undefined ? $scope.supliersDetail.phone : $scope.supliersDetail.mobile + "," + $scope.supliersDetail.phone
+            }
         });
     }
 
@@ -562,7 +565,7 @@
         $scope.saveBill = function (index) {
             var date = getDate($scope.billDate);
             var billDueDate = getDate($scope.billDueDate);
-            var actualDate = getDate($scope.actualDate);
+            var actualDate = moment(getDate($scope.actualDate)).format("DD/MM/YYYY");
             if ($scope.billNo == undefined) {
                 $rootScope.$broadcast('event:error', { message: "Please type Invoice No" });
                 return;
@@ -616,7 +619,7 @@
                 $scope.billtable[$scope.tableIndex].dutyAmount = $scope.dutyAmount;
                 $scope.billtable[$scope.tableIndex].SAD = $scope.SAD1;
                 $scope.billtable[$scope.tableIndex].totalDutyAmt = $scope.totalDutyAmt;
-                $scope.billtable[$scope.tableIndex].actualDate = $scope.actualDate;
+                $scope.billtable[$scope.tableIndex].actualDate = moment(getDate($scope.actualDate)).format("DD/MM/YYYY");
                 $scope.billtable[$scope.tableIndex].customData = $scope.customDatanew
                 $scope.billtable[$scope.tableIndex].purchaseRate = (Number($scope.assesableValue) / Number($scope.billtable[$scope.tableIndex].NETWEIGHT)).toFixed(2);
                 $scope.billtable[$scope.tableIndex].dutyPerUnit = (Number($scope.exciseDuty1) / Number($scope.billtable[$scope.tableIndex].NETWEIGHT)).toFixed(2);
@@ -629,7 +632,7 @@
                     $scope.billtable[i].exciseDuty = $scope.exciseDutyPerUnit * $scope.billtable[i].NETWEIGHT;
                     $scope.billtable[i].dutyAmount = $scope.exciseRate * $scope.billtable[i].NETWEIGHT;
                     $scope.billtable[i].SAD = $scope.exciseSAD * $scope.billtable[i].NETWEIGHT;
-                    $scope.billtable[i].actualDate = $scope.actualDate;
+                    $scope.billtable[i].actualDate = moment(getDate($scope.actualDate)).format("DD/MM/YYYY");
                 }
             }
             
@@ -1106,7 +1109,7 @@
     }
     $scope.remarks.selected = { name: '' };
     $scope.addBillLineItem = function () {
-        var actualDate = getDate($scope.actualDate);
+        var actualDate = moment(getDate($scope.actualDate)).format("DD/MM/YYYY");
         $scope.GODOWN.push({ type: "GODOWN", name: $scope.newitem });
         if ($scope.invoiceType == 'Import') {
             var billdata = {
@@ -1289,6 +1292,9 @@
     }
     $scope.bindSupplierDetail = function (data) {
         console.log(data.balanceType)
+        $scope.shippingAddress = ''
+        $scope.email  = ''
+        $scope.mobile = ''
         var balanceType = data.balanceType
        
         if (data.balanceType == 'debit') {
@@ -1305,7 +1311,11 @@
             }
         })
         $scope.email = data.email
-        $scope.mobile = data.mobile
+        if (data.phone != undefined) {
+            $scope.mobile = data.mobile == undefined ? data.phone : data.mobile + "," + data.phone
+        }
+      
+        //$scope.mobile = data.mobile + "," + data.phone?
         $scope.shippingAddress = data.billingAddress[0].street
        
     }

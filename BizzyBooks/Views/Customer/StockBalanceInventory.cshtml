@@ -95,7 +95,7 @@
 
                                     </ui-select-match>
 
-                                    <ui-select-choices repeat="invoice in ItemList| unique:'_id.GODOWN'|filter: $select.search ">
+                                    <ui-select-choices repeat="invoice in ItemList| filter: $select.search ">
                                         <div>
                                             <span style="color:forestgreen">{{invoice._id.no}}</span>
                                         </div>
@@ -194,7 +194,7 @@
                                     </ui-select-choices>
                                 </ui-select>
                             </div>
-                            <div class="form-group">
+                            @*<div class="form-group">
                                 <h4 class="tabheading font_11">Excise per unit</h4>
                                 <ui-select ng-model="exciseDuty.selected"
                                            ui-select-focuser
@@ -237,7 +237,7 @@
 
                                     </ui-select-choices>
                                 </ui-select>
-                            </div>
+                            </div>*@
                             <div class="form-group">
                                 <h4 class="tabheading font_11">Net Wt</h4>
                                 <ui-select ng-model="NETWEIGHT.selected"
