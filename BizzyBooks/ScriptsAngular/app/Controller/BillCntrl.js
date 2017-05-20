@@ -135,14 +135,16 @@
     $("#import").addClass('active')
     $("#dollar").addClass('active')
     $("#kg").addClass('active')
-
+    $scope.domesticExcise = true
     $scope.invoiceType1 = function (invoiceType) {
         $scope.invoiceType = invoiceType;
         if (invoiceType == 'Domestic') {
             $("#rupee").addClass('active')
             $("#dollar").removeClass('active')
             $("#custom").hide();
+           
             $("#curr").hide();
+            $scope.domesticExcise = false
         }
         else {
             $("#dollar").addClass('active')
@@ -151,6 +153,8 @@
             $("#import").addClass('active')
             $("#custom").show()
             $("#curr").show()
+            $scope.domesticExcise = true
+           
         }
     }
     // bind file 
@@ -178,19 +182,29 @@
     }
     $scope.excelTableItemSum = function () {
         var total = 0;
-        var totalweight = 0;
+        var totalweight = 0
+        var manualtotal = 0;
         for (var i = 0; i < $scope.billtable1.length; i++) {
             var product = Number($scope.billtable1[i]);
+            manualtotal += Number($scope.billtable1[i].TOTALAMOUNTINR);
             total += Number($scope.billtable1[i].TOTALAMOUNTUSD);
             totalweight += Number($scope.billtable1[i].NETWEIGHT);
         }
         $scope.totalWeight = Number(totalweight);
-        $scope.TOTALAMOUNTUSD = Math.round(total);
-        if ($scope.ExchangeRateINR) {
-            $scope.totalAmountINR = Number((Number($scope.TOTALAMOUNTUSD) * Number($scope.ExchangeRateINR)).toFixed(2));
+       
+        if ($scope.invoiceType == 'Domestic') {
+            $scope.totalAmountINR = Math.round(manualtotal);
+        }
+        else {
+            $scope.TOTALAMOUNTUSD = Math.round(total);
+            if ($scope.ExchangeRateINR) {
+                $scope.totalAmountINR = Number((Number($scope.TOTALAMOUNTUSD) * Number($scope.ExchangeRateINR)).toFixed(2));
+            }
         }
         return $scope.totalAmountINR
     }
+   
+
     $scope.manualTableSum = function () {
         var manualTotal = 0;
         var netweight = 0;
@@ -441,7 +455,7 @@
                         $scope.customPaymentInfo = billData.customPaymentInfo;
                         $scope.accountTable = billData.accountlineItem;
                         if (billData.itemDetail && localStorage["usertype"] == 'UO') {
-                            $scope.billtable1 = billData.itemDetail;
+                            $scope.billtable1 = billData.itemDetail; 
                             $scope.excelTableItemSum();
                             $scope.id = billData.id
                             $scope.totalAmountINR = $scope.excelTableItemSum() + $scope.accountTableSum();
@@ -732,8 +746,10 @@
             }
             if ($scope.manualIndex != null) {
                 $scope.billtable1[$scope.manualIndex] = data;
+                $scope.excelTableItemSum();
             } else {
                 $scope.billtable1.push(data);
+                $scope.excelTableItemSum();
             }
             $scope.manualIndex = null;
             
@@ -1095,7 +1111,7 @@
         $scope.NETWEIGHT = data.NETWEIGHT
         $scope.GROSSWT = data.GROSSWT
         $scope.PCSLENGTHINMTRS = data.PCSLENGTHINMTRS
-        $scope.TOTALAMOUNTMANUAL = data.TOTALAMOUNTMANUAL
+        $scope.TOTALAMOUNTMANUAL = data.TOTALAMOUNTINR
 
     }
     $scope.exciseCalculate = function () {
@@ -1270,14 +1286,17 @@
     //delete item 
     $scope.deleteItem = function (id, type, name, index) {
         $http.delete(config.api + "masters/" + id).then(function (response) {
-            $scope.REMARKS = response.data
+            //$scope.REMARKS = response.data
         });
         if (type == "GODOWN") {
-            delete $scope.GODOWN[index].name
+           // delete $scope.GODOWN[index].name
+            $scope.GODOWN.splice(index, 1);
         } else if (type == "REMARKS") {
-            delete $scope.REMARKS[index].name
+           // delete $scope.REMARKS[index].name
+            $scope.REMARKS.splice(index, 1);
         } else if (type == "DESCRIPTION") {
-            delete $scope.DESCRIPTION[index].name
+            //delete $scope.DESCRIPTION[index].name
+            $scope.DESCRIPTION.splice(index, 1);
         }
     }
     function calculateOpenningBalnce(data, balanceType) {

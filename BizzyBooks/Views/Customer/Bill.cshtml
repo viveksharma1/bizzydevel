@@ -322,7 +322,7 @@
                     <div class="modal-content" style="float:left; width:100%">
                         <div class="modal-header" style="float:left; width:100%">
                             <button type="button" class="close active" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Mannual Entry</h4>
+                            <h4 class="modal-title">Manual Entry</h4>
                         </div>
                         <div class="modal-body" style="float:left; width:100%">
                             <div class="col-sm-4">
@@ -1197,7 +1197,7 @@
                         <th > 
                             
                             @*<i class="cursor fa fa-plus" add-item itemtype="GODOWN[0].type"></i>*@
-                            <label class="badge cursor"  add-item itemtype="GODOWN[0].type"><i class="fa fa-plus"></i> Add</label>
+                            <label class="badge cursor"  add-item itemtype= GODN ng-init="GODN = 'GODOWN'"><i class="fa fa-plus"></i> Add</label>
                             <ui-select ui-tree-select  ng-model="godown.selected.name" id="countryCode" 
                                         
                                        theme="selectize" Sstyle="text-overflow: ellipsis">
@@ -1220,7 +1220,7 @@
                         </th>
                         <th>
                             @*<i class="cursor fa fa-plus" add-item  itemtype="DESCRIPTION[0].type"></i>*@
-                            <label class="badge cursor" add-item itemtype="DESCRIPTION[0].type"><i class="fa fa-plus"></i> Add</label>
+                            <label class="badge cursor" add-item itemtype= "DESC" ng-init="DESC = 'DESCRIPTION'"><i class="fa fa-plus"></i> Add</label>
                             <ui-select ui-tree-select ng-model="description.selected.name" id="countryCode"
                                        ui-select-focuser
                                        theme="selectize">
@@ -1243,7 +1243,7 @@
                         </th>
                         <th>
                             @*<i class="cursor fa fa-plus" add-item itemtype="REMARKS[0].type"></i>*@
-                            <label class="badge cursor" add-item itemtype="REMARKS"><i class="fa fa-plus"></i> Add</label>
+                            <label class="badge cursor" add-item itemtype= "RE" ng-init="RE = 'REMARKS'"><i class="fa fa-plus"></i> Add</label>
                             <ui-select ui-tree-select  ng-model="remarks.selected.name" id="countryCode"
                                        ui-select-focuser
                                        theme="selectize">
@@ -1285,7 +1285,8 @@
                         <th  style="text-align:right" width="100">AMOUNT(&#8377;)</th>  
                         <th > Excise </th>
                         <th> SAD </th> 
-                        <th style="text-align:right" width="100"> Total </th>                  
+                        @*<th style="text-align:right" width="100"> Total </th>*@                  
+                        <th>&nbsp;</th>
                         <th >&nbsp;</th>
                     </tr>
 
@@ -1303,7 +1304,7 @@
                         <td class="Count" style="text-align:center">{{item.AMOUNTINR |number : 2}}</td>         
                         <td style="text-align:right">{{item.dutyAmount |number : 2}}</td>     
                         <td style="text-align:right">{{item.SAD |number : 2}}</td>     
-                        <td class="Count" style="text-align:center"><li style="margin-top:1Px"  excise-Info excisedata="item"></li></td>                
+                        <td class="Count" style="text-align:center"><i style="margin-top:1Px;color:green"aria-hidden="true" class="fa fa-info fa-2x"  excise-Info excisedata="item"></i></td>                
                           <td class="text-center Count" ><a class="edit" title="Edit"> <i class="fa fa-times-circle cursor RemoveTR" style="font-size:11px" ng-click="remove($index)"></i></a></td>     
                         
                     </tr>
@@ -1439,7 +1440,7 @@
                 <i class="fa fa-caret-right"></i> Account details
             </h4>
             <hr style="float:left; width:100%; margin:5px 0px" />*@
-            <div class="col-sm-12 padding">
+            <div class="col-sm-12 padding" ng-hide="domesticExcise">
                 <label class="col-sm-12 padding" style="margin-top:5px">Excise Account</label>
                 <div class="col-sm-1 padding">
                     <input type="checkbox" ng-click ="exciseLedgerentry()" ng-model="exciseChecked" style="width:25px; height:25px;  margin-top:5px" />

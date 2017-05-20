@@ -14,8 +14,8 @@
                 });
                 $scope.groupMasters = {};
                 $scope.accounts = {};
-                $scope.city = { selected: { city: null } };
-                $scope.state = { selected: { city: null } };
+                $scope.city = {};
+                $scope.state = {};
                
                 $scope.checkboxModel = {
                     value1: false

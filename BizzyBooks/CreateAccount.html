@@ -24,7 +24,7 @@
 
                                 <ui-select ng-model="groupMasters.selected"  ui-select-focuser id="countryCode" theme="selectize" >
 
-                                    <ui-select-match placeholder="Choose Group">{{$select.selected.name}}</ui-select-match>
+                                    <ui-select-match placeholder="Choose Group"ng-click="clear($event, $select)">{{$select.selected.name}}</ui-select-match>
                                     <ui-select-choices repeat="person in groupMaster  | filter: $select.search">
                                         <div >
                                             <span style="color:black" ng-model="supplier1" ng-bind-html="person.name | highlight: $select.search">{{person.type}}</span>
@@ -138,9 +138,9 @@
 
                                     <div>
 
-                                        <ui-select ng-model="state.selected" ui-select-focuser id="countryCode" theme="selectize" on-select="getcity($select.selected.ID)">
+                                        <ui-select ng-model="state.selected" ui-select-focuser id="countryCode" on-select="getcity($select.selected.ID)" theme="selectize" >
 
-                                            <ui-select-match placeholder="State" ng-click="clear($event, $select)"><b style="font-size:12px">{{$select.selected.Name}}</b></ui-select-match>
+                                            <ui-select-match placeholder="State" ng-click="clear($event, $select)">{{$select.selected.Name}}</ui-select-match>
                                             <ui-select-choices repeat="state in stateData  | filter: $select.search">
                                                 <div>
                                                     <span style="color:black" ng-bind-html="state.Name | highlight: $select.search"></span>
@@ -158,7 +158,7 @@
                                   
                                     <div>
 
-                                        <ui-select ng-model="city.selected" ui-select-focuser id="countryCode" theme="selectize">
+                                        <ui-select ng-model="city.selected" ui-select-focuser  theme="selectize">
 
                                             <ui-select-match placeholder="City" ng-click="clear($event, $select)"><b style="font-size:12px">{{$select.selected.city}}</b></ui-select-match>
                                             <ui-select-choices repeat="city in cityData  | filter: $select.search">

@@ -84,6 +84,7 @@
             $scope.totalDutyAmt = billdata.manualLineItem[0].totalDutyAmt;
             $scope.totalBillAmount = billdata.amount;
             $scope.totalCustom = ((Number($scope.totalDutyAmt) * (Number(data.TOTALAMOUNT) * Number(billdata.ExchangeRate))) / (Number($scope.totalBillAmount) * Number(data.NETWEIGHT))).toFixed(2);
+            $scope.totalCustomPerItem = Number($scope.totalDutyAmt)
             $scope.costPerKg = $scope.costPerKg + Number($scope.totalCustom)
 
         });
