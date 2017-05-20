@@ -12,7 +12,7 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
             $('#form-popoverPopup').hide();
         }
         var files, res;
-     
+        $scope.visible = true
         $scope.clear = function ($event, $select) {
             $event.stopPropagation();
             $select.selected = null;
@@ -390,6 +390,7 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
                  vochNo: $scope.expenseId,
                  balance: $scope.netamount,
                  narration: $scope.narration,
+                 uoVisible: $scope.visible,
                  transactionData: {
                      compCode: localStorage.CompanyId,
                      email:$scope.email,
@@ -416,7 +417,7 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
                      attachements: attachements,
                  }
              }
-             $http.post(config.login + "saveExpensetest/" + $stateParams.expenceId, data).then(function (response) {
+             $http.post(config.login + "saveExpensetest/" + $stateParams.expenceId + "/"+ $scope.visible, data).then(function (response) {
                  if (response.status == 200) {
                      $rootScope.$broadcast('event:success', { message: "Expense Created" });
                      $stateParams.expenceId = response.data

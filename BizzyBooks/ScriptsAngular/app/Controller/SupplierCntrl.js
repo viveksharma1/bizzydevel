@@ -69,7 +69,7 @@ myApp.controller('SupplierCntrl', ['$scope', '$http', '$timeout', '$stateParams'
     }  
     //get expense data
     $scope.getExpense = function () {
-        $http.get(config.login + 'getTransactionData/' + localStorage.CompanyId + '?role=' + localStorage["usertype"] + "&type=EXPENSE").then(function (response) {
+        $http.get(config.login + 'getTransactionDataExpense/' + localStorage.CompanyId + '?role=' + localStorage["usertype"] + "&type=EXPENSE").then(function (response) {
             $scope.expenseTable = response.data;
             $scope.expenseCount = $scope.expenseTable.length
                 for (var i = 0; i < $scope.expenseTable.length; i++) {

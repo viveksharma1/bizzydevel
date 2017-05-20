@@ -2,7 +2,7 @@
   
   
 
-    "login": "http://localhost:4000/",
-   "api": "http://localhost:4000/api/"
+    "login": "http://104.236.223.163:4000/",
+   "api": "http://104.236.223.163:4000/api/"
 
 }
