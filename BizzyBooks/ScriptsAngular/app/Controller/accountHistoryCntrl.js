@@ -15,6 +15,8 @@
         $scope.ledgerData = data;
         var credit = 0;
         var debit = 0;
+        var amount1 = ''
+        var amount2 = ''
         for (var i = 0; i < $scope.ledgerData.length; i++) {
             var remarks;
             if ($scope.ledgerData[i].remarks) {
@@ -24,13 +26,18 @@
                 remarks = '';
             }
             if ($scope.ledgerData[i].particular1) {
-                var particular1 =  " & "+ localStorage[$scope.ledgerData[i].particular1]
+              //  var particular1 = " & " + localStorage[$scope.ledgerData[i].particular1]
+                var amount1 =  $scope.ledgerData[i].amount1
+                var amount2 = $scope.ledgerData[i].amount2
+                $scope.ledgerData[i].particular1 = localStorage[$scope.ledgerData[i].particular1] + ' '  + amount2 
             }
             else {
                 particular1 = '';
+                 amount1 = '',
+                 amount2 = ''
             }
             $scope.ledgerData[i].accountName = localStorage[$scope.ledgerData[i].accountName]
-            $scope.ledgerData[i].particulars = localStorage[$scope.ledgerData[i].particular] + remarks + particular1
+            $scope.ledgerData[i].particulars = localStorage[$scope.ledgerData[i].particular] + remarks + ' ' +  amount1
             if ($scope.ledgerData[i].credit) {
                 credit += Number($scope.ledgerData[i].credit);
             }

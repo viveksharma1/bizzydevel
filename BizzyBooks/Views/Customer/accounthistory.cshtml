@@ -78,7 +78,8 @@
                             <td style="text-align:center" class="Ledgercheck"><input type="checkbox" /></td>
                             <td style="padding:5px" class="text-primary cursor" ng-bind="data.date  | date :'dd/MM/yyyy'"></td>
                             <td style="padding:5px;font-family: 'Gill Sans MT', 'Trebuchet MS', sans-serif">
-                               {{data.particulars}}
+                              {{data.particulars}}<br /> 
+                               <em ng-bind="data.particular1"></em> 
                             </td>
                             <td style="padding:5px;font-family: 'Gill Sans MT', 'Trebuchet MS', sans-serif">
                                 {{data.voType}}

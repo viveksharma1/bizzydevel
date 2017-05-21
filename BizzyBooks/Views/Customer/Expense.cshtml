@@ -112,7 +112,7 @@
             </div>
             <div class="col-sm-4 padding text-right pull-right">
                 <p class="text-right">Balance Due</p>
-                <p class="balancedue" style="float:none">&#8377; {{totaltax + totalcharges }}</p>
+                <p class="balancedue" style="float:none">&#8377; {{ (totaltax + totalcharges) | number: 0  }}</p>
 
 
                 

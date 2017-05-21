@@ -150,7 +150,7 @@
                 </div>
                 <div class="col-sm-6">
                     <h4 class="tabheading font_11">Interest Amount</h4>
-                    <input type="text" class="form-control" ng-model="settlementData.interestAmount" ng-disabled="isDisabled"/>
+                    <input type="text" class="form-control" ng-model="settlementData.interestAmount | number :2 " ng-disabled="isDisabled"/>
                 </div>
             </div>
         </div>
@@ -192,7 +192,7 @@
                 <hr />
                 <div class="col-sm-4">
                     <h4 class="tabheading font_11">VAT Amount</h4>
-                    <input type="text" class="form-control" ng-model="settlementData.totalDedvatAmount" />
+                    <input type="text" class="form-control" ng-model="settlementData.totalDedvatAmount | number :2 " />
                 </div>
                 <div class="col-sm-8">
                     <h4 class="tabheading font_11">VAT Account<span class="pull-right" style="color:forestgreen"><i class="fa fa-rupee"></i> {{vatAccountBalance |number : fractionSize}} <em style="color:red">{{supplierType}}</em></span></h4>
@@ -219,7 +219,7 @@
 
                 <div class="col-sm-4">
                     <h4 class="tabheading font_11 content" style="margin-top:0px !important;">Excise Amount</h4>
-                    <input type="text" class="form-control" ng-model="settlementData.totalDedExciseAmount" />
+                    <input type="text" class="form-control" ng-model="settlementData.totalDedExciseAmount | number :2 " />
                 </div>
                 <div class="col-sm-8">
                     <h4 class="tabheading font_11 content" style="margin-top:0px !important;">OT Tax Account<span class="pull-right" style="color:forestgreen"><i class="fa fa-rupee"></i> {{oTaxBalance |number : fractionSize}} <em style="color:red">{{supplierType}}</em></span></h4>

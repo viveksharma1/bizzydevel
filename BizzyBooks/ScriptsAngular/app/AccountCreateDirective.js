@@ -194,6 +194,8 @@
                     //} if (localStorage['adminrole'] = '2') {
                     //    var isUo = false
                     //}
+                    $scope.city = { selected: { city: null } };
+                    $scope.state = { selected: { city: null } };
                     var isUo = localStorage.usertype == 'UO' ? true : false;
                     console.log($scope.groupMasters);
                     console.log($scope.checkboxModel.value1);

@@ -50,7 +50,7 @@
         });
     }
     getInventory();
-    var qryAgg = 'visible=true&group={"no": "$no","DESCRIPTION":"$DESCRIPTION","GODOWN": "$GODOWN","RRMARKS":"$RRMARKS"}';
+    var qryAgg = 'visible=true&group={"no": "$no","DESCRIPTION":"$DESCRIPTION","GODOWN": "$GODOWN","RRMARKS":"$RRMARKS","NETWEIGHT":"$NETWEIGHT"}';
     $http.get(config.login + "getAggregateInventories?" + qryAgg).then(function (response) {
         $scope.ItemList = response.data;
         //$scope.filterList2 = $scope.ItemList2;

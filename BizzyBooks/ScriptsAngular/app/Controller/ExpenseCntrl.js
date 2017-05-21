@@ -164,6 +164,7 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
                         $scope.attachements = expenseData.attachements;
                         $scope.narration = response.data.narration
                         $scope.refNo = response.data.refNo
+                        $scope.visible =  response.data.uoVisible
                         if (response.data.paymentLog) {
                             $scope.receiptCount = response.data.paymentLog.length;
                             $scope.receipts = response.data.paymentLog;
@@ -211,7 +212,7 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
     }
     $scope.bindSupplierDetail = function (data) {
         $scope.shippingAddress = ''
-        $scope.email = data.email = ''
+        $scope.email  = ''
         $scope.mobile = ''
         var balanceType = data.balanceType
         var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
@@ -374,9 +375,9 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
                  attachements.push({ title: fileItem.title, cdnPath: fileItem.cdnPath, file: fileItem.file })
              });
              if (!$scope.tdsamount) {
-                 $scope.netAmount = Number($scope.itemTableSum()) + Number($scope.accountTableSum())
+                 $scope.netAmount = Math.round(Number($scope.itemTableSum()) + Number($scope.accountTableSum()))
              } else {
-                 $scope.netAmount = Number($scope.itemTableSum()) + Number($scope.accountTableSum())- Number($scope.tdsamount)
+                 $scope.netAmount = Math.round(Number($scope.itemTableSum()) + Number($scope.accountTableSum()) - Number($scope.tdsamount))
              }
              var data = {
                  type: "EXPENSE",

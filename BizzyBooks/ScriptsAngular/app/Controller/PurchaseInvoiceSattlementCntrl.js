@@ -49,8 +49,9 @@
             
         }
         if (type == "perKg") {
-            $scope.settlementData.vatPerKg = Number((Number($scope.settlementData.vatAmount) / Number($scope.settlementData.totalQty)).toFixed())
-            $scope.settlementData.excisePerKg = Number((Number($scope.settlementData.exciseAmount) / Number($scope.settlementData.totalQty)).toFixed())
+            $scope.settlementData.vatPerKg = Number((Number($scope.settlementData.vatAmount) / Number($scope.settlementData.totalQty)).toFixed(2))
+            $scope.settlementData.excisePerKg = Number((Number($scope.settlementData.exciseAmount) / Number($scope.settlementData.totalQty)).toFixed(2))
+            $scope.settlementData.totalDedPerKg = ((Number($scope.settlementData.vatAmount) + Number($scope.settlementData.exciseAmount)) / Number($scope.settlementData.totalQty)).toFixed(2)
             $scope.isDisabled1 = false;
                 $scope.isDisabled = true;
             }
@@ -138,7 +139,7 @@
     $scope.calculateinterest = function (rate,amount) {
         $scope.settlementData.interestAmount = ((Number(amount) * rate) / 100).toFixed(2);
         $scope.settlementData.totalDedvatAmount = Number($scope.settlementData.vatAmount) > Number($scope.settlementData.interestAmount) ? $scope.settlementData.interestAmount : $scope.settlementData.vatAmount
-        $scope.settlementData.totalDedExciseAmount = $scope.settlementData.interestAmount > $scope.settlementData.vatAmount ? $scope.settlementData.interestAmount - $scope.settlementData.totalDedvatAmount: 0 
+        $scope.settlementData.totalDedExciseAmount = Number($scope.settlementData.interestAmount) > Number($scope.settlementData.vatAmount) ? Number($scope.settlementData.interestAmount) - Number($scope.settlementData.totalDedvatAmount): 0 
         console.log($scope.totalDedvatAmount); 
     }
     
@@ -190,9 +191,9 @@
        
     //
     $scope.vatDedPerkg = function () {
-        $scope.settlementData.totalLessPerKg = Number((Number($scope.settlementData.lessPerKg) * Number($scope.settlementData.totalQty)).toFixed())
+        $scope.settlementData.totalLessPerKg = (Number((Number($scope.settlementData.totalDedPerKg) - Number($scope.settlementData.lessPerKg))) * Number($scope.settlementData.totalQty)).toFixed(2)
         $scope.settlementData.totalDedvatAmount = Number($scope.settlementData.vatAmount) > Number($scope.settlementData.totalLessPerKg) ? $scope.settlementData.totalLessPerKg : $scope.settlementData.vatAmount
-        $scope.settlementData.totalDedExciseAmount = $scope.settlementData.totalLessPerKg > $scope.settlementData.vatAmount ? $scope.settlementData.totalLessPerKg - $scope.settlementData.totalDedvatAmount : 0
+        $scope.settlementData.totalDedExciseAmount = Number($scope.settlementData.totalLessPerKg) > Number($scope.settlementData.vatAmount) ?Number($scope.settlementData.totalLessPerKg) - Number($scope.settlementData.totalDedvatAmount): 0
 
     }
     function calculateTotalQty(data) {

@@ -707,14 +707,14 @@
                     $http.post(config.login + "saveBillTest/" + $stateParams.billNo, data).then(function (response) {
                         if (response.status == 200) {
                             $scope.saving = false;
-                            $rootScope.$broadcast('event:success', { message: "Purchase Invoice Created" });
+                           $rootScope.$broadcast('event:success', { message: "Purchase Invoice Created" });
 
                             $stateParams.billNo = response.data
                             $state.go('Customer.Bill',{ billNo: response.data},{location: 'replace' });
 
                         }
                         else {
-                            $rootScope.$broadcast('event:error', { message: "Error while creating receiipt" });
+                            $rootScope.$broadcast('event:error', { message: "Error while creating invoice" });
                         }
                     });
                 }
@@ -900,7 +900,7 @@
         $scope.customCecAndEducess = 1
         $scope.SAD = 4
         $scope.baseValue = Number($scope.baseRate1 * $scope.exchangeRateBill * $scope.totalQnt).toFixed(2)
-        $scope.baseValue1 = $scope.baseValue.toFixed(2)
+       // $scope.baseValue1 = $scope.baseValue.toFixed(2)
     }
     //calculate custom duty
     $scope.calculateCustom = function () {
