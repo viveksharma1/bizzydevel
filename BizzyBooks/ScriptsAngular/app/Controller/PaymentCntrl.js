@@ -395,7 +395,7 @@
             compCode: localStorage.CompanyId,
             type: type,
             role:localStorage['usertype'],
-            date: paymentDate,//$scope.dateFormat($scope.paymentdate),
+            date: paymentDate,
             amount: $scope.totalPaidAmount,
             vochNo: $scope.paymentNo,
             state: "PAID",

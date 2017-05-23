@@ -1,4 +1,4 @@
-﻿myApp.controller('accountHistoryCntrl', ['$scope', '$http', '$stateParams', 'config', '$state', function ($scope, $http, $stateParams, config, $state) {
+﻿myApp.controller('accountHistoryCntrl', ['$scope', '$http', '$stateParams', 'config', '$state', 'DTOptionsBuilder', function ($scope, $http, $stateParams, config, $state, DTOptionsBuilder) {
 
     $(".my a").click(function (e) {
         e.preventDefault();
@@ -6,6 +6,10 @@
     $scope.Accountbtn = function () {
         $('#formaccount').modal('show');
     };
+    $scope.dtOptions = DTOptionsBuilder.newOptions()
+         .withOption('processing', false)
+         .withOption('scrolly', 300)
+         .withOption('paging', false)
     $scope.userType = localStorage.usertype
     $http.get(config.api + "accounts/" + $stateParams.accountId + "?[filter][where][compCode]=" + localStorage.CompanyId).then(function (response) {
        $scope.accountData = response.data;

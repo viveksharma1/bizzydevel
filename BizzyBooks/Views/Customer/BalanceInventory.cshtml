@@ -53,7 +53,7 @@
                 <div class="col-sm-12 padding" style="padding:10px 0px !important">
                     <div class="col-sm-2 padding  ">
 
-                        <div class="filterBox pull-left" style="padding:0px">
+                        <div class="filterBox pull-left"  id ="filterBox"style="padding:0px">
                             <h3 style="padding:10px">Search Filter</h3>
                             <div class="col-sm-12 scrollbar scrollbarAngular" style="height:460px">
                                 <div class="form-group ">
@@ -67,7 +67,25 @@
                                         <option>Process</option>
                                     </select>
                                 </div>
+                                <div class="form-group">
+                                    <h4 class="tabheading font_11">Invoice No</h4>
+                                    <ui-select ng-model="no.selected"
+                                               ui-select-focuser
+                                               theme="selectize">
+                                        <ui-select-match width="100%" allow-clear="true" placeholder="">
+                                            <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                                {{ $select.selected._id.no || $select.search }}
+                                            </span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="invoice in ItemList  | unique:'_id.no'|filter: $select.search">
+                                            <div>
+                                                <span style="color:forestgreen">{{invoice._id.no}}</span>
+                                            </div>
 
+
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
                                 <div class="form-group">
                                     <h4 class="tabheading font_11">Sub Category</h4>
                                     <ui-select ng-model="subcategory.selected"
@@ -515,24 +533,25 @@
                         <div style="overflow-x:auto; float:left; width:100%;">
 
 
-                            <table class="table-condensed table table-bordered" fixed-header id="ItemTable" style="width:100%; height:490px; font-size:12px;">
-                                <thead style="background-color:#f0f8ff; white-space:nowrap;">
+                            <table class="dataTables table-condensed table-bordered table-striped" datatable="ng" cellspacing="0"dt-options="dtOptions" id="ItemTable"  style="font-size:11px;font:bold">
+                                <thead style="background-color:#f0f8ff">
                                     <tr>
-                                        <th style="text-align:center" width="50"><input ng-model="selectAll" ng-click="selectAllLineItem(filterList)" type="checkbox" /></th>
+                                        @*<th style="text-align:center" width="50"><input ng-model="selectAll" ng-click="selectAllLineItem(filterList)" type="checkbox" /></th>*@
                                         <th>Invoice no </th>
                                         <th>Sub Category </th>
                                         <th>Coil no</th>
-                                        <th>Incoming Date</th>
+                                        <th>Date</th>
                                         <th>Lot Weight</th>
                                         <th>Location</th>
 
                                         <th>Grade</th>
                                         <th>Finish</th>
-                                        <th>Thickness (MM)</th>
-                                        <th>Width (MM)</th>
-                                        <th>Length (MM)</th>
-                                        <th>Net (MT)</th>
-                                        <th>Gross (MT)</th>
+                                        <th>Thickness</th>
+                                        <th>Width</th>
+                                        <th>Length</th>
+                                        <th>Net weight</th>
+                                        <th>Gross weight</th>
+                                        <th>BALANCE</th>
                                         <th>PCS </th>
                                         <th>Remarks</th>
 
@@ -540,16 +559,17 @@
 
                                     </tr>
                                 </thead>
+                               
                                 <tbody>
 
 
                                     <tr ng-repeat="item in filterList | filter:search">
                                         @*
-                                    <td> {{item.CONTNO}}</td>
+                <td> {{item.CONTNO}}</td>
 
-                                    <td> {{item.DESCRIPTION}}</td>
+                <td> {{item.DESCRIPTION}}</td>
                                         *@
-                                        <td style="text-align:center"><input ng-click="selectLineItem(item)" ng-model="item.selected" type="checkbox" /></td>
+                                        @*<td style="text-align:center"><input ng-click="selectLineItem(item)" ng-model="item.selected" type="checkbox" /></td>*@
                                         <td> {{item.no}}</td>
                                         <td> {{item.SUBCATEGORY}}</td>
                                         <td> {{item.COILSHEETNO}}</td>
@@ -563,6 +583,7 @@
                                         <td> {{item.LENGTH}}</td>
                                         <td> {{item.NETWEIGHT}}</td>
                                         <td> {{item.GROSSWT}}</td>
+                                        <td> {{item.BALANCE}}</td>
                                         <td> {{item.PCS/LENGTHINMTRS}}</td>
                                         <td> {{item.REMARK}}</td>
 
@@ -582,28 +603,55 @@
                                             </div>
                                         </td>
                                         @*<td>
-                                        <button type="button" class="editbtn" ng-click="GRNDetail(item)">Detail</button>
-                                        <class class="linkseparator" style="margin-top:4px; margin-right:0px">|</class>
-                                        <div class="btn-group editcaret">
-                                            <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>
-                                            <ul class="dropdown-menu editdrpdwn" role="menu" style="top:18px">
-                                                <li><a href="#/Customer/Invoice">Invoice</a></li>
+                    <button type="button" class="editbtn" ng-click="GRNDetail(item)">Detail</button>
+                    <class class="linkseparator" style="margin-top:4px; margin-right:0px">|</class>
+                    <div class="btn-group editcaret">
+                        <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>
+                        <ul class="dropdown-menu editdrpdwn" role="menu" style="top:18px">
+                            <li><a href="#/Customer/Invoice">Invoice</a></li>
 
-                                            </ul>
+                        </ul>
 
-                                        </div>
-                                    </td>*@
+                    </div>
+                </td>*@
 
                                     </tr>
+                                <tfoot>
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
 
+                                        <th></th>
+                                        <th></th>
+
+                                        <th>Total:</th>
+                                        <th style="text-align:right;font-size:12px">{{totalNetWeight}}</th>
+                                        <th style="text-align:center;font-size:12px">{{totalNetBalance}}</th>
+                                       
+                                       
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+
+
+                                    </tr>
+                                </tfoot>
 
 
 
                                 </tbody>
+                               
 
                             </table>
 
-
+                           
                             <!-- ChangeStatusModal -->
                             <div id="ChangeStatusModal" class="modal fade" role="dialog">
                                 <div class="modal-dialog modal-sm" style="margin-top:100px">

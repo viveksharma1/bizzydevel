@@ -1,14 +1,21 @@
-﻿myApp.controller('BalanceInventoryCntrl', ['$scope', '$http', '$timeout', '$stateParams', 'commonService', '$rootScope', '$state', 'config', '$filter', function ($scope, $http, $timeout, $stateParams, commonService, $rootScope, $state, config, $filter) {
+﻿myApp.controller('BalanceInventoryCntrl', ['$scope', '$http', '$timeout', '$stateParams', 'commonService', '$rootScope', '$state', 'config', '$filter', 'DTOptionsBuilder', function ($scope, $http, $timeout, $stateParams, commonService, $rootScope, $state, config, $filter, DTOptionsBuilder) {
 
 
     $(".my a").click(function (e) {
         e.preventDefault();
     });
-
-
+    
     $scope.goBack = function () {
         window.history.back();
     }
+    $scope.dtOptions = DTOptionsBuilder.newOptions()
+         .withOption('processing', false)
+        .withOption('scrollX', 450)
+         .withOption('scrollY', 370)
+         .withOption('paging', false)
+    
+    
+   
     //$scope.clear = function ($event, $select) {
     //    $event.stopPropagation();
     //    //to allow empty field, in order to force a selection remove the following line
@@ -25,17 +32,36 @@
 
         $timeout(function () { $select.activate() }, 200);
     }
-
-    $http.get(config.api + "Inventories?filter[where][visible]=false&filter[limit]=20").then(function (response) {
-        $scope.ItemList2 = response.data;
-        $scope.filterList = $scope.ItemList2;
-    });
-    var qryAgg = 'visible=false&group={"SUBCATEGORY": "$SUBCATEGORY","COILSHEETNO":"$COILSHEETNO","INCOMINGDATE": "$INCOMINGDATE","LotWeight":"$LotWeight","LOCATION":"$LOCATION","GRADE":"$GRADE","FINISH":"$FINISH","THICKNESS":"$THICKNESS","WIDTH":"$WIDTH","LENGTH":"$LENGTH","NETWEIGHT":"$NETWEIGHT","GROSSWT":"$GROSSWT","PCS/LENGTHINMTRS":"PCS/LENGTHINMTRS"}';
+    
+    function getTotalsum(data) {
+        var NETWEIGHT = 0;
+        var BALANCE = 0;
+        for (var i = 0; i < data.length; i++) {
+            NETWEIGHT += Number(data[i].NETWEIGHT)
+            if (data[i].BALANCE != undefined) {
+                BALANCE += Number(data[i].BALANCE)
+            }
+           
+        }
+        $scope.totalNetWeight =  NETWEIGHT.toFixed(3)
+        $scope.totalNetBalance = (BALANCE).toFixed(3)
+    }
+    function getInventory() {
+        $http.get(config.api + "Inventories?filter[where][visible]=false").then(function (response) {
+            $scope.ItemList2 = response.data;
+            $scope.filterList = $scope.ItemList2;
+            getTotalsum(response.data);
+        });
+    }
+    getInventory();
+    var qryAgg = 'visible=false&group={"SUBCATEGORY": "$SUBCATEGORY","COILSHEETNO":"$COILSHEETNO","INCOMINGDATE": "$INCOMINGDATE","LotWeight":"$LotWeight","LOCATION":"$LOCATION","GRADE":"$GRADE","FINISH":"$FINISH","THICKNESS":"$THICKNESS","WIDTH":"$WIDTH","LENGTH":"$LENGTH","NETWEIGHT":"$NETWEIGHT","GROSSWT":"$GROSSWT","PCS/LENGTHINMTRS":"PCS/LENGTHINMTRS","no":"$no"}';
     $http.get(config.login + "getAggregateInventories?" + qryAgg).then(function (response) {
         $scope.ItemList = response.data;
+       
      });
     
-    $scope.pcslengthmtr = {};
+    $scope.pcslengthmtr = {}
+    $scope.no = {};
     $scope.grossweight = {};
     $scope.netweight = {};
     $scope.length = {};
@@ -63,6 +89,7 @@
         $scope.incomingdate = {};
         $scope.coilsheetno = {};
         $scope.subcategory = {};
+        $scope.no = {};
         $scope.filterList = $scope.ItemList2;
     }
     $scope.applyFilter = function () {
@@ -82,11 +109,13 @@
                 "NETWEIGHT": $scope.netweight.selected ? $scope.netweight.selected._id.NETWEIGHT : $scope.netweight.selected,
                 "GROSSWT": $scope.grossweight.selected ? $scope.grossweight.selected._id.GROSSWT : $scope.grossweight.selected,
                 "PCS/LENGTHINMTRS": $scope.pcslengthmtr.selected ? $scope.pcslengthmtr.selected._id.PCS / LENGTHINMTRS : $scope.pcslengthmtr.selected,
+                "no": $scope.no.selected ? $scope.no.selected._id.no : $scope.no.selected,
 
             }
         }
         $http.get(config.api + "Inventories?filter=" + encodeURIComponent(JSON.stringify(qry))).then(function (response) {
             $scope.filterList = response.data;
+            getTotalsum(response.data);
         });
     }
     //$scope.applyFilter = function () {
@@ -409,6 +438,7 @@
         $http.post(config.api + "Inventories", data).then(function (response) {
             console.log(response)
             $rootScope.$broadcast('event:success', { message: $scope.ExeclDataRows.length + " Opening Stock Uploaded Successfully " });
+            getInventory();
         })
     }
     $scope.uploadFile = function () {
@@ -443,12 +473,19 @@
                             var obj4 = obj2.replace(" ", "");
                             var obj1 = obj4.replace("/", "");
 
-                           
+                            if (obj1 == "InvoiceNo") {
+                                retObj["no"] = retObj[obj1] = XL_row_object[key][obj];
+                            }
+                            if (obj1 == "INCOMINGDATE") {
+                                retObj["INCOMINGDATE"] = moment(new Date(retObj[obj1] = XL_row_object[key][obj])).format('DD/MM/YYYY');
+                                console.log(retObj["INCOMINGDATE"])
+                            }
                             var INOUT = "IN/OUT"
                             var date = "date"
                             var exchangeRate = "exchangeRate"
                             if (obj1 == "NETWEIGHT") {
                                 $scope.netweight = Number(XL_row_object[key][obj]);
+                                retObj["BALANCE"] = Number(XL_row_object[key][obj]);
                             }
                             if (obj1 == "TOTALPRICE") {
                                 $scope.totalprice = Number(XL_row_object[key][obj]);
@@ -470,7 +507,7 @@
                             retObj[INOUT] = 0
                             retObj["currentStatus"] = 'open';
                             retObj["visible"] = false;
-                            retObj["no"] = "Opening Balance" ;
+                            retObj["type"] = 'OB';
                             retObj["statusTransaction"] = [{ dt: new Date(), status: 'open', remarks: 'inventory added' }];
                             retObj["assesableValue"] = '0';
                             retObj["exciseDuty"] = '0';

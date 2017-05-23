@@ -1,4 +1,4 @@
-﻿myApp.controller('StockBalanceInventoryCntrl', ['$scope', '$http', '$timeout', '$stateParams', 'commonService', '$rootScope', '$state', 'config', '$filter', function ($scope, $http, $timeout, $stateParams, commonService, $rootScope, $state, config, $filter) {
+﻿myApp.controller('StockBalanceInventoryCntrl', ['$scope', '$http', '$timeout', '$stateParams', 'commonService', '$rootScope', '$state', 'config', '$filter', 'DTOptionsBuilder', function ($scope, $http, $timeout, $stateParams, commonService, $rootScope, $state, config, $filter, DTOptionsBuilder) {
 
 
     $(".my a").click(function (e) {
@@ -12,6 +12,12 @@
     $scope.UploadOpeningStock = function () {
         $('#UploadOpeningStock').modal('show');
     }
+    $scope.dtOptions = DTOptionsBuilder.newOptions()
+        .withOption('processing', false)
+       .withOption('scrollX', 370)
+        .withOption('scrollY', 370)
+        .withOption('paging', false)
+
 
     //$scope.clear = function ($event, $select) {
     //    $event.stopPropagation();
@@ -37,8 +43,8 @@
             NETWEIGHT += Number(data[i].NETWEIGHT)
             BALANCE += Number(data[i].BALANCE)
         }
-        $scope.totalNetWeight = "TOTAL QUANTITY :" + (NETWEIGHT).toFixed(3) 
-        $scope.totalNetBalance = "BALANCE QUANTITY :" + (BALANCE).toFixed(3)
+        $scope.totalNetWeight = (NETWEIGHT).toFixed(3) 
+        $scope.totalNetBalance = (BALANCE).toFixed(3)
 
 
     }
@@ -50,7 +56,7 @@
         });
     }
     getInventory();
-    var qryAgg = 'visible=true&group={"no": "$no","DESCRIPTION":"$DESCRIPTION","GODOWN": "$GODOWN","RRMARKS":"$RRMARKS","NETWEIGHT":"$NETWEIGHT"}';
+    var qryAgg = 'visible=true&group={"no": "$no","DESCRIPTION":"$DESCRIPTION","GODOWN": "$GODOWN","RRMARKS":"$RRMARKS","NETWEIGHT":"$NETWEIGHT", "BALANCE":"$BALANCE","RG":"$RG"}';
     $http.get(config.login + "getAggregateInventories?" + qryAgg).then(function (response) {
         $scope.ItemList = response.data;
         //$scope.filterList2 = $scope.ItemList2;
@@ -61,17 +67,18 @@
     $scope.godown = {};
     $scope.description = {};
     $scope.remarks = {};
-    $scope.rgno = {};
+    $scope.RG = {};
     $scope.exciseDuty = {};
     $scope.SAD = {};
     $scope.NETWEIGHT = {};
+    $scope.BALANCE = {};
 
     $scope.clearFilter=function(){
         $scope.invoiceno = {};
         $scope.godown = {};
         $scope.description = {};
         $scope.remarks = {};
-        $scope.rgno = {};
+        $scope.RG = {};
         $scope.exciseDuty = {};
         $scope.SAD = {};
         $scope.NETWEIGHT = {};
@@ -86,10 +93,11 @@
                 "GODOWN": $scope.godown.selected ? $scope.godown.selected._id.GODOWN : $scope.godown.selected,
                 "DESCRIPTION": $scope.description.selected ? $scope.description.selected._id.DESCRIPTION : $scope.description.selected,
                 "RRMARKS": $scope.remarks.selected ? $scope.remarks.selected._id.RRMARKS : $scope.remarks.selected,
-                "rgNo": $scope.rgno.selected ? $scope.rgno.selected._id.rgNo : $scope.rgno.selected,
+                "RG": $scope.RG.selected ? $scope.RG.selected._id.RG : $scope.RG.selected,
                 "exciseDuty": $scope.exciseDuty.selected ? $scope.exciseDuty.selected._id.exciseDuty : $scope.exciseDuty.selected,
                 "SAD": $scope.SAD.selected ? $scope.SAD.selected._id.SAD : $scope.SAD.selected,
                 "NETWEIGHT": $scope.NETWEIGHT.selected ? $scope.NETWEIGHT.selected._id.NETWEIGHT : $scope.NETWEIGHT.selected,
+                "BALANCE": $scope.BALANCE.selected ? $scope.BALANCE.selected._id.BALANCE : $scope.BALANCE.selected,
             }
         }
         $http.get(config.api + "Inventories?filter=" + encodeURIComponent(JSON.stringify(qry))).then(function (response) {
@@ -358,7 +366,7 @@
                             }
 
                             if (obj1 == "actualDate") {
-                                retObj["actualDate"] = moment(new Date(retObj[obj1] = XL_row_object[key][obj])).format('MM/DD/YYYY');
+                                retObj["actualDate"] = moment(new Date(retObj[obj1] = XL_row_object[key][obj])).format('DD/MM/YYYY');
                                 console.log(retObj["actualDate"])
                             }
                             console.log(retObj[obj1])
@@ -367,7 +375,7 @@
                             retObj["visible"] = true;
                            // retObj["no"] = "Opening Balance";
                             retObj["statusTransaction"] = [{ dt: new Date(), status: 'open', remarks: 'inventory added' }];
-                            retObj["rgNo"] = count + 1;
+                            retObj["RG"] = count + 1;
                             
                             //retObj["assesableValue"] = '0';
                            // retObj["exciseDuty"] = '0';

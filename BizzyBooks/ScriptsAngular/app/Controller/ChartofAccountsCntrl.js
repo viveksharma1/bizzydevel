@@ -1,4 +1,4 @@
-﻿myApp.controller('ChartofAccountsCntrl', ['$scope', '$http', 'config', 'dateService', 'authService', '$rootScope', function ($scope, $http, config, dateService, authService, $rootScope) {
+﻿myApp.controller('ChartofAccountsCntrl', ['$scope', '$http', 'config', 'dateService', 'authService', '$rootScope', 'DTOptionsBuilder', function ($scope, $http, config, dateService, authService, $rootScope, DTOptionsBuilder) {
 
     $(".my a").click(function (e) {
         e.preventDefault();
@@ -10,7 +10,7 @@
         format: 'dd/mm/yyyy',
         autoclose: true,
     });
-
+   
     $('#toDate').datepicker({
         format: 'dd/mm/yyyy',
         autoclose: true,
@@ -50,7 +50,7 @@
     $(".js-example-basic-single").select2();
     //console.log(localStorage.DefaultCompanyName);
 
-
+    
 
     $('.btn-toggle').click(function () {
         $(this).find('.btn').toggleClass('active');
@@ -156,10 +156,13 @@
     }
 
     $scope.getAccountList = function (compCode) {
+      
         $http.post(config.login + "dateWiseAccountDetail" + "?date=" + localStorage.toDate + "&role=" + localStorage['usertype'], compCode).then(function (response) {
+            $scope.displayTable = true
             //$scope.account = response.data;
             $scope.account = getAccountData(response.data);
             console.log($scope.account);
+            
         });
     }
     if (localStorage.usertype == 'UO') {
@@ -216,7 +219,12 @@
 
 
     }
+   
 
+    $scope.dtOptions = DTOptionsBuilder.newOptions()
+    .withOption('scrollx', true)
+    .withOption('paging', false)
+   
 
     //var urlToChangeStream = "" + config.api + "accounts/change-stream?_format=event-stream";
     //var src = new EventSource(urlToChangeStream);

@@ -1,4 +1,4 @@
-﻿myApp.controller('BillCntrl', ['$scope', '$http', '$timeout', '$stateParams', 'commonService', '$rootScope', '$state', 'config', '$filter', 'authService', 'FileUploader', function ($scope, $http, $timeout, $stateParams, commonService, $rootScope, $state, config, $filter, authService, FileUploader) {
+﻿myApp.controller('BillCntrl', ['$scope', '$http', '$timeout', '$stateParams', 'commonService', '$rootScope', '$state', 'config', '$filter', 'authService', 'FileUploader', 'DTOptionsBuilder', function ($scope, $http, $timeout, $stateParams, commonService, $rootScope, $state, config, $filter, authService, FileUploader, DTOptionsBuilder) {
     $scope.manualTotal = 0;
     $scope.CIFTOTAL1 = 0;
     $scope.role = localStorage["usertype"];
@@ -8,6 +8,12 @@
             container: 'body'
         });
     })
+    $scope.dtOptions = DTOptionsBuilder.newOptions()
+        .withOption('processing', false)
+       .withOption('scrollX', 450)
+        .withOption('scrollY', 370)
+        .withOption('paging', false)
+
     $.fn.datepicker.defaults.format = "dd/mm/yyyy";
     var type = $stateParams.type;
     localStorage["type1"] = "BILL"
@@ -190,7 +196,8 @@
             total += Number($scope.billtable1[i].TOTALAMOUNTUSD);
             totalweight += Number($scope.billtable1[i].NETWEIGHT);
         }
-        $scope.totalWeight = Number(totalweight);
+       
+        $scope.totalWeight = Number(totalweight)
        
         if ($scope.invoiceType == 'Domestic') {
             $scope.totalAmountINR = Math.round(manualtotal);
@@ -198,7 +205,7 @@
         else {
             $scope.TOTALAMOUNTUSD = Math.round(total);
             if ($scope.ExchangeRateINR) {
-                $scope.totalAmountINR = Number((Number($scope.TOTALAMOUNTUSD) * Number($scope.ExchangeRateINR)).toFixed(2));
+                $scope.totalAmountINR = Number((Number($scope.TOTALAMOUNTUSD) * Number($scope.ExchangeRateINR)))
             }
         }
         return $scope.totalAmountINR
@@ -337,6 +344,11 @@
     $scope.remove = function (index) {
         $scope.billtable.splice(index, 1);
         $scope.manualTableSum();
+        $scope.RG = Number($scope.RG) - 1
+
+        for (var i = 0; i < $scope.billtable.length; i++) {
+            $scope.billtable[i].RG = $scope.rgCount + i + 1
+        }
     }
     $scope.remove1 = function (index) {
         $scope.accountTable1.splice(index, 1);
@@ -413,7 +425,7 @@
     $scope.$on("event:accountReferesh", function (event, args) {
         // Refresh accounts...
         $scope.getSupplier();
-        $scope.getpurchaseAccount();
+        $scope.getPurchaseAccount();
         $scope.getExpenseAccount();
     });
     $scope.getSupplier();
@@ -795,6 +807,7 @@
                                 if (obj1 == "TOTALPRICE") {
                                     $scope.totalprice = Number(XL_row_object[key][obj]);
                                     retObj["TOTALAMOUNTUSD"] = $scope.netweight * $scope.totalprice;
+                                    retObj["TOTALAMOUNTINR"] = Number($scope.netweight * $scope.totalprice * Number($scope.ExchangeRateINR))
                                 }
 
                                 if (obj1 == "FOBUNITPRICEUSD" || obj1 == "CIFUNITPRICE" || obj1 == "NETWEIGHT" || obj1 == "TOTALPRICE"  || obj1 == "GROSSWT") {
@@ -1080,6 +1093,8 @@
     $scope.edit = function (data, index) {
         $scope.selectedItemIndex = index;
         $scope.idSelectedVote = index;
+        $scope.RG = data.RG
+       
         $scope.godown = { selected: { name: data.GODOWN } };
         $scope.description = { selected: { name: data.DESCRIPTION } };
         $scope.remarks = { selected: { name: data.RRMARKS } };
@@ -1092,6 +1107,8 @@
         $scope.sadAmount = data.SAD
         $scope.exciseRate = data.exciseRate
         $scope.sadRate = data.sadRate,
+        $scope.purchaseRate = data.purchaseRate
+        $scope.dutyPerUnit = data.dutyPerUnit
         $scope.sadPerUnit = Number((data.SAD / data.NETWEIGHT).toFixed(2))
     }
 
@@ -1124,12 +1141,19 @@
         $scope.sadPerUnit = ($scope.sadAmount / $scope.lineItemnetweight).toFixed(2);
     }
     $scope.remarks.selected = { name: '' };
+    $scope.getRgNo = function (name){
+        $http.get(config.api + "Inventories/count/" + "?[where][GODOWN]=" + name).then(function (response) {
+            $scope.RG = response.data.count + 1
+            $scope.rgCount = response.data.count
+        });
+    }
     $scope.addBillLineItem = function () {
         var actualDate = moment(getDate($scope.actualDate)).format("DD/MM/YYYY");
         $scope.GODOWN.push({ type: "GODOWN", name: $scope.newitem });
         if ($scope.invoiceType == 'Import') {
             var billdata = {
                 GODOWN: $scope.godown.selected.name,
+                RG: $scope.RG,
                 DESCRIPTION: $scope.description.selected.name,
                 RRMARKS: $scope.remarks.selected.name,
                 NETWEIGHT: $scope.lineItemnetweight,
@@ -1144,9 +1168,9 @@
                 SAD: $scope.sadAmount,
                 actualDate:actualDate,
                 totalDutyAmt: '',
-                purchaseRate: '',
+                purchaseRate: $scope.exciseDutyAmount,
                 dutyPerUnit: '',
-                sadPerUnit: ''
+                sadPerUnit: $scope.sadAmount
             }
         }
         if ($scope.invoiceType == 'Domestic') {
@@ -1162,6 +1186,7 @@
             //    totalamount = $scope.lineItemnetweight * $scope.lineItemBaseRate;
             //}
             var billdata = {
+                RG: $scope.RG,
                 GODOWN: $scope.godown.selected.name,
                 DESCRIPTION: $scope.description.selected.name,
                 RRMARKS: $scope.remarks.selected.name,
@@ -1188,6 +1213,7 @@
             $scope.billtable[$scope.selectedItemIndex] = billdata;
         } else {
             $scope.billtable.push(billdata);
+            $scope.RG = Number($scope.RG) + 1
         }
         $scope.exciseAssessableValue = ''
         $scope.exciseDutyPerUnit = ''
@@ -1285,19 +1311,36 @@
     });
     //delete item 
     $scope.deleteItem = function (id, type, name, index) {
-        $http.delete(config.api + "masters/" + id).then(function (response) {
-            //$scope.REMARKS = response.data
-        });
-        if (type == "GODOWN") {
-           // delete $scope.GODOWN[index].name
-            $scope.GODOWN.splice(index, 1);
-        } else if (type == "REMARKS") {
-           // delete $scope.REMARKS[index].name
-            $scope.REMARKS.splice(index, 1);
-        } else if (type == "DESCRIPTION") {
-            //delete $scope.DESCRIPTION[index].name
-            $scope.DESCRIPTION.splice(index, 1);
+        var type1
+        if (type == "REMARKS") {
+            type1 = "[RRMARKS]"
+        } else {
+            type1 = "["+ type +"]"
         }
+        $http.get(config.api + "Inventories/count/" + "?[where]" + type1 + "=" + name).then(function (response) {
+            var count = response.data.count
+            console.log(response.data);
+            if (count == 0) {
+                $http.delete(config.api + "masters/" + id).then(function (response) {
+                    //$scope.REMARKS = response.data
+                });
+                if (type == "GODOWN") {
+                    // delete $scope.GODOWN[index].name
+                    $scope.GODOWN.splice(index, 1);
+                } else if (type == "REMARKS") {
+                    // delete $scope.REMARKS[index].name
+                    $scope.REMARKS.splice(index, 1);
+                } else if (type == "DESCRIPTION") {
+                    //delete $scope.DESCRIPTION[index].name
+                    $scope.DESCRIPTION.splice(index, 1);
+                }
+            }
+            else {
+                alert("can not delete")
+            }
+        });
+       
+       
     }
     function calculateOpenningBalnce(data, balanceType) {
         var balance;

@@ -41,7 +41,7 @@
         </div>
 
         <div class="col-sm-12" style="padding:20px 0px">
-            <input type="text" ng-model="search" class="form-control pull-right" style="width:150px;margin-right:8px;margin-bottom:5px" placeholder="Find inventory" />
+          
             @*<div class="btn-group" style="margin-left:9px">
                 <button type="button" class="btn btn-primary btn-sm"> Action</button>
                 <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -60,7 +60,7 @@
                     
                 
 </div>*@
-            <div class="col-sm-12 padding" style="padding:10px 0px !important">
+            <div class="col-sm-12 padding" style="padding:1px 0px !important">
                 <div class="col-sm-2 padding">
 
                     <div class="col-sm-12 filterBox">
@@ -169,19 +169,19 @@
 
                             <div class="form-group">
                                 <h4 class="tabheading font_11">Rg No.</h4>
-                                <ui-select ng-model="rgno.selected"
+                                <ui-select ng-model="RG.selected"
                                            ui-select-focuser
                                            theme="selectize">
                                     <ui-select-match width="100%" allow-clear="true" placeholder="">
                                         <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
-                                            {{ $select.selected._id.rgNo || $select.search }}
+                                            {{ $select.selected._id.RG || $select.search }}
                                         </span>
 
                                     </ui-select-match>
 
-                                    <ui-select-choices repeat="invoice in ItemList  | unique:'_id.rgNo'|filter: $select.search">
+                                    <ui-select-choices repeat="invoice in ItemList  | unique:'_id.RG'|filter: $select.search">
                                         <div>
-                                            <span style="color:forestgreen">{{invoice._id.rgNo}}</span>
+                                            <span style="color:forestgreen">{{invoice._id.RG}}</span>
                                         </div>
 
 
@@ -252,6 +252,26 @@
                                     </ui-select-choices>
                                 </ui-select>
                             </div>
+                            <div class="form-group">
+                                <h4 class="tabheading font_11">BALANCE QTY</h4>
+                                <ui-select ng-model="BALANCE.selected"
+                                           ui-select-focuser
+                                           theme="selectize">
+                                    <ui-select-match width="100%" allow-clear="true" placeholder="">
+                                        <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                            {{ $select.selected._id.BALANCE || $select.search }}
+                                        </span>
+
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="invoice in ItemList  | unique:'_id.NETWEIGHT'|filter: $select.search">
+                                        <div>
+                                            <span style="color:forestgreen">{{invoice._id.BALANCE}}</span>
+                                        </div>
+
+
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
                             
                             </div>
                             <hr style="margin:0px 0px 10px 0px" />
@@ -261,9 +281,9 @@
                             </span>
                         </div>
                 </div>
-                <div class="col-sm-10 padding5">
-                    <div style="overflow-x:auto; float:left; width:100%;">
-                        <table class="table-bordered table-condensed table-hover table" style="font-size:12px !important;">
+                <div class="col-sm-10" >
+                    <div style="overflow-x:auto; margin-top:2px;width:100%;">
+                        <table class="datatable table-bordered table-condensed table-hover table" style="font-size:12px !important;" datatable="ng" cellspacing="0"dt-options="dtOptions">
                             <thead>
                                 <tr>
                                     <th style="text-align:center"><input ng-model="selectAll" ng-click="selectAllLineItem(filterList)" type="checkbox" /></th>
@@ -294,7 +314,7 @@
                                     <td> {{item.DESCRIPTION}}</td>
                                     <td> {{item.RRMARKS}}</td>
                                     <td> {{item.actualDate}}</td>
-                                    <td> {{$index + 1}}</td>
+                                    <td> {{item.RG}}</td>
                                     <td style="text-align:right"> {{item.purchaseRate |number : 2}}</td>
                                     <td style="text-align:right"> {{item.dutyPerUnit |number : 3}}</td>
                                     <td style="text-align:right"> {{item.sadPerUnit |number : 3}}</td>
@@ -318,7 +338,31 @@
                                   
                                 </tr>
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th>Total :</th>
+                                    <th style="text-align:right;font-size:12px">{{totalNetWeight}}</th>
+                                  
+                                    <th style="text-align:center;font-size:12px">{{totalNetBalance}}</th>
+                                    <th ></th>
+
+
+                                   
+
+
+                                </tr>
+                            </tfoot>
                         </table>
+                       
                         <span>
                             <label class="pull-right" style="color:#081A96;margin-left:13px"> {{totalNetBalance}}</label>
                             <label class="pull-right" style="color:#058B27;margin-left:50px">{{totalNetWeight }}</label>

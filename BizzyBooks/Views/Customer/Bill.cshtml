@@ -1020,7 +1020,7 @@
                        
                         <div class="form-group">
                             <label>Account</label>
-                            <ui-select ui-tree-select ng-model="paymentAccounts.selected.accountName" id="countryCode"
+                            <ui-select ui-tree-select ng-model="paymentAccounts.selected" id="countryCode"
                                        ui-select-focuser
                                        theme="selectize">
 
@@ -1043,7 +1043,7 @@
                         </div>
                         <div class="form-group">
                             <label>Party Account</label>
-                            <ui-select ui-tree-select ng-model="partyAccount.selected.accountName" id="countryCode"
+                            <ui-select ui-tree-select ng-model="partyAccount.selected" id="countryCode"
                                        ui-select-focuser
                                        theme="selectize">
 
@@ -1088,16 +1088,16 @@
 
 
 
-        <div class="collapse in scroll-wrapper" id="ItemDetail2" ng-init="role = admin">
-            <div style="overflow-x:auto; float:left; width:100%; height:450px">
-                <table class="table table-bordered wordbreak table-hover" fixed-header style="border-collapse: collapse; font-size:12px; margin-top:10px; margin-bottom:0px; margin-left:10px; height:285px">
+        <div  id="ItemDetail2" ng-init="role = admin">
+          
+                <table class="dataTables table-condensed table-bordered table-striped"datatable="ng" cellspacing="0"dt-options="dtOptions"  >
                     <thead>
 
                         <tr>
 
                             <th>CONT NO</th>
-                            <th>INCOMING DATE</th>
-                            <th>LOT WEIGHT</th>
+                            <th>DATE</th>
+                            <th>LOT WT</th>
                             <th>LOCATION</th>
                             <th>SUB CATEGORY</th>
                             <th>COIL/SHEET NO</th>
@@ -1106,12 +1106,12 @@
                             <th>THICKNESS</th>
                             <th>WIDTH</th>
                             <th>LENGTH</th>
-                            <th>NET WEIGHT</th>
+                            <th>NET WT</th>
                             <th>GROSS WT</th>
                             <th>PCS/m</th>
-                            <th>FOB UNIT PRICE USD</th>
-                            <th>CIF UNIT PRICE</th>
-                            <th>FREIGHT FORWARDING</th>
+                            <th>FOB/UNIT(USD)</th>
+                            <th>CIF/UNIT</th>
+                            <th>FREIGHT</th>
                             <th>CIF ACTUAL PRICE</th>
                             <th>TOTAL PRICE</th>
                             <th>TOTAL AMT($)</th>
@@ -1124,28 +1124,28 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="item in billtable1 | filter:search"class="cursor" ng-click="editItemDetail(item,$index)"  ng-class="{selected: $index === manualIndex}">
-                            <td style="word-wrap:break-word !important; word-break:break-all !important"> {{item.CONTNO}} </td>
-                            <td style="word-break:break-all !important"> {{item.INCOMINGDATE}} </td>
-                            <td style="word-break:break-all !important"> {{item.LotWeight}} </td>
-                            <td style="word-break:break-all !important"> {{item.LOCATION}} </td>
-                            <td style="word-break:break-all !important"> {{item.SUBCATEGORY}} </td>
-                            <td style="word-break:break-all !important"> {{item.COILSHEETNO}} </td>
-                            <td style="word-break:break-all !important"> {{item.GRADE}} </td>
-                            <td style="word-break:break-all !important"> {{item.FINISH}} </td>
-                            <td style="word-break:break-all !important"> {{item.THICKNESS}} </td>
-                            <td style="word-break:break-all !important"> {{item.WIDTH}} </td>
-                            <td style="word-break:break-all !important"> {{item.LENGTH}} </td>
-                            <td style="word-break:break-all !important"> {{item.NETWEIGHT}} </td>
-                            <td style="word-break:break-all !important"> {{item.GROSSWT}} </td>
-                            <td style="word-break:break-all !important"> {{item.PCSLENGTHINMTRS}} </td>
-                            <td style="word-break:break-all !important"> {{item.FOBUNITPRICEUSD}} </td>
-                            <td style="word-break:break-all !important"> {{item.CIFUNITPRICE}} </td>
-                            <td style="word-break:break-all !important"> {{item.FREIGHTFORWARDING}}</td>
-                            <td style="word-break:break-all !important"> {{item.CIFACTUALPRICE|number : fractionSize}}</td>
-                            <td style="word-break:break-all !important"> {{item.TOTALPRICE|number : fractionSize}}</td>
-                            <td style="word-break:break-all !important"> {{item.TOTALAMOUNTUSD|number : fractionSize}}</td>
-                            <td style="word-break:break-all !important"> {{item.TOTALAMOUNTINR|number : fractionSize}}</td>
-                            <td style="word-break:break-all !important"> {{item.REMARK}}</td>
+                            <td > {{item.CONTNO}} </td>
+                            <td > {{item.INCOMINGDATE}} </td>
+                            <td > {{item.LotWeight}} </td>
+                            <td > {{item.LOCATION}} </td>
+                            <td > {{item.SUBCATEGORY}} </td>
+                            <td > {{item.COILSHEETNO}} </td>
+                            <td > {{item.GRADE}} </td>
+                            <td > {{item.FINISH}} </td>
+                            <td > {{item.THICKNESS}} </td>
+                            <td > {{item.WIDTH}} </td>
+                            <td > {{item.LENGTH}} </td>
+                            <td > {{item.NETWEIGHT}} </td>
+                            <td > {{item.GROSSWT}} </td>
+                            <td > {{item.PCSLENGTHINMTRS}} </td>
+                            <td > {{item.FOBUNITPRICEUSD}} </td>
+                            <td > {{item.CIFUNITPRICE}} </td>
+                            <td > {{item.FREIGHTFORWARDING}}</td>
+                            <td > {{item.CIFACTUALPRICE|number : fractionSize}}</td>
+                            <td > {{item.TOTALPRICE|number : fractionSize}}</td>
+                            <td > {{item.TOTALAMOUNTUSD|number : fractionSize}}</td>
+                            <td > {{item.TOTALAMOUNTINR|number : fractionSize}}</td>
+                            <td > {{item.REMARK}}</td>
 
                         </tr>
                     </tbody>
@@ -1153,33 +1153,34 @@
                         <tr style="background:#F0EEEE">
                             <th style="padding:5px" colspan="2">Total</th>
                             <th style="text-align:center; padding:5px">&nbsp;</th>
+                            
+                            
+                            <th style="text-align:center;  padding:5px">&nbsp;</th>
+                            <th style="text-align:center;  padding:5px">&nbsp;</th>
+                            <th style="text-align:center;  padding:5px">&nbsp;</th>
+
+                            <th style="text-align:left;  padding:5px"></th>
+                            <th style="text-align:center;  padding:5px">&nbsp;</th>
+                            <th style="text-align:center;  padding:5px">&nbsp;</th>
+                            <th style="text-align:center;  padding:5px">&nbsp;</th>
+                            <th style="text-align:center;  padding:5px">{{totalWeight |number : fractionSize}}</th>
+                            <th style="text-align:center;  padding:5px">&nbsp;</th>
+                            <th style="text-align:center;  padding:5px">&nbsp;</th>
                             <th style="text-align:center;  padding:5px">&nbsp;</th>
                             <th style="text-align:center;  padding:5px">&nbsp;</th>
                             <th style="text-align:center;  padding:5px">&nbsp;</th>
                             <th style="text-align:center;  padding:5px">&nbsp;</th>
 
-                            <th style="text-align:left;  padding:5px">{{CIFTOTAL1 |number : fractionSize}}</th>
-                            <th style="text-align:center;  padding:5px">&nbsp;</th>
-                            <th style="text-align:center;  padding:5px">&nbsp;</th>
-                            <th style="text-align:center;  padding:5px">&nbsp;</th>
-                            <th style="text-align:center;  padding:5px">&nbsp;</th>
-                            <th style="text-align:center;  padding:5px">&nbsp;</th>
-                            <th style="text-align:center;  padding:5px">&nbsp;</th>
-                            <th style="text-align:center;  padding:5px">&nbsp;</th>
-                            <th style="text-align:center;  padding:5px">&nbsp;</th>
-                            <th style="text-align:center;  padding:5px">&nbsp;</th>
-                            <th style="text-align:center;  padding:5px">&nbsp;</th>
-
                             <th style="text-align:center;  padding:5px">&nbsp;</th>
 
 
-                            <th style="text-align:left;  padding:5px">{{CIFTOTAL1 |number : fractionSize}}</th>
-                            <th style="text-align:left;  padding:5px">{{FOBTOTAL2 |number : fractionSize}}</th>
+                            <th style="text-align:left;  padding:5px">{{TOTALAMOUNTUSD |number : fractionSize}}</th>
+                            <th style="text-align:left;  padding:5px">{{totalAmountINR |number : fractionSize}}</th>
                             <th style="text-align:center;  padding:5px">&nbsp;</th>
                         </tr>
                     </tfoot>
                 </table>
-            </div>
+           
         </div>
 
 
@@ -1194,11 +1195,12 @@
                 <thead>
                    
                     <tr style="background:rgb(243, 245, 248)">
+                        <th style="width:30px"><input tabindex="11" placeholder="RG"ng-model="RG"class="form-control text-center" style="margin-top:18px;width:37px" /></th>
                         <th > 
                             
                             @*<i class="cursor fa fa-plus" add-item itemtype="GODOWN[0].type"></i>*@
                             <label class="badge cursor"  add-item itemtype= GODN ng-init="GODN = 'GODOWN'"><i class="fa fa-plus"></i> Add</label>
-                            <ui-select ui-tree-select  ng-model="godown.selected.name" id="countryCode" tabindex="8"
+                            <ui-select ui-tree-select  ng-model="godown.selected.name"  on-select ="getRgNo(godown.selected.name)"id="countryCode" tabindex="8"
                                         
                                        theme="selectize" Sstyle="text-overflow: ellipsis">
 
@@ -1218,6 +1220,13 @@
                                 </ui-select-choices>
                             </ui-select>
                         </th>
+
+                      
+
+                       
+ 
+                            
+                       
                         <th>
                             @*<i class="cursor fa fa-plus" add-item  itemtype="DESCRIPTION[0].type"></i>*@
                             <label class="badge cursor" add-item itemtype= "DESC" ng-init="DESC = 'DESCRIPTION'"><i class="fa fa-plus"></i> Add</label>
@@ -1275,6 +1284,7 @@
                         <th>&nbsp;</th>
                     </tr>
                     <tr >
+                        <th>RG</th>
                         <th>GODOWN</th>
                         <th>DESCRIPTION</th>
                         <th>REMARKS</th>
@@ -1294,6 +1304,7 @@
                 </thead>
                 <tbody>
                     <tr ng-repeat="item in billtable track by $index" class="cursor" ng-click="edit(item,$index)"  ng-class="{selected: $index === idSelectedVote}" >
+                        <td class="Count">{{item.RG}}</td>
                         <td class="Count" >{{item.GODOWN}}</td>
                         <td class="Count" >{{item.DESCRIPTION}}</td>
                         <td class="Count">{{item.RRMARKS}}</td>
