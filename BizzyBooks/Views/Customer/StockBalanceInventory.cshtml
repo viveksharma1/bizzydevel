@@ -63,9 +63,9 @@
             <div class="col-sm-12 padding" style="padding:1px 0px !important">
                 <div class="col-sm-2 padding">
 
-                    <div class="col-sm-12 filterBox">
-                        <h3>Search Filter</h3>
-                        <div class="scrollbar scrollbarAngular" style="height:390px; padding:0px 10px 10px 10px">
+                    <div class="col-sm-12 filterBox" style="padding:0px">
+                        <h3 style="padding:10px">Search Filter</h3>
+                        <div class="scrollbar scrollbarAngular" style="height:430px; padding:0px 10px 10px 10px">
                             <div class="form-group">
                                 <h4 class="tabheading font_11">Status</h4>
                                 <select class="form-control">
@@ -275,7 +275,7 @@
                             
                             </div>
                             <hr style="margin:0px 0px 10px 0px" />
-                            <span class="pull-right">
+                            <span class="pull-right" style="padding:0px 10px 10px 10px">
                                 <button class="btn btn-sm btn-default" ng-click="clearFilter();" type="button">Clear</button>
                                 <button class="btn btn-sm btn-primary" ng-click="applyFilter();" type="button">Search</button>
                             </span>
@@ -284,7 +284,7 @@
                 <div class="col-sm-10" >
                     <div style="overflow-x:auto; margin-top:2px;width:100%;">
                         <table class="datatable table-bordered table-condensed table-hover table" style="font-size:12px !important;" datatable="ng" cellspacing="0"dt-options="dtOptions">
-                            <thead>
+                            <thead style="background-color:#f0f8ff">
                                 <tr>
                                     <th style="text-align:center"><input ng-model="selectAll" ng-click="selectAllLineItem(filterList)" type="checkbox" /></th>
                                     <th>NO</th>

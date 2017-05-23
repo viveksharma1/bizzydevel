@@ -10,8 +10,8 @@
     }
     $scope.dtOptions = DTOptionsBuilder.newOptions()
          .withOption('processing', false)
-        .withOption('scrollX', 450)
-         .withOption('scrollY', 370)
+        .withOption('scrollX', 550)
+         .withOption('scrollY', 380)
          .withOption('paging', false)
     
     

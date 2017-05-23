@@ -653,11 +653,11 @@
                                                 <td> {{item.PCS/LENGTHINMTRS}}</td>
                                                 <td width="105"> {{item.BALANCE |number : fractionSize}}</td>
                                                 <td style="text-align:right" width="180">
-                                                    <input type="text" ng-change="qtyChange(item,item.itemQty,'{{item.itemQty}}');" ng-model="item.itemQty " ng-init="item.itemQty = item.itemQty || item.BALANCE"
+                                                    <input type="text" ng-change="qtyChange(item,item.itemQty,'{{item.itemQty}}');" ng-model="item.itemQty" style="width:100px" ng-init="item.itemQty = item.itemQty || item.BALANCE"
                                                            class="form-control text-right" />
                                                 </td>
                                                 <td style="text-align:right" width="180">
-                                                    <input type="number" step="0.01" ng-change="rateChange(item,item.itemRate);" ng-model="item.itemRate" class="form-control text-right" />
+                                                    <input type="number" step="0.01" ng-change="rateChange(item,item.itemRate);" ng-model="item.itemRate" style="width:100px" class="form-control text-right" />
                                                 </td>
                                                 <td style="text-align:right" width="100">
                                                     {{item.itemAmount}}
@@ -688,8 +688,8 @@
                                             <th style="text-align:center"></th>
                                             <th style="text-align:center"></th>
                                             <th style="text-align:center; width:80px">Total</th>
-                                            <th style="text-align:center; width:80px">{{totalQty}}</th>
-                                            <th style="text-align:right; width:20px"></th>
+                                            <th style="text-align:center; width:100px">{{totalQty}}</th>
+                                            <th style="text-align:right; width:80px"></th>
                                             <th style="text-align:right; width:100px">{{totalAmount}}(&#8377;)</th>
                                         </tr>
                                     </tfoot>

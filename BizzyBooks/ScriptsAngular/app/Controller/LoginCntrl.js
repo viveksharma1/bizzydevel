@@ -17,6 +17,7 @@ myApp.controller('LoginCntrl', ['$state', '$http', '$rootScope', '$scope', 'conf
             else if (res == -1) { authData.usertype = "UO"; $scope.loggedin(authData); }
             else { showErrorToast("Login Failed"); resetLogin(); }
         } else {
+         
             $scope.username = $('#usernamedetail').val();
             $scope.password = $('#userpassword').val();
             var data = {
@@ -24,9 +25,13 @@ myApp.controller('LoginCntrl', ['$state', '$http', '$rootScope', '$scope', 'conf
                 "password": $scope.password
             };
             $http.post(config.login + "login", data).success(function (data, status) {
+                $('#Move').hide();
+                $('#LoginLoader').show();
                 console.log(data.message);
                 if (data.message == "User Not Found") {
                     $('#InvalidModal').modal('show');
+                    $('#LoginLoader').hide();
+                    $('#Move').show();
                 }
                 else {
                     authData={
@@ -41,8 +46,11 @@ myApp.controller('LoginCntrl', ['$state', '$http', '$rootScope', '$scope', 'conf
                     $scope.role = data.user.role;
                     if ($scope.role === "2") { //O
                         $scope.loggedin(authData);
+                    
                     } else { //UO
                         $('#InvalidModal').modal('show');
+                        $('#LoginLoader').show();
+                        $('#Move').hide();
                     }
                     
                 }
@@ -54,6 +62,8 @@ myApp.controller('LoginCntrl', ['$state', '$http', '$rootScope', '$scope', 'conf
             $scope.showCaptcha = true;
             $('#CaptchaDiv').show();
             Captcha();
+            $('#LoginLoader').hide();
+            $('#Move').show();
         }
     }
     function resetLogin() {
