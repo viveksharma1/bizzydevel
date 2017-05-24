@@ -9115,3 +9115,5 @@ main {
 .Entry-Sublabel{margin-bottom:0px; padding-left:30px; width:100%; float:left;color:#808080}
 #ExciseDutyModal .modal-dialog{width:65%;}
 .ExciseTable th, .ExciseTable td{padding:5px}
+
+    #Datefilter{width:240px !important}
