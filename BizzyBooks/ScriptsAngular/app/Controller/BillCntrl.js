@@ -104,10 +104,16 @@
         if (billDate)
             setDate($scope.billDueDate, moment(billDate).add(days, 'days'));
     }
-    $('#billDueDate').datepicker();
-    $('#billDate').datepicker();
-    $('#customPayementDate').datepicker();
-    $('#actualDate').datepicker();
+    availableDates = ['01-24-2010', '01-25-2030'];
+    $('#billDueDate').datepicker({
+        assumeNearbyYear: true
+       
+    
+    });
+    $('#billDate').datepicker({ assumeNearbyYear: true });
+    $('#customPayementDate').datepicker({ assumeNearbyYear: true });
+    $('#actualDate').datepicker({ assumeNearbyYear: true });
+   
 
     var files, res;
     

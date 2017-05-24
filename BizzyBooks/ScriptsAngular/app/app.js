@@ -279,7 +279,8 @@ var myApp = angular
                 poNo: null,
                 suppliers: null,
                 Code: null,
-                voId: null
+                voId: null,
+                noBackTrack: false
 
             }
 

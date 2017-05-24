@@ -87,8 +87,8 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
             if (expenseDate)
                 setDate($scope.expenseDueDate, moment(expenseDate).add(days, 'days'));
         }
-        $('#expenseDate').datepicker();
-        $('#expenseDueDate').datepicker();
+        $('#expenseDate').datepicker({ assumeNearbyYear:true});
+        $('#expenseDueDate').datepicker({ assumeNearbyYear: true });
         $scope.accounts = {};
         $scope.supplier = {};
         $scope.tdsRate = {};

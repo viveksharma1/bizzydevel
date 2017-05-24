@@ -251,7 +251,7 @@
         }
         if (voType == 'Payment') {
 
-            $state.go('Customer.Payment', { voId: id });
+            $state.go('Customer.Payment', { voId: id, noBackTrack: true });
         }
         if (voType == 'General Invoice') {
 
