@@ -21,9 +21,7 @@
         .withOption('paging', false)
        .withOption('bInfo', false)
        .withOption('searching', false)
-  
-
-   .withOption('oLanguage', false);
+   .withOption('oLanguage', false)
 
    
     //$scope.clear = function ($event, $select) {

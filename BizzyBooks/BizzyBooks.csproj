@@ -260,6 +260,7 @@
     <Content Include="js\accordion.min.js" />
     <Content Include="js\alertify.js" />
     <Content Include="js\angular-charts.js" />
+    <Content Include="js\angular-datatables.min.css" />
     <Content Include="js\angular-fusioncharts.min.js" />
     <Content Include="js\bootstrap-datepicker.js" />
     <Content Include="js\bootstrap-filestyle.min.js" />

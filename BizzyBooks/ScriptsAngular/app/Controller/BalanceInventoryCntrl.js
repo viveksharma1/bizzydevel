@@ -9,9 +9,7 @@
         window.history.back();
     }
     var h = window.innerHeight;
-   function  datatable(){
-   
-}
+ 
    $scope.dtOptions = DTOptionsBuilder.newOptions()
         .withOption('processing', false)
        .withOption('scrollX', 450)
