@@ -8,16 +8,29 @@
     $scope.goBack = function () {
         window.history.back();
     }
+    $('#SearchFilter').hide();
+    $("#wrapper").addClass("toggled");
+
+    $('#menutoggle').click(function () {
+        $('#Datefilter').addClass('Datefilter2');
+    })
+
+    $scope.InventoryFilter = function () {
+        $('#SearchFilter').toggle();
+        $('#balancetable').toggleClass('col-sm-10');
+    }
+
 
     $scope.UploadOpeningStock = function () {
         $('#UploadOpeningStock').modal('show');
     }
+
     $(".dataTables_info").hide()
     var h = window.innerHeight; 
     $scope.dtOptions = DTOptionsBuilder.newOptions()
         .withOption('processing', false)
        .withOption('scrollX', 370)
-        .withOption('scrollY', h-260)
+        .withOption('scrollY', h - 230)
         .withOption('paging', false)
        .withOption('bInfo', false)
        .withOption('searching', false)

@@ -40,7 +40,7 @@
 
         </div>
 
-        <div class="col-sm-12" style="padding:20px 0px">
+        <div class="col-sm-12" style="padding:10px 0px">
           
             @*<div class="btn-group" style="margin-left:9px">
                 <button type="button" class="btn btn-primary btn-sm"> Action</button>
@@ -60,135 +60,147 @@
                     
                 
 </div>*@
-            <div class="col-sm-12 padding" style="padding:1px 0px !important">
-                <div class="col-sm-2 padding">
-
-                    <div class="col-sm-12 filterBox">
-                        <h3>Search Filter</h3>
-                        <div class="scrollbar scrollbarAngular" style="height:390px; padding:0px 10px 10px 10px">
-                            <div class="form-group">
-                                <h4 class="tabheading font_11">Status</h4>
-                                <select class="form-control">
-                                    <option>Select</option>
-                                    <option>Sale</option>
-                                    <option>Return</option>
-                                    <option>Delivered</option>
-                                    <option>Open</option>
-                                    <option>Process</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <h4 class="tabheading font_11">Invoice No</h4>
-                                <ui-select ng-model="invoiceno.selected" id="countryCode"
-                                           ui-select-focuser
-                                           theme="selectize">
-                                    <ui-select-match width="100%" allow-clear="true" placeholder="">
-                                        <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
-                                            {{ $select.selected._id.no || $select.search }}
-                                        </span>
-
-                                    </ui-select-match>
-
-                                    <ui-select-choices repeat="invoice in ItemList| unique:'_id.no'|filter: $select.search ">
-                                        <div>
-                                            <span style="color:forestgreen">{{invoice._id.no}}</span>
-                                        </div>
 
 
-                                    </ui-select-choices>
-                                </ui-select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <h4 class="tabheading font_11">GODOWN</h4>
-                                <ui-select ng-model="godown.selected" id="countryCode"
-                                           ui-select-focuser
-                                           theme="selectize">
-                                    <ui-select-match width="100%" allow-clear="true" placeholder="">
-                                        <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
-                                            {{ $select.selected._id.GODOWN || $select.search }}
-                                        </span>
+            <div class="col-sm-2 padding">
+               <span id="InventoryFilter" ng-click="InventoryFilter()" style="margin-left:5px">
+                    <i class="fa fa-filter tableicon" data-toggle="tooltip" data-placement="bottom" title="Advance Filter"></i><i class="fa fa-caret-down" style="margin-left:-6px;"></i>
+                </span>
+                <label style="color:#134968; margin-left:17px;margin-top:10px">Total Count:<b>{{filterList.length}}</b></label>
+            </div>
+            <div class="col-sm-10 padding">
+               
+                <label class="pull-right" style="margin-right:17px"><input type="text" ng-model="search" class="form-control pull-left" style="width:150px;" placeholder="Find inventory" /></label>
+                </div>
+                <div class="col-sm-12 padding" style="padding:1px 0px !important">
+                    <div class="col-sm-2 padding" id="SearchFilter">
 
-                                    </ui-select-match>
+                        <div class="col-sm-12 filterBox" style="padding:0px">
+                            <h3 style="padding:10px">Search Filter</h3>
+                            <div class="scrollbar scrollbarAngular" style="height:390px; padding:0px 10px 10px 10px">
+                                <div class="form-group">
+                                    <h4 class="tabheading font_11">Status</h4>
+                                    <select class="form-control">
+                                        <option>Select</option>
+                                        <option>Sale</option>
+                                        <option>Return</option>
+                                        <option>Delivered</option>
+                                        <option>Open</option>
+                                        <option>Process</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <h4 class="tabheading font_11">Invoice No</h4>
+                                    <ui-select ng-model="invoiceno.selected" id="countryCode"
+                                               ui-select-focuser
+                                               theme="selectize">
+                                        <ui-select-match width="100%" allow-clear="true" placeholder="">
+                                            <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                                {{ $select.selected._id.no || $select.search }}
+                                            </span>
 
-                                    <ui-select-choices repeat="invoice in ItemList| unique:'_id.GODOWN'|filter: $select.search ">
-                                        <div>
-                                            <span style="color:forestgreen">{{invoice._id.GODOWN}}</span>
-                                        </div>
+                                        </ui-select-match>
 
-
-                                    </ui-select-choices>
-                                </ui-select>
-                            </div>
-                            <div class="form-group">
-                                <h4 class="tabheading font_11">Description</h4>
-                                <ui-select ng-model="description.selected" id="spnDescription"
-                                           ui-select-focuser
-                                           theme="selectize">
-                                    <ui-select-match width="100%" allow-clear="true" placeholder="">
-                                        <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
-                                            {{ $select.selected._id.DESCRIPTION || $select.search }}
-                                        </span>
-
-                                    </ui-select-match>
-
-
-                                    <ui-select-choices repeat="invoice in ItemList  | unique:'_id.DESCRIPTION'|filter: $select.search">
-                                        <div>
-                                            <span style="color:forestgreen">{{invoice._id.DESCRIPTION}}</span>
-                                        </div>
-
-
-                                    </ui-select-choices>
-                                </ui-select>
-                            </div>
+                                        <ui-select-choices repeat="invoice in ItemList| unique:'_id.no'|filter: $select.search ">
+                                            <div>
+                                                <span style="color:forestgreen">{{invoice._id.no}}</span>
+                                            </div>
 
 
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
 
-                            <div class="form-group">
-                                <h4 class="tabheading font_11">Remarks</h4>
-                                <ui-select ng-model="remarks.selected" id="countryCode"
-                                           ui-select-focuser
-                                           theme="selectize">
-                                    <ui-select-match width="100%" allow-clear="true" placeholder="">
-                                        <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
-                                            {{ $select.selected._id.RRMARKS || $select.search }}
-                                        </span>
+                                <div class="form-group">
+                                    <h4 class="tabheading font_11">GODOWN</h4>
+                                    <ui-select ng-model="godown.selected" id="countryCode"
+                                               ui-select-focuser
+                                               theme="selectize">
+                                        <ui-select-match width="100%" allow-clear="true" placeholder="">
+                                            <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                                {{ $select.selected._id.GODOWN || $select.search }}
+                                            </span>
 
-                                    </ui-select-match>
-                                    <ui-select-choices repeat="invoice in ItemList  | unique:'_id.RRMARKS'|filter: $select.search">
-                                        <div>
-                                            @*<span ng-model="remarks" ng-bind-html="invoice.RRMARKS | highlight: $select.search">{{invoice.RRMARKS}}</span>*@
-                                            <span style="color:forestgreen">{{invoice._id.RRMARKS}}</span>
-                                        </div>
+                                        </ui-select-match>
 
-
-                                    </ui-select-choices>
-                                </ui-select>
-                            </div>
-
-                            <div class="form-group">
-                                <h4 class="tabheading font_11">Rg No.</h4>
-                                <ui-select ng-model="RG.selected"
-                                           ui-select-focuser
-                                           theme="selectize">
-                                    <ui-select-match width="100%" allow-clear="true" placeholder="">
-                                        <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
-                                            {{ $select.selected._id.RG || $select.search }}
-                                        </span>
-
-                                    </ui-select-match>
-
-                                    <ui-select-choices repeat="invoice in ItemList  | unique:'_id.RG'|filter: $select.search">
-                                        <div>
-                                            <span style="color:forestgreen">{{invoice._id.RG}}</span>
-                                        </div>
+                                        <ui-select-choices repeat="invoice in ItemList| unique:'_id.GODOWN'|filter: $select.search ">
+                                            <div>
+                                                <span style="color:forestgreen">{{invoice._id.GODOWN}}</span>
+                                            </div>
 
 
-                                    </ui-select-choices>
-                                </ui-select>
-                            </div>
-                            @*<div class="form-group">
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <div class="form-group">
+                                    <h4 class="tabheading font_11">Description</h4>
+                                    <ui-select ng-model="description.selected" id="spnDescription"
+                                               ui-select-focuser
+                                               theme="selectize">
+                                        <ui-select-match width="100%" allow-clear="true" placeholder="">
+                                            <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                                {{ $select.selected._id.DESCRIPTION || $select.search }}
+                                            </span>
+
+                                        </ui-select-match>
+
+
+                                        <ui-select-choices repeat="invoice in ItemList  | unique:'_id.DESCRIPTION'|filter: $select.search">
+                                            <div>
+                                                <span style="color:forestgreen">{{invoice._id.DESCRIPTION}}</span>
+                                            </div>
+
+
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+
+
+
+                                <div class="form-group">
+                                    <h4 class="tabheading font_11">Remarks</h4>
+                                    <ui-select ng-model="remarks.selected" id="countryCode"
+                                               ui-select-focuser
+                                               theme="selectize">
+                                        <ui-select-match width="100%" allow-clear="true" placeholder="">
+                                            <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                                {{ $select.selected._id.RRMARKS || $select.search }}
+                                            </span>
+
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="invoice in ItemList  | unique:'_id.RRMARKS'|filter: $select.search">
+                                            <div>
+                                                @*<span ng-model="remarks" ng-bind-html="invoice.RRMARKS | highlight: $select.search">{{invoice.RRMARKS}}</span>*@
+                                                <span style="color:forestgreen">{{invoice._id.RRMARKS}}</span>
+                                            </div>
+
+
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+
+                                <div class="form-group">
+                                    <h4 class="tabheading font_11">Rg No.</h4>
+                                    <ui-select ng-model="RG.selected"
+                                               ui-select-focuser
+                                               theme="selectize">
+                                        <ui-select-match width="100%" allow-clear="true" placeholder="">
+                                            <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                                {{ $select.selected._id.RG || $select.search }}
+                                            </span>
+
+                                        </ui-select-match>
+
+                                        <ui-select-choices repeat="invoice in ItemList  | unique:'_id.RG'|filter: $select.search">
+                                            <div>
+                                                <span style="color:forestgreen">{{invoice._id.RG}}</span>
+                                            </div>
+
+
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                @*<div class="form-group">
                                 <h4 class="tabheading font_11">Excise per unit</h4>
                                 <ui-select ng-model="exciseDuty.selected"
                                            ui-select-focuser
@@ -232,239 +244,240 @@
                                     </ui-select-choices>
                                 </ui-select>
                             </div>*@
-                            <div class="form-group">
-                                <h4 class="tabheading font_11">Net Wt</h4>
-                                <ui-select ng-model="NETWEIGHT.selected"
-                                           ui-select-focuser
-                                           theme="selectize">
-                                    <ui-select-match width="100%" allow-clear="true" placeholder="">
-                                        <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
-                                            {{ $select.selected._id.NETWEIGHT || $select.search }}
-                                        </span>
+                                <div class="form-group">
+                                    <h4 class="tabheading font_11">Net Wt</h4>
+                                    <ui-select ng-model="NETWEIGHT.selected"
+                                               ui-select-focuser
+                                               theme="selectize">
+                                        <ui-select-match width="100%" allow-clear="true" placeholder="">
+                                            <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                                {{ $select.selected._id.NETWEIGHT || $select.search }}
+                                            </span>
 
-                                    </ui-select-match>
-                                    <ui-select-choices repeat="invoice in ItemList  | unique:'_id.NETWEIGHT'|filter: $select.search">
-                                        <div>
-                                            <span style="color:forestgreen">{{invoice._id.NETWEIGHT}}</span>
-                                        </div>
-
-
-                                    </ui-select-choices>
-                                </ui-select>
-                            </div>
-                            <div class="form-group">
-                                <h4 class="tabheading font_11">BALANCE QTY</h4>
-                                <ui-select ng-model="BALANCE.selected"
-                                           ui-select-focuser
-                                           theme="selectize">
-                                    <ui-select-match width="100%" allow-clear="true" placeholder="">
-                                        <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
-                                            {{ $select.selected._id.BALANCE || $select.search }}
-                                        </span>
-
-                                    </ui-select-match>
-                                    <ui-select-choices repeat="invoice in ItemList  | unique:'_id.NETWEIGHT'|filter: $select.search">
-                                        <div>
-                                            <span style="color:forestgreen">{{invoice._id.BALANCE}}</span>
-                                        </div>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="invoice in ItemList  | unique:'_id.NETWEIGHT'|filter: $select.search">
+                                            <div>
+                                                <span style="color:forestgreen">{{invoice._id.NETWEIGHT}}</span>
+                                            </div>
 
 
-                                    </ui-select-choices>
-                                </ui-select>
-                            </div>
-                            
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <div class="form-group">
+                                    <h4 class="tabheading font_11">BALANCE QTY</h4>
+                                    <ui-select ng-model="BALANCE.selected"
+                                               ui-select-focuser
+                                               theme="selectize">
+                                        <ui-select-match width="100%" allow-clear="true" placeholder="">
+                                            <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                                {{ $select.selected._id.BALANCE || $select.search }}
+                                            </span>
+
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="invoice in ItemList  | unique:'_id.NETWEIGHT'|filter: $select.search">
+                                            <div>
+                                                <span style="color:forestgreen">{{invoice._id.BALANCE}}</span>
+                                            </div>
+
+
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+
                             </div>
                             <hr style="margin:0px 0px 10px 0px" />
-                            <span class="pull-right">
+                            <span class="pull-right" style="padding:0px 10px 10px 10px">
                                 <button class="btn btn-sm btn-default" ng-click="clearFilter();" type="button">Clear</button>
                                 <button class="btn btn-sm btn-primary" ng-click="applyFilter();" type="button">Search</button>
                             </span>
                         </div>
-                </div>
-                <label style="color:#134968; margin-left:17px;margin-top:10px">Total Count:<b>{{filterList.length}}</b></label>
-                <label class="pull-right" style="margin-right:17px"><input type="text" ng-model="search" class="form-control pull-left" style="width:150px;" placeholder="Find inventory" /></label>
-
-                <div class="col-sm-10" >
-                    <div style="overflow-x:auto; margin-top:2px;width:100%;">
-                        <table class="datatable table-bordered table-condensed table-hover table" style="font-size:12px !important;" datatable="ng" cellspacing="0"dt-options="dtOptions">
-                            <thead>
-                                <tr>
-                                    <th style="text-align:center"><input ng-model="selectAll" ng-click="selectAllLineItem(filterList)" type="checkbox" /></th>
-                                    <th>NO</th>
-                                    <th>GODOWN</th>
-                                    <th>DESCRIPTION</th>
-                                    <th>REMARKS</th>
-                                    <th>DATE</th>
-                                    <th>RG</th>
-                                    <th>RATE</th>
-                                    <th>DUTY/UNIT</th>
-                                    <th>SAD/UNIT</th>
-                                    <th>QUANTITY</th>
-                                    <th>BALANCE </th>
-                                    <th>Action</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
+                    </div>
 
 
+               
 
-                                <tr ng-repeat="item in filterList | filter:search">
-                                    <td style="text-align:center"><input ng-click="selectLineItem(item)" ng-model="item.selected" type="checkbox" /></td>
-                                    <td> {{item.no}}</td>
-                                    <td> {{item.GODOWN}}</td>
+                    <div class="col-sm-12 padding" id="balancetable">
+                        <div style="overflow-x:auto; margin-top:2px;width:100%;">
+                            <table class="datatable table-bordered table-condensed table-hover table" datatable="ng" cellspacing="0" dt-options="dtOptions" style="font-size:11px;font:bold;color:#1430AF;">
+                                <thead style="background-color:#7CC3EB;color:#fff">
+                                    <tr style="height:11px">
+                                        <th style="text-align:center"><input ng-model="selectAll" ng-click="selectAllLineItem(filterList)" type="checkbox" /></th>
+                                        <th>NO</th>
+                                        <th>GODOWN</th>
+                                        <th>DESCRIPTION</th>
+                                        <th>REMARKS</th>
+                                        <th>DATE</th>
+                                        <th>RG</th>
+                                        <th>RATE</th>
+                                        <th>DUTY/UNIT</th>
+                                        <th>SAD/UNIT</th>
+                                        <th>QUANTITY</th>
+                                        <th>BALANCE </th>
+                                        <th>Action</th>
 
-                                    <td> {{item.DESCRIPTION}}</td>
-                                    <td> {{item.RRMARKS}}</td>
-                                    <td> {{item.actualDate}}</td>
-                                    <td> {{item.RG}}</td>
-                                    <td style="text-align:right"> {{item.purchaseRate |number : 2}}</td>
-                                    <td style="text-align:right"> {{item.dutyPerUnit |number : 3}}</td>
-                                    <td style="text-align:right"> {{item.sadPerUnit |number : 3}}</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
 
-                                    <td style="text-align:right"> {{item.NETWEIGHT |number : 3}}</td>
-                                    <td style="text-align:right"> {{item.BALANCE |number : 3}}</td>
-                                    <td style="text-align:right;">
-                                        <button type="button" class="editbtn"><a href="" ng-click="showStatusBox(item)">Change Status</a></button>
-                                        <class class="linkseparator" style="margin-top:4px; margin-right:0px"></class>
-                                        <div class="btn-group editcaret">
-                                            <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>
-                                            <ul class="dropdown-menu editdrpdwn" role="menu" style="left:-135px">
-                                                <li><a ng-click="showRemarkBox(item)" class="cursor">Add Remarks</a></li>
-                                                <li><a ng-click="showAddjustmentBox(item)" class="cursor">Adjustment</a></li>
-                                                <li><a ng-click="viewInfo(item);" class="cursor">View Info</a></li>
-                                                @*<li><a ui-sref="Customer.BalanceInventoryViewDetail()" class="cursor">View Detail</a></li>*@
-                                            </ul>
 
+
+                                    <tr ng-repeat="item in filterList | filter:search">
+                                        <td style="text-align:center"><input ng-click="selectLineItem(item)" ng-model="item.selected" type="checkbox" /></td>
+                                        <td> {{item.no}}</td>
+                                        <td> {{item.GODOWN}}</td>
+
+                                        <td> {{item.DESCRIPTION}}</td>
+                                        <td> {{item.RRMARKS}}</td>
+                                        <td> {{item.actualDate}}</td>
+                                        <td> {{item.RG}}</td>
+                                        <td style="text-align:right"> {{item.purchaseRate |number : 2}}</td>
+                                        <td style="text-align:right"> {{item.dutyPerUnit |number : 3}}</td>
+                                        <td style="text-align:right"> {{item.sadPerUnit |number : 3}}</td>
+
+                                        <td style="text-align:right"> {{item.NETWEIGHT |number : 3}}</td>
+                                        <td style="text-align:right"> {{item.BALANCE |number : 3}}</td>
+                                        <td style="text-align:right;">
+                                            <button type="button" class="editbtn"><a href="" ng-click="showStatusBox(item)">Change Status</a></button>
+                                            <class class="linkseparator" style="margin-top:4px; margin-right:0px"></class>
+                                            <div class="btn-group editcaret">
+                                                <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>
+                                                <ul class="dropdown-menu editdrpdwn" role="menu" style="left:-135px">
+                                                    <li><a ng-click="showRemarkBox(item)" class="cursor">Add Remarks</a></li>
+                                                    <li><a ng-click="showAddjustmentBox(item)" class="cursor">Adjustment</a></li>
+                                                    <li><a ng-click="viewInfo(item);" class="cursor">View Info</a></li>
+                                                    @*<li><a ui-sref="Customer.BalanceInventoryViewDetail()" class="cursor">View Detail</a></li>*@
+                                                </ul>
+
+                                            </div>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th>Total :</th>
+                                        <th style="text-align:right;font-size:12px">{{totalNetWeight}}</th>
+
+                                        <th style="text-align:center;font-size:12px">{{totalNetBalance}}</th>
+                                        <th></th>
+
+
+
+
+
+                                    </tr>
+                                </tfoot>
+                            </table>
+
+
+                            <!-- ChangeStatusModal -->
+                            <div id="ChangeStatusModal" class="modal fade" role="dialog">
+                                <div class="modal-dialog modal-sm" style="margin-top:100px">
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title">Change Status</h4>
                                         </div>
-                                    </td>
-
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th>Total :</th>
-                                    <th style="text-align:right;font-size:12px">{{totalNetWeight}}</th>
-
-                                    <th style="text-align:center;font-size:12px">{{totalNetBalance}}</th>
-                                    <th ></th>
-
-
-
-
-
-                                </tr>
-                            </tfoot>
-                        </table>
-
-
-                        <!-- ChangeStatusModal -->
-                        <div id="ChangeStatusModal" class="modal fade" role="dialog">
-                            <div class="modal-dialog modal-sm" style="margin-top:100px">
-                                <!-- Modal content-->
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        <h4 class="modal-title">Change Status</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="form-group">
-                                            <label>Change Status</label>
-                                            <select ng-model="spnStatus" class="form-control">
-                                                <option>Return</option>
-                                                <option>Delivered</option>
-                                                <option>Process</option>
-                                            </select>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label>Change Status</label>
+                                                <select ng-model="spnStatus" class="form-control">
+                                                    <option>Return</option>
+                                                    <option>Delivered</option>
+                                                    <option>Process</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Remarks</label>
+                                                <textarea ng-model="txtRemarks" class="form-control" style="height:100px"></textarea>
+                                            </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label>Remarks</label>
-                                            <textarea ng-model="txtRemarks" class="form-control" style="height:100px"></textarea>
+                                        <div class="modal-footer">
+                                            <button type="button" ng-click="changeStatus();" class="btn btn-primary">Change</button>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                         </div>
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="button" ng-click="changeStatus();" class="btn btn-primary">Change</button>
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    </div>
+
                                 </div>
-
                             </div>
-                        </div>
 
 
-                        <!-- AddRemarksModal -->
-                        <div id="AddRemarksModal" class="modal fade" role="dialog">
-                            <div class="modal-dialog modal-sm" style="margin-top:100px">
+                            <!-- AddRemarksModal -->
+                            <div id="AddRemarksModal" class="modal fade" role="dialog">
+                                <div class="modal-dialog modal-sm" style="margin-top:100px">
 
-                                <!-- Modal content-->
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        <h4 class="modal-title">Add Remarks</h4>
-                                    </div>
-                                    <div class="modal-body">
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title">Add Remarks</h4>
+                                        </div>
+                                        <div class="modal-body">
 
-                                        <div class="form-group">
-                                            <label>Remarks</label>
-                                            <textarea ng-model="txtAddRemarks" class="form-control" style="height:100px"></textarea>
+                                            <div class="form-group">
+                                                <label>Remarks</label>
+                                                <textarea ng-model="txtAddRemarks" class="form-control" style="height:100px"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" ng-click="addRemark()" class="btn btn-primary">Save</button>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                         </div>
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="button" ng-click="addRemark()" class="btn btn-primary">Save</button>
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    </div>
+
                                 </div>
-
                             </div>
-                        </div>
 
-                        <!-- AddjustmentbtnModal -->
-                        <div id="AddjustmentbtnModal" class="modal fade" role="dialog">
-                            <div class="modal-dialog modal-sm" style="margin-top:100px">
+                            <!-- AddjustmentbtnModal -->
+                            <div id="AddjustmentbtnModal" class="modal fade" role="dialog">
+                                <div class="modal-dialog modal-sm" style="margin-top:100px">
 
-                                <!-- Modal content-->
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        <h4 class="modal-title">Adjustment</h4>
-                                    </div>
-                                    <div class="modal-body">
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title">Adjustment</h4>
+                                        </div>
+                                        <div class="modal-body">
 
-                                        <div class="form-group">
-                                            <label>NET Wt.</label>
-                                            <input type="number" step="0.01" ng-model="netwt" class="form-control" />
+                                            <div class="form-group">
+                                                <label>NET Wt.</label>
+                                                <input type="number" step="0.01" ng-model="netwt" class="form-control" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Adjustment Wt.</label>
+                                                <input ng-model="adjustmentWt" type="number" step="0.01" class="form-control" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Total NET Wt.</label>
+                                                <input ng-model="totalNetWt" type="number" step="0.01" class="form-control" />
+                                            </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label>Adjustment Wt.</label>
-                                            <input ng-model="adjustmentWt" type="number" step="0.01" class="form-control" />
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Total NET Wt.</label>
-                                            <input ng-model="totalNetWt" type="number" step="0.01" class="form-control" />
+                                        <div class="modal-footer">
+                                            <button type="button" ng-click="updateWt()" class="btn btn-primary">Save</button>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                         </div>
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="button" ng-click="updateWt()" class="btn btn-primary">Save</button>
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    </div>
+
                                 </div>
-
                             </div>
+
                         </div>
 
                     </div>
-
                 </div>
             </div>
-        </div>
 
 
 
