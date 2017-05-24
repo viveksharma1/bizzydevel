@@ -1,5 +1,18 @@
 ﻿myApp.controller('BalanceInventoryCntrl', ['$scope', '$http', '$timeout', '$stateParams', 'commonService', '$rootScope', '$state', 'config', '$filter', 'DTOptionsBuilder', function ($scope, $http, $timeout, $stateParams, commonService, $rootScope, $state, config, $filter, DTOptionsBuilder) {
 
+    $('[data-toggle="tooltip"]').tooltip();
+
+    $('#SearchFilter').hide();
+    $("#wrapper").addClass("toggled");
+
+    $('#menutoggle').click(function () {
+        $('#Datefilter').addClass('Datefilter2');
+    })
+
+    $scope.InventoryFilter = function () {
+        $('#SearchFilter').toggle();
+        $('#balancetable').toggleClass('col-sm-10');
+    }
 
     $(".my a").click(function (e) {
         e.preventDefault();
@@ -13,7 +26,7 @@
    $scope.dtOptions = DTOptionsBuilder.newOptions()
         .withOption('processing', false)
        .withOption('scrollX', 450)
-        .withOption('scrollY', h - 260)
+        .withOption('scrollY', h - 195)
         .withOption('paging', false)
         .withOption('searching', false)
    .withOption('bInfo', false)
