@@ -8,7 +8,9 @@
                 <div class="btn-group btn-toggle" style="top: 0px !important;margin-right: 5px;">
                     <button class="btn  btn-sm" ng-class="{active:isAccount==true}" ng-click="createAccountBtn()">Account</button>
                     <button class="btn  btn-sm" ng-class="{active:isAccount==false}" ng-click="createGroupBtn()">Group</button>
+                   
                 </div>
+                <label permission="usertype:UO"style="color:forestgreen"><input type="checkbox" ng-model="visible" />:</label>
             </div>
             <div class="modal-body content" style="padding:10px 20px;">
                 <div class="content">
@@ -39,60 +41,45 @@
                             </div>
                         </div>
 
-                        <!--<div class="col-sm-6 form-group padding5">
-                            <label>Balance Type </label>
-
-                            <span style="padding-top:12px;margin-top:12px;">
-                                <select ng-model="balanceType">
-                                    <option value="credit">Credit</option>
-
-                                    <option value="debit">Debit</option>
-                                </select>
-                            </span>
-
-
-                        </div>-->
+                      
 
 
                     </div>
 
-                    <div id="form-popoverPopup" class="popupbox">
-                        <div>
-                            <label style="color:firebrick"><b>New Group</b></label>
-                            <i class="fa fa-times-circle cursor pull-right" title="close" ng-click="popuclose()"></i>
-                        </div>
-                        <div class="form-content" style="height:200px">
-                            <div class="form-group">
-                                <label><span class="red">*</span>Group Name</label>
-                                <input type="text" ng-model="groupName" class="form-control" />
-                            </div>
-                            
-                        </div>
-                    </div>
+                   
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-6 ">
 
 
-                        <div class="col-sm-12 form-group padding5">
-                            <label>Description</label>
-                            <input ng-model="description" type="text" class="form-control" ng-disabled="isDisabled" />
-                        </div>
-                        <div class="col-sm-6 form-group padding5">
+                        <!--<div class="col-sm-12 form-group padding5">
+            <label>Description</label>
+            <input ng-model="description" type="text" class="form-control" ng-disabled="isDisabled" />
+        </div>-->
+                        <div class="col-sm-3 form-group padding5">
                             <label>Rate (%)</label>
                             <input ng-model="rate" ng-disabled="isDisabled" type="number" step="0.01" class="form-control" />
 
-                           
-                            <span>
-                                <label>Opening Balance</label>
-                                <input ng-model="openingBalance" ng-disabled="isDisabled" type="number" step="0.01" class="form-control" />
-                                
-                            </span>
-                           
+                        </div>
+                        <div class="col-sm-3 form-group padding5">
+                            <label>Balance</label>
+                            <input ng-model="openingBalance" ng-disabled="isDisabled" type="number" step="0.01" class="form-control" />
 
                         </div>
-                    </div>
+                        <div class="col-sm-3 form-group padding5">
+                            <label>Type</label>
+                            <select ng-model="obType"  tabindex="5" class="form-control">
+                                <option>credit</option>
+                                <option>debit</option>
 
-                </div>
+                            </select>
+
+
+                        </div>
+                        <div class="col-sm-9 form-group padding5">
+                            <label>Description</label>
+                            <input ng-model="description" type="text" class="form-control" ng-disabled="isDisabled" />
+                        </div>
+                    </div>
 
                 <div class="col-sm-12 padding" style="padding-top:20px !important">
                     <ul class="nav nav-tabs tabnav my">

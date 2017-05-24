@@ -25,6 +25,7 @@
                     $scope.accountId = null
 
                 }
+                $scope.visible = false;
                
 
                 $http.get(config.api + "groupMasters").then(function (response) {
@@ -128,6 +129,7 @@
 
                             $scope.groupMasters = { selected: { name: $scope.value.Under } };
                             $scope.groupMasters.selected.type = $scope.value.type;
+                            $scope.obType = $scope.value.obType;
                             $scope.balanceType = $scope.value.balanceType;
                             $scope.email = $scope.value.email;
                             
@@ -215,6 +217,7 @@
                             Under:          $scope.groupMasters.selected.name,
                             type:           $scope.groupMasters.selected.type,
                             balance:        $scope.balance,
+                            obType:         $scope.obType,
                             rate:           $scope.rate,
                             isUo:           isUo,
                             isActive:       true,
@@ -285,7 +288,7 @@
                                     
                                     $scope.accountId = response.data.id
                                     console.log(response.data)
-                                    $http.post(config.login + "openingBalanceLedgerEntry/" + localStorage.CompanyId + "?accountId=" + $scope.accountId + "&role=" + localStorage.usertype, accountData).then(function (response) {
+                                    $http.post(config.login + "openingBalanceLedgerEntry/" + localStorage.CompanyId + "?accountId=" + $scope.accountId + "&role=" + localStorage.usertype + "&visible=" + $scope.visible, accountData).then(function (response) {
                                         $http.get(config.login + "getAccountNameById").then(function (response) {
                                             $scope.accountData = response.data
                                             $rootScope.$broadcast('event:success', { message: "Account Created Succesfully" });

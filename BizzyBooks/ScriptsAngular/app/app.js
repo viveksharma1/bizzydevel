@@ -334,12 +334,13 @@ var myApp = angular
         });
 
         $stateProvider.state("Customer.accountHistory", {
-            url: "/accountHistory/:accountId/:balanceType",
+            url: "/accountHistory/:accountId/:balanceType?Balance=/:obType",
             templateUrl: "Customer/accountHistory",
             controller: "accountHistoryCntrl",
             params: {
                 accountId: null,
-                balanceType: null
+                balanceType: null,
+                obType:null
             }
         });
         // new controller

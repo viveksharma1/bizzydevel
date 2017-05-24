@@ -15,6 +15,9 @@
        $scope.accountData = response.data;
        console.log($scope.accountData);
     })
+
+    $scope.obType = $stateParams.obType
+    console.log($scope.obType)
     function bindAccountName(data) {
         $scope.ledgerData = data;
         var credit = 0;
@@ -135,6 +138,14 @@
             }
             if ($stateParams.balanceType == 'debit') {
                 balance = Number(data.debit) - Number(data.credit)
+            }
+            if ($stateParams.obType == 'credit') {
+                $scope.openingBalanceCredit = balance;
+
+            } else if ($stateParams.obType == 'debit') {
+                $scope.openingBalanceDebit = balance;
+            } else {
+                $scope.openingBalanceCredit = balance;
             }
             console.log(balance)
             return balance

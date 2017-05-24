@@ -30,7 +30,8 @@ namespace Restaurant
                         "~/css/jquery.toastmessage-min.css",
                         "~/css/jquery.timepicker.css",
                         "~/css/jsoneditor.min.css",
-                        "~/css/sweetalert.css"
+                        "~/css/sweetalert.css",
+                        "~/css/material.min.css"
                 //"~/css/treasure-overlay-spinner.min.css"
                 //,
                 //"~/css/angular-progress-button-styles.min.css"

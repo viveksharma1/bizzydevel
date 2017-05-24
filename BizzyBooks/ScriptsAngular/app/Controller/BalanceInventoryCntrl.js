@@ -8,14 +8,22 @@
     $scope.goBack = function () {
         window.history.back();
     }
-    $scope.dtOptions = DTOptionsBuilder.newOptions()
-         .withOption('processing', false)
-        .withOption('scrollX', 450)
-         .withOption('scrollY', 370)
-         .withOption('paging', false)
-    
+    var h = window.innerHeight;
+   function  datatable(){
+   
+}
+   $scope.dtOptions = DTOptionsBuilder.newOptions()
+        .withOption('processing', false)
+       .withOption('scrollX', 450)
+        .withOption('scrollY', h - 260)
+        .withOption('paging', false)
+        .withOption('searching', false)
+   .withOption('bInfo', false)
+
+   .withOption('oLanguage', false);
     
    
+    
     //$scope.clear = function ($event, $select) {
     //    $event.stopPropagation();
     //    //to allow empty field, in order to force a selection remove the following line
@@ -45,22 +53,27 @@
         }
         $scope.totalNetWeight =  NETWEIGHT.toFixed(3)
         $scope.totalNetBalance = (BALANCE).toFixed(3)
+
+
     }
+    $scope.datatable = false
     function getInventory() {
         $http.get(config.api + "Inventories?filter[where][visible]=false").then(function (response) {
             $scope.ItemList2 = response.data;
             $scope.filterList = $scope.ItemList2;
             getTotalsum(response.data);
+            $scope.datatable = true
         });
     }
     getInventory();
-    var qryAgg = 'visible=false&group={"SUBCATEGORY": "$SUBCATEGORY","COILSHEETNO":"$COILSHEETNO","INCOMINGDATE": "$INCOMINGDATE","LotWeight":"$LotWeight","LOCATION":"$LOCATION","GRADE":"$GRADE","FINISH":"$FINISH","THICKNESS":"$THICKNESS","WIDTH":"$WIDTH","LENGTH":"$LENGTH","NETWEIGHT":"$NETWEIGHT","GROSSWT":"$GROSSWT","PCS/LENGTHINMTRS":"PCS/LENGTHINMTRS","no":"$no"}';
+    var qryAgg = 'visible=false&group={"SUBCATEGORY": "$SUBCATEGORY","COILSHEETNO":"$COILSHEETNO","DATE": "$DATE","LotWeight":"$LotWeight","LOCATION":"$LOCATION","GRADE":"$GRADE","FINISH":"$FINISH","THICKNESS":"$THICKNESS","WIDTH":"$WIDTH","LENGTH":"$LENGTH","NETWEIGHT":"$NETWEIGHT","GROSSWT":"$GROSSWT","PCSLENGTHINMTRS":"PCSLENGTHINMTRS","no":"$no"}';
     $http.get(config.login + "getAggregateInventories?" + qryAgg).then(function (response) {
         $scope.ItemList = response.data;
+        $scope.datatable = true
        
      });
     
-    $scope.pcslengthmtr = {}
+    $scope.PCSLENGTHINMTRS = {}
     $scope.no = {};
     $scope.grossweight = {};
     $scope.netweight = {};
@@ -71,12 +84,12 @@
     $scope.grade = {};
     $scope.location = {};
     $scope.lotweight = {};
-    $scope.incomingdate = {};
+    $scope.DATE = {};
     $scope.coilsheetno = {};
     $scope.subcategory = {};
 
     $scope.clearFilter = function () {
-        $scope.pcslengthmtr = {};
+        $scope.PCSLENGTHINMTRS = {};
         $scope.grossweight = {};
         $scope.netweight = {};
         $scope.length = {};
@@ -86,7 +99,7 @@
         $scope.grade = {};
         $scope.location = {};
         $scope.lotweight = {};
-        $scope.incomingdate = {};
+        $scope.DATE = {};
         $scope.coilsheetno = {};
         $scope.subcategory = {};
         $scope.no = {};
@@ -98,7 +111,7 @@
                 "visible": false,
                 "SUBCATEGORY": $scope.subcategory.selected ? $scope.subcategory.selected._id.SUBCATEGORY : $scope.subcategory.selected,
                 "COILSHEETNO": $scope.coilsheetno.selected ? $scope.coilsheetno.selected._id.COILSHEETNO : $scope.coilsheetno.selected,
-                "INCOMINGDATE": $scope.incomingdate.selected ? $scope.incomingdate.selected._id.INCOMINGDATE : $scope.incomingdate.selected,
+                "DATE": $scope.DATE.selected ? $scope.DATE.selected._id.DATE : $scope.DATE.selected,
                 "LotWeight": $scope.lotweight.selected ? $scope.lotweight.selected._id.LotWeight : $scope.lotweight.selected,
                 "LOCATION": $scope.location.selected ? $scope.location.selected._id.LOCATION : $scope.location.selected,
                 "GRADE": $scope.grade.selected ? $scope.grade.selected._id.GRADE : $scope.grade.selected,
@@ -108,7 +121,7 @@
                 "LENGTH": $scope.length.selected ? $scope.length.selected._id.LENGTH : $scope.length.selected,
                 "NETWEIGHT": $scope.netweight.selected ? $scope.netweight.selected._id.NETWEIGHT : $scope.netweight.selected,
                 "GROSSWT": $scope.grossweight.selected ? $scope.grossweight.selected._id.GROSSWT : $scope.grossweight.selected,
-                "PCS/LENGTHINMTRS": $scope.pcslengthmtr.selected ? $scope.pcslengthmtr.selected._id.PCS / LENGTHINMTRS : $scope.pcslengthmtr.selected,
+                "PCSLENGTHINMTRS": $scope.PCSLENGTHINMTRS.selected ? $scope.PCSLENGTHINMTRS.selected._id.PCSLENGTHINMTRS : $scope.PCSLENGTHINMTRS.selected,
                 "no": $scope.no.selected ? $scope.no.selected._id.no : $scope.no.selected,
 
             }
@@ -477,8 +490,8 @@
                                 retObj["no"] = retObj[obj1] = XL_row_object[key][obj];
                             }
                             if (obj1 == "INCOMINGDATE") {
-                                retObj["INCOMINGDATE"] = moment(new Date(retObj[obj1] = XL_row_object[key][obj])).format('DD/MM/YYYY');
-                                console.log(retObj["INCOMINGDATE"])
+                                retObj["DATE"] = moment(new Date(retObj[obj1] = XL_row_object[key][obj])).format('DD/MM/YYYY');
+                                console.log(retObj["DATE"])
                             }
                             var INOUT = "IN/OUT"
                             var date = "date"
@@ -493,7 +506,7 @@
                                 console.log(retObj["TOTALAMOUNTUSD"]);
                             }
 
-                            if (obj1 == "FOBUNITPRICEUSD" || obj1 == "CIFUNITPRICE" || obj1 == "NETWEIGHT" || obj1 == "TOTALPRICE" || obj1 == "LENGTH" || obj1 == "WIDTH" || obj1 == "THICKNESS" || obj1 == "GROSSWT") {
+                            if (obj1 == "FOBUNITPRICEUSD" || obj1 == "CIFUNITPRICE" || obj1 == "NETWEIGHT" || obj1 == "TOTALPRICE" || obj1 == "GROSSWT") {
                                 retObj[obj1] = Number(XL_row_object[key][obj]);
                             }
 

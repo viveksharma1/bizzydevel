@@ -54,7 +54,7 @@
     $scope.transaction = [];
     $scope.paidData = [];
     $scope.itemChecked = [];
-    $scope.paymentdate = 'paymentdate';
+   // $scope.paymentdate = 'paymentdate';
     $scope.oldAttachment = null;
     var uploader = $scope.uploader = new FileUploader({
         url: config.login + "upload"

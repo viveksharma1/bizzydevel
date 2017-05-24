@@ -56,7 +56,7 @@
                 <td style="text-align:right; width:150px" ><b>{{data.balance | number:2  }}  <em style="color:red">{{data.bType}}</em></b></td>
 
                 <td style="text-align:right; width:150px">
-                    <button type="button" class="editbtn"><a ui-sref="Customer.accountHistory({accountId:data._id,balanceType:data.balanceType})" style="font-weight:bold;color:#1D4B8F">History</a></button>
+                    <button type="button" class="editbtn"><a ui-sref="Customer.accountHistory({accountId:data._id,balanceType:data.balanceType,obType:data.obType})" style="font-weight:bold;color:#1D4B8F">History</a></button>
                     <class class="linkseparator" style="margin-top:4px; margin-right:0px"></class>
                     <div class="btn-group editcaret">
                         <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>

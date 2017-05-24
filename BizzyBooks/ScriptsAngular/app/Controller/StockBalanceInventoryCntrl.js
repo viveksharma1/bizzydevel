@@ -12,13 +12,20 @@
     $scope.UploadOpeningStock = function () {
         $('#UploadOpeningStock').modal('show');
     }
+    $(".dataTables_info").hide()
+    var h = window.innerHeight; 
     $scope.dtOptions = DTOptionsBuilder.newOptions()
         .withOption('processing', false)
        .withOption('scrollX', 370)
-        .withOption('scrollY', 370)
+        .withOption('scrollY', h-260)
         .withOption('paging', false)
+       .withOption('bInfo', false)
+       .withOption('searching', false)
+  
 
+   .withOption('oLanguage', false);
 
+   
     //$scope.clear = function ($event, $select) {
     //    $event.stopPropagation();
     //    //to allow empty field, in order to force a selection remove the following line
@@ -53,11 +60,13 @@
             $scope.ItemList2 = response.data;
             $scope.filterList = $scope.ItemList2;
             getTotalsum(response.data)
+            $(".dataTables_info").hide()
         });
     }
     getInventory();
     var qryAgg = 'visible=true&group={"no": "$no","DESCRIPTION":"$DESCRIPTION","GODOWN": "$GODOWN","RRMARKS":"$RRMARKS","NETWEIGHT":"$NETWEIGHT", "BALANCE":"$BALANCE","RG":"$RG"}';
     $http.get(config.login + "getAggregateInventories?" + qryAgg).then(function (response) {
+        $(".dataTables_info").hide()
         $scope.ItemList = response.data;
         //$scope.filterList2 = $scope.ItemList2;
         //console.log($scope.ItemList);
