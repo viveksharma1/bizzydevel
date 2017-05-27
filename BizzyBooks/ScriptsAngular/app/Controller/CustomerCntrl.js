@@ -12,7 +12,20 @@
         $('#menuUp i').toggleClass("fa-chevron-down fa-chevron-up")
         e.preventDefault();
     };
+    $scope.getInvoice = function () {
+        $http.get(config.login + 'getInvoiceData/' + localStorage.CompanyId + '?role=' + localStorage["usertype"]).then(function (response) {
+            $scope.invoiceData = response.data;
+            console.log(response.data);
+            for (var i = 0; i < $scope.invoiceData.length; i++) {
+                $scope.invoiceData[i].customer = localStorage[$scope.invoiceData[i].customer];
 
+            }
+            console.log($scope.InventoryList)
+            $(".loader").hide()
+        });
+    }
+
+   
     $scope.totalCustomerbtn = function () {
 
         $scope.getCustomer();
@@ -21,7 +34,7 @@
         $('#paidInvoiceTable').hide();
         $('#example').show();
         $('#openInvoiceTable').hide();
-    },
+    }
 
 
 
@@ -31,21 +44,20 @@
        $('#paidInvoiceTable').hide();
        $('#example').hide();
        $('#openInvoiceTable').hide();
-   },
+   }
 
    $scope.paidInvoicebtn = function () {
 
-       $scope.getInvoice()
+       $scope.getInvoice();
        $('#overdueInvoiceTable').hide();
        $('#paidInvoiceTable').show();
        $('#example').hide();
        $('#openInvoiceTable').hide();
 
-   },
-    $('#openInvoiceTable').show();
-    $('#paidInvoiceTable').show();
+   }
+   
    $scope.openInvoicebtn = function (status) {
-       $scope.getInvoice()
+       $scope.getInvoice();
        $('#overdueInvoiceTable').hide();
        $('#paidInvoiceTable').hide();
        $('#example').hide();
@@ -54,11 +66,20 @@
 
    }
 
-    $('#overdueInvoiceTable').hide();
-    $('#paidInvoiceTable').hide();
-    $('#example').show();
-    $('#openInvoiceTable').hide();
+   
+   $scope.openInvoicebtn();
+  
+   $('#overdueInvoiceTable').hide();
+   $('#paidInvoiceTable').hide();
 
+  
+
+
+   if ($rootScope.$previousState.controller == "SalesInvoiceCntrl") {
+       $scope.openInvoicebtn();
+   } 
+
+ 
    
 
     console.log($scope.customer);
@@ -112,138 +133,17 @@
         $scope.groupMaster = response.data
         console.log($scope.account);
     });
-    $scope.createNewSupplier = function () {
-
-        var data = {
-
-            compCode: localStorage.CompanyId,
-            email: $scope.email,
-            company: $scope.company,
-            phone: $scope.phone,
-            mobile: $scope.mobile,
-            fax: $scope.fax,
-            billingAddress: [
-              {
-                  street: $scope.street,
-                  city: $scope.city,
-                  state: $scope.state,
-                  postalCode: $scope.postalCode,
-                  country: $scope.country
-              }
-            ],
-            shippingAddress: [
-              {
-
-                  street: $scope.street1,
-                  city: $scope.city1,
-                  state: $scope.state1,
-                  postalCode: $scope.postalCode1,
-                  country: $scope.country1
-              }
-            ],
-            taxInfo: [
-              {
-                  taxRegNo: $scope.taxRegNo,
-                  cstRegNo: $scope.cstRegNo,
-                  panNo: $scope.panNo,
-                  range: $scope.range,
-                  division: $scope.division,
-                  address: $scope.address,
-                  commisionerate: $scope.commisionerate,
-                  ceRegionNo: $scope.ceRegionNo, 
-                  eccCodeNo: $scope.eccCodeNo,
-                  iecNo: $scope.iecNo,
-
-
-              }
-            ],
-
-            notes: $scope.notes,
-            account: {              
-                group: $scope.groupMaster.selected.name,
-                             
-            }
-
-        }
-
-
-        if (!data.email == '') {
-
-
-
-
-            $http.post(config.login + "createCustomer", data).then(function (response) {
-                $scope.createAccount();
-
-          
-            $scope.email = null,
-            $scope.company = null,
-            $scope.phone = null,
-            $scope.mobile = null,
-            $scope.fax = null,
-
-
-                  $scope.street = null,
-                  $scope.city = null,
-                  $scope.state = null,
-                  $scope.postalCode = null,
-
-
-                  $scope.street1 = null,
-                  $scope.city1 = null,
-                  $scope.state1 = null,
-                  $scope.postalCode1 = null,
-
-
-                  $scope.taxRegNo = null,
-                  $scope.cstReg = null,
-                  $scope.panNo = null,
-
-
-
-                  $scope.paymentMethod = null,
-                  $scope.terme = null,
-                  $scope.deliveryMethod = null,
-                  $scope.openingBalance = null,
-                  $scope.asOf = null,
-                  $scope.notes = null
-            });
-        }
-    };
+  
 
 
     //get customer data
-    $http.get(config.api + "customerTransactions" + "/count").then(function (response) {
-        $scope.openInvoiceCount = response.data;
-    });
-    $http.get(config.api + "customers" + "/count").then(function (response) {
-        $scope.customerCount = response.data;
-    });
+   
+   
 
-    $scope.getTransaction = function () {
-
-        $http.get(config.api + "customerTransactions").then(function (response) {
-            $scope.transactions = response.data;
-        });
-
-
-    }
+   
 
     // get invoice data 
-    $scope.getInvoice = function () {
-        $http.get(config.login + 'getInvoiceData/' + localStorage.CompanyId + '?role=' + localStorage["usertype"]).then(function (response) {
-            $scope.invoiceData = response.data;
-            console.log(response.data);
-            for (var i = 0; i < $scope.invoiceData.length; i++) {
-                $scope.invoiceData[i].customer = localStorage[$scope.invoiceData[i].customer];
-
-            }
-            console.log($scope.InventoryList)
-            $(".loader").hide()
-        });
-    }
-
-    $scope.getInvoice();
+   
     //get customer data
 
     $scope.getCustomer = function () {

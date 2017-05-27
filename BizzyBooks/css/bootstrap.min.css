@@ -7692,7 +7692,7 @@ button.close {
 .flexheader {
     float: left;
     width: 100%;
-    background: #0b4462;
+    background: #8979A2;
     color: #fff;
 }
 
@@ -8953,14 +8953,14 @@ main {
 .tablepadding{padding:10px !important;}
 #AddInventoryModal .modal-dialog{width:99%;}
 .filterBox{padding: 10px;
-    background: aliceblue;
-    border: 1px solid rgba(108, 127, 137, 0.13);
+    background: #F1F0F7;
+    border: 0px solid rgba(108, 127, 137, 0.13);
     border-radius: 3px;}
 .filterBox h3{font-size: 16px;
     font-weight: bold;
     margin: 0px;
     padding-bottom: 10px;
-    border-bottom: 1px solid rgba(108, 127, 137, 0.13);}
+    border-bottom: 1px solid rgba(10, 17, 137, 0.13);}
 .filterBox .form-group{margin-bottom:0px}
 .remarksbox{background:rgba(243, 245, 248, 0.3); box-shadow:none; border-left:1px solid #e3e3e3;  border-right:1px solid #e3e3e3; border-bottom:1px solid #e3e3e3; height:80px}
 .itemtd td{padding:3px;}
@@ -9116,4 +9116,8 @@ main {
 #ExciseDutyModal .modal-dialog{width:65%;}
 .ExciseTable th, .ExciseTable td{padding:5px}
 
-    #Datefilter{width:240px !important}
+  .isPaid {
+    background-color:#CAF3CD;
+   
+}
+

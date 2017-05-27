@@ -141,7 +141,7 @@ myApp.controller('HomeCntrl', ['$state', '$http', '$rootScope', '$scope', 'confi
     }
     $scope.changeCompany = function (company) {
         setCompany(company);
-        //$state.reload();
+        $state.reload();
     }
     $scope.logout = function () {
         $http.get(config.login + 'logout' + "?token1=" + localStorage["tokenNo"])

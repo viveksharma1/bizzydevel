@@ -9,75 +9,74 @@
 
 
 
-<div>
+<div class="FlexPopup" style="display:block" ng-init="model = {}">
+    <div class="flexheader" style="color:#5D2CA7">
+        <ul class="list-unstyled submenu InvoiceMenu" style="float:left">
+
+            <li><a href="#"><span>Inventory</span></a></li>
+        </ul>
+        <ul class="list-unstyled submenu InvoiceMenu">
+
+            <li><a href="" ng-click="goBack()"><i class="fa fa-times"></i></a></li>
+        </ul>
+    </div>
     <div class="content">
-        <div class="panel lightblue bluebrdr marginbottom content">
-            <div class="panel-heading">
-                <strong class="heading">Balance Inventory</strong>
+        
 
-               
-                <span id="fileUpload" class="pull-right">
-                    <label class="btn btn-default btn-sm" style="height:30px;width:200px">
-                       <strong class="text-primary">Opening Stock</strong> (Choose file)
-                        <input type="file" id="imageUpload" file-model="myFile"
-                               style="display: none">
 
-                    </label>
-                    <button ng-click="uploadFile()" ng-hide="saving" id="fileUpload1"
-                            class="btn btn-primary btn-sm">
-                        <i class="fa fa-upload"></i>
-                    </button>
-                    <button ng-click="uploadFile()" ng-show="saving" id="fileUpload1"
-                            class="btn btn-primary btn-sm">
-                        <i class="fa fa-spin fa-spinner"></i>
-                    </button>
+            <div class="col-sm-12" style="padding:20px 0px 0px 0px">
 
-                </span>
-                @*<h4 style="color:green;margin-left:4px"class="pull-right"> Opening Stock: </h4>*@
-            </div>
 
-            <!-- Modal -->
 
-        </div>
 
-        <div class="col-sm-12" style="padding:10px 0px">
-          
-            @*<div class="btn-group" style="margin-left:9px">
-                <button type="button" class="btn btn-primary btn-sm"> Action</button>
-                <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="caret" style="border-top-color:#fff !important"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a href="" ng-click="showStatusBox(itemChecked,true)">Change Status</a></li>
-                    <li><a ng-click="showRemarkBox(itemChecked,true)" class="cursor">Add Remarks</a></li>
-                    <li><a ng-click="showAddjustmentBox(itemChecked,true)" class="cursor">Adjustment</a></li>
-                </ul>
+                @*<div class="btn-group" style="margin-left:9px">
+                        <button type="button" class="btn btn-primary btn-sm"><a href="#/Customer/GRNEntry" style="color:#fff"> Action</a></button>
+                        <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret" style="border-top-color:#fff !important"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="" ng-click="showStatusBox(itemChecked,true)">Change Status</a></li>
+                            <li><a ng-click="showRemarkBox(itemChecked,true)" class="cursor">Add Remarks</a></li>
+                            <li><a ng-click="showAddjustmentBox(itemChecked,true)" class="cursor">Adjustment</a></li>
+                        </ul>
+                    </div>*@
+
+
+
+                <div class="col-sm-12 padding">
+
+                    <span id="InventoryFilter" ng-click="InventoryFilter()" style="margin-left:5px">
+                        <i class="fa fa-filter tableicon" style="color:#6C04AC" data-toggle="tooltip" data-placement="bottom" title="Advance Filter"></i><i class="fa fa-caret-down" style="margin-left:-6px;"></i>
+                    </span>
                 
-                
-               
-                    
-                   
-                    
-                
-</div>*@
+                    <span id="fileUpload" class="pull-right">
+                        <label class="btn btn-default btn-sm" style="height:32px;width:200px">
+                            <strong style="color:#6C04AC">Opening Stock</strong> (Choose file)
+                            <input type="file" id="imageUpload" file-model="myFile"
+                                   style="display: none">
+
+                        </label>
+                        <button ng-click="uploadFile()" ng-hide="saving" id="fileUpload1"
+                                class="btn-sm" style="color:#6C04AC">
+                            <i class="fa fa-upload" style="color:#6C04AC"></i>
+                        </button>
+                        <button ng-click="uploadFile()" ng-show="saving" id="fileUpload1"
+                                class="btn btn-primary btn-sm">
+                            <i class="fa fa-spin fa-spinner"></i>
+                        </button>
+                    </span>
 
 
-            <div class="col-sm-2 padding">
-               <span id="InventoryFilter" ng-click="InventoryFilter()" style="margin-left:5px">
-                    <i class="fa fa-filter tableicon" data-toggle="tooltip" data-placement="bottom" title="Advance Filter"></i><i class="fa fa-caret-down" style="margin-left:-6px;"></i>
-                </span>
-                <label style="color:#134968; margin-left:17px;margin-top:10px">Total Count:<b>{{filterList.length}}</b></label>
-            </div>
-            <div class="col-sm-10 padding">
-               
-                <label class="pull-right" style="margin-right:17px"><input type="text" ng-model="search" class="form-control pull-left" style="width:150px;" placeholder="Find inventory" /></label>
+                    <input class="pull-left reportSearch" type="search" placeholder="search" name="lastname" ng-model="search" style="width:300px;height:30px; margin:0px 0px">
+
+                    <label style="color:#6C04AC; margin-top:5px;margin-left:10px">Total Count:<b>{{filterList.length}}</b></label>
                 </div>
-                <div class="col-sm-12 padding" style="padding:1px 0px !important">
+                <div class="content">
                     <div class="col-sm-2 padding" id="SearchFilter">
 
-                        <div class="col-sm-12 filterBox" style="padding:0px">
+                        <div class="filterBox pull-left" id="filterBox" style="padding:0px; margin-top:10px">
                             <h3 style="padding:10px">Search Filter</h3>
-                            <div class="scrollbar scrollbarAngular" style="height:390px; padding:0px 10px 10px 10px">
+                            <div class="col-sm-12 scrollbar scrollbarAngular" style="height:460px">
                                 <div class="form-group">
                                     <h4 class="tabheading font_11">Status</h4>
                                     <select class="form-control">
@@ -201,49 +200,49 @@
                                     </ui-select>
                                 </div>
                                 @*<div class="form-group">
-                                <h4 class="tabheading font_11">Excise per unit</h4>
-                                <ui-select ng-model="exciseDuty.selected"
-                                           ui-select-focuser
-                                           theme="selectize">
-                                    <ui-select-match width="100%" allow-clear="true" placeholder="">
-                                        <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
-                                            {{ $select.selected._id.exciseDuty || $select.search }}
-                                        </span>
+                    <h4 class="tabheading font_11">Excise per unit</h4>
+                    <ui-select ng-model="exciseDuty.selected"
+                               ui-select-focuser
+                               theme="selectize">
+                        <ui-select-match width="100%" allow-clear="true" placeholder="">
+                            <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                {{ $select.selected._id.exciseDuty || $select.search }}
+                            </span>
 
-                                    </ui-select-match>
-
-
-                                    <ui-select-choices repeat="invoice in ItemList  | unique:'_id.exciseDuty'|filter: $select.search">
-                                        <div>
-                                            <span style="color:forestgreen">{{invoice._id.exciseDuty}}</span>
-                                        </div>
+                        </ui-select-match>
 
 
-                                    </ui-select-choices>
-                                </ui-select>
+                        <ui-select-choices repeat="invoice in ItemList  | unique:'_id.exciseDuty'|filter: $select.search">
+                            <div>
+                                <span style="color:forestgreen">{{invoice._id.exciseDuty}}</span>
                             </div>
-                            <div class="form-group">
-                                <h4 class="tabheading font_11">SAD per unit</h4>
-                                <ui-select ng-model="SAD.selected"
-                                           ui-select-focuser
-                                           theme="selectize">
-                                    <ui-select-match width="100%" allow-clear="true" placeholder="">
-                                        <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
-                                            {{ $select.selected._id.SAD || $select.search }}
-                                        </span>
-
-                                    </ui-select-match>
 
 
-                                    <ui-select-choices repeat="invoice in ItemList  | unique:'_id.SAD'|filter: $select.search">
-                                        <div>
-                                            <span style="color:forestgreen">{{invoice._id.SAD}}</span>
-                                        </div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div class="form-group">
+                    <h4 class="tabheading font_11">SAD per unit</h4>
+                    <ui-select ng-model="SAD.selected"
+                               ui-select-focuser
+                               theme="selectize">
+                        <ui-select-match width="100%" allow-clear="true" placeholder="">
+                            <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                {{ $select.selected._id.SAD || $select.search }}
+                            </span>
+
+                        </ui-select-match>
 
 
-                                    </ui-select-choices>
-                                </ui-select>
-                            </div>*@
+                        <ui-select-choices repeat="invoice in ItemList  | unique:'_id.SAD'|filter: $select.search">
+                            <div>
+                                <span style="color:forestgreen">{{invoice._id.SAD}}</span>
+                            </div>
+
+
+                        </ui-select-choices>
+                    </ui-select>
+                </div>*@
                                 <div class="form-group">
                                     <h4 class="tabheading font_11">Net Wt</h4>
                                     <ui-select ng-model="NETWEIGHT.selected"
@@ -295,13 +294,14 @@
                     </div>
 
 
-               
+
 
                     <div class="col-sm-12 padding" id="balancetable">
-                        <div style="overflow-x:auto; margin-top:2px;width:100%;">
-                            <table class="datatable table-bordered table-condensed table-hover table" datatable="ng" cellspacing="0" dt-options="dtOptions" style="font-size:11px;font:bold;color:#1430AF;">
-                                <thead style="background-color:#7CC3EB;color:#fff">
-                                    <tr style="height:11px">
+                        <div ng-if="datatable">
+                            @*<div style="overflow-x:auto; margin-top:2px;width:100%;">*@
+                            <table class="datatable table-bordered table-condensed table-hover" datatable="ng" cellspacing="0" dt-options="dtOptions" style="font-size:11px;font:bold;color:#0B6976;width:100%">
+                                <thead style="background-color:#E5F3FC;color:black">
+                                    <tr>
                                         <th style="text-align:center"><input ng-model="selectAll" ng-click="selectAllLineItem(filterList)" type="checkbox" /></th>
                                         <th>NO</th>
                                         <th>GODOWN</th>
@@ -337,7 +337,7 @@
 
                                         <td style="text-align:right"> {{item.NETWEIGHT |number : 3}}</td>
                                         <td style="text-align:right"> {{item.BALANCE |number : 3}}</td>
-                                        <td style="text-align:right;">
+                                        <td style="text-align:right;white-space:nowrap">
                                             <button type="button" class="editbtn"><a href="" ng-click="showStatusBox(item)">Change Status</a></button>
                                             <class class="linkseparator" style="margin-top:4px; margin-right:0px"></class>
                                             <div class="btn-group editcaret">
@@ -365,11 +365,13 @@
                                         <th></th>
                                         <th></th>
                                         <th></th>
-                                        <th>Total :</th>
-                                        <th style="text-align:right;font-size:12px">{{totalNetWeight}}</th>
+                                        <th>Total:</th>
+                                        <th>{{totalNetWeight}}</th>
 
-                                        <th style="text-align:center;font-size:12px">{{totalNetBalance}}</th>
+                                        <th>{{totalNetBalance}}</th>
                                         <th></th>
+                                        
+
 
 
 
@@ -474,20 +476,21 @@
                             </div>
 
                         </div>
+                    </div>
 
                     </div>
                 </div>
-            </div>
-
-
-
-      
+          
 
 
 
 
 
+
+
+
+
+
+        </div>
 
     </div>
-
-</div>

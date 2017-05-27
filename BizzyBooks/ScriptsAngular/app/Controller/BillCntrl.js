@@ -104,13 +104,22 @@
         if (billDate)
             setDate($scope.billDueDate, moment(billDate).add(days, 'days'));
     }
-    availableDates = ['01-24-2010', '01-25-2030'];
+   
+   
     $('#billDueDate').datepicker({
-        assumeNearbyYear: true
+        assumeNearbyYear: true,
+        todayBtn: true
+       
+      
        
     
     });
-    $('#billDate').datepicker({ assumeNearbyYear: true });
+    $('#billDate').datepicker({
+        assumeNearbyYear: true,
+        todayBtn: true
+        
+
+    });
     $('#customPayementDate').datepicker({ assumeNearbyYear: true });
     $('#actualDate').datepicker({ assumeNearbyYear: true });
    
@@ -470,6 +479,7 @@
                     .then(function (response) {
                        
                         var billData = response.data.transactionData;
+                        console.log(response)
                         $scope.customPaymentInfo = billData.customPaymentInfo;
                         $scope.accountTable = billData.accountlineItem;
                         if (billData.itemDetail && localStorage["usertype"] == 'UO') {
@@ -483,6 +493,7 @@
                             $scope.totalAmountINR = $scope.manualTableSum() + $scope.accountTableSum();
                             $scope.id = billData.id
                             $scope.billData = billData
+                            $scope.customBalance = response.data.customBalance
                         }
                         if (!response.data.balance) {
                             $('#paymentStatus').show();
@@ -497,6 +508,14 @@
                             $scope.receiptCount = null;
                             $scope.receipts = [];
                         }
+                        if (response.data.customPaymentLog) {
+                            $scope.customCount = response.data.customPaymentLog.length;
+                            $scope.custom = response.data.customPaymentLog;
+                        } else {
+                            $scope.customCount = null;
+                            $scope.custom = [];
+                        }
+
                         $scope.paymentDays = billData.paymentDays
                         $scope.paymentLog = { data: "dfdgd" };
                         $scope.billNo = billData.no
@@ -540,21 +559,21 @@
         }
     };
     $scope.saveCustom = function () {
-        $scope.billtable[$scope.tableIndex].assesableValue = $scope.assesableValue;
-        $scope.billtable[$scope.tableIndex].exciseDuty = $scope.exciseDuty1;
-        $scope.billtable[$scope.tableIndex].dutyAmount = $scope.dutyAmount;
-        $scope.billtable[$scope.tableIndex].SAD = $scope.SAD1;
-        $scope.billtable[$scope.tableIndex].totalDutyAmt = $scope.totalDutyAmt;
-        $scope.billtable[$scope.tableIndex].customData = $scope.customDatanew
-        var data = {
-            manualLineItem: $scope.billtable,
-            billNo: $scope.billNo,
-            totalDutyAmt1: $scope.totalDutyAmt13
-        };
-        $http.post(config.login + "saveCustom", data).then(function (response) {
-            showSuccessToast("Custom Save Succesfully");
-        });
-    }
+        if ($scope.assesableValue) {
+            $scope.billtable[$scope.tableIndex].assesableValue = $scope.assesableValue;
+            $scope.billtable[$scope.tableIndex].exciseDuty = $scope.exciseDuty1;
+            $scope.billtable[$scope.tableIndex].dutyAmount = $scope.dutyAmount;
+            $scope.billtable[$scope.tableIndex].SAD = $scope.SAD1;
+            $scope.billtable[$scope.tableIndex].totalDutyAmt = $scope.totalDutyAmt;
+           // $scope.billtable[$scope.tableIndex].actualDate = moment(getDate($scope.actualDate)).format("DD/MM/YYYY");
+            $scope.billtable[$scope.tableIndex].customData = $scope.customDatanew
+            $scope.billtable[$scope.tableIndex].purchaseRate = (Number($scope.assesableValue) / Number($scope.billtable[$scope.tableIndex].NETWEIGHT)).toFixed(2);
+            $scope.billtable[$scope.tableIndex].dutyPerUnit = (Number($scope.exciseDuty1) / Number($scope.billtable[$scope.tableIndex].NETWEIGHT)).toFixed(2);
+            $scope.billtable[$scope.tableIndex].sadPerUnit = (Number($scope.SAD1) / Number($scope.billtable[$scope.tableIndex].NETWEIGHT)).toFixed(2);
+            $scope.sumtotalcustomData();
+        }
+        }
+    
     $scope.dateFormat = function (date) {
         var res = date.split("/");
         var month = res[1];
@@ -598,6 +617,10 @@
             var date = getDate($scope.billDate);
             var billDueDate = getDate($scope.billDueDate);
             var actualDate = moment(getDate($scope.actualDate)).format("DD/MM/YYYY");
+            if ($scope.receiptCount > 0) {
+                $rootScope.$broadcast('event:error', { message: "Can't Update" });
+                return;
+            }
             if ($scope.billNo == undefined) {
                 $rootScope.$broadcast('event:error', { message: "Please type Invoice No" });
                 return;
@@ -639,34 +662,30 @@
                 var amount = $scope.manualTableSum() + $scope.accountTableSum();
                 purchaseAmount = $scope.manualTableSum()
                 var totalAmountINR = 0
+               var amountInDollar = $scope.manualTotal
+              var   balanceInDollar = $scope.manualTotal
+                var adminAmountInDollar = 0
+                var adminBalanceInDollar = 0
             }
             if (authService.userHasPermission('usertype:UO')) {
                 purchaseAmount = $scope.excelTableItemSum();
                 var totalAmountINR = $scope.excelTableItemSum() + $scope.accountTableSum()
+               var  adminAmountInDollar = $scope.TOTALAMOUNTUSD
+               var  adminBalanceInDollar = $scope.TOTALAMOUNTUSD
                 var amount = 0;
+                var amountInDollar = 0
+                var balanceInDollar = 0
             }
-            if ($scope.assesableValue) {
-                $scope.billtable[$scope.tableIndex].assesableValue = $scope.assesableValue;
-                $scope.billtable[$scope.tableIndex].exciseDuty = $scope.exciseDuty1;
-                $scope.billtable[$scope.tableIndex].dutyAmount = $scope.dutyAmount;
-                $scope.billtable[$scope.tableIndex].SAD = $scope.SAD1;
-                $scope.billtable[$scope.tableIndex].totalDutyAmt = $scope.totalDutyAmt;
-                $scope.billtable[$scope.tableIndex].actualDate = moment(getDate($scope.actualDate)).format("DD/MM/YYYY");
-                $scope.billtable[$scope.tableIndex].customData = $scope.customDatanew
-                $scope.billtable[$scope.tableIndex].purchaseRate = (Number($scope.assesableValue) / Number($scope.billtable[$scope.tableIndex].NETWEIGHT)).toFixed(2);
-                $scope.billtable[$scope.tableIndex].dutyPerUnit = (Number($scope.exciseDuty1) / Number($scope.billtable[$scope.tableIndex].NETWEIGHT)).toFixed(2);
-                $scope.billtable[$scope.tableIndex].sadPerUnit = (Number($scope.SAD1) / Number($scope.billtable[$scope.tableIndex].NETWEIGHT)).toFixed(2);
-                $scope.sumtotalcustomData();
-            }
-            if ($scope.exciseAssessableValue) {
-                for (var i = 0; i < $scope.billtable.length; i++) {
-                    $scope.billtable[i].assesableValue = $scope.exciseAssessableValue * $scope.billtable[i].NETWEIGHT;
-                    $scope.billtable[i].exciseDuty = $scope.exciseDutyPerUnit * $scope.billtable[i].NETWEIGHT;
-                    $scope.billtable[i].dutyAmount = $scope.exciseRate * $scope.billtable[i].NETWEIGHT;
-                    $scope.billtable[i].SAD = $scope.exciseSAD * $scope.billtable[i].NETWEIGHT;
-                    $scope.billtable[i].actualDate = moment(getDate($scope.actualDate)).format("DD/MM/YYYY");
-                }
-            }
+            
+            //if ($scope.exciseAssessableValue) {
+            //    for (var i = 0; i < $scope.billtable.length; i++) {
+            //        $scope.billtable[i].assesableValue = $scope.exciseAssessableValue * $scope.billtable[i].NETWEIGHT;
+            //        $scope.billtable[i].exciseDuty = $scope.exciseDutyPerUnit * $scope.billtable[i].NETWEIGHT;
+            //        $scope.billtable[i].dutyAmount = $scope.exciseRate * $scope.billtable[i].NETWEIGHT;
+            //        $scope.billtable[i].SAD = $scope.exciseSAD * $scope.billtable[i].NETWEIGHT;
+            //        $scope.billtable[i].actualDate = moment(getDate($scope.actualDate)).format("DD/MM/YYYY");
+            //    }
+            //}
             
             var data = {
                 type: type,
@@ -677,7 +696,9 @@
                 role: localStorage['usertype'],
                 no: $scope.billNo,
                 vochNo: $scope.billNo,
-                narration:$scope.narration,
+                narration: $scope.narration,
+                customAmount: Number($scope.dutyAmount1),
+                customBalance:Number($scope.dutyAmount1),
                 transactionData: {
                     compCode: localStorage.CompanyId,
                     supliersId: $scope.supplier.selected.id,
@@ -700,6 +721,13 @@
                     purchaseAmount: Number(purchaseAmount),
                     amount: Number(amount),
                     balance: Number(amount),
+                    amountInDollar: amountInDollar,
+                    balanceInDollar: balanceInDollar,
+                    adminAmountInDollar: adminAmountInDollar,
+                    adminBalanceInDollar: adminBalanceInDollar,
+                    
+                   
+
                     totalWeight: $scope.totalWeight,
                     ExchangeRate: $scope.ExchangeRateINR,
                     supCode: $scope.supplier.selected.supCode,
@@ -716,6 +744,8 @@
                     }
                 }
             }
+            $http.post("https://api.keen.io/3.0/projects/592786ff90b3659264952080/events/EVENT_COLLECTION?api_key=68E5FFBBE11B658F42D2DCC6B0DAA360E49B385A4968803E62262B67D57FAD566083E9CFF7C0330BCA4825895644BCB4F9DBFD0350461A9E6251D31AD380D1640F7A79C638D723794E5E3E5EFC118925B221F78DE0BE81BFA596D65AF89BA6FB", data).then(function (response) {
+            });
             var url = config.login + "checkSalesInventory/" + $stateParams.billNo
             commonService.checkSalesInventory(url).then(function (response) {
                 if (response.data.status == "can not update") {
@@ -833,6 +863,7 @@
                                 retObj["dutyAmount"] = '0';
                                 retObj["SAD"] = '0';
                                 retObj["totalDutyAmt"] = '0';
+                                retObj["compCode"] = localStorage.CompanyId
                                 if ($scope.rate && $scope.weight) {
 
                                     retObj["fobamount"] = Number($scope.rate) * Number($scope.weight);
@@ -904,9 +935,9 @@
     $scope.lineDataQnt = [];
     $scope.count = 0;
     var totalQnt = 0;
-    $scope.idSelectedItem = null;
-    $scope.selectLineItem = function (index, rate, netweight) {
-        $scope.idSelectedItem = index;
+    $scope.customIndex = null;
+    $scope.selectLineItem = function (index, rate, netweight,customData) {
+        $scope.customIndex = index;
         $scope.tableIndex = index;
         $scope.count++;
         $scope.baseRate1 = rate
@@ -919,7 +950,8 @@
         $scope.customCecAndEducess = 1
         $scope.SAD = 4
         $scope.baseValue = Number($scope.baseRate1 * $scope.exchangeRateBill * $scope.totalQnt).toFixed(2)
-       // $scope.baseValue1 = $scope.baseValue.toFixed(2)
+        // $scope.baseValue1 = $scope.baseValue.toFixed(2)
+        $scope.getCustomData(customData)
     }
     //calculate custom duty
     $scope.calculateCustom = function () {
@@ -1097,6 +1129,7 @@
     $scope.idSelectedVote = null;
     $scope.selectedItemIndex = null;
     $scope.edit = function (data, index) {
+
         $scope.selectedItemIndex = index;
         $scope.idSelectedVote = index;
         $scope.RG = data.RG
@@ -1147,15 +1180,19 @@
         $scope.sadPerUnit = ($scope.sadAmount / $scope.lineItemnetweight).toFixed(2);
     }
     $scope.remarks.selected = { name: '' };
-    $scope.getRgNo = function (name){
-        $http.get(config.api + "Inventories/count/" + "?[where][GODOWN]=" + name).then(function (response) {
+    $scope.getRgNo = function (name) {
+        var data = {
+            name: name
+        }
+        $http.post(config.login + "getInventoryCount",data).then(function (response) {
             $scope.RG = response.data.count + 1
             $scope.rgCount = response.data.count
         });
     }
+    var actualdate = moment(getDate($scope.actualDate)).format("DD/MM/YYYY");
     $scope.addBillLineItem = function () {
-        var actualDate = moment(getDate($scope.actualDate)).format("DD/MM/YYYY");
-        $scope.GODOWN.push({ type: "GODOWN", name: $scope.newitem });
+        
+        //$scope.GODOWN.push({ type: "GODOWN", name: $scope.newitem });
         if ($scope.invoiceType == 'Import') {
             var billdata = {
                 GODOWN: $scope.godown.selected.name,
@@ -1169,14 +1206,14 @@
                // AMOUNTPERITEM: $scope.lineItemnetweight * $scope.lineItemBaseRate * $scope.ExchangeRateINR,
                 AMOUNTINR: $scope.lineItemnetweight * $scope.lineItemBaseRate * $scope.ExchangeRateINR,
                 assesableValue: $scope.exciseAssessableValue,
-                exciseDuty: $scope.exciseDutyAmount,
-                dutyAmount: $scope.exciseDutyAmount,
-                SAD: $scope.sadAmount,
-                actualDate:actualDate,
+                exciseDuty: '',
+                dutyAmount: '',
+                SAD: '',
+                actualDate: actualdate,
                 totalDutyAmt: '',
-                purchaseRate: $scope.exciseDutyAmount,
+                purchaseRate: '',
                 dutyPerUnit: '',
-                sadPerUnit: $scope.sadAmount
+                sadPerUnit: '',
             }
         }
         if ($scope.invoiceType == 'Domestic') {
@@ -1206,7 +1243,7 @@
                 dutyAmount: $scope.exciseDutyAmount,
                 SAD: $scope.sadAmount,
                 totalDutyAmt: '',
-                actualDate: actualDate,
+                actualDate: actualdate,
                 exciseRate: $scope.exciseRate,
                 sadRate: $scope.sadRate,
                 purchaseRate: $scope.lineItemBaseRate,

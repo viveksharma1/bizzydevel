@@ -181,6 +181,7 @@
                 $scope.$watch('groupMasters.selected', function () {
                     if ($scope.groupMasters.selected)
                         $scope.balanceType = $scope.groupMasters.selected.balanceType;
+                        $scope.obType = $scope.groupMasters.selected.balanceType;
                 });
                 $scope.createGroupBtn = function () {
 

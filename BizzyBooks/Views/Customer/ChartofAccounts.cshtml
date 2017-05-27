@@ -21,8 +21,11 @@
                 </ui-select>
             </div>
             <div class="btn-group">
-                <button type="button" class="btn btn-primary btn-sm" ng-click="Accountbtn()" style="height:28px" id="NewCustomerCreate">Create Account</button>
+               
+                <label class="btn btn-default btn-sm" style="height:32px;width:160px;margin-right:14px">
+                    <strong style="color:#6C04AC"ng-click="Accountbtn()">Create Account</strong>
 
+                </label>
             </div>
         </div>
     
@@ -33,17 +36,17 @@
     </div>
 <create-account value="myValue"> </create-account>
 <div ng-If="displayTable"class="col-sm-12" style="padding:10px;margin-right:45px">
-    @*<input type="text" class="form-control pull-right fa fa-search" placeholder="Search" ng-model="search"  style="width:250px;border-color:#1D4B8F;border-width:2px; float:left"/>*@
+    <input type="text" class="form-control pull-right fa fa-search" placeholder="Search" ng-model="search"  style="width:250px;border-color:#1D4B8F;border-width:2px; float:left"/>
    
    
-    <table class="table"  style="margin-top:10px;margin-right:75px" datatable="ng" cellspacing="0"dt-options="dtOptions">
-        <thead>
+    <table class="datatable  table-condensed table-hover"   id="ItemTable" style="font-size:14px;width:100%;font:bold;color:#0B6976;">
+        <thead style="background-color:#ECEFF5;color:black">
             <tr>
                 <th style="width:13px; color:#1D4B8F">&nbsp;</th>
                 <th style="color:#1D4B8F">NAME</th>
                 <th style="color:#1D4B8F">GROUP</th>
-                
-                <th style="text-align:right;color:#1D4B8F">BALANCE</th>              
+
+                <th style="text-align:right;color:#1D4B8F">BALANCE</th>
                 <th style="text-align:right;color:#1D4B8F">ACTION</th>
             </tr>
         </thead>

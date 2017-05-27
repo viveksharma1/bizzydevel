@@ -87,6 +87,21 @@
     //$scope.no = $stateParams.poNo;
     $scope.bankAccount = {};
     $scope.partyAccount = {};
+    if (localStorage.bankAccountId) {
+        $scope.bankAccount = { selected: { accountName: localStorage[localStorage.bankAccountId], id: localStorage.bankAccountId } };
+    }
+    else {
+        $scope.bankAccount = {}
+    }
+    if ($stateParams.partyAccountId != null) {
+        $scope.partyAccount = { selected: { accountName: localStorage[$stateParams.partyAccountId], id: $stateParams.partyAccountId } };
+        getAllBill($stateParams.partyAccountId);
+       
+    }
+    else {
+        $scope.partyAccount = {};
+    }
+    
     $scope.badlaAccount = {};
     $scope.badlaAccounts = [];
     $scope.badlaDate = 'badlaDate';
@@ -179,7 +194,7 @@
    
     //}
     function getAllBill(id) {
-        $http.get(config.login + "getVouchersforReceipt" + "?customerId=" + id + "&role=" + localStorage.usertype).then(function (response) {
+        $http.get(config.login + "getVouchersforReceipt" + "?customerId=" + id + "&role=" + localStorage.usertype + "&compCode=" + localStorage.CompanyId).then(function (response) {
             $scope.paymentData = response.data
             angular.copy($scope.paymentData, $scope.paidData);
             checkPaymentBills();

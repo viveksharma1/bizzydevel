@@ -86,7 +86,12 @@ myApp.controller('SupplierCntrl', ['$scope', '$http', '$timeout', '$stateParams'
     $scope.getPurchaseInvoice();
     $scope.getSupplier();
     $scope.getExpense();
-    
+    $scope.isPaid = function (amount) {
+        if (amount == '0') {
+            return "isPaid"
+        }
+
+    }
     $scope.SuppliersTablebtn = function () {
         $(".loader").show()
         $scope.url3 = "getSupplierAccount"
@@ -336,6 +341,12 @@ myApp.controller('SupplierCntrl', ['$scope', '$http', '$timeout', '$stateParams'
 
 
 
+    $('#OpenBill').show();
+    $('#example').hide();
+    $('#PurchaseOrderTable').hide();
+    $scope.OpenBillTable('OPEN');
+    $('#PaidBillTable').hide();
+    $('#EnquiryTable').hide();
     $scope.addInventrybtn = function (data) {
 
         $scope.inventorylist = data
@@ -345,12 +356,20 @@ myApp.controller('SupplierCntrl', ['$scope', '$http', '$timeout', '$stateParams'
         $scope.billDate1 = data.date
         $('#addInventryModal').modal('show');
     }
-   
-    if (localStorage["type1"] == "PO") {
+    if ($rootScope.$previousState.controller == "SupplierCntrl") {
+
+        $('#OpenBill').show();
+        $('#example').hide();
+        $('#PurchaseOrderTable').hide();
+        $scope.OpenBillTable('OPEN');
+        $('#PaidBillTable').hide();
+        $('#EnquiryTable').hide();
+    }
+    if ($rootScope.$previousState.controller == "ExpenseCntrl") {
        
         $scope.InventoryList = [];
         $(".sk-wave").show()
-        $scope.PurchaseOrderTable('OPEN');
+        $scope.ExpenseTable();
         $('#PurchaseOrderTable').show();
         $('#example').hide();
         $scope.InventoryList = [];
@@ -369,7 +388,7 @@ myApp.controller('SupplierCntrl', ['$scope', '$http', '$timeout', '$stateParams'
     }
 
 
-    if (localStorage["type1"] == "BILL") {
+    if ($rootScope.$previousState.controller == "BillCntrl") {
         $('#OpenBill').show();
         $('#example').hide();
         $('#PurchaseOrderTable').hide();
@@ -378,7 +397,7 @@ myApp.controller('SupplierCntrl', ['$scope', '$http', '$timeout', '$stateParams'
         $('#EnquiryTable').hide();
     }
 
-    if (localStorage["type1"] == "PAYMENT") {
+    if ($rootScope.$previousState.controller == "PaymentCntrl") {
         $scope.OpenBillTable('OPEN');
         $('#example').hide();
         $('#PurchaseOrderTable').hide();

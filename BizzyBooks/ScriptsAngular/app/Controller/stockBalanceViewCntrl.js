@@ -24,6 +24,7 @@
         $http.get(config.api + "voucherTransactions/" + $scope.Item.invId).then(function (result) {
             $scope.billDetail = result.data;
             $scope.supplierName = localStorage[$scope.billDetail.transactionData.supliersId]
+            $scope.actualDate = $scope.billDetail.transactionData.actualDate
         });
         $scope.GRNDetail($scope.Item);
     });

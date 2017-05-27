@@ -15,7 +15,7 @@
         format: 'dd/mm/yyyy',
         autoclose: true,
     });
-
+   
     $scope.Accountbtn = function (id) {
 
         console.log(id);
@@ -178,7 +178,10 @@
         $scope.getAccountList([localStorage.CompanyId]);
     }
 
-
+    $scope.$on("event:accountReferesh", function (event, args) {
+        // Refresh accounts...
+        $scope.getAccountList([localStorage.CompanyId]);
+    });
     // delete account 
 
     $scope.deleteAccountPopup = function (id) {
@@ -221,10 +224,6 @@
     }
    
 
-    $scope.dtOptions = DTOptionsBuilder.newOptions()
-    .withOption('scrollx', true)
-    .withOption('paging', false)
-   
 
     //var urlToChangeStream = "" + config.api + "accounts/change-stream?_format=event-stream";
     //var src = new EventSource(urlToChangeStream);
@@ -254,5 +253,13 @@
     //    }
     //  console.log(d.data);
     //})
-
+    var h = window.innerHeight;
+    $scope.dtOptions = DTOptionsBuilder.newOptions()
+       .withOption('processing', false)
+    
+       .withOption('scrollY', h - 190)
+       .withOption('paging', false)
+      .withOption('bInfo', false)
+      .withOption('searching', false)
+  .withOption('oLanguage', false)
 }]);

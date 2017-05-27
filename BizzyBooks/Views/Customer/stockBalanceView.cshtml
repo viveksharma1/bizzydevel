@@ -60,7 +60,7 @@
 
                         <li>
                             <span>Cost/KG  </span>
-                            <span class="pull-right">{{costPerMTinINR}}</span>
+                            <span class="pull-right">{{costPerMTinINR|number : 2}}</span>
                         </li>
 
 
@@ -92,7 +92,7 @@
                     <ul>
                         <li>
                             <span>Custom Per KG </span>
-                            <span class="pull-right"> (<b>{{totalCustomPerItem |number : fractionSize}}</b>) {{totalCustom |number : fractionSize}}</span>
+                            <span class="pull-right"> (<b>{{totalCustomPerItem |number : 2}}</b>) {{totalCustom |number : fractionSize}}</span>
                         </li>
 
 
@@ -140,7 +140,7 @@
                 <div class="col-sm-3 padding">
 
                     <h4 class="tabheading text-primary">Actual Date</h4>
-                    <p>{{billDetail.billData.actualDate | date}}</p>
+                    <p>{{Item.actualDate}}</p>
                 </div>
 
 
@@ -308,7 +308,7 @@
                                 </div>
                                 <div class="tableCell">
                                     <span class="value">
-                                        <b> {{Item.NETWEIGHT - Item.BALANCE}}</b>
+                                        <b> {{Item.BALANCE}}</b>
                                     </span>
                                 </div>
                             </div>

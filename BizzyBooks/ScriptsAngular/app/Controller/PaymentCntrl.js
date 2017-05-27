@@ -44,17 +44,40 @@
         $scope.myValue = { accountName: value };
     }
 
-    $('#paymentdate').datepicker().on('changeDate', function (ev) {
-        $('.datepicker').hide();
-    });
+    $('#paymentdate').datepicker({
+        assumeNearbyYear: true,
+        todayBtn: true
+
+    })
     var type = $stateParams.type;
     $scope.bankAccount = {};
     $scope.partyAccount = {};
+    if (localStorage.bankAccountId) {
+        $scope.bankAccount = { selected: { accountName: localStorage[localStorage.bankAccountId], id: localStorage.bankAccountId } };
+    }
+    else {
+        $scope.bankAccount = {}
+    }
+    if ($stateParams.partyAccountId != null) {
+        $scope.partyAccount = { selected: { accountName: localStorage[$stateParams.partyAccountId], id: $stateParams.partyAccountId } };
+        getAllBill($stateParams.partyAccountId);
+        
+        //setDate($scope.paymentdate, localStorage.paymentDate);
+       
+    }
+    else {
+        $scope.partyAccount = {};
+    }
+   // $scope.paymentdate = 'paymentdate';
+    //setDate($scope.paymentdate, localStorage.paymentDate.toISOString());
+    ////$scope.paymentdate = localStorage.paymentDate.toISOString();
+   
     $scope.paymentData = [];
     $scope.transaction = [];
     $scope.paidData = [];
     $scope.itemChecked = [];
-   $scope.paymentdate = 'paymentdate';
+    $scope.accountTable = []
+   
     $scope.oldAttachment = null;
     var uploader = $scope.uploader = new FileUploader({
         url: config.login + "upload"
@@ -153,7 +176,7 @@
     } else {
         $scope.mode = "new";
         setDate($scope.paymentdate);
-        $scope.currency = "Dollar";
+        $scope.currency = "Rupee";
         $scope.exchangeRate();
         
     }
@@ -197,10 +220,15 @@
         }
 
     }
+    $scope.amountChangeInDollar = function (index, amount, rate) {
+        var balanceInDollar = $scope.paymentData[index].balanceInDollar
+        $scope.paymentData[index].amountPaid = Number(amount) * Number(rate)
+        $scope.paymentData[index].balanceInDollar = $scope.paymentData[index].balanceInDollar - Number(amount)
+
+    }
     $scope.amountChange = function (item, payAmount, oldPayAmount) {
         if (payAmount != null)
             $scope.selectLineItem(item, true, payAmount, oldPayAmount);
-
         if ($scope.itemChecked.length > 0) {
             for (var i = 0; i < $scope.itemChecked.length; i++) {
                 if (item) {
@@ -313,7 +341,7 @@
     }
     function getAllBill(supliersId, fields) {
         if (supliersId){
-            $http.get(config.login + "getVouchersforPayment?customerId=" + supliersId + "&role=" + localStorage.usertype).then(function (response) {
+            $http.get(config.login + "getVouchersforPayment?customerId=" + supliersId + "&role=" + localStorage.usertype + "&compCode=" + localStorage.CompanyId).then(function (response) {
                 if (response) {
                     $scope.paymentData = response.data
                     //angular.copy($scope.paymentData, $scope.paidData);
@@ -327,6 +355,23 @@
                 checkPaymentBills();
             });
         }
+    }
+    $scope.getAllBillForCustomPayment = function () {
+        $scope.custom = true;
+        $http.get(config.login + "getVouchersforCustomPayment" + "?role=" + localStorage.usertype + "&compCode=" + localStorage.CompanyId ).then(function (response) {
+                if (response) {
+                    $scope.paymentData = response.data
+                    //angular.copy($scope.paymentData, $scope.paidData);
+                    //checkPaymentBills();
+                }
+                else {
+                    $scope.paymentData = [];
+                    angular.copy($scope.paymentData, $scope.paidData);
+                    showSuccessToast("No Open Invoice");
+                }
+                checkPaymentBills();
+            });
+        
     }
     function checkPaymentBills() {
         removeDuplicate();
@@ -373,6 +418,7 @@
         }
         if ($scope.bankAccount.selected == undefined || $scope.bankAccount.selected == null) {
             showErrorToast("Please select bank/cash account");
+           
             return;
         }
         if (!$scope.paymentdate) {
@@ -390,13 +436,22 @@
         angular.forEach(queue, function (fileItem) {
             attachements.push({ title: fileItem.title, cdnPath: fileItem.cdnPath, file: fileItem.file })
         });
+        if ($scope.accountTable.length > 0) {
+            $scope.totalBankAmount = $scope.totalPaidAmount + accountTableSum();
+        }
+        else {
+            $scope.totalBankAmount = $scope.totalPaidAmount
+        }
         calculateTotal(true);
+        localStorage.bankAccountId = $scope.bankAccount.selected.id
+        localStorage.paymentDate = $scope.paymentdate
         var data = {
             compCode: localStorage.CompanyId,
             type: type,
             role:localStorage['usertype'],
             date: paymentDate,
             amount: $scope.totalPaidAmount,
+            totalBankAmount: $scope.totalBankAmount,
             vochNo: $scope.paymentNo,
             state: "PAID",
             remark: $scope.remarks,
@@ -410,6 +465,7 @@
                 exchangeRate: $scope.ExchangeRateINR,
                 remarks: $scope.remarks,
                 billDetail: $scope.itemChecked,
+                accountlineItem: $scope.accountTable,
                 attachements: attachements
             },
         }
@@ -424,7 +480,7 @@
             }
             $scope.goBack(true);
         } else {
-            $http.post(config.login + 'payment?id=' + $stateParams.voId, data)
+            $http.post(config.login + 'payment?id=' + $stateParams.voId + "&custom=" + $scope.custom, data)
                      .then(function (response) {
                          if (response.data.err) {
                              $rootScope.$broadcast('event:error', { message: "Error while creating Payment: " + response.data.err });
@@ -467,7 +523,15 @@
             $scope.getOpenInvoice($scope.partyAccount);
         }
     }
-  
+    
+    function accountTableSum() {
+        var amount = 0;
+        for (var i = 0; i < $scope.accountTable.length; i++) {
+            amount += Number($scope.accountTable[i].amount);
+        }
+        Number(amount.toFixed(2));
+        return Number(amount.toFixed(2));
+    }
     function getPaymentdata(id) {
         $http.get(config.api + 'voucherTransactions/' + id)
                     .then(function (response) {
@@ -475,6 +539,7 @@
                     });
     }
     function fillData(data) {
+        $scope.accountTable = [];
         $scope.state = data.state;
         $scope.currency = data.vo_payment.currency;
         $scope.ExchangeRateINR = data.vo_payment.exchangeRate;
@@ -487,6 +552,10 @@
         setDate($scope.paymentdate, data.date);
         $scope.remarks = data.remark;
         $scope.attachements = data.vo_payment.attachements;
+        $scope.accountTable = data.vo_payment.accountlineItem
+        if (data.vo_payment.accountlineItem.length > 0) {
+            $scope.totalBankAmount = $scope.totalPaidAmount + accountTableSum();
+        }
         bindAttachments(data.vo_payment.attachements, function () {
             $scope.oldAttachment = null;
         });
@@ -556,10 +625,64 @@
             }
         });
     }
-
+    $scope.accounts = {}
+    $scope.getExpenseAccount = function () {
+        $http.get(config.login + "getExpenseAccount/" + localStorage.CompanyId).then(function (response) {
+            $scope.expenseAccount = response.data
+        });
+    }
+    $scope.$on("event:accountReferesh", function (event, args) {
+        // Refresh accounts...
+       
+        $scope.getExpenseAccount();
+    });
+    
+    $scope.getExpenseAccount();
+    $scope.selectedAccIndex = null;
+    $scope.editAccountTable = function (data, index) {
+        if (index === $scope.selectedAccIndex) {
+            $scope.selectedAccIndex = null;
+            $scope.accounts = null;
+            $scope.accountAmount = null;
+        } else {
+            $scope.selectedAccIndex = index;
+            $scope.accounts = { selected: data };
+            $scope.accountAmount = data.amount;
+        }
+    }
    
-   
+    $scope.addAccount = function () {
+        if ($scope.accounts == null || $scope.accounts.selected == null) {
+            showErrorToast("please select account");
+            return;
+        }
+        if (isNaN($scope.accountAmount) || $scope.accountAmount == null) {
+            showErrorToast("please enter amount");
+            return;
+        }
+        var accountData = {
+            accountName: $scope.accounts.selected.accountName,
+            accountId: $scope.accounts.selected.id,
+            description: $scope.accountDescription,
+            amount: $scope.accountAmount
+        }
+        if ($scope.selectedAccIndex != null) {
+            $scope.accountTable[$scope.selectedAccIndex] = accountData;
+        } else {
+            $scope.accountTable.push(accountData);
+        }
+        $scope.totalBankAmount = $scope.totalPaidAmount + accountTableSum();
+        $scope.accountAmount = null;
+        $scope.selectedAccIndex = null
+       
+    }
 
+    $scope.removeAccountTable = function (index) {
+        $scope.accountTable.splice(index, 1);
+        $scope.totalBankAmount = $scope.totalPaidAmount + accountTableSum();
+        accountTableSum
+        $scope.selectedAccIndex = null;
+    }
 
 
 }]);

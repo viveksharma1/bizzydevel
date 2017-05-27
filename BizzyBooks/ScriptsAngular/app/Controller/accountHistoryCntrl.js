@@ -150,6 +150,27 @@
             console.log(balance)
             return balance
     }
+    function calculateClosingBalnce(data) {
+        var balance;
+        console.log(data)
+        console.log($stateParams.balanceType)
+        if ($stateParams.balanceType == 'credit' && data.credit) {
+            balance = Number(data.credit) - Number(data.debit)
+        }
+        if ($stateParams.balanceType == 'debit') {
+            balance = Number(data.debit) - Number(data.credit)
+        }
+        if ($stateParams.obType == 'credit') {
+            $scope.closingBalanceCredit = balance;
+
+        } else if ($stateParams.obType == 'debit') {
+            $scope.closingBalanceDebit = balance;
+        } else {
+            $scope.closingBalanceCredit = balance;
+        }
+        console.log(balance)
+        return balance
+    }
     $scope.$on('date-changed', function (event, args) {
         $scope.fdate = args.fromDate;
         $scope.tDate = args.toDate;
@@ -162,7 +183,7 @@
         });
         $http.post(config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + $stateParams.accountId + "&role=" + localStorage.usertype, [localStorage.CompanyId]).then(function (response) {
             var closingBalance = response.data.openingBalanc
-            $scope.closingBalance = calculateOpenningBalnce(closingBalance);
+            $scope.closingBalance = calculateClosingBalnce(closingBalance);
             console.log("closingBalance", $scope.closingBalance);
             console.log($scope.closingBalance);
 
@@ -180,7 +201,7 @@
             });
             $http.post(config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + $stateParams.accountId + "&role=" + localStorage.usertype, compCode).then(function (response) {
                  var closingBalance = response.data.openingBalance 
-                    $scope.closingBalance = calculateOpenningBalnce(closingBalance);
+                 $scope.closingBalance = calculateClosingBalnce(closingBalance);
                     console.log("closingBalance", $scope.closingBalance);
                     console.log($scope.closingBalance);        
             });
@@ -263,7 +284,7 @@
         }
         if (voType == 'Receipt') {
 
-            $state.go('Customer.Receipt', { voId: id });
+            $state.go('Customer.Receipt', { voId: id, noBackTrack: true });
         }
        
 
@@ -278,6 +299,10 @@
         if (voType == 'Purchase Settelment') {
 
             $state.go('Customer.PurchaseInvoiceSattlement', { voId: id }); 
+        }
+        if (voType == 'Sales Settelment') {
+
+            $state.go('Customer.SalesInvoiceSattlement', { voId: id });
         }
         if (voType == 'Journal Entry') {
             $state.go('Customer.JournalEntry', { voId: id });

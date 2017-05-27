@@ -19,7 +19,7 @@ namespace Restaurant
 
                   "~/css/bootstrap-select.min.css",
                   "~/css/dataTables.min.css",
-                 //  "~/css/angular-datatables.min.css",
+                  "~/css/angular-datatables.min.css",
                     "~/css/xeditable.css",
                     "~/css/select2.css",
                     "~/css/loader.css",

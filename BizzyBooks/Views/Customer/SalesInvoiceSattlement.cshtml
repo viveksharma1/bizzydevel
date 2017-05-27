@@ -4,11 +4,10 @@
     Layout = null;
 }
 
-
 <script type="text/ng-template" id="salesInfo_template.html">
     <span>
 
-        <label style="color:#73A91B" ng-repeat="data in billdata.accountData">{{data.account.accountName}} <b style="color:#000"> {{data.amount}}</b> </label> <br>
+        <label style="color:#73A91B" ng-repeat="data in billdata.accountData">{{data.accountName}} <b style="color:#000"> {{data.amount}}</b> </label> <br>
 
 
 
@@ -16,27 +15,6 @@
 
 </script>
 
-<script type="text/ng-template" id="/ui-tree-select.html">
-    <ui-select ng-model="model.$selected"
-               ui-select-focuser
-               theme="selectize">
-        <ui-select-match placeholder="Select a group">
-            {{ $select.selected.title }}
-        </ui-select-match>
-        <ui-select-choices repeat="group in groups | filter: $select.search">
-            <div>
-                <span ng-bind-html="group.title | highlight: $select.search"></span>
-                <!--<span ng-bind-html="'('+group.size+' users)'"></span>
-                <a href
-                  ng-show="group.parent"
-                  class="goto-child-group"
-                  ng-click="loadChildGroupsOf(group, $select)">
-                  <i class="fa fa-angle-right"></i>
-                </a>-->
-            </div>
-        </ui-select-choices>
-    </ui-select>
-</script>
 
 <div class="FlexPopup" style="display:block" ng-init="model = {}">
     <div class="flexheader lightblue  ">
@@ -78,7 +56,7 @@
                 <div class="col-sm-3 padding">
 
                     <h4 class="tabheading font_11">Supplier</h4>
-                    <input type="text" class="form-control" ng-model="customerName" disabled />
+                    <input type="text" class="form-control" ng-model="supplierName" disabled />
 
                 </div>
 
@@ -130,7 +108,7 @@
 
 
                 @*<h4 class="tabheading" style="float:right; width:100%; margin-top:0px !important">Ref. No.</h4>
-                <input type="text" class="form-control pull-right" ng-model="settlementData.invoiceNo" disabled style="width:100px" />*@
+                    <input type="text" class="form-control pull-right" ng-model="settlementData.invoiceNo" disabled style="width:100px" />*@
             </div>
 
 
@@ -152,7 +130,7 @@
                 </div>
                 <div class="col-sm-6">
                     <h4 class="tabheading font_11">Interest Amount</h4>
-                    <input type="text" class="form-control" ng-model="settlementData.interestAmount" ng-disabled="isDisabled" />
+                    <input type="text" class="form-control" ng-model="settlementData.interestAmount | number :2 " ng-disabled="isDisabled" />
                 </div>
             </div>
         </div>
@@ -194,7 +172,7 @@
                 <hr />
                 <div class="col-sm-4">
                     <h4 class="tabheading font_11">VAT Amount</h4>
-                    <input type="text" class="form-control" ng-model="settlementData.totalDedvatAmount" />
+                    <input type="text" class="form-control" ng-model="settlementData.totalDedvatAmount | number :2 " />
                 </div>
                 <div class="col-sm-8">
                     <h4 class="tabheading font_11">VAT Account<span class="pull-right" style="color:forestgreen"><i class="fa fa-rupee"></i> {{vatAccountBalance |number : fractionSize}} <em style="color:red">{{supplierType}}</em></span></h4>
@@ -221,7 +199,7 @@
 
                 <div class="col-sm-4">
                     <h4 class="tabheading font_11 content" style="margin-top:0px !important;">Excise Amount</h4>
-                    <input type="text" class="form-control" ng-model="settlementData.totalDedExciseAmount" />
+                    <input type="text" class="form-control" ng-model="settlementData.totalDedExciseAmount | number :2 " />
                 </div>
                 <div class="col-sm-8">
                     <h4 class="tabheading font_11 content" style="margin-top:0px !important;">OT Tax Account<span class="pull-right" style="color:forestgreen"><i class="fa fa-rupee"></i> {{oTaxBalance |number : fractionSize}} <em style="color:red">{{supplierType}}</em></span></h4>
@@ -276,8 +254,6 @@
 
 
 </div>
-
-
 
 
 

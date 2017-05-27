@@ -361,7 +361,7 @@
 
                 <tbody>
 
-                    <tr ng-repeat="data in expenseTable | filter:search track by $index" class="cursor ">
+                    <tr ng-repeat="data in expenseTable | filter:search track by $index"ng-class="isPaid(data.balance)" class="cursor ">
                         <td style="padding-left:15px; width:15px"><input type="checkbox" class="checkboxcss" /></td>
                         <td>{{data.supplier}}</td>
                         <td>{{data.email}}</td>
@@ -374,7 +374,7 @@
 
 
                         <td style="text-align:right; width:150px">
-                            <button type="button" class="editbtn"><a ui-sref="Customer.Payment({poNo:data.no,suppliers:data.supliersName,Code:data.supCode})">Make Payment</a></button>
+                            <button type="button" class="editbtn"><a ui-sref="Customer.Payment({partyAccountId:data.supplierId})">Make Payment</a></button>
                             <class class="linkseparator" style="margin-top:4px; margin-right:0px">|</class>
                             <div class="btn-group editcaret">
                                 <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>
@@ -450,7 +450,7 @@
 
                 <tbody>
                    
-                    <tr ng-repeat="data in purchaseInvoiceTable | filter:search track by $index" class="cursor " >
+                    <tr ng-repeat="data in purchaseInvoiceTable | filter:search track by $index"ng-class="isPaid(data.balance)" class="cursor " >
                         <td style="padding-left:15px; width:15px"><input type="checkbox" class="checkboxcss" /></td>
                         <td>{{data.supplier}}</td>
                         <td>{{data.email}}</td>
@@ -463,7 +463,7 @@
                        
 
                         <td style="text-align:right; width:150px">
-                            <button type="button" class="editbtn"><a ui-sref="Customer.Payment({poNo:data.no,suppliers:data.supliersName,Code:data.supCode})">Make Payment</a></button>
+                            <button type="button" class="editbtn"><a ui-sref="Customer.Payment({partyAccountId:data.supplierId})">Make Payment</a></button>
                             <class class="linkseparator" style="margin-top:4px; margin-right:0px">|</class>
                             <div class="btn-group editcaret">
                                 <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>

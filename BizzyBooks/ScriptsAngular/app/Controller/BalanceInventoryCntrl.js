@@ -3,7 +3,7 @@
     $('[data-toggle="tooltip"]').tooltip();
 
     $('#SearchFilter').hide();
-    $("#wrapper").addClass("toggled");
+   
 
     $('#menutoggle').click(function () {
         $('#Datefilter').addClass('Datefilter2');
@@ -23,16 +23,7 @@
     }
     var h = window.innerHeight;
  
-   $scope.dtOptions = DTOptionsBuilder.newOptions()
-        .withOption('processing', false)
-       .withOption('scrollX', 450)
-        .withOption('scrollY', h - 195)
-        .withOption('paging', false)
-        .withOption('searching', false)
-   .withOption('bInfo', false)
-
-   .withOption('oLanguage', false);
-    
+  
    
     
     //$scope.clear = function ($event, $select) {
@@ -68,16 +59,22 @@
 
     }
     $scope.datatable = false
+   
     function getInventory() {
-        $http.get(config.api + "Inventories?filter[where][visible]=false").then(function (response) {
+        $http.get(config.api + "Inventories?filter[where][visible]=false&[filter][where][compCode]=" + localStorage.CompanyId).then(function (response) {
             $scope.ItemList2 = response.data;
             $scope.filterList = $scope.ItemList2;
             getTotalsum(response.data);
+    
             $scope.datatable = true
+         
+    
+           
+
         });
     }
     getInventory();
-    var qryAgg = 'visible=false&group={"SUBCATEGORY": "$SUBCATEGORY","COILSHEETNO":"$COILSHEETNO","DATE": "$DATE","LotWeight":"$LotWeight","LOCATION":"$LOCATION","GRADE":"$GRADE","FINISH":"$FINISH","THICKNESS":"$THICKNESS","WIDTH":"$WIDTH","LENGTH":"$LENGTH","NETWEIGHT":"$NETWEIGHT","GROSSWT":"$GROSSWT","PCSLENGTHINMTRS":"PCSLENGTHINMTRS","no":"$no"}';
+    var qryAgg = 'visible=false&compCode=' + localStorage.CompanyId +'&group={"SUBCATEGORY": "$SUBCATEGORY","COILSHEETNO":"$COILSHEETNO","DATE": "$DATE","LotWeight":"$LotWeight","LOCATION":"$LOCATION","GRADE":"$GRADE","FINISH":"$FINISH","THICKNESS":"$THICKNESS","WIDTH":"$WIDTH","LENGTH":"$LENGTH","NETWEIGHT":"$NETWEIGHT","GROSSWT":"$GROSSWT","PCSLENGTHINMTRS":"PCSLENGTHINMTRS","no":"$no"}';
     $http.get(config.login + "getAggregateInventories?" + qryAgg).then(function (response) {
         $scope.ItemList = response.data;
         $scope.datatable = true
@@ -120,6 +117,7 @@
         var qry = {
             "where": {
                 "visible": false,
+                "compCode": localStorage.CompanyId,
                 "SUBCATEGORY": $scope.subcategory.selected ? $scope.subcategory.selected._id.SUBCATEGORY : $scope.subcategory.selected,
                 "COILSHEETNO": $scope.coilsheetno.selected ? $scope.coilsheetno.selected._id.COILSHEETNO : $scope.coilsheetno.selected,
                 "DATE": $scope.DATE.selected ? $scope.DATE.selected._id.DATE : $scope.DATE.selected,
@@ -529,6 +527,7 @@
                            
                             retObj[exchangeRate] = $scope.ExchangeRateINR
                             retObj[INOUT] = 0
+                            retObj["compCode"] = localStorage.CompanyId
                             retObj["currentStatus"] = 'open';
                             retObj["visible"] = false;
                             retObj["type"] = 'OB';
@@ -579,7 +578,15 @@
 
 
     
+    $scope.dtOptions = DTOptionsBuilder.newOptions()
+.withOption('processing', false)
+.withOption('scrollX', 450)
+.withOption('scrollY', h - 195)
+.withOption('paging', false)
+.withOption('searching', false)
+.withOption('bInfo', false)
 
+.withOption('oLanguage', false);
 
 
 

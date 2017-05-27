@@ -156,6 +156,7 @@ var myApp = angular
                 type: 'Receipt',
                 noBackTrack:false,
                 voId: null,
+                partyAccountId: null,
             }
 
         });
@@ -277,7 +278,7 @@ var myApp = angular
             params: {
                 type:'Payment',
                 poNo: null,
-                suppliers: null,
+                partyAccountId: null,
                 Code: null,
                 voId: null,
                 noBackTrack: false
@@ -406,11 +407,15 @@ var myApp = angular
         
 
         $stateProvider.state("Customer.SalesInvoiceSattlement", {
-            url: "/SalesInvoiceSattlement",
+            url: "/SalesInvoiceSattlement/:voId",
             templateUrl: "Customer/SalesInvoiceSattlement",
             controller: "SalesInvoiceSattlementCntrl",
             requiresAuthentication: true,
-            permissions: 'Float.add.Customers.Sales Invoice.active'
+            permissions: 'Float.add.Customers.Sales Invoice.active',
+            params: {
+                voId: null
+               
+            }
         });
 
         $stateProvider.state("Customer.PurchaseInvoiceSattlement", {

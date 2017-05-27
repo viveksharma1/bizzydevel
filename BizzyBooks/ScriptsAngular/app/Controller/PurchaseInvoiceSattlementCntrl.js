@@ -118,7 +118,7 @@
         $scope.settlementData.compCode = localStorage.CompanyId
         $scope.settlementData.invoiceNo = $scope.invoiceNo
         $scope.settlementData.vatAccount = $scope.vatAccount.selected.id
-        $scope.settlementData.type = "Purchase settlement"
+        $scope.settlementData.type = "Purchase Settelment"
         $scope.settlementData.otaxAccount = $scope.otaxAccount.selected.id
         delete $scope.settlementData._id;
         
@@ -128,7 +128,7 @@
                 $stateParams.voId = response.data.id
                 console.log(response.data);
                 $rootScope.$broadcast('event:success', { message: "Purchase Settelment Done" });
-                $state.go('Customer.PurchaseInvoiceSattlement', { voId: response.data.id });
+                $state.go('Customer.PurchaseInvoiceSattlement', { voId: response.data.id }, { location: 'replace' });
 
             }
             

@@ -62,12 +62,20 @@
         if (voType == 'Contra Entry') {
             $state.go('Customer.ContraEntry', { voId: id });
         }
+        if (voType == 'Purchase Settelment') {
+
+            $state.go('Customer.PurchaseInvoiceSattlement', { voId: id });
+        }
+        if (voType == 'Sales Settelment') {
+
+            $state.go('Customer.SalesInvoiceSattlement', { voId: id });
+        }
 
 
     }
 
 
-    $http.get(config.api + 'voucherTransactions?filter[fields][date] =true&filter[fields][type] =true&filter[fields][amount] =true&filter[fields][vochNo] =true&filter[fields][id] =true')
+    $http.get(config.api + 'voucherTransactions?[filter][where][compCode]=' + localStorage.CompanyId + '&filter[fields][date]=true&filter[fields][type] =true&filter[fields][amount] =true&filter[fields][vochNo] =true&filter[fields][id] =true')
                 .then(function (response) {
                     $scope.voucherTransaction = response.data;
                 })

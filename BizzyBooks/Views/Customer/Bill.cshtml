@@ -8,6 +8,24 @@
         display: none;
     }
 </style>
+<script type="text/javascript">
+  !function(name,path,ctx){
+    var latest,prev=name!=='Keen'&&window.Keen?window.Keen:false;ctx[name]=ctx[name]||{ready:function(fn){var h=document.getElementsByTagName('head')[0],s=document.createElement('script'),w=window,loaded;s.onload=s.onerror=s.onreadystatechange=function(){if((s.readyState&&!(/^c|loade/.test(s.readyState)))||loaded){return}s.onload=s.onreadystatechange=null;loaded=1;latest=w.Keen;if(prev){w.Keen=prev}else{try{delete w.Keen}catch(e){w.Keen=void 0}}ctx[name]=latest;ctx[name].ready(fn)};s.async=1;s.src=path;h.parentNode.insertBefore(s,h)}}
+  }('KeenAsync','https://d26b395fwzu5fz.cloudfront.net/keen-tracking-1.1.3.min.js',this);
+
+  KeenAsync.ready(function(){
+    // Configure a client instance
+    var client = new KeenAsync({
+      projectId: '592786ff90b3659264952080',
+      writeKey: '68E5FFBBE11B658F42D2DCC6B0DAA360E49B385A4968803E62262B67D57FAD566083E9CFF7C0330BCA4825895644BCB4F9DBFD0350461A9E6251D31AD380D1640F7A79C638D723794E5E3E5EFC118925B221F78DE0BE81BFA596D65AF89BA6FB'
+    });
+
+    // Record an event
+    client.recordEvent('pageviews', {
+      title: document.title
+    });
+  });
+</script>
 <script type="text/ng-template" id="popover_template.html">
     <table style='width:100%'><tr><th>Date</th><th>Amount</th><th>Voch No.</th></tr><tr ng-repeat='data in datas' class="cursor" ui-sref="Customer.Receipt({voId:data.id,noBackTrack:true})"><td style="color:forestgreen">{{data.date|date:'dd/MM/yyyy'}}</td><td>Rs{{data.amount}}</td><td>{{data.vochNo}}</td></tr><tr></tr></table>
 </script>
@@ -714,18 +732,18 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="data in customTable" class="cursor" ng-click="selectLineItem($index,data.BASERATE,data.NETWEIGHT)" ng-class="{selected: $index === selectedItemIndex}">
+                                <tr ng-repeat="data in customTable" class="cursor"  ng-class="{selected: $index === customIndex}">
                                     
                                     <td class="filterable-cell">{{data.DESCRIPTION}}<br /> <small class="text-primary">{{data.REMARKS}} </small></td>
                                     <td class="filterable-cell" style="text-align:right" >{{data.NETWEIGHT}}</td>
                                     <td class="filterable-cell" style="text-align:right">{{data.BASERATE}}</td>
-                                    <td class="filterable-cell" style="text-align:right">{{data.assesableValue}}</td>
-                                    <td class="filterable-cell" style="text-align:right">{{data.exciseDuty}}</td>
-                                    <td class="filterable-cell" style="text-align:right">{{data.dutyAmount}}</td>
-                                    <td class="filterable-cell" style="text-align:right">{{data.SAD}}</td>
-                                    <td class="filterable-cell" style="text-align:right">{{data.totalDutyAmt}}</td>
+                                    <td class="filterable-cell" style="text-align:right">{{data.assesableValue | number:3}}</td>
+                                    <td class="filterable-cell" style="text-align:right">{{data.exciseDuty| number:3}}</td>
+                                    <td class="filterable-cell" style="text-align:right">{{data.dutyAmount| number:3}}</td>
+                                    <td class="filterable-cell" style="text-align:right">{{data.SAD| number:3}}</td>
+                                    <td class="filterable-cell" style="text-align:right">{{data.totalDutyAmt| number:3}}</td>
 
-                                    <td class="filterable-cell" style="text-align:center; width:80px"><button type="button" ng-click="getCustomData(data.customData)" class="btn btn-xs btn-sm btn-primary">View</button></td>
+                                    <td class="filterable-cell" style="text-align:center; width:80px"><button type="button" ng-click="selectLineItem($index,data.BASERATE,data.NETWEIGHT,data.customData)" class="btn btn-xs btn-sm btn-primary">Edit</button></td>
                                 </tr>
 
 
@@ -749,14 +767,20 @@
                         </table>
 
                         <div style="padding:5px 10px;  float:left; width:100%; padding-bottom:5px;">
-                            <label class="text-warning" ng-class="customPymentStatus()"><i class="fa fa-warning"></i> {{customStatus}}</label>&nbsp;
-                            <button type="button" class="btn btn-info btn-sm" ng-click="PayModalBtn(dutyAmount1)">Pay</button>
+                          
+                           
+                            
+                            <lavel ng-repeat="data in custom | limitTo:1">
+                                <small style="float:left; margin:10px 0px"><span class="text-primary cursor" id="myPopover" pop-over datas="custom">{{customCount}} Payment </span> made</small>
+
+                            </lavel>
+                            <label> Balance:{{customBalance | number:3}}</label>
 
 
 
                             <span class="pull-right">
                                 <button type="button" class="btn btn-info btn-sm" ng-click="calculateCustom()">Calculate</button>
-                                <button type="button" class="btn btn-success btn-sm"  ng-disabled="isDisabled" id="saveBill" ng-click="saveBill()">Save</button>
+                                <button type="button" class="btn btn-success btn-sm"  ng-disabled="isDisabled" id="saveBill" ng-click="saveCustom()">Save</button>
                             </span>
                         </div>
 
@@ -1177,6 +1201,7 @@
                             <th style="text-align:left;  padding:5px">{{TOTALAMOUNTUSD |number : fractionSize}}</th>
                             <th style="text-align:left;  padding:5px">{{totalAmountINR |number : fractionSize}}</th>
                             <th style="text-align:center;  padding:5px">&nbsp;</th>
+                            
                         </tr>
                     </tfoot>
                 </table>
@@ -1333,14 +1358,15 @@
                         <th>Total</th>
                         <th style="text-align:center;">&nbsp;</th>
                         <th style="text-align:center;">&nbsp;</th>
-                        <th style="text-align:right;">{{netweight |number : 2}}&nbsp;</th>
-                        <th style="text-align:left;">&nbsp;</th>
+                        <th style="text-align:right;">&nbsp;</th>
+                        <th style="text-align:left;">{{netweight |number : 2}}&nbsp;</th>
+                        <th style="text-align:right;color:forestgreen">&nbsp;</th>
                         <th style="text-align:right;color:forestgreen">{{manualTotal |number : 2}}&nbsp;</th>
                         <th style="text-align:right;color:forestgreen">{{manualTotalINR |number : 2}}&nbsp;</th>
                         <th style="text-align:right;color:forestgreen">{{totalExcise |number : 2}}&nbsp;</th>
-                        <th style="text-align:right;color:forestgreen">{{totalSad |number : 2}}&nbsp;</th>
+                        <th style="text-align:center;">{{totalSad |number : 2}}&nbsp;</th>
                         <th style="text-align:center;">&nbsp;</th>
-                        <th style="text-align:center;">&nbsp;</th>
+                        <th style="text-align:center;  padding:5px">&nbsp;</th>
                     </tr>
                 </tfoot>
             </table>
@@ -1460,16 +1486,13 @@
                     <ui-select ui-tree-select ng-model="excise.selected" id="countryCode" tabindex="15"
                                ui-select-focuser
                                theme="selectize">
-
-                        <ui-select-match placeholder="ACCOUNT">
-                            <span class="selectuiTable" style="width:100%">
-                                <span>{{ $select.selected.accountName || $select.search }}</span>
-                                <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
+                        <ui-select-match style="width:100%" placeholder="Select Account">
+                            <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                {{ $select.selected.accountName || $select.search }}
                             </span>
-
                         </ui-select-match>
 
-                        <ui-select-choices repeat="person in account  | filter: $select.search" refresh="refreshAccountTable($select)" refresh-delay="2">
+                        <ui-select-choices repeat="person in account  | filter: $select.search" >
 
                             <div>
                                 <span ng-bind-html="person.accountName | highlight: $select.search"></span>
@@ -1526,12 +1549,10 @@
                                            ui-select-focuser  on-select="applyRate($select.selected.rate)" ng-init="$select.addnew=1;$select.type='buyer';"
                                            theme="selectize">
 
-                                    <ui-select-match placeholder="ACCOUNT">
-                                        <span class="selectuiTable" style="width:100%">
-                                            <span>{{ $select.selected.accountName || $select.search }}</span>
-                                            <a class="btn btn-xs btn-link pull-right" ng-click="clear($event, $select)"><i class="glyphicon glyphicon-remove"></i></a>
+                                    <ui-select-match style="width:100%" placeholder="Select Account">
+                                        <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">
+                                            {{ $select.selected.accountName || $select.search }}
                                         </span>
-
                                     </ui-select-match>
 
                                     <ui-select-choices repeat="person in expenseAccount  | filter: $select.search | orderBy:'accountName'" @*refresh="refreshAccountTable($select)" refresh-delay="2"*@>

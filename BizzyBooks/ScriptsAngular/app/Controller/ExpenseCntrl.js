@@ -344,6 +344,10 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
         // save Expense new 
          $scope.saving = false;
          $scope.saveExpenceNew = function (refNo) {
+             if ($scope.receiptCount > 0) {
+                 $rootScope.$broadcast('event:error', { message: "Can't Update" });
+                 return;
+             }
              var expenseDate = getDate($scope.expenseDate);
              var expenseDueDate = getDate($scope.expenseDueDate);
              if ($scope.supplier.selected == undefined || $scope.supplier.selected == null) {
