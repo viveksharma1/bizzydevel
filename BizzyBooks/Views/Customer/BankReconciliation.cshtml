@@ -1,8 +1,128 @@
 ﻿
 @{
-    ViewBag.Title = "BankReconciliation";
+    ViewBag.Title = "Bank Reconciliation";
     Layout = null;
 }
 
-<h2>BankReconciliation</h2>
+<div class="content">
+    <div class="panel lightblue bluebrdr marginbottom content">
+        <div class="panel-heading">
+            <strong class="heading">Bank Reconciliation</strong>
+
+            <div class="pull-right" style="width:63%">
+            
+                <div class="btn-group btn-toggle pull-right" style="top: 0px !important;">
+                    <button class="btn active btn-sm btn-default">All</button>
+                    <button class="btn btn-sm btn-default">Pending</button>
+
+                </div>
+
+                <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; margin-right:10px">
+                    <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+                    <span></span> <b class="caret"></b>
+                </div>
+                <div class="col-sm-6 padding5">
+                    <ui-select ng-model="groupMasters.selected" ui-select-focuser id="countryCode" theme="selectize" on-select="getGroupData($select.selected)">
+
+                        <ui-select-match placeholder="Choose Bank">
+                            <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">{{$select.selected.name || $select.search}}</span>
+                        </ui-select-match>
+                        <ui-select-choices repeat="person in groupMaster  | filter: $select.search">
+                            <div>
+                                <span style="color:black" ng-model="supplier1" ng-bind-html="person.name | highlight: $select.search">{{person.type}}</span>
+                                <span style="color:forestgreen">({{person.type}})</span>
+
+                            </div>
+
+
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+        </div>
+
+        
+    </div>
+   
+    
+   <div class="col-sm-12" style="padding:20px 10px">
+       <table style="width:100%; border-top:1px solid #e3e3e3; height:400px" fixed-header class="table-hover">
+           <thead style="border-bottom: 1px solid rgb(227, 227, 227); background: rgb(240, 238, 238); padding: 5px 0px;">
+               <tr>
+                   <th style="padding:2px 5px">Date</th>
+                   <th width="550" style="padding:2px 5px">Particular</th>
+                   <th style="padding:2px 5px">Vch. Type</th>
+                   <th style="padding:2px 5px">Monthly Date</th>
+                   <th style="text-align:right; padding:2px 5px">Debit</th>
+                   <th style="text-align:right; padding:2px 5px">Credit</th>
+               </tr>
+           </thead>
+           <tbody>
+               <tr>
+                   <td style="padding:5px">5-4-2017</td>
+                   <td style="padding:5px"><strong>Cash</strong></td>
+                   <td style="padding:5px"><strong>Contra</strong></td>
+                   <td style="padding:5px">&nbsp;</td>
+                   <td style="text-align:right; padding:5px"><strong>25,000.00</strong></td>
+                   <td style="text-align:right; padding:5px"><strong>&nbsp;</strong></td>
+               </tr>
+               <tr>
+                   <td style="padding:5px">8-4-2017</td>
+                   <td style="padding:5px"><strong>Venkat</strong></td>
+                   <td style="padding:5px"><strong>Payment</strong></td>
+                   <td style="padding:5px">&nbsp;</td>
+                   <td style="text-align:right; padding:5px"><strong>&nbsp;</strong></td>
+                   <td style="text-align:right; padding:5px"><strong>18,000.00</strong></td>
+                   
+               </tr>
+               <tr>
+                   <td style="padding:5px">12-4-2017</td>
+                   <td style="padding:5px"><strong>Bank Charges</strong></td>
+                   <td style="padding:5px"><strong>Payment</strong></td>
+                   <td style="padding:5px">&nbsp;</td>
+                   <td style="text-align:right; padding:5px"><strong>15,000.00</strong></td>
+                   <td style="text-align:right; padding:5px"><strong>&nbsp;</strong></td>
+
+               </tr>
+               <tr>
+                   <td style="padding:5px">13-4-2017</td>
+                   <td style="padding:5px"><strong>Kushal</strong></td>
+                   <td style="padding:5px"><strong>Reciept</strong></td>
+                   <td style="padding:5px">&nbsp;</td>
+                   <td style="text-align:right; padding:5px"><strong>12,000.00</strong></td>
+                   <td style="text-align:right; padding:5px"><strong>&nbsp;</strong></td>
+
+               </tr>
+               <tr>
+                   <td style="padding:5px">18-4-2017</td>
+                   <td style="padding:5px"><strong>Nirmal &Aacute; Co.</strong></td>
+                   <td style="padding:5px"><strong>Reciept</strong></td>
+                   <td style="padding:5px">&nbsp;</td>
+                   <td style="text-align:right; padding:5px"><strong>&nbsp;</strong></td>
+                   <td style="text-align:right; padding:5px"><strong>18,000.00</strong></td>
+
+               </tr>
+
+           </tbody>
+           <tfoot style="border-bottom:2px solid #000; border-top:2px solid #000">
+               <tr>
+                   <th colspan="4" style="text-align:right; font-weight:normal; padding:5px">Balance as per Company Books:</th>
+                   <th style="text-align:right; padding:5px"><strong>25,000.00</strong></th>
+                   <td style="text-align:right; padding:5px"><strong>&nbsp;</strong></td>
+               </tr>
+               <tr>
+                   <th colspan="4" style="text-align:right; font-weight:normal; border-bottom:1px solid #000; padding:5px">Amounts not reflected in Bank</th>
+                   <th style="text-align:right; border-bottom:1px solid #000; padding:5px"><strong>79,000.00</strong></th>
+                   <td style="text-align:right; border-bottom:1px solid #000; padding:5px"><strong>81,350.00</strong></td>
+               </tr>
+               <tr>
+                   <th colspan="4" style="text-align:right; padding:5px">Amounts not reflected in Bank</th>
+                   <th style="text-align:right; padding:5px"><strong>24,350.00</strong></th>
+                   <th style="text-align:right; padding:5px"><strong>&nbsp;</strong></th>
+               </tr>
+           </tfoot>
+       </table>
+   </div>
+
+</div>
 
