@@ -28,8 +28,13 @@
             $state.go('Customer.GeneralInvoice', { voId: id });
         }
         if (voType == 'Sales Invoice') {
+            if (localStorage.usertype == "UO") {
+                $state.go('Customer.GeneralInvoice', { voId: id });
+            } else {
+                $state.go('Customer.SalesInvoice', { voId: id });
+            }
 
-            $state.go('Customer.SalesInvoice', { voId: id });
+           
         }
         if (voType == 'Receipt') {
 
@@ -74,9 +79,25 @@
 
     }
 
+    // $scope.role = localStorage["usertype"];
+    if (localStorage["usertype"] == 'O') {
+        var type = ["Purchase Settelment","Sales Settelment","Badla Voucher"]
+        $http.post(config.login + "voucherTransactions" + "?compCode=" + localStorage.CompanyId + "&role=" + localStorage.usertype, type).then(function (response) {
+                   $scope.voucherTransaction = response.data;
+               })
+    } else {
+        var type = ["Sales Invoice"]
+        $http.post(config.login + "voucherTransactions" + "?compCode=" + localStorage.CompanyId + "&role=" + localStorage.usertype, type).then(function (response) {
+              
+                   $scope.voucherTransaction = response.data;
+               })
+    }
 
-    $http.get(config.api + 'voucherTransactions?[filter][where][compCode]=' + localStorage.CompanyId + '&filter[fields][date]=true&filter[fields][type] =true&filter[fields][amount] =true&filter[fields][vochNo] =true&filter[fields][id] =true')
-                .then(function (response) {
-                    $scope.voucherTransaction = response.data;
-                })
+
+    $scope.checkSatate = function () {
+        if (data.state == "deleted") {
+            return true;
+        }
+    }
+   
 }]);

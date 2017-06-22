@@ -36,7 +36,7 @@
     //    $select.activate();
     //}
     $scope.clear = function ($event, $select) {
-        $event.stopPropagation();
+       // $event.stopPropagation();
         $select.selected = undefined;
         $select.search = undefined;
 
@@ -61,7 +61,7 @@
     $scope.datatable = false
    
     function getInventory() {
-        $http.get(config.api + "Inventories?filter[where][visible]=false&[filter][where][compCode]=" + localStorage.CompanyId).then(function (response) {
+        $http.get(config.login + "getInventory" + "?compCode=" + localStorage.CompanyId + "&visible=" + false).then(function (response) {
             $scope.ItemList2 = response.data;
             $scope.filterList = $scope.ItemList2;
             getTotalsum(response.data);
@@ -74,7 +74,7 @@
         });
     }
     getInventory();
-    var qryAgg = 'visible=false&compCode=' + localStorage.CompanyId +'&group={"SUBCATEGORY": "$SUBCATEGORY","COILSHEETNO":"$COILSHEETNO","DATE": "$DATE","LotWeight":"$LotWeight","LOCATION":"$LOCATION","GRADE":"$GRADE","FINISH":"$FINISH","THICKNESS":"$THICKNESS","WIDTH":"$WIDTH","LENGTH":"$LENGTH","NETWEIGHT":"$NETWEIGHT","GROSSWT":"$GROSSWT","PCSLENGTHINMTRS":"PCSLENGTHINMTRS","no":"$no"}';
+    var qryAgg = 'visible=false&compCode=' + localStorage.CompanyId + '&group={"SUBCATEGORY": "$SUBCATEGORY","COILSHEETNO":"$COILSHEETNO","DATE": "$DATE","LotWeight":"$LotWeight","LOCATION":"$LOCATION","GRADE":"$GRADE","FINISH":"$FINISH","THICKNESS":"$THICKNESS","WIDTH":"$WIDTH","LENGTH":"$LENGTH","NETWEIGHT":"$NETWEIGHT","GROSSWT":"$GROSSWT","PCSLENGTHINMTRS":"PCSLENGTHINMTRS","no":"$no","INCOMINGDATE":"$INCOMINGDATE"}';
     $http.get(config.login + "getAggregateInventories?" + qryAgg).then(function (response) {
         $scope.ItemList = response.data;
         $scope.datatable = true
@@ -92,7 +92,7 @@
     $scope.grade = {};
     $scope.location = {};
     $scope.lotweight = {};
-    $scope.DATE = {};
+    $scope.incomingdate = {};
     $scope.coilsheetno = {};
     $scope.subcategory = {};
 
@@ -107,37 +107,170 @@
         $scope.grade = {};
         $scope.location = {};
         $scope.lotweight = {};
-        $scope.DATE = {};
+        $scope.incomingdate = {};
         $scope.coilsheetno = {};
         $scope.subcategory = {};
         $scope.no = {};
         $scope.filterList = $scope.ItemList2;
     }
-    $scope.applyFilter = function () {
-        var qry = {
-            "where": {
-                "visible": false,
-                "compCode": localStorage.CompanyId,
-                "SUBCATEGORY": $scope.subcategory.selected ? $scope.subcategory.selected._id.SUBCATEGORY : $scope.subcategory.selected,
-                "COILSHEETNO": $scope.coilsheetno.selected ? $scope.coilsheetno.selected._id.COILSHEETNO : $scope.coilsheetno.selected,
-                "DATE": $scope.DATE.selected ? $scope.DATE.selected._id.DATE : $scope.DATE.selected,
-                "LotWeight": $scope.lotweight.selected ? $scope.lotweight.selected._id.LotWeight : $scope.lotweight.selected,
-                "LOCATION": $scope.location.selected ? $scope.location.selected._id.LOCATION : $scope.location.selected,
-                "GRADE": $scope.grade.selected ? $scope.grade.selected._id.GRADE : $scope.grade.selected,
-                "FINISH": $scope.finish.selected ? $scope.finish.selected._id.FINISH : $scope.finish.selected,
-                "THICKNESS": $scope.thickness.selected ? $scope.thickness.selected._id.THICKNESS : $scope.thickness.selected,
-                "WIDTH": $scope.width.selected ? $scope.width.selected._id.WIDTH : $scope.width.selected,
-                "LENGTH": $scope.length.selected ? $scope.length.selected._id.LENGTH : $scope.length.selected,
-                "NETWEIGHT": $scope.netweight.selected ? $scope.netweight.selected._id.NETWEIGHT : $scope.netweight.selected,
-                "GROSSWT": $scope.grossweight.selected ? $scope.grossweight.selected._id.GROSSWT : $scope.grossweight.selected,
-                "PCSLENGTHINMTRS": $scope.PCSLENGTHINMTRS.selected ? $scope.PCSLENGTHINMTRS.selected._id.PCSLENGTHINMTRS : $scope.PCSLENGTHINMTRS.selected,
-                "no": $scope.no.selected ? $scope.no.selected._id.no : $scope.no.selected,
+    var WIDTH = []
+    var SUBCATEGORY = []
+    var COILSHEETNO = []
+    var INCOMINGDATE = []
+    var LotWeight = []
+    var LOCATION = []
+    var GRADE = []
+    var FINISH = []
+    var THICKNESS = []
+    var WIDTH = []
+    var LENGTH = []
+    var NETWEIGHT = []
+    var GROSSWT = []
+    $scope.addLotWeight = function (item) {
+        LotWeight.push(item)
 
-            }
+    }
+    $scope.removeLotWeight = function (item) {
+        var index = LotWeight.indexOf(item);
+        if (index > -1) {
+            LotWeight.splice(index, 1);
         }
-        $http.get(config.api + "Inventories?filter=" + encodeURIComponent(JSON.stringify(qry))).then(function (response) {
+    }
+    $scope.addCOILSHEETNO = function (item) {
+        COILSHEETNO.push(item)
+
+    }
+    $scope.removeCOILSHEETNO = function (item) {
+        var index = COILSHEETNO.indexOf(item);
+        if (index > -1) {
+            COILSHEETNO.splice(index, 1);
+        }
+    }
+    $scope.addWIDTH = function (item) {
+        WIDTH.push(item)
+
+    }
+    $scope.removeWIDTH = function (item) {
+        var index = WIDTH.indexOf(item);
+        if (index > -1) {
+            WIDTH.splice(index, 1);
+        }
+    }
+    $scope.addTHICKNESS = function (item) {
+        THICKNESS.push(item)
+
+    }
+    $scope.removeTHICKNESS = function (item) {
+        var index = THICKNESS.indexOf(item);
+        if (index > -1) {
+            THICKNESS.splice(index, 1);
+        }
+    }
+    $scope.addGRADE = function (item) {
+        GRADE.push(item)
+
+    }
+    $scope.removeGRADE = function (item) {
+        var index = GRADE.indexOf(item);
+        if (index > -1) {
+            GRADE.splice(index, 1);
+        }
+    }
+    $scope.addFINISH = function (item) {
+        FINISH.push(item)
+
+    }
+    $scope.removeFINISH = function (item) {
+        var index = FINISH.indexOf(item);
+        if (index > -1) {
+            FINISH.splice(index, 1);
+        }
+    }
+    $scope.addNETWEIGHT = function (item) {
+        NETWEIGHT.push(item)
+
+    }
+    $scope.removeNETWEIGHT = function (item) {
+        var index = NETWEIGHT.indexOf(item);
+        if (index > -1) {
+            NETWEIGHT.splice(index, 1);
+        }
+    }
+
+    $scope.removeINCOMINGDATE = function (item) {
+        var index = INCOMINGDATE.indexOf(item);
+        if (index > -1) {
+            INCOMINGDATE.splice(index, 1);
+        }
+    }
+    $scope.addINCOMINGDATE = function (item) {
+        INCOMINGDATE.push(item)
+
+    }
+    $scope.removeGROSSWT = function (item) {
+        var index = GROSSWT.indexOf(item);
+        if (index > -1) {
+            GROSSWT.splice(index, 1);
+        }
+    }
+    $scope.addGROSSWT = function (item) {
+        GROSSWT.push(item)
+
+    }
+    $scope.removeLENGTH = function (item) {
+        var index = LENGTH.indexOf(item);
+        if (index > -1) {
+            LENGTH.splice(index, 1);
+        }
+    }
+    $scope.addLENGTH = function (item) {
+        LENGTH.push(item)
+
+    }
+    $scope.removeLOCATION = function (item) {
+        var index = LOCATION.indexOf(item);
+        if (index > -1) {
+            LOCATION.splice(index, 1);
+        }
+    }
+    $scope.addLOCATION = function (item) {
+        LOCATION.push(item)
+
+    }
+    $scope.removeSUBCATEGORY = function (item) {
+        var index = SUBCATEGORY.indexOf(item);
+        if (index > -1) {
+            SUBCATEGORY.splice(index, 1);
+        }
+    }
+    $scope.addSUBCATEGORY = function (item) {
+        SUBCATEGORY.push(item)
+
+    }
+   
+    $scope.applyFilter = function () {
+
+        var qry = [
+              { WIDTH: WIDTH },
+
+            { COILSHEETNO: COILSHEETNO },
+            { INCOMINGDATE: INCOMINGDATE },
+            { LotWeight: LotWeight },
+            { LOCATION: LOCATION },
+           { GRADE: GRADE },
+           { FINISH: FINISH },
+            { THICKNESS: THICKNESS },
+
+
+            { NETWEIGHT: NETWEIGHT },
+            { GROSSWT: GROSSWT },
+            { LENGTH: LENGTH },
+             { SUBCATEGORY: SUBCATEGORY },
+
+        ]
+
+        $http.post(config.login + "inventoryFilter", qry).then(function (response) {
             $scope.filterList = response.data;
-            getTotalsum(response.data);
         });
     }
     //$scope.applyFilter = function () {
@@ -456,12 +589,48 @@
     //    $scope.closeAddjustmentBox();
     //}
 
+
     function uploadStockInventory(data) {
-        $http.post(config.api + "Inventories", data).then(function (response) {
-            console.log(response)
-            $rootScope.$broadcast('event:success', { message: $scope.ExeclDataRows.length + " Opening Stock Uploaded Successfully " });
-            getInventory();
-        })
+        var iData = []
+        var inventoryData = [];
+        var iData = data
+        var splitCount = 0
+        var lCount = 0
+        var MAX = 0
+        var gCount = 0
+        var count = Math.round(data.length / 100)
+        if (count < 1) {
+            gCount = 1
+            MAX = data.length
+        } else {
+           gCount = count
+           MAX = 100
+        }   
+        for (var i = 0; i < gCount; i++) {
+                if ((data.length - (splitCount * 100)) < 100) {
+                    MAX = data.length - (splitCount * 100)
+            }
+                for (var j = 0; j < MAX; j++) {
+                    inventoryData.push(data[lCount])
+                    lCount++;
+                       
+            }
+                splitCount++;
+                //console.log(splitCount++)
+            console.log("first 1 hundred ", inventoryData)
+           
+            $http.post(config.login + "uploadInventory", inventoryData).then(function (response) {
+               console.log(response)
+               $rootScope.$broadcast('event:success', { message: $scope.ExeclDataRows.length + " Opening Stock Uploaded Successfully " });
+               getInventory()
+            })
+            inventoryData = []
+        }
+        
+    }
+
+    $scope.myPagingFunction = function () {
+        alert("fdfdfs")
     }
     $scope.uploadFile = function () {
         
@@ -576,11 +745,11 @@
         var data = this.parseExcel(file);
     };
 
-
+   
     
     $scope.dtOptions = DTOptionsBuilder.newOptions()
 .withOption('processing', false)
-.withOption('scrollX', 450)
+.withOption('scrollX', 100)
 .withOption('scrollY', h - 195)
 .withOption('paging', false)
 .withOption('searching', false)

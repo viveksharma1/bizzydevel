@@ -421,10 +421,10 @@
             }
         }
         $scope.cashAccountType = data.balanceType == 'debit' ? " (Dr.) " : " (Cr.)";
-        var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
-        commonService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
-            if (response.data.openingBalance) {
-                $scope.cashAccountBalance = Math.abs(calculateOpenningBalnce(response.data.openingBalance, data.balanceType))
+       // var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
+        commonService.getOpeningBalance(data.id).then(function (response) {
+            if (response.data) {
+                $scope.cashAccountBalance = response.data.balance
             } else {
                 $scope.cashAccountBalance = 0.00;
             }

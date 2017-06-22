@@ -1,7 +1,8 @@
-﻿myApp.controller('SalesInvoiceCntrl', ['$scope', '$http', '$timeout', '$rootScope', '$state', 'config', '$stateParams', '$filter', 'FileUploader', 'commonService', 'SweetAlert', function ($scope, $http, $timeout, $rootScope, $state, config, $stateParams, $filter, FileUploader, commonService, SweetAlert) {
-    if ($rootScope.$previousState == $state.current && $stateParams.voId == null) {
-        window.history.back();
-    }
+﻿myApp.controller('SalesInvoiceCntrl', ['$scope', '$http', '$timeout', '$rootScope', '$state', 'config', '$stateParams', '$filter', 'FileUploader', 'commonService'
+, 'SweetAlert', 'authService', function ($scope, $http, $timeout, $rootScope, $state, config, $stateParams, $filter, FileUploader, commonService, SweetAlert, authService) {
+    //if ($rootScope.$previousState == $state.current && $stateParams.voId == null) {
+    //    window.history.back();
+    //}
     $(".my a").click(function (e) {
         e.preventDefault();
     })
@@ -49,26 +50,29 @@
         autoclose: true,
     });
     
+    //$scope.goBack = function () {
+    //    if ($rootScope.$previousState.name.length == 0 || $rootScope.$previousState == $state.current) {
+    //        window.history.back();
+    //    } else
+    //        $state.go($rootScope.$previousState);
+    //    //window.history.back();
+    //}
     $scope.goBack = function () {
-        if ($rootScope.$previousState.name.length == 0 || $rootScope.$previousState == $state.current) {
-            window.history.back();
-        } else
-            $state.go($rootScope.$previousState);
-        //window.history.back();
+        window.history.back();
     }
     $scope.add = function (type, value) {
         $('#formaccount').modal('show');
         $scope.myValue = { accountName: value };
     }
-
+    
     $(":file").filestyle({ buttonName: "btn-sm btn-info" });
     var type = $stateParams.type;
     var uploader = $scope.uploader = new FileUploader({
         url: config.login + "upload"
     });
-
+    $scope.visible = false
     // FILTERS
-
+    $scope.amountUo  = 0
     uploader.filters.push({
         name: 'customFilter',
         fn: function (item /*{File|FileLikeObject}*/, options) {
@@ -105,16 +109,43 @@
         $(this).addClass('active');
     })
 
+    function pad(n, width, z) {
+        z = z || '0';
+        n = n + '';
+        return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+    }
+   
+    
+    $scope.billDate = "InvoiceDate";
+    $scope.billIssueDate = "IssueDate"
+    $scope.billRemovalDate = "RemovalDate"
+    $scope.orderDate = "orderDate"
+    if ($stateParams.billDate != null) {
+        setDate($scope.billDate, $stateParams.billDate);
+        setDate($scope.billIssueDate, $stateParams.billDate);
+        setDate($scope.billRemovalDate, $stateParams.billDate);
+        setDate($scope.orderDate, $stateParams.billDate);
+    } else {
+        setDate($scope.billDate, new Date());
+        setDate($scope.billIssueDate, new Date());
+        setDate($scope.billRemovalDate, new Date());
+        setDate($scope.orderDate, new Date());
+    }
+   
+
+
     $scope.salesAccount = {};
     $scope.rdi = false;
     //Initialization
-    $scope.supplier = {};
+    $scope.supplier = {selected:{id:null}}
+    //$scope.supplier = {};
     $scope.supplier2 = {};
     $scope.account = {}
+    $scope.itemTableSalesUo = []
     //$scope.totalAmountINR = 0;
     $scope.invoiceType = "Excise";
     $scope.customerType = "Consignee";
-
+    $scope.modeTransport = "Road";
     $scope.oldAttachment = null;
     function bindAttachments(attachments, callback) {
         if (attachments) {
@@ -241,9 +272,9 @@
             }
             $scope.buyerType = data.balanceType == 'debit' ? " (Dr.) " : " (Cr.)";
             var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
-            commonService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
-                if (response.data.openingBalance) {
-                    $scope.buyerBalance = Math.abs(calculateOpenningBalnce(response.data.openingBalance, data.balanceType))
+            commonService.getOpeningBalance(data.id).then(function (response) {
+                if (response.data) {
+                    $scope.buyerBalance = response.data.balance
                 } else {
                     $scope.buyerBalance = 0.00;
                 }
@@ -263,9 +294,9 @@
             }
             $scope.consigneeType = data.balanceType == 'debit' ? " (Dr.) " : " (Cr.)";
             var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
-            commonService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
-                if (response.data.openingBalance) {
-                    $scope.consigneeBalance = Math.abs(calculateOpenningBalnce(response.data.openingBalance, data.balanceType))
+            commonService.getOpeningBalance(data.id).then(function (response) {
+                if (response.data) {
+                    $scope.consigneeBalance = response.data.balance
                 } else {
                     $scope.consigneeBalance = 0.00;
                 }
@@ -295,6 +326,7 @@
                       $scope.comInvoiceNo = response.data.comInvoiceNo;
                       $scope.exciseInvoiceNo = response.data.exciseInvoiceNo;
                       $scope.orderNo = response.data.invoiceData.orderNo;
+                      $scope.vehicleNumber = response.data.vehicleNumber
                       setDate($scope.orderDate, response.data.invoiceData.orderDate);
                       $scope.termsDelivery = response.data.invoiceData.termsDelivery;
                       $scope.narration = response.data.remark;
@@ -305,14 +337,23 @@
                       $scope.rdi = response.data.invoiceData.rdi;
                       $scope.itemTable = response.data.invoiceData.billData;
                       angular.copy($scope.itemTable, $scope.itemTableTemp);
+
+                     
+                      $scope.visible = response.data.isUO
                       $scope.accountTable = response.data.invoiceData.accountlineItem;
                       setDate($scope.billDate, response.data.date);
                       setDate($scope.billDueDate, response.data.duedate);
                       setDate($scope.billIssueDate, response.data.invoiceData.issueDate, $scope.billIssueTime);// $filter('date')(response.data.invoiceData.issueDate, 'dd/MM/yyyy');
                       setDate($scope.billRemovalDate, response.data.invoiceData.removalDate, $scope.billRemovalTime);// $filter('date')(response.data.invoiceData.issueDate, 'dd/MM/yyyy');
                       $scope.paymentDays = response.data.invoiceData.paymentDays;
-                      getSupplierDetail(response.data.invoiceData.customerAccountId);
+                      $scope.itemTableSalesUo = response.data.invoiceData.billDataUo;
+                      if(response.data.amountUo){
+                          $scope.amountUo = response.data.amountUo
+                      }
                       getSupplierDetail(response.data.invoiceData.consigneeAccountId, true);
+                      getSupplierDetail(response.data.invoiceData.customerAccountId);
+                      getSalesAccountBalance(response.data.invoiceData.ledgerAccountId)
+                      getCustomerAccountBalance(response.data.invoiceData.consigneeAccountId)
                       if (response.data.paymentLog) {
                           $scope.receiptCount = response.data.paymentLog.length;
                           $scope.receipts = response.data.paymentLog;
@@ -332,26 +373,29 @@
 
 
                   });
-
     }
-    $scope.remarks = {};
-    $scope.godown = {};
-    $scope.description = {};
-    $scope.rgno = {};
-    $scope.exciseDuty = {};
-    $scope.SAD = {};
-    $scope.NETWEIGHT = {};
-    $scope.billNoValid = false;
-    $scope.comInvoiceNoValid = true;
-    $scope.exciseInvoiceNoValid = true;
-    $scope.clearFilter = function () {
+        $scope.invoiceno = {};
         $scope.godown = {};
         $scope.description = {};
         $scope.remarks = {};
-        $scope.rgno = {};
+        $scope.RG = {};
         $scope.exciseDuty = {};
         $scope.SAD = {};
         $scope.NETWEIGHT = {};
+        $scope.BALANCE = {};
+    $scope.billNoValid = false;
+    $scope.comInvoiceNoValid = true;
+    $scope.exciseInvoiceNoValid = true;
+    $scope.clearFilter = function(){
+        $scope.invoiceno = {};
+        $scope.godown = {};
+        $scope.description = {};
+        $scope.remarks = {};
+        $scope.RG = {};
+        $scope.exciseDuty = {};
+        $scope.SAD = {};
+        $scope.NETWEIGHT = {};
+        $scope.BALANCE = {};
         $scope.filterList = $scope.ItemList2;
     }
     $scope.hasVoId = false;
@@ -361,18 +405,35 @@
         $scope.billNoValid = true;
         $scope.comInvoiceNoValid = true;
         $scope.exciseInvoiceNoValid = true;
+    } else {
+        $http.get(config.login + "getSalesInvoiceNo" + "?compCode=" + localStorage.CompanyId + "&type=" + "Sales Invoice").then(function (response) {
+            if (response) {
+                console.log(response)
+                var count = response.data.count + 1
+                var no = pad(count, 4);
+                $scope.billNoValid = true;
+
+                $scope.comInvoiceNo = "17-18-" + no
+                $scope.exciseInvoiceNo = "I-" + pad(count, 6);
+                $scope.billNo = "17-18-" + no
+            }
+
+        });
     }
     $scope.applyFilter = function () {
         var qry = {
             "where": {
-                "visible":true,
+                "visible": true,
+                "compCode": localStorage.CompanyId,
+                "no":$scope.invoiceno.selected ? $scope.invoiceno.selected._id.no : $scope.invoiceno.selected,
                 "GODOWN": $scope.godown.selected ? $scope.godown.selected._id.GODOWN : $scope.godown.selected,
                 "DESCRIPTION": $scope.description.selected ? $scope.description.selected._id.DESCRIPTION : $scope.description.selected,
                 "RRMARKS": $scope.remarks.selected ? $scope.remarks.selected._id.RRMARKS : $scope.remarks.selected,
-                "rgNo": $scope.rgno.selected ? $scope.rgno.selected._id.rgNo : $scope.rgno.selected,
-                "exciseDuty": $scope.exciseDuty.selected ? $scope.exciseDuty.selected._id.exciseDuty : $scope.exciseDuty.selected,
-                "SAD": $scope.SAD.selected ? $scope.SAD.selected._id.SAD : $scope.SAD.selected,
+                "RG": $scope.RG.selected ? $scope.RG.selected._id.RG : $scope.RG.selected,
+                "dutyPerUnit": $scope.exciseDuty.selected ? $scope.exciseDuty.selected._id.exciseDuty : $scope.exciseDuty.selected,
+                "sadPerUnit": $scope.SAD.selected ? $scope.SAD.selected._id.SAD : $scope.SAD.selected,
                 "NETWEIGHT": $scope.NETWEIGHT.selected ? $scope.NETWEIGHT.selected._id.NETWEIGHT : $scope.NETWEIGHT.selected,
+                "BALANCE": $scope.BALANCE.selected ? $scope.BALANCE.selected._id.BALANCE : $scope.BALANCE.selected,
             }
         }
         $http.get(config.api + "Inventories?filter="+encodeURIComponent(JSON.stringify( qry))).then(function (response) {
@@ -384,6 +445,7 @@
     $scope.AddLineItem = function (val) {
         $('#AddInventoryModal').modal('show');
         if (val) {
+            $scope.isEdit = val
             $scope.clearFilter();
             $scope.itemChecked = [];
             $scope.itemCartChecked = [];
@@ -392,16 +454,19 @@
             calculateCartTotal($scope.itemCart);
             $scope.showItemInventory();
         } else {
+            $scope.isEdit = val
             $scope.showItemCart();
+            $scope.itemCart = $scope.itemTable
         }
+        sumFilterTable();
     }
 
-    $http.get(config.api + "Inventories?filter[where][visible]=true&filter[limit]=20").then(function (response) {
+    $http.get(config.login + "getInventory" + "?compCode=" + localStorage.CompanyId + "&visible=" + true).then(function (response) {
         $scope.ItemList2 = response.data;
         $scope.filterList = $scope.ItemList2;
     });
 
-    var qryAgg = 'visible=true&group={"DESCRIPTION":"$DESCRIPTION","GODOWN": "$GODOWN","RRMARKS":"$RRMARKS","rgNo":"$rgNo","exciseDuty":"$exciseDuty","SAD":"$SAD","NETWEIGHT":"$NETWEIGHT"}';
+    var qryAgg = 'visible=true&compCode=' + localStorage.CompanyId + '&group={"no": "$no","DESCRIPTION":"$DESCRIPTION","GODOWN": "$GODOWN","RRMARKS":"$RRMARKS","NETWEIGHT":"$NETWEIGHT", "BALANCE":"$BALANCE","RG":"$RG","dutyPerUnit":"$dutyPerUnit","sadPerUnit":"$sadPerUnit"}';
     $http.get(config.login + "getAggregateInventories?" + qryAgg).then(function (response) {
         $scope.ItemList = response.data; // items to bind in filter ui select.
     });
@@ -449,6 +514,9 @@
         if ($scope.paymentDays)
             days = $scope.paymentDays;
         var billDate = getDate($scope.billDate);
+        setDate($scope.billIssueDate, billDate);
+        setDate($scope.billRemovalDate, billDate);
+        setDate($scope.orderDate, billDate);
         if (billDate)
             setDate($scope.billDueDate, moment(billDate).add(days, 'days'));
     }
@@ -466,19 +534,30 @@
     
     function getSupplierDetail(id,isConsignee) {
         //$scope.supliersDetail = []
-        $http.get(config.api + "accounts" + "?filter[where][id]=" + id).then(function (response) {
+        $http.get(config.api + "accounts/" + id).then(function (response) {
+            $scope.supliersDetail2 = response.data;
             if (isConsignee) {
-                $scope.supliersDetail2 = response.data;
-                console.log(response.data);
-                $scope.shippingAddress2 = response.data[0].shippingAddress[0].street;
-                $scope.email2 = response.data[0].email;
-            }else{
-                $scope.supliersDetail = response.data;
-                console.log(response.data);
-                $scope.shippingAddress = response.data[0].shippingAddress[0].street;
-                $scope.email = response.data[0].email;
+                $scope.email2 = $scope.supliersDetail2.email;
+                console.log($scope.email2)
+                //if ($scope.supliersDetail2.phone != undefined) {
+                //    $scope.contactNo2 = $scope.supliersDetail2.mobile == undefined ? $scope.supliersDetail2.phone : $scope.supliersDetail2.mobile + "," + $scope.supliersDetail.phone
+                //}
+                $scope.contactNo2 = $scope.supliersDetail2.mobile
+                $scope.shippingAddress2 = $scope.supliersDetail2.billingAddress[0].street;
+            } else {
+                getCustomerAccountBalance2(id)
+                $scope.email = $scope.supliersDetail2.email;
+                console.log($scope.email)
+               
+                //if ($scope.supliersDetail2.phone != undefined) {
+                //  //  $scope.contactNo = $scope.supliersDetail2.mobile == undefined ? $scope.supliersDetail2.phone : $scope.supliersDetail2.mobile + "," + $scope.supliersDetail.phone
+                //}
+                $scope.contactNo = $scope.supliersDetail2.mobile
+                $scope.shippingAddress = $scope.supliersDetail2.billingAddress[0].street;
+               
             }
         });
+        
     }
     $scope.accounts = [];
     function getSalesAccounts() {
@@ -511,11 +590,25 @@
         $scope.roundOff = ($scope.gTotal - Number($scope.salesAmount)).toFixed(2);
     }
 
+    function sumFilterTable() {
+        var NETWEIGHT = 0;
+        var data = $scope.filterList
+        var BALANCE = 0;
+        for (var i = 0; i < $scope.filterList.length; i++) {
+            NETWEIGHT += Number($scope.filterList[i].NETWEIGHT);
+            BALANCE += Number($scope.filterList[i].BALANCE);
+        }
+        $scope.Totalbalance = BALANCE
+        $scope.totalNetweight = NETWEIGHT
+    }
+    
     function sumItemTable(data) {
         var totalQty = 0;
         var totalAmount = 0;
+       
         if (data) {
             for (var i = 0; i < data.length; i++) {
+              
                 if (data[i].itemQty)
                     totalQty += Number(data[i].itemQty);
 
@@ -527,6 +620,7 @@
 
             }
         }
+       
         $scope.totalQty = totalQty.toFixed(2);
         $scope.totalAmount = totalAmount.toFixed(2);
         $scope.totalItem = data==undefined ? 0: data.length;
@@ -634,8 +728,20 @@
 
 
     }
-    $scope.selectLineItem = function (itemData) {
+    $scope.selectLineItem = function (itemData,index) {
         var item = {};
+        if (itemData.select) {
+            if ($scope.filterList[index].itemQty) {
+                $scope.filterList[index].BALANCE = $scope.filterList[index].BALANCE - $scope.filterList[index].itemQty
+            } else {
+                $scope.filterList[index].itemQty = $scope.filterList[index].BALANCE
+            }
+
+        } else {
+            if ($scope.filterList[index].itemQty) {
+                $scope.filterList[index].BALANCE = Number($scope.filterList[index].BALANCE) + Number($scope.filterList[index].itemQty)
+            }
+        }
         angular.copy(itemData, item);
         if (!$scope.isCart) {
             if (itemData.select) {
@@ -787,7 +893,14 @@
     }
     $scope.itemTableTemp=[];
     $scope.addItemToInvoice = function () {
+       
+        console.log($scope.isEdit)
+        if ($scope.itemTable.length > 0 && $scope.isEdit) {
+            $rootScope.$broadcast('event:error', { message: "Previous Item will be lost !" });
+            return
+        }
         if (checkAddedItemsInInventory($scope.itemCart)) {
+           
             angular.copy($scope.itemCart, $scope.itemTable);
             angular.copy($scope.itemTable, $scope.itemTableTemp);
             sumItemListTable($scope.itemTable);
@@ -799,20 +912,21 @@
         } else {
             showErrorToast("Error! Aggregate SaleQty is greater the net weight for some items");
         }
+        
     }
     function updateItemTable() {
         angular.copy($scope.itemTableTemp, $scope.itemTable);
         if ($scope.invoiceType == 'Excise') {
             angular.forEach($scope.itemTable, function (item) {
                 if ($scope.rdi ) {
-                    item.itemAmount = item.itemQty * (item.itemRate + Number(item.exciseDuty?item.exciseDuty:0/item.NETWEIGHT) + Number(item.SAD?item.SAD:0/item.NETWEIGHT));
+                    item.itemAmount = item.itemQty * (item.itemRate + Number(item.dutyPerUnit ? item.dutyPerUnit : 0) + Number(item.sadPerUnit ? item.sadPerUnit : 0));
                 }
             });
         } else if ($scope.invoiceType == 'Non Excise') {
             angular.forEach($scope.itemTable, function (item) {
                 item.itemAmount = item.itemQty * item.itemRate;
-                item.SAD = 0.0;
-                item.exciseDuty = 0.0;
+                item.sadPerUnit = 0.0;
+                item.dutyPerUnit = 0.0;
             });
         }
         sumItemListTable($scope.itemTable);
@@ -826,9 +940,10 @@
             for (var i = 0; i < data.length; i++) {
                 if (data[i].itemAmount)
                     totalAmount += Number(data[i].itemAmount);
+                totalQty += Number(data[i].itemQty);
             }
         }
-        //$scope.totalQty = totalQty.toFixed(2);
+        $scope.totalQty = totalQty
         $scope.listTotalAmount = totalAmount.toFixed(2);
     }
     
@@ -975,8 +1090,8 @@
        .ToArray();
     }
 
-
-    $scope.saveInvoice = function () {
+   
+    $scope.saveInvoice = function (reload) {
         var billDate = getDate($scope.billDate);
         var billIssueDateTime = getDate($scope.billIssueDate, $scope.billIssueTime);
         var billRemovalDateTime = getDate($scope.billRemovalDate, $scope.billRemovalTime);
@@ -1004,7 +1119,7 @@
             showErrorToast("Bill no is not valid");
             return;
         }
-
+        //var invDate = getDate($scope.paymentdate)
         var pendingUploads = uploader.getNotUploadedItems();
         if (pendingUploads.length > 0) {
             showErrorToast("Please review attachments some of them are not uploaed to server.");
@@ -1027,19 +1142,32 @@
         //else {
         //    $scope.salesAmount = parseFloat($scope.totalAmountINR.toFixed(2));
         //}
-
+       
+        if ($scope.amountUo) {
+            var amountUO = $scope.amountUo
+        } else {
+            var amountUO = $scope.gTotal
+        }
         var data = {
             compCode: localStorage.CompanyId,
             type: type,
             role: localStorage.usertype,
             date: billDate,
+            salesledgerAmount:$scope.listTotalAmount,
+            username: authService.getAuthentication().username,
             duedate: billDueDate,
             amount: $scope.gTotal,
+            amountO: $scope.gTotal,
+            amountUo: amountUO,
             roundOff: $scope.roundOff,
             vochNo: $scope.billNo,
+            vehicleNumber:$scope.vehicleNumber,
             comInvoiceNo: $scope.comInvoiceNo,
             exciseInvoiceNo: $scope.exciseInvoiceNo,
             state: "OPEN",
+            isUO: $scope.visible,
+            isUo: "false",
+            visible: "false",
             customerId: $scope.supplier2.selected.id,
             balance: $scope.gTotal,
             roi: $scope.intRate == undefined ? 0 : $scope.intRate,
@@ -1049,13 +1177,15 @@
             aggLineItems:getAggregateLineItems(),
             invoiceData: {
                 orderNo: $scope.orderNo,
+                billDataUo:$scope.itemTableSalesUo,
                 orderDate: orderDate,
                 termsDelivery: $scope.termsDelivery,
                 invoiceSubType: $scope.invoiceType,
                 customerType: $scope.customerType,
                 issueDate: billIssueDateTime,
                 removalDate: billRemovalDateTime,
-                customerAccountId: $scope.supplier.selected ? $scope.supplier.selected.id : $scope.supplier2.selected.id,
+                customerAccountId: $scope.supplier.selected.id,
+              //  customerAccountId: $scope.supplier.selected ? $scope.supplier.selected.id : $scope.supplier2.selected.id,
                 consigneeAccountId: $scope.supplier2.selected.id,// ? $scope.supplier2.selected.company : $scope.supplier.selected.company,
                 rdi: $scope.rdi,
                 ledgerAccountId: $scope.salesAccount.selected.id,
@@ -1077,10 +1207,15 @@
                 $rootScope.$broadcast('event:error', { message: "Error while creating invoice: "+response.data.err });
             } else {
                 $rootScope.$broadcast('event:success', { message: "Invoice Created" });
-                if (!$scope.hasVoId) {
-                    $state.go("Customer.SalesInvoice", { voId: response.data.id }, {location:true});
-                } else {
-                    $state.reload();
+                if (reload == 'true') {
+                    $state.go("Customer.SalesInvoice", { voId: null, billDate:billDate }, { location: 'replace' }, { reload: true });
+                }
+                else {
+                    if (!$scope.hasVoId) {
+                        $state.go("Customer.SalesInvoice", { voId: response.data.id }, { location: 'replace' }, { reload: true });
+                    } else {
+                        $state.reload();
+                    }
                 }
             }
             //$state.go("Customer.SalesInvoice/" + response.data.id);
@@ -1101,7 +1236,8 @@
     $("#billNo").focusout(function () {
         var billNo = $scope.billNo;
         if (billNo != undefined && !$scope.hasVoId) {
-            $http.get(config.login + "isVoucherExist/" + billNo).then(function (response) {
+           // var uri = config.login + "isVoucherExist/" + billNo
+            $http.get(config.login + "isVoucherExist/" + encodeURIComponent(billNo)).then(function (response) {
                 if(response.data.id) {
                     //$scope.existingEnvoiceId = response.data.id
                     SweetAlert.swal({
@@ -1185,10 +1321,10 @@
     })
     $scope.bindSalesAccountDetail = function (data) {
         $scope.salesAccountType = data.balanceType == 'debit' ? " (Dr.) " : " (Cr.)";
-        var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
-        commonService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
-            if (response.data.openingBalance) {
-                $scope.salesAccountBalance = Math.abs(calculateOpenningBalnce(response.data.openingBalance, data.balanceType))
+       // var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
+        commonService.getOpeningBalance(data.id).then(function (response) {
+            if (response.data) {
+                $scope.salesAccountBalance = response.data.balance
             } else {
                 $scope.salesAccountBalance = 0.00;
             }
@@ -1203,4 +1339,32 @@
     //        $state.go('Customer.Receipt', null, { location: false });
     //}
     
+    function getSalesAccountBalance(id){
+        commonService.getOpeningBalance(id).then(function (response) {
+            if (response.data) {
+                $scope.salesAccountBalance = response.data.balance
+            } else {
+                $scope.salesAccountBalance = 0.00;
+            }
+        });
+       
+    }
+    function getCustomerAccountBalance(id) {
+        commonService.getOpeningBalance(id).then(function (response) {
+            if (response.data) {
+                $scope.consigneeBalance = response.data.balance
+            } else {
+                $scope.consigneeBalance = 0.00;
+            }
+        });
+    }
+    function getCustomerAccountBalance2(id) {
+        commonService.getOpeningBalance(id).then(function (response) {
+            if (response.data) {
+                $scope.buyerBalance = response.data.balance
+            } else {
+                $scope.buyerBalance = 0.00;
+            }
+        });
+    }
 }]);

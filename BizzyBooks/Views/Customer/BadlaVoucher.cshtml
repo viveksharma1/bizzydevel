@@ -66,14 +66,14 @@
             <div class="col-sm-5 padding">
                 <div class="col-sm-3 padding">
                     <h4 class="tabheading font_11">Invoice Ref.</h4>
-                    <input ng-model="billInfo.vochNo" type="text" class="form-control" disabled />
+                    <input ng-model="badlaData.vochNo" type="text" class="form-control" disabled />
                 </div>
 
 
                 <div class="col-sm-3 padding">
 
                     <h4 class="tabheading font_11">Invoice Date</h4>
-                    <input ng-bind="billInfo.date | date:'dd/MM/yyyy'" type='text' class="form-control" disabled />
+                    <input ng-model="badlaData.date | date:'medium' " type='text' class="form-control" disabled />
 
                 </div>
                 @*<div class="col-sm-3 padding">
@@ -193,55 +193,55 @@
                 </h4>
                 <hr style="float:left; width:100%; margin:20px 0px" />
 
-                <table style="float:left; width:100%" class="table-bordered">
+                <table  style="float:left; width:100%" class="table-bordered card">
                     <thead style="background:rgb(243, 245, 248)">
                         <tr>
                             <th class="tablepadding">&nbsp;</th>
-                            <th class="tablepadding" width="150">Total</th>
-                            <th class="tablepadding" width="180">Manual W/o Interest</th>
+                            <th class="tablepadding" width="150"></th>
+                            <th class="tablepadding" width="180"></th>
                             <th class="tablepadding" width="150">Diff</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td class="tablepadding">DAYS</td>
-                            <td class="tablepadding"><input ng-model="badlaInfo.dayTotal"  type="number" class="form-control" /></td>
-                            <td class="tablepadding"><input ng-model="badlaInfo.dayInterest" type="text" class="form-control" /></td>
-                            <td class="tablepadding"><input ng-model="badlaInfo.dayDiff" type="text" class="form-control" /></td>
+                            <td class="tablepadding"><input ng-model="badlaInfo.dayTotal"  type="number" class="form-control " disabled /></td>
+                            <td class="tablepadding"><input ng-model="badlaInfo.dayInterest" type="text" class="form-control"disabled /></td>
+                            <td class="tablepadding"><input ng-model="badlaInfo.dayDiff" type="text" class="form-control" disabled/></td>
                         </tr>
                         <tr>
                             <td class="tablepadding">INTEREST (%)</td>
-                            <td class="tablepadding"><input ng-model="badlaInfo.perTotal" type="text" class="form-control" /></td>
-                            <td class="tablepadding"><input ng-model="badlaInfo.perInterest" type="text" class="form-control" /></td>
-                            <td class="tablepadding"><input ng-model="badlaInfo.perDiff" type="text" class="form-control" /></td>
+                            <td class="tablepadding"><input ng-model="badlaInfo.perTotal" type="text" class="form-control"disabled /></td>
+                            <td class="tablepadding"><input ng-model="badlaInfo.perInterest" type="text" class="form-control"disabled /></td>
+                            <td class="tablepadding"><input ng-model="badlaInfo.perDiff" type="text" class="form-control"disabled /></td>
                         </tr>
 
                     </tbody>
                 </table>
 
                 </div>
-                <div class="col-sm-7">
+                <div class="col-sm-7 scrollbarAngular scrollbar" style="height:200px">
                     <h4 class="cursor pull-left" style="margin-top: 15px; margin-bottom: 0px;">
                         <i class="fa fa-caret-right"></i> Interest History
                     </h4>
                     <hr style="float:left; width:100%; margin:20px 0px" />
-                    <table style="float:left; width:100%" class="table-bordered table">
-                        <thead >
+                    <table  class="table table-bordered card hover" style="margin-right:25px">
+                        <thead>
                             <tr style="background:rgb(243, 245, 248)">
                                 <th class="tablepadding">Date</th>
                                 <th class="tablepadding" style="text-align:right">Amount</th>
                                 <th class="tablepadding" style="text-align:right">Interest</th>
-                                <th class="tablepadding">Voucher No.</th>
+                                <th class="tablepadding" style="text-align:right">Voucher No.</th>
                             </tr>
-                        
+
                         </thead>
                         <tbody>
-                         <tr ng-repeat="data in voucherData.paymentLog">
-                             <td>{{data.date | date:'dd/MM/yyyy'}}</td>
-                             <td style="text-align:right">{{data.amount |number : fractionSize}}</td>
-                             <td style="text-align:right">{{data.interest |number : fractionSize}}</td>
-                             <td>{{data.vochNo}}</td>
-                         </tr>
+                            <tr ng-repeat="data in voucherData.paymentLog">
+                                <td>{{data.date | date:'dd/MM/yyyy'}}</td>
+                                <td style="text-align:right">{{data.amount |number : fractionSize}}</td>
+                                <td style="text-align:right">{{data.interest |number : fractionSize}}</td>
+                                <td style="text-align:right">{{data.vochNo}}</td>
+                            </tr>
 
                         </tbody>
                     </table>

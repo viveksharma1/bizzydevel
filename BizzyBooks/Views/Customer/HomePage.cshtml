@@ -3,6 +3,7 @@
     ViewBag.Title = "HomePage";
     Layout = null;
 }
+
 <style>
     .changeUi li {
         width: 100%;
@@ -30,137 +31,36 @@
             }
 </style>
 <div class="HomeWrapper">
-    <div class="col-sm-8" style="min-height:560px; border-right:1px dotted #ccc">
+    <div class="col-sm-8" style="min-height:560px;">
 
-        @*<div class="col-sm-6" style="padding-left:0px">
-                <div class="card border-blue">
-                    <h3 style="font-size:20px">Company List
-                        <button permission="usertype:UO" type="button" class="btn btn-sm btn-warning pull-right btn-xs" ng-click="AddCompnay()" style="margin-top:4px">Add New Company</button>
-                     </h3>
-                    <hr />
-                    <ul class="list-unstyled my changeUi scrollbar scrollbarAngular" style="height:120px"  >
-                        <li ng-repeat="list in CompanyList"><a ng-click="changeCompany(list)">{{list.CompanyName}}</a></li>
-                    </ul>
-
-                </div>
-            </div>*@
+       
 
 
-
-        <!-- namechangeModal -->
-        <div id="namechangeModal" class="modal fade" role="dialog">
-            <div class="modal-dialog modal-sm" style="margin-top:150px">
-
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header bg-primary">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Company Change</h4>
-                    </div>
-                    <div class="modal-body" style="padding:30px 20px; text-align:center">
-                        <p>
-                            The name of the company has been changed from  <strong>M/s ABS Ltd.</strong> to <strong>Paynna Anugrah Indonesia</strong>.
-                        </p>
-                    </div>
-                    <div class="modal-footer" style="text-align:center">
-                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" style="width:80px">Close</button>
-                        <button type="button" class="btn btn-primary btn-sm" style="width:80px" ng-click="BindCompanyName(list.CompanyName,list.CompanyId,list.VAT_TIN_NO,list.CST_TIN_NO)">Ok</button>
-
-                    </div>
-                </div>
-
-            </div>
-        </div>
-        @*<div class="col-sm-6 padding">
-            <div class="card border-blue">
-                <h3 style="font-size:20px">Period </h3>
-                <hr />
-                <div class="col-sm-6 padding">
-                    <div class="form-group">
-                        <label>From</label>
-                        <div class='input-group date' id='Fromdate'>
-                            <input type='text' class="form-control" placeholder="dd/mm/yyyy" />
-                            <span class="input-group-addon date">
-                                <span class="glyphicon glyphicon-calendar"></span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-sm-6 padding">
-                    <div class="form-group">
-                        <label>To</label>
-                        <div class='input-group date' id='Todate'>
-                            <input type='text' class="form-control" placeholder="dd/mm/yyyy" />
-                            <span class="input-group-addon date">
-                                <span class="glyphicon glyphicon-calendar"></span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <hr style="float:left; width:100%" />
-                <button type="button" class="btn btn-sm btn-primary pull-right">Search</button>
-            </div>
-    </div>*@
+        
 
 
-
-    <div class="card">
-        <h3>
-            Income
-            <small class="pull-right">Last 365 Days</small>
-        </h3>
-
-        <div class="col-sm-4 IncomeContent" style="padding:0px">
-            <div class="bg-yellow IncomeBar"></div>
-            <strong>2</strong>
-            <p>OPEN INVOICES</p>
-        </div>
-
-        <div class="col-sm-4 IncomeContent" style="padding:0px">
-            <div class="bg-red IncomeBar" style="width:85%; float:left"></div>
-            <div class="bg-yellow IncomeBar" style="width:10%; float:left; margin-right:5%"></div>
-            <strong>1</strong>
-            <p>Overdue</p>
-        </div>
-
-        <div class="col-sm-4 IncomeContent" style="padding:0px">
-            <div class="bg-green IncomeBar"></div>
-            <strong>3</strong>
-            <p>Paid last 30 days</p>
-        </div>
+    <div class="card" >
+            <canvas id="myChart" width=150 height=80></canvas>
     </div>
 
 
     <div class="card">
-        <h3>
-            Expenses
-            <small class="pull-right">Last 365 Days</small>
+        <h3 style="border-bottom:2px solid;border-radius:1px; border-width:thin;  border-color:#CDCDCD; font-family:Cambria, Cochin, Georgia, Times, Times New Roman, serif">
+            Month wise total Sales
+           
         </h3>
-
-        <div class="col-sm-4 IncomeContent" style="padding:0px">
-            <div class="bg-yellow IncomeBar"></div>
-            <strong>2</strong>
-            <p>Purchase Order</p>
-        </div>
-
-        <div class="col-sm-4 IncomeContent" style="padding:0px">
-            <div class="bg-red IncomeBar" style="width:85%; float:left"></div>
-            <div class="bg-yellow IncomeBar" style="width:10%; float:left; margin-right:5%"></div>
-            <strong>3</strong>
-            <p>Unpaid Bills</p>
-        </div>
-
-        <div class="col-sm-4 IncomeContent" style="padding:0px">
-            <div class="bg-green IncomeBar"></div>
-            <strong>2</strong>
-            <p>Paid Bills last 30 days</p>
-        </div>
+        <canvas id="myChart2" width=150 height=80></canvas>
     </div>
+        <div class="card">
+            <h3 style="border-bottom:2px solid;border-radius:1px; border-width:thin;  border-color:#CDCDCD;font-family:Cambria, Cochin, Georgia, Times, Times New Roman, serif">
+                Month wise total Purchase
+
+            </h3>
+            <canvas id="myChart3" width=150 height=80></canvas>
+        </div>
 
 
-
-    <div class="card">
+    @*<div class="card">
         <h3>
             Enquiry
             <small class="pull-right">Last 365 Days</small>
@@ -184,15 +84,15 @@
             <strong>5</strong>
             <p>Cancelled</p>
         </div>
-    </div>
+    </div>*@
 
 </div>
 
 
 <div class="col-sm-4">
-    <h3 class="ActivitiesHeader">
+    @*<h3 class="ActivitiesHeader">
         Activities
-        <div class="pull-right">
+        <div class="pull-right ">
             <div class="dropdown pull-left" style="margin-right:5px">
                 <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" style="width:100px; font-weight:bold; text-align:left">
                     All
@@ -207,69 +107,75 @@
             </div>
             <button type="button" class="btn btn-primary btn-sm"><a href="#/Customer/ActivityLog" style="color:#fff">Activity Log</a></button>
         </div>
-    </h3>
-    <section class="timeline scrollbarAngular scrollbar" style="height:470px;">
-        <ul class="list-unstyled">
-            <li>
+    </h3>*@
+    <div class="timeline scrollbarAngular scrollbar card" style="height:418px;">
+        <h3 class="cardHeader" style="border-bottom:2px solid;border-radius:1px; border-width:thin;  border-color:#CDCDCD;font-family:Cambria, Cochin, Georgia, Times, Times New Roman, serif">Activities</h3>
+        <ul class="list-unstyled " style="color:#9918DE" ng-repeat="data in userActivityLog | orderBy:'-date'">
+            @*<li>
                 <span>
                     August 17, 2016
                     <strong>5 DAYS AGO</strong>
                 </span>
-            </li>
-            <li>
+            </li>*@
+            <li >
                 <div>
-                    <aside>Sales Receipt 1004:</aside> Rs577.20 added for Ajay Kumar.
-                    <p>Aug 17</p>
+                    <aside>{{data.activityType}} </aside><label>{{ data.vochNo}}</label> by {{data.username}}
+                    <p><i class="fa fa-clock-o" style="color:mediumpurple" aria-hidden="true"></i> {{data.date | date:"medium"}} , {{data.fromNow}}
                 </div>
             </li>
 
-            <li>
-                <div>
-                    <aside>Payment:</aside> Rs1,000.00 added for Ajay Kumar.
-                    <p>Aug 17</p>
-                </div>
-            </li>
+          
+           
 
-            <li>
-                <div>
-                    <aside>Invoice 1003:</aside> Rs5,000.00 added for Shankar Subramanian.
-                    <p>Aug 17</p>
-                </div>
-            </li>
-
-
-            <li>
-                <div>
-                    <aside>Purchase Order 1001:</aside> Rs6,000.00 added for Manoj Kumar.
-                    <p>Aug 17</p>
-                </div>
-            </li>
-            <li>
-                <div>
-                    <aside>Sales Receipt 1004:</aside> Rs577.20 added for Ajay Kumar.
-                    <p>Aug 17</p>
-                </div>
-            </li>
-            <li>
-                <div>
-                    <aside>Payment:</aside> Rs1,000.00 added for Ajay Kumar.
-                    <p>Aug 17</p>
-                </div>
-            </li>
-
-            <li>
-                <div>
-                    <aside>Invoice 1003:</aside> Rs5,000.00 added for Shankar Subramanian.
-                    <p>Aug 17</p>
-                </div>
-            </li>
 
 
 
 
 
         </ul>
-    </section>
+    </div>
+    <div class="card">
+        <h3 style="border-bottom:2px solid;border-radius:1px; border-width:thin;  border-color:#CDCDCD;font-family:Cambria, Cochin, Georgia, Times, Times New Roman, serif">
+            Total Count
+
+        </h3>
+        <canvas id="myChart4" width=150 height=170></canvas>
+    </div>
+    <div class="timeline scrollbarAngular scrollbar card" style="height:448px;">
+        <h3 style="border-bottom:2px solid;border-radius:1px; border-width:thin;  border-color:#CDCDCD;font-family:Cambria, Cochin, Georgia, Times, Times New Roman, serif">
+            Recent Transaction
+
+        </h3>
+
+
+        <table class="table-condensed table-hover" style="margin-top:10px; background-color:#FBFBFB; width:350px; float:left;table-layout:fixed; border:none">
+            
+                <tr>
+                   
+                    @*<th style="color:#1D4B8F">Date</th>*@
+                    <th style="color:#574747">Type</th>
+                    <th style="color:#574747">Ref No.</th>
+                    <th style="text-align:right;color:#574747">Amount</th>
+
+                </tr>
+           
+            <tbody >
+                <tr ng-repeat="data in voucherTransaction  | filter:search" class="cursor" ng-disabled='true' ng-click="openTransaction(data.id,data.type)" style="width:350px">
+                   
+                    @*<td><div class="datelink cursor text-primary padding">{{data.date |date:'dd/MM/yyyy'}}</div></td>*@
+                    <td style="color:#696D6E ;font-size:12px;text-transform: uppercase">{{data.type}}</td>
+                    <td style="font-size:10px;   font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif">{{data.vochNo}}</td>
+                    <td style="text-align:right;color:#696D6E; font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif "><b>{{data.amount | number:2}}</b></td>
+
+                </tr>
+
+
+
+            </tbody>
+        </table>
+
+
+    </div>
 </div>
 
 </div>

@@ -39,7 +39,7 @@
     //    $select.activate();
     //}
     $scope.clear = function ($event, $select) {
-        $event.stopPropagation();
+       // $event.stopPropagation();
         $select.selected = undefined;
         $select.search = undefined;
 
@@ -60,7 +60,8 @@
     }
     $scope.datatable = false
     function getInventory() {
-        $http.get(config.api + "Inventories?filter[where][visible]=true&[filter][where][compCode]=" + localStorage.CompanyId).then(function (response) {
+        // $http.get(config.api + "Inventories?filter[where][visible]=true&[filter][where][compCode]=" + localStorage.CompanyId ).then(function (response) {
+       $http.get(config.login + "getInventory" + "?compCode=" +  localStorage.CompanyId  + "&visible=" + true).then(function (response) {
             $scope.ItemList2 = response.data;
             $scope.filterList = $scope.ItemList2;
             getTotalsum(response.data)
@@ -338,7 +339,9 @@
 
     // stock upload
     function uploadStockInventory(data) {
-        $http.post(config.api + "Inventories", data).then(function (response) {
+       
+
+        $http.post(config.login + "uploadInventory", data).then(function (response) {
             $rootScope.$broadcast('event:success', { message: $scope.ExeclDataRows.length + " Opening Stock Uploaded Successfully " });
             getInventory();
         })
@@ -387,6 +390,13 @@
                                 console.log(retObj["actualDate"])
                             }
                             console.log(retObj[obj1])
+                           
+                            if (obj1 == "NETWEIGHT" ) {
+                                retObj[obj1] = Number(XL_row_object[key][obj]);
+                            }
+                            if (obj1 == "BALANCE") {
+                                retObj[obj1] = Number(XL_row_object[key][obj]);
+                            }
                             retObj["type"] = 'OB';
                             retObj["compCode"] = localStorage.CompanyId
                             retObj["currentStatus"] = 'open';

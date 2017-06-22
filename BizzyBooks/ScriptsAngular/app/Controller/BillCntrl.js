@@ -1,6 +1,7 @@
 ﻿myApp.controller('BillCntrl', ['$scope', '$http', '$timeout', '$stateParams', 'commonService', '$rootScope', '$state', 'config', '$filter', 'authService', 'FileUploader', 'DTOptionsBuilder', function ($scope, $http, $timeout, $stateParams, commonService, $rootScope, $state, config, $filter, authService, FileUploader, DTOptionsBuilder) {
     $scope.manualTotal = 0;
     $scope.CIFTOTAL1 = 0;
+    $scope.commonService = commonService
     $scope.role = localStorage["usertype"];
     $(function () {
         $("body").tooltip({
@@ -125,7 +126,12 @@
    
 
     var files, res;
-    
+    $scope.billDate = "billDate";
+    setDate($scope.billDate, new Date());
+    if ($stateParams.billDate != null) {
+        setDate($scope.billDate, $stateParams.billDate);
+    }
+
     $scope.purchaseAccounts = {};
     $scope.unit = "KG";
     $scope.weightUnit = function (data) {
@@ -142,6 +148,7 @@
     }
     //total sum
     $scope.billtable1 = [];
+    $scope.isUpdate = true
     $scope.currency1 = function (currency) {
         if (currency == "Rupee") {
             $scope.subtotalnew = $scope.ExchangeRateINR * $scope.subtotalnew1;
@@ -163,8 +170,9 @@
             $("#rupee").addClass('active')
             $("#dollar").removeClass('active')
             $("#custom").hide();
-           
+            $("#Domestic").addClass('active')
             $("#curr").hide();
+            $("#import").removeClass('active');
             $scope.domesticExcise = false
         }
         else {
@@ -174,6 +182,7 @@
             $("#import").addClass('active')
             $("#custom").show()
             $("#curr").show()
+            $("#Domestic").removeClass('active');
             $scope.domesticExcise = true
            
         }
@@ -199,7 +208,11 @@
             amount += Number($scope.accountTable[i].amount);
         }
         $scope.totalAccountAmount = Number(amount.toFixed(2));
-        return Number(($scope.totalAccountAmount.toFixed(2)))
+        var amt = Math.round($scope.totalAccountAmount)
+        var totalamt = Number($scope.totalAccountAmount + $scope.totalAmountINR).toFixed(2)
+        $scope.gTotal = Math.round($scope.totalAccountAmount) + Math.round($scope.totalAmountINR)
+        $scope.roundOff = ($scope.gTotal - Number(totalamt)).toFixed(2);
+        return amt
     }
     $scope.excelTableItemSum = function () {
         var total = 0;
@@ -249,7 +262,8 @@
         $scope.manualTotalperItem = Number(AMOUNTPERITEM)
         $scope.manualTotal = Number(manualTotal.toFixed(2));
         $scope.netweight = Number(netweight);
-        return $scope.totalAmountINR
+        var amt = Math.round($scope.totalAmountINR)   
+        return amt
     }
     //total sum
     $scope.excelLineItem1 = function () {
@@ -452,13 +466,21 @@
             $scope.supliersDetail = response.data;
             console.log(response.data)
 
-           
+            $scope.bindSupplierDetail(response.data)
             $scope.email = $scope.supliersDetail.email;
            
-            $scope.shippingAddress = $scope.supliersDetail.billingAddress[0].street;
+            $scope.shippingAddress = $scope.supliersDetail.billingAddress?$scope.supliersDetail.billingAddress[0].street:null;
             if ($scope.supliersDetail.phone != undefined) {
                 $scope.mobile = $scope.supliersDetail.mobile == undefined ? $scope.supliersDetail.phone : $scope.supliersDetail.mobile + "," + $scope.supliersDetail.phone
             }
+        });
+    }
+    $scope.getPartyDetail = function (id) {
+        $http.get(config.api + "accounts/" + id).then(function (response) {
+           
+            
+            $scope.bindPurchaseLedgerDetail(response.data)
+            
         });
     }
 
@@ -480,6 +502,7 @@
                        
                         var billData = response.data.transactionData;
                         console.log(response)
+                        checkSalesTransction(billNo)
                         $scope.customPaymentInfo = billData.customPaymentInfo;
                         $scope.accountTable = billData.accountlineItem;
                         if (billData.itemDetail && localStorage["usertype"] == 'UO') {
@@ -487,13 +510,16 @@
                             $scope.excelTableItemSum();
                             $scope.id = billData.id
                             $scope.totalAmountINR = $scope.excelTableItemSum() + $scope.accountTableSum();
+                            $scope.customBalance = Number(response.data.customBalance)
+                            $scope.dutyAmount1 = Number(response.data.customAmount)
                         }
                         if (billData.manualLineItem && localStorage["usertype"] == 'O') {
                             $scope.billtable = billData.manualLineItem;
                             $scope.totalAmountINR = $scope.manualTableSum() + $scope.accountTableSum();
                             $scope.id = billData.id
                             $scope.billData = billData
-                            $scope.customBalance = response.data.customBalance
+                            $scope.customBalance = Number(response.data.customBalance)
+                            $scope.dutyAmount1 = Number(response.data.customAmount)
                         }
                         if (!response.data.balance) {
                             $('#paymentStatus').show();
@@ -515,7 +541,7 @@
                             $scope.customCount = null;
                             $scope.custom = [];
                         }
-
+                       // $scope.customBalance = response.data.customBalance
                         $scope.paymentDays = billData.paymentDays
                         $scope.paymentLog = { data: "dfdgd" };
                         $scope.billNo = billData.no
@@ -524,8 +550,9 @@
                         $scope.supplier = { selected: { accountName: localStorage[billData.supliersId], id: billData.supliersId } };
                         $scope.purchaseAccounts = { selected: { accountName: localStorage[billData.purchaseAccountId], id: billData.purchaseAccountId } };
                         $scope.getSupplierDetail(billData.supliersId);
+                        $scope.getPartyDetail(billData.purchaseAccountId)
                         $scope.invoiceType1(billData.invoiceType);
-                        setDate($scope.billDate, billData.date);
+                        setDate($scope.billDate, billData.billDate);
                         setDate($scope.billDueDate, billData.billDueDate);
                         setDate($scope.actualDate, billData.actualDate);
                         $scope.attachements = billData.attachements;
@@ -550,6 +577,20 @@
     else {
         $scope.exchangeRate();
     }
+
+
+    function checkSalesTransction(invId) {
+        $http.get(config.login + "checkSalesTransaction" + "?invId=" + invId)
+                    .then(function (response) {
+                        if (response.data.status == 'can not update') {
+                          $scope.isUpdate = false
+                        }
+                        else {
+                            $scope.isUpdate = true
+                        }
+
+         });
+    }
     $scope.getNewData = function (type, data, e) {
         $scope.saveItem({ name: data, type: type });
         if ($(e.target).closest('.popover').length) {
@@ -558,6 +599,12 @@
             });
         }
     };
+    $scope.ticCustom = function (data) {
+        if (data) {
+            return "fa fa-check"
+        }
+        return
+    }
     $scope.saveCustom = function () {
         if ($scope.assesableValue) {
             $scope.billtable[$scope.tableIndex].assesableValue = $scope.assesableValue;
@@ -571,6 +618,9 @@
             $scope.billtable[$scope.tableIndex].dutyPerUnit = (Number($scope.exciseDuty1) / Number($scope.billtable[$scope.tableIndex].NETWEIGHT)).toFixed(2);
             $scope.billtable[$scope.tableIndex].sadPerUnit = (Number($scope.SAD1) / Number($scope.billtable[$scope.tableIndex].NETWEIGHT)).toFixed(2);
             $scope.sumtotalcustomData();
+            //$rootScope.$broadcast('event:success', { message: "Custom Saved " });
+            $scope.clearCustomField()
+
         }
         }
     
@@ -613,10 +663,15 @@
     // save bill 
     $scope.saving = false;
     
-        $scope.saveBill = function (index) {
-            var date = getDate($scope.billDate);
+        $scope.saveBill = function (reload) {
+            var billDate = getDate($scope.billDate);
             var billDueDate = getDate($scope.billDueDate);
-            var actualDate = moment(getDate($scope.actualDate)).format("DD/MM/YYYY");
+            var actualDate = getDate($scope.actualDate)
+            var date = getDate($scope.actualDate)
+            if ($scope.isUpdate == false) {
+                  $rootScope.$broadcast('event:error', { message: "Can't Update " });
+                  return;
+                }
             if ($scope.receiptCount > 0) {
                 $rootScope.$broadcast('event:error', { message: "Can't Update" });
                 return;
@@ -659,8 +714,8 @@
             var purchaseAmount;
 
             if (authService.userHasPermission('usertype:O')) {
-                var amount = $scope.manualTableSum() + $scope.accountTableSum();
-                purchaseAmount = $scope.manualTableSum()
+                var amount = Number($scope.totalAccountAmount) +$scope.manualTableSum();
+                purchaseAmount = $scope.totalAmountINR
                 var totalAmountINR = 0
                var amountInDollar = $scope.manualTotal
               var   balanceInDollar = $scope.manualTotal
@@ -669,7 +724,7 @@
             }
             if (authService.userHasPermission('usertype:UO')) {
                 purchaseAmount = $scope.excelTableItemSum();
-                var totalAmountINR = $scope.excelTableItemSum() + $scope.accountTableSum()
+                var totalAmountINR = $scope.totalAccountAmount + $scope.totalAmountINR;
                var  adminAmountInDollar = $scope.TOTALAMOUNTUSD
                var  adminBalanceInDollar = $scope.TOTALAMOUNTUSD
                 var amount = 0;
@@ -686,26 +741,41 @@
             //        $scope.billtable[i].actualDate = moment(getDate($scope.actualDate)).format("DD/MM/YYYY");
             //    }
             //}
-            
+            if (authService.userHasPermission('usertype:O')) {
+                isUo = false
+                visible = true
+                // paymentNo = $scope.paymentNo
+            }
+            if (authService.userHasPermission('usertype:UO')) {
+                isUo = true
+                visible = true
+                // paymentNo = "UO" + $scope.paymentNo
+            }
             var data = {
                 type: type,
                 state: "OPEN",
                 date: date,
-                amount: $scope.totalAmountINR.toFixed(2),
+                billDate:billDate,
+                amount: Number($scope.totalAmountINR.toFixed(2)),
                 compCode: localStorage.CompanyId,
                 role: localStorage['usertype'],
                 no: $scope.billNo,
                 vochNo: $scope.billNo,
+                isUo: isUo,
+                visible: visible,
+                username: authService.getAuthentication().username,
                 narration: $scope.narration,
                 customAmount: Number($scope.dutyAmount1),
                 customBalance:Number($scope.dutyAmount1),
                 transactionData: {
+                    roundOff: $scope.roundOff,
                     compCode: localStorage.CompanyId,
                     supliersId: $scope.supplier.selected.id,
                     email: $scope.email,
                     role: localStorage['usertype'],
                     currency: $scope.currency,
                     date: date,
+                    billDate:billDate,
                     billDueDate: billDueDate,
                     actualDate: actualDate,
                     ordertype: "BILL",
@@ -754,11 +824,15 @@
                 } else {
                     $http.post(config.login + "saveBillTest/" + $stateParams.billNo, data).then(function (response) {
                         if (response.status == 200) {
-                            $scope.saving = false;
-                           $rootScope.$broadcast('event:success', { message: "Purchase Invoice Created" });
-
-                            $stateParams.billNo = response.data
-                            $state.go('Customer.Bill',{ billNo: response.data},{location: 'replace' });
+                            $scope.saving = false;  
+                            $rootScope.$broadcast('event:success', { message: "Purchase Invoice Created" });
+                            if (reload == 'true') {
+                                $state.go('Customer.Bill', { billNo: null, billDate: billDate }, { location: 'replace' }, { reload: true });
+                            } else {
+                                $stateParams.billNo = response.data
+                                $state.go('Customer.Bill', { billNo: response.data }, { location: 'replace' });
+                            }
+                             
 
                         }
                         else {
@@ -915,6 +989,7 @@
         $scope.customTable1 = $scope.billtable;
         $('#CustomModalPopup').modal('show');
         $scope.sumtotalcustomData();
+        $scope.clearCustomField()
     },
     $(document).on("click", ".editable_text", function () {
         var original_text = $(this).text();
@@ -954,6 +1029,46 @@
         $scope.getCustomData(customData)
     }
     //calculate custom duty
+
+
+    $scope.clearCustomField = function () {
+        $scope.baseRate = null
+        $scope.baseValue = null
+        $scope.arshiyaCharge1 = null
+        $scope.InsuranceAndFreight1 = null
+        $scope.cifValue = null
+        $scope.customDuty1 = null
+        $scope.assesableValue = null
+        $scope.exciseDuty1 = null
+        $scope.eduCess1 = null
+        $scope.customCecAndEducess1 = null
+        $scope.dutyAmount = null
+        $scope.SAD1 = null
+        $scope.totalDutyAmt = null
+        $scope.customDatanew = null
+        $scope.arshiyaCharge1 = null
+        $scope.arshiyaCharge = null
+        $scope.assesableValue = null
+        $scope.exciseDuty1 = null
+        $scope.dutyAmount = null
+
+        $scope.totalDutyAmt = null
+        $scope.arshiyaCharge = null
+        $scope.InsuranceAndFreight = null
+        $scope.InsuranceAndFreight1 = null
+        $scope.cifValue = null
+        $scope.customDuty1 = null
+        $scope.customCecAndEducess = null
+        $scope.eduCess1 = null
+        $scope.exciseDuty = null
+        $scope.customDuty = null
+        $scope.eduCess = null
+        $scope.customCecAndEducess1 = null,
+        $scope.SAD = null
+        $scope.baseRate1 = null
+        $scope.totalQnt = null,
+        $scope.exchangeRateBill = null
+    }
     $scope.calculateCustom = function () {
         $scope.baseRate = $scope.baseRate1
         $scope.baseValue = Number($scope.baseRate1 * $scope.exchangeRateBill * $scope.totalQnt).toFixed(2)
@@ -1180,18 +1295,21 @@
         $scope.sadPerUnit = ($scope.sadAmount / $scope.lineItemnetweight).toFixed(2);
     }
     $scope.remarks.selected = { name: '' };
+    $scope.godown.selected = { name: '' };
     $scope.getRgNo = function (name) {
         var data = {
-            name: name
+            name: name,
+            TYPE: $scope.invoiceType
         }
-        $http.post(config.login + "getInventoryCount",data).then(function (response) {
+        $http.post(config.login + "getInventoryCount" + "?compCode=" + localStorage.CompanyId ,data).then(function (response) {
             $scope.RG = response.data.count + 1
-            $scope.rgCount = response.data.count
+            console.log(response.data)
+            $scope.rgCount = response.data.count + 1
         });
     }
-    var actualdate = moment(getDate($scope.actualDate)).format("DD/MM/YYYY");
+    
     $scope.addBillLineItem = function () {
-        
+        var actualdate = moment(getDate($scope.actualDate)).format("DD/MM/YYYY");
         //$scope.GODOWN.push({ type: "GODOWN", name: $scope.newitem });
         if ($scope.invoiceType == 'Import') {
             var billdata = {
@@ -1214,6 +1332,7 @@
                 purchaseRate: '',
                 dutyPerUnit: '',
                 sadPerUnit: '',
+                TYPE: $scope.invoiceType
             }
         }
         if ($scope.invoiceType == 'Domestic') {
@@ -1248,7 +1367,8 @@
                 sadRate: $scope.sadRate,
                 purchaseRate: $scope.lineItemBaseRate,
                 dutyPerUnit: $scope.exciseDutyPerUnit,
-                sadPerUnit: (Number($scope.sadAmount) / Number($scope.lineItemnetweight)).toFixed(2)
+                sadPerUnit: (Number($scope.sadAmount) / Number($scope.lineItemnetweight)).toFixed(2),
+                TYPE: $scope.invoiceType
             }
             $scope.manualTableSum();
         }
@@ -1317,7 +1437,7 @@
         }
     }
     $scope.clear = function ($event, $select) {
-        $event.stopPropagation();
+        //$event.stopPropagation();
         $select.selected = null;
         $select.search = undefined;
 
@@ -1407,10 +1527,10 @@
         }else{
             $scope.supplierType = " (Cr.)"
         }
-        var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
-        commonService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
-            if (response.data.openingBalance) {
-                $scope.supplierBalance = Math.abs(calculateOpenningBalnce(response.data.openingBalance, balanceType))
+       // var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
+        commonService.getOpeningBalance(data.id).then(function (response) {
+            if (response.data) {
+                $scope.supplierBalance = response.data.balance
             } else {
                 $scope.supplierBalance = 0.00;
             }
@@ -1421,7 +1541,7 @@
         }
       
         //$scope.mobile = data.mobile + "," + data.phone?
-        $scope.shippingAddress = data.billingAddress[0].street
+        $scope.shippingAddress = data.billingAddress?data.billingAddress[0].street:null
        
     }
     $scope.bindPurchaseLedgerDetail = function (data) {
@@ -1431,10 +1551,10 @@
         } else {
             $scope.purchaseType = " (Cr.)"
         }
-        var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
-        commonService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
-            if (response.data.openingBalance) {
-                $scope.purchaseLedgerBalance = calculateOpenningBalnce(response.data.openingBalance, balanceType)
+      //  var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
+        commonService.getOpeningBalance(data.id).then(function (response) {
+            if (response.data) {
+                $scope.purchaseLedgerBalance = response.data.balance
             }
             else {
                 $scope.purchaseLedgerBalance = 0.00;
@@ -1554,7 +1674,7 @@
     };
     //get existing bill
     $scope.getExistingBill = function (billNo) {
-        $http.get(config.login + "isVoucherExist/" + billNo).then(function (response) {
+        $http.get(config.login + "isVoucherExist/" + encodeURI(billNo)).then(function (response) {
             if(response.data.id) {
                 $scope.existingEnvoiceId = response.data.id
                 $('#invoiceExist').modal('show');        

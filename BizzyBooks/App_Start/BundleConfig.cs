@@ -48,10 +48,13 @@ namespace Restaurant
                    "~/js/bootstrap.min.js",
                     "~/js/moment/moment.js",
                    "~/js/progressbar/bootstrap-progressbar.min.js",
+                   "~/js/progressbar/ui-bootstrap-tpls-0.4.0.js",
 
                     "~/js/prefixfree.min.js",
                    "~/js/datepicker/daterangepicker.js",
                    "~/ScriptsAngular/Angular/angular.js",
+                    "~/js/Chart.js",
+                  "~/js/angular-charts.js",
                    "~/ScriptsAngular/Angular/angular-route.js",
                    "~/ScriptsAngular/Angular/angular-ui-router.js",
                    "~/ScriptsAngular/Angular/src/angular-sanitize.min.js",
@@ -108,7 +111,9 @@ namespace Restaurant
                                 "~/js/loading-bar.js",
                                 "~/js/bootstrap-datepicker.js",
                                 "~/js/daterangepicker.js",
-                                "~/js/jquery.toastmessage-min.js"
+                                "~/js/jquery.toastmessage-min.js",
+                                 "~/js/ng-infinite-scroll.min.js"
+                                  
 
 
 
@@ -135,7 +140,8 @@ namespace Restaurant
                  //"~/ScriptsAngular/Angular/angular-route.js",
                  //For test of Ui-Select
                  //"~/ScriptsAngular/Angular/src/angular-sanitize.min.js",
-
+                 "~/js/Chart.js",
+                  "~/js/angular-charts.min.js",
                  "~/js/Common.js",
                  "~/ScriptsAngular/app/App.js",
                  "~/ScriptsAngular/app/directives/permissionDirective.js",
@@ -204,7 +210,8 @@ namespace Restaurant
                   "~/ScriptsAngular/app/Controller/stockBalanceViewCntrl.js",
                   "~/ScriptsAngular/app/Controller/ContraEntryCntrl.js",
                   "~/ScriptsAngular/app/Controller/BalanceSheetCntrl.js",
-                 "~/ScriptsAngular/app/Controller/ProfitLossAccountCntrl.js"
+                 "~/ScriptsAngular/app/Controller/ProfitLossAccountCntrl.js",
+                  "~/ScriptsAngular/app/Controller/salesInventoryCntrl.js"
 
 
 

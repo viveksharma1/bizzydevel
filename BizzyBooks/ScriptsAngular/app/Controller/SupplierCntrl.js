@@ -62,19 +62,25 @@ myApp.controller('SupplierCntrl', ['$scope', '$http', '$timeout', '$stateParams'
     $scope.getPurchaseInvoice = function () {
         $http.get(config.login + 'getTransactionData/'+ localStorage.CompanyId + '?role=' + localStorage["usertype"] + "&type=Purchase Invoice").then(function (response) {
             $scope.purchaseInvoiceTable = response.data;
+            var totalAmount = 0
             for (var i = 0; i < $scope.purchaseInvoiceTable.length; i++) {
                 $scope.purchaseInvoiceTable[i].supplier = localStorage[$scope.purchaseInvoiceTable[i].supplier];
-            }         
+                totalAmount += $scope.purchaseInvoiceTable[i].amount
+            }
+            $scope.totalBill = totalAmount
         });
     }  
     //get expense data
     $scope.getExpense = function () {
         $http.get(config.login + 'getTransactionDataExpense/' + localStorage.CompanyId + '?role=' + localStorage["usertype"] + "&type=EXPENSE").then(function (response) {
             $scope.expenseTable = response.data;
+            var totalAmount = 0
             $scope.expenseCount = $scope.expenseTable.length
                 for (var i = 0; i < $scope.expenseTable.length; i++) {
                     $scope.expenseTable[i].supplier = localStorage[$scope.expenseTable[i].supplier];
+                    totalAmount += $scope.expenseTable[i].amount
                 }
+                $scope.totalExpense = totalAmount
             });  
     }
     //get supplier data

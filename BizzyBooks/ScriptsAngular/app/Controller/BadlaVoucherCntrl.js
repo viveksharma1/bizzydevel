@@ -34,6 +34,8 @@
 
                         //$scope.paymentdate = $filter('date')(response.data.date, 'dd/MM/yyyy');
                         //fill badla info if exists
+                        $scope.badlaData = response.data.vo_badla.billDetail[0]
+
 
                         $scope.badlaInfo = response.data.vo_badla.conditons;
                         calculateTotal();
@@ -52,7 +54,6 @@
 
 
                     });
-    }
     function calculateTotal() {
         var total = 0;
         for (var i = 0; i < $scope.voucherData.paymentLog.length; i++) {
@@ -60,6 +61,7 @@
         }
         
         $scope.totalInterest = total;
+    }
     }
     if ($stateParams.voId) {
         getVoucherInfo($stateParams.voId);

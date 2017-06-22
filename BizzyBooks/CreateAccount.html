@@ -24,9 +24,10 @@
                             <label><span class="red">*</span>Under</label>
                             <div>
 
-                                <ui-select ng-model="groupMasters.selected"  ui-select-focuser id="countryCode" theme="selectize" >
+                                <ui-select ng-model="groupMasters.selected"  ui-select-focuser id="countryCode" theme="selectize" on-select="getGroupData($select.selected)">
 
-                                    <ui-select-match placeholder="Choose Group"ng-click="clear($event, $select)">{{$select.selected.name}}</ui-select-match>
+                                    <ui-select-match placeholder="Choose Group">
+                                    <span class="selectuiTable" style="width:100%" ng-click="clear($event, $select)">{{$select.selected.name || $select.search}}</span></ui-select-match>
                                     <ui-select-choices repeat="person in groupMaster  | filter: $select.search">
                                         <div >
                                             <span style="color:black" ng-model="supplier1" ng-bind-html="person.name | highlight: $select.search">{{person.type}}</span>

@@ -119,6 +119,7 @@
                         <li><a ui-sref=".inventorystock" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Stock </a></li>
                         <li><a ui-sref=".BalanceInventory" style="font-size: 12px;  padding-left: 27px;  color: #57bbf0;">Balance  </a></li>*@
                         <li permission="Inventory.Balance Stock.active"><a ui-sref=".StockBalanceInventory" style="font-size: 12px;  padding-left: 27px;  color: black;"><b>- Stock Balance</b> </a></li>
+                        <li permission="Inventory.Balance Stock.active"><a ui-sref=".salesInventory" style="font-size: 12px;  padding-left: 27px;  color: black;"><b>- Sales Inventory </b> </a></li>
                         <li permission="Inventory.Balance Stock Line.active"><a ui-sref=".BalanceInventory" style="font-size: 12px;  padding-left: 27px;  color: black;"><b>- Line Item Balance</b></a></li>
 
                     </ul>
@@ -194,12 +195,12 @@
         <div class="container-fluid" >
             <div class="row">
 
-                <div class="cursor topbar" style="color:#0b4462;background:#C3EFF2">
+                <div class="cursor topbar" style="color:#0b4462;background:#fcf8e3">
                     <i class="fa fa-bars menutoggle" id="menutoggle"></i>
 
                     <ul class="list-unstyled topmenu">
-                        <li><a ui-sref=".SearchTransactions"><i class="fa fa-search" style="color:#50CDD6"></i></a></li>
-                        <li class="addrotate flytopbar"><i class="fa fa-plus"style="color:#50CDD6"></i> </li>
+                        <li><a ui-sref=".SearchTransactions"><i class="fa fa-search" style="color:#fcf8e3"></i></a></li>
+                        <li class="addrotate flytopbar"><i class="fa fa-plus"style="color:#fcf8e3"></i> </li>
                     </ul>
 
 
@@ -489,6 +490,7 @@
                                 </div>
                             </div>
                             <hr style="float:left; width:100%" />
+                            <button type="button" class="btn btn-sm btn-primary pull-left" ng-click="reset()">Reset</button>
                             <button type="button" class="btn btn-sm btn-primary pull-right" ng-click="setPeriod()">Search</button>
 
 

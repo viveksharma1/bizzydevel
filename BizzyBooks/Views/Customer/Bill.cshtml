@@ -27,7 +27,7 @@
   });
 </script>
 <script type="text/ng-template" id="popover_template.html">
-    <table style='width:100%'><tr><th>Date</th><th>Amount</th><th>Voch No.</th></tr><tr ng-repeat='data in datas' class="cursor" ui-sref="Customer.Receipt({voId:data.id,noBackTrack:true})"><td style="color:forestgreen">{{data.date|date:'dd/MM/yyyy'}}</td><td>Rs{{data.amount}}</td><td>{{data.vochNo}}</td></tr><tr></tr></table>
+    <table style='width:100%'><tr><th>Date</th><th>Amount</th><th>Voch No.</th></tr><tr ng-repeat='data in datas' class="cursor" ui-sref="Customer.Payment({voId:data.id,noBackTrack:true})"><td style="color:forestgreen">{{data.date|date:'dd/MM/yyyy'}}</td><td>Rs{{data.amount}}</td><td>{{data.vochNo}}</td></tr><tr></tr></table>
 </script>
 <script type="text/ng-template" id="exciseInfo_template.html">
     <span >
@@ -116,7 +116,7 @@
                 <label>Type  :</label>
                 <div class="btn-group btnhover">
                     <button type="button" id="import"class="btn btn-xs btn-default" ng-click="invoiceType1('Import')">Import</button>
-                    <button type="button" 
+                    <button type="button" id="Domestic" 
                             class="btn btn-xs  btn-default"ng-click="invoiceType1('Domestic')">Domestic</button>
 
                 </div>
@@ -167,7 +167,7 @@
 
             <div class="col-sm-4 padding" style="margin-left:10px">
 
-                <h4 class="tabheading font_11">Supplier <span class="pull-right" style="color:forestgreen" ><i class="fa fa-rupee"></i> {{supplierBalance |number : fractionSize}} <em style="color:red">{{supplierType}}</em></span></h4>
+                <h4 class="tabheading font_11">Supplier <span class="pull-right" style="color:forestgreen" ><i class="fa fa-rupee"></i> {{supplierBalance | number:2}} <em style="color:red">{{supplierType}}</em></span></h4>
                 <ui-select ui-tree-select ng-model="supplier.selected" id="countryCode" tabindex="1"
                            ui-select-focuser ng-init="$select.addnew=1;$select.type='buyer';" on-select="bindSupplierDetail($select.selected)"
                            theme="selectize" >
@@ -743,7 +743,7 @@
                                     <td class="filterable-cell" style="text-align:right">{{data.SAD| number:3}}</td>
                                     <td class="filterable-cell" style="text-align:right">{{data.totalDutyAmt| number:3}}</td>
 
-                                    <td class="filterable-cell" style="text-align:center; width:80px"><button type="button" ng-click="selectLineItem($index,data.BASERATE,data.NETWEIGHT,data.customData)" class="btn btn-xs btn-sm btn-primary">Edit</button></td>
+                                    <td class="filterable-cell" style="text-align:center; width:80px"><button type="button" ng-click="selectLineItem($index,data.BASERATE,data.NETWEIGHT,data.customData)" class="btn btn-xs btn-sm btn-primary">Edit <i  aria-hidden="true" ng-class="ticCustom(data.dutyAmount)"></i></button></td>
                                 </tr>
 
 
@@ -1572,7 +1572,7 @@
 
                             <th>
                                 <input type="text" id="arshiyaCharge"
-                                       ng-model="accountAmount" placeholder="AMOUNT" tabindex="20" only-digits class="form-control text-right" style="margin-top:-5px" />
+                                       ng-model="accountAmount" placeholder="AMOUNT" tabindex="20" class="form-control text-right" style="margin-top:-5px" />
                             </th>
                             <th style="text-align:center"><button ng-click="addAccount()" tabindex="21" class="btn btn-primary btn-sm">Add</button></th>
                         </tr>
@@ -1606,6 +1606,7 @@
                 </table>
                 <div class="pull-right" style="margin-right:60px; margin-top:5px">
                     <p class="text-right"></p>
+                    <h4> Round Off : <span style="width:160px; float:right; text-align:right">{{roundOff}}</span> </h4>
                     <h4 permission="usertype:O"> Total : <span style="width:160px; float:right; text-align:right" >{{(manualTableSum() + accountTableSum()) | number : 2}}</span> </h4>
                     <h4 permission="usertype:UO"> Total : <span style="width:160px; float:right; text-align:right" >{{(excelTableItemSum() + accountTableSum()) | number : 2}}</span> </h4>
 
@@ -1627,8 +1628,23 @@
         </span>
 
         <div class="pull-right">
-            <button type="button" ng-hide="saving" class="btn btn-sm btn-primary " ng-disabled="isDisabled" ng-click="saveBill()"> Save</button>
+           
             <button class="btn btn-sm btn-success"   ng-show="saving" id="loaderbtn" ng-disabled="isDisabled"><i class="fa fa-spin fa-spinner"></i> </button>
+            <span class="pull-right">
+                <div class="btn-group dropup">
+                    <button type="button" class="btn btn-sm btn-success" ng-click="saveBill()">Save</button>
+                    <button type="button" class="btn btn-warning btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:25px">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" style="right:-2px; background:radial-gradient() !important">
+                        <li><a href="" ng-click="saveBill()">Save</a></li>
+                        <li><a href="" ng-click="saveBill('true')">Save And New</a></li>
+
+                    </ul>
+
+                </div>
+
+            </span>
             <div class="btn-group dropup">
             </div>
         </div>

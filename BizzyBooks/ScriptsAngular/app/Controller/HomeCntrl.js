@@ -237,8 +237,20 @@ myApp.controller('HomeCntrl', ['$state', '$http', '$rootScope', '$scope', 'confi
             });
         }
     }
-
+    $scope.reset = function () {
+       
+            //var d = new Date(moment(new Date()).subtract(1, 'year'));
+            var d = new Date("04/01/2017");
+            d.setHours(0, 0, 0, 0);
+            localStorage.fromDate = d;
+            var d = new Date("03/31/2018");
+            d.setHours(23, 59, 59, 0);
+            localStorage.toDate = d;
+            $state.reload();
+      
+    }
     $scope.setPeriod = function () {
+        $("#flyoutDate").hide()
         var d = new Date(getDate($scope._fDate));
         d.setHours(0, 0, 0, 0);
         $scope.fromDate = d;
@@ -250,6 +262,8 @@ myApp.controller('HomeCntrl', ['$state', '$http', '$rootScope', '$scope', 'confi
 
         console.log("data in home", $scope.fromDate, $scope.toDate)
         //var _sDate =new  getDate($scope._fDate);
+
+
         //var _eDate = getDate($scope._tDate);
         $rootScope.$broadcast('date-changed', { fromDate: $scope.fromDate, toDate: $scope.toDate });
         

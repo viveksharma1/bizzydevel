@@ -3,15 +3,386 @@
     ViewBag.Title = "SalesInvoiceSattlement";
     Layout = null;
 }
-
+<style>
+    .popover.bottom > .arrow{left:27% !important}
+    .popover{width:auto !important;height:500px;overflow:auto}
+    .subpage{outline:1cm #f3f5f8 solid }
+    .page{padding:0px 10mm !important; border:1px !important}
+</style>
 <script type="text/ng-template" id="salesInfo_template.html">
-    <span>
+    <div>
+        <div id="printable" class="page" ng-hide="type =='1'">
+            <table id="table" style="border:1px solid #e3e3e3; vertical-align:top;" class="subpage" cellpadding="0" cellspacing="0">
+                <tr style="vertical-align:top">
+                    <td style="vertical-align:top; height:100px;border-bottom:1px solid #e3e3e3;">
+                        <table>
+                            <tr>
+                                <td style="border-right:1px solid #e3e3e3; vertical-align:top; padding:5px; width:200px; font-size:12px">
+                                    <p style="margin-bottom:2px">Authenticated by:</p>
+                                    <strong style="padding-bottom:100px">for {{ company.CompanyName}}</strong>
+                                    
+                                    <p style="margin-bottom:20px; padding-top:100px; text-align:center">Proprietor/Authorised Signatory</p>
+                                </td>
+                                <td style="border-right:1px solid #e3e3e3; vertical-align:top; padding:5px; text-align:center">
+                                    <h4 style="text-align:center; margin:10px 0px">EXCISE INVOICE</h4>
+                                    <h5 style="margin:0px">FIRST/SECOND STAGE DEALER'S INVOICE</h5>
+                                    <small>(Under Rule 11 (7) of Central Excise Rules 2002)</small>
+                                    <h1 style="font-size:18px; margin:5px; font-weight:bold;  text-transform:uppercase; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">{{ company.CompanyName}}</h1>
+                                    <p style="margin:0px">Office Add :{{company.CompanyAddress}}<br />Phone No. : {{company.CompanyMobileNo}} Fax : {{company.FaxNo}} <br />Prop : {{company.ProprietorName}}</p>
+                                </td>
+                                <td style="vertical-align:top; text-transform:uppercase; width:250px; font-size:12px; padding:3px 0px;   padding-bottom:20px">
+                                    <p style="margin-bottom:2px; padding:2px 5px">
+                                        Original For Buyer
+                                        <em style="width:20px; height:15px; border:1px solid #666; float:right"></em>
+                                    </p>
+                                    <p style="margin-bottom:2px;  padding:2px 5px">
+                                        Duplicate for transporter
+                                        <em style="width:20px; height:15px; border:1px solid #666; float:right"></em>
+                                    </p>
+                                    <p style="margin-bottom:2px;  padding:2px 5px; border-bottom:1px solid #e3e3e3">
+                                        triplicate for assets
+                                        <em style="width:20px; height:15px; border:1px solid #666; float:right"></em>
+                                    </p>
+                                    <p style="padding:2px 5px; margin-bottom:0px">Range : {{company.Range}} &nbsp; &nbsp; Division : {{company.Division}}</p>
+                                    <p style="padding:2px 5px; margin-bottom:0px; font-size:10px">Range & Div. Add.  &nbsp; &nbsp;: {{}}</p>
+                                    <table style="font-size:10px;">
 
-        <label style="color:#73A91B" ng-repeat="data in billdata.accountData">{{data.accountName}} <b style="color:#000"> {{data.amount}}</b> </label> <br>
+                                        <tr>
+                                            <td style="padding:2px 5px">Commissionerate</td>
+                                            <td style="padding:2px 5px">: {{company.Commisionerate}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:2px 5px">C.E.Regn No.</td>
+                                            <td style="padding:2px 5px">: {{company.CE_RegionNo}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:2px 5px">ECC Code No.</td>
+                                            <td style="padding:2px 5px">: {{company.ECC_Code_NO}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:2px 5px">PAN NO.</td>
+                                            <td style="padding:2px 5px">: {{company.PAN_NO}}</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr style="vertical-align:top">
+                    <td style="vertical-align:top; height:50px;border-bottom:1px solid #e3e3e3;">
+                        <table style="width:100%; vertical-align:top;" cellpadding="5" cellspacing="5">
+                            <tr>
+                                <td width="170" style="padding:2px 5px"><strong>INVOICE NO.</strong></td>
+                                <td width="300" style="padding:2px 5px"><strong>: {{invoiceData.exciseInvoiceNo}}</strong></td>
+
+                                <td width="160" style="padding:2px 5px"><strong>DATE</strong></td>
+                                <td style="padding:2px 5px; width:150px"><strong>: {{invoiceData.date|date:'dd-MMM-yyyy'}}</strong></td>
+                            </tr>
+                            <tr>
+                                <td style="padding:2px 5px">Date & Time of Issue</td>
+                                <td style="padding:2px 5px">: {{invoiceData.invoiceData.issueDate|date:'dd-MMM-yyyy h:mm a'}}</td>
+                                <td style="padding:2px 5px">Mode of Transport</td>
+                                <td style="padding:2px 5px">: {{invoiceData.invoiceData.modeTransport}}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:2px 5px">Date & Time of removal</td>
+                                <td style="padding:2px 5px">: {{invoiceData.invoiceData.removalDate|date:'dd-MMM-yyyy h:mm a'}}</td>
+                                <td style="padding:2px 5px">Vehicle No/Lr No.</td>
+                                <td style="padding:2px 5px">: {{invoiceData.invoiceData.vehicleNo}}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:2px 5px">Comm. Invoice No.</td>
+                                <td style="padding:2px 5px" colspan="3">: {{invoiceData.comInvoiceNo}} <span style="margin-left:50px">Date : {{invoiceData.date|date:'dd-MMM-yyyy'}}</span></td>
+
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr style="vertical-align:top">
+                    <td style="vertical-align:top; height:50px;">
+                        <table style="width:100%; vertical-align:top; font-size:12px">
+                            <tr>
+                                <td style="vertical-align:top; border-right:1px solid #e3e3e3; width:55%">
+                                    <table>
+                                        <tr>
+                                            <td style="padding:2px 5px; width:120px; vertical-align:top">Name & Add. of</td>
+                                            <td style="text-transform:uppercase; padding:2px 5px;"><strong>: {{supliersDetail2.accountName}}</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:2px 5px; vertical-align:top">Consignee</td>
+                                            <td style="text-transform:uppercase; padding:2px 5px 10px 10px">{{supliersDetail2.billingAddress[0].street}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:2px 5px; vertical-align:top">Range </td>
+                                            <td>
+                                                <table style="width:100%">
+                                                    <tr>
+                                                        <td style="padding:2px 5px; vertical-align:top; width:90px">: {{supliersDetail2.taxInfo.range}}</td>
+                                                        <td style="padding:2px 5px; vertical-align:top; width:137px">Divison :</td>
+                                                        <td style="padding:2px 5px; vertical-align:top">{{supliersDetail2.taxInfo.division}}</td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:2px 5px; vertical-align:top">ECC No. </td>
+                                            <td style="vertical-align:top">
+                                                <table style="width:100%; white-space:nowrap">
+                                                    <tr>
+                                                        <td style="padding:2px 5px; vertical-align:top; width:90px">: {{supliersDetail2.taxInfo.eccCodeNo}}</td>
+                                                        <td style="padding:2px 5px; vertical-align:top; white-space:nowrap">Comisionerate :</td>
+                                                        <td style="padding:2px 5px; vertical-align:top">{{supliersDetail2.taxInfo.commisionerate}}</td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:2px 5px;vertical-align:top">Excise Reg. No.</td>
+                                            <td style="text-transform:uppercase; padding:2px 5px">: {{supliersDetail2.taxInfo.exRegNo}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:2px 5px; vertical-align:top">Consignee VAT TIN</td>
+                                            <td style="text-transform:uppercase; padding:2px 5px">: {{supliersDetail2.taxInfo.taxRegNo}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:2px 5px; vertical-align:top">Consignee CST</td>
+                                            <td style="text-transform:uppercase; padding:2px 5px">: {{supliersDetail2.taxInfo.cstRegNo}}</td>
+                                        </tr>
+                                    </table>
+                                </td>
+
+                                <td style="vertical-align:top; width:45%">
+                                    <table>
+                                        <tr>
+                                            <td style="padding:2px 5px; width:120px; vertical-align:top">Name & Add. of</td>
+                                            <td style="text-transform:uppercase; padding:2px 5px;"><strong>: {{supliersDetail.accountName}}</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:2px 5px; vertical-align:top">of Buyer</td>
+                                            <td style="text-transform:uppercase; padding:2px 5px 10px 10px">{{supliersDetail.billingAddress[0].street}}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="padding:2px 5px; vertical-align:top">ECC No. </td>
+                                            <td style="text-transform:uppercase; padding:2px 5px">
+                                                : {{supliersDetail.taxInfo.eccCodeNo}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:2px 5px;vertical-align:top">Excise Reg. No.</td>
+                                            <td style="text-transform:uppercase; padding:2px 5px">: {{supliersDetail2.taxInfo.exRegNo}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:2px 5px; vertical-align:top">Buyer VAT TIN</td>
+                                            <td style="text-transform:uppercase; padding:2px 5px">: {{supliersDetail.taxInfo.taxRegNo}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:2px 5px; vertical-align:top">Buyer CST</td>
+                                            <td style="text-transform:uppercase; padding:2px 5px">: {{supliersDetail.taxInfo.cstRegNo}}</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+
+                </tr>
+
+                <tr style="vertical-align:top">
+                    <td style="vertical-align:top; height:100px">
+                        <table style="vertical-align:top; width:100%; font-size:11px; border-left:none; border-right:none; border-color:rgba(227, 227, 227, 0.44)" border="1">
+                            <tr style="text-align:center; vertical-align:top">
+                                <td style="padding:3px">Sr No.</td>
+                                <td style="padding:3px; width:200px">Description of Goods</td>
+                                <td style="padding:3px">ID Marks & No.</td>
+                                <td style="padding:3px">Page No. In RG23D</td>
+                                <td style="padding:3px">Quantity Kgs</td>
+                                <td style="padding:3px">Rate</td>
+                                <td style="padding:3px">Tariff No.</td>
+                                <td style="padding:3px; width:80px">Rate of Duty %</td>
+                                <td style="padding:0px; font-size:11px; width:300px">
+                                    Duty Per Unit/Total Amtount of Duty
+                                    <table style="vertical-align:top; width:100%; height:51px;border-bottom:none; font-size:12px; border-left:none; border-right:none; border-color:rgba(227, 227, 227, 0.44); border-bottom:none; margin-bottom:0px" border="1">
+                                        <tr style="vertical-align:top">
+                                            <td style="padding:3px; width:120px">Excise</td>
+                                            <td style="padding:3px;width:120px">Cess <br />2%</td>
+                                            <td style="padding:3px;width:120px">HCess<br /> 1%</td>
+                                            <td style="padding:3px;width:120px">AddDuty 4%</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td style="padding:3px">Value in Rs. (in figures)</td>
+                            </tr>
+                            <tr style="text-align:center; vertical-align:top" ng-repeat="item in invoiceData.invoiceData.billData">
+                                <td style="padding:3px;">{{$index+1}}</td>
+                                <td style="padding:3px; text-transform:uppercase">{{item.DESCRIPTION}}</td>
+                                <td style="padding:3px">&nbsp;</td>
+                                <td style="padding:3px"></td>
+                                <td style="padding:3px; text-align:right">{{item.itemQty}}</td>
+                                <td style="padding:3px; text-align:right">{{item.itemRate}}</td>
+                                <td style="padding:3px">{{}}</td>
+                                <td style="padding:3px; text-align:right">{{item.dutyAmount/item.NETWEIGHT |number : 2}}</td>
+                                <td style="padding:0px; font-size:11px; width:250px">
+                                    <table style="vertical-align:top; width:100%; font-size:12px; border-left:none; border-right:none; border-color:rgba(227, 227, 227, 0.44); border-top:none; border-bottom:none; margin-bottom:0px" border="1">
+                                        <tr style="vertical-align:top">
+                                            <td style="padding:3px; text-align:right;width:67px; border:none">
+                                                <p style="margin-bottom:2px">{{item.dutyPerUnit |number : 2}}</p>
+                                                @*<p style="margin-bottom:2px">0.00</p>*@
+                                            </td>
+                                            <td style="padding:3px; text-align:right;width:81px; border:none; border-left:1px solid #e3e3e3">
+                                                <p style="margin-bottom:2px">0.00</p>
+                                                @*<p style="margin-bottom:2px">0.00</p>*@
+                                            </td>
+                                            <td style="padding:3px; text-align:right;width:93px; border:none; border-left:1px solid #e3e3e3">
+                                                <p style="margin-bottom:2px">0.00</p>
+                                                @*<p style="margin-bottom:2px">0.00</p>*@
+                                            </td>
+                                            <td style="padding:3px; text-align:right;width:100px; border:none; border-left:1px solid #e3e3e3">
+                                                <p style="margin-bottom:2px">{{item.sadPerUnit|number : 2}}</p>
+                                                @*<p style="margin-bottom:2px">0.00</p>*@
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td style="padding:3px; text-align:right">{{item.itemAmount}}</td>
+                            </tr>
+
+                            <tr style="text-align:center; vertical-align:top">
+                                <td style="padding:3px; text-align:left" colspan="4"><strong>Total</strong></td>
+                                <td style="padding:3px; text-align:right"><strong>{{totalQty}}</strong></td>
+                                <td style="padding:3px; text-align:right" colspan="3">&nbsp;</td>
+                                <td style="padding:0px; font-size:11px; width:250px">
+                                    <table style="vertical-align:top; width:100%; font-size:12px; border-left:none; border-right:none; border-color:rgba(227, 227, 227, 0.44); border-top:none; border-bottom:none; margin-bottom:0px" border="1">
+                                        <tr style="vertical-align:top">
+                                            <td style="padding:3px; text-align:right;width:68px;border:none">
+                                                <p><strong>{{totalExciseAmount}}</strong></p>
+
+                                            </td>
+                                            <td style="padding:3px; text-align:right;width:81px;border:none; border-left:1px solid #e3e3e3">
+                                                <p style="margin-bottom:2px"><strong>0.00</strong></p>
+                                            </td>
+                                            <td style="padding:3px; text-align:right;width:93px;border:none; border-left:1px solid #e3e3e3">
+                                                <p style="margin-bottom:2px"><strong>0.00</strong></p>
+                                            </td>
+                                            <td style="padding:3px; text-align:right;width:100px;border:none; border-left:1px solid #e3e3e3">
+                                                <p style="margin-bottom:2px"><strong>{{totalSADAmount}}</strong></p>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td style="padding:3px; text-align:right"><strong>{{totalAmount}}</strong> </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr style="vertical-align:top">
+                    <td style="vertical-align:top; padding:5px; font-size:12px">
 
 
+                        @*<table style="width:100%">
+                            <tr style="vertical-align:top" ng-repeat="acc in invoiceData.invoiceData.accountlineItem">
+                                <td style="text-align:right">{{acc.account.accountName}} {{acc.account.rate}}%</td>
+                                <td style="text-align:right; width:100px">{{acc.amount}}</td>
+                                </tr>
+                            </table>*@
 
-    </span>
+
+                        <table style="width:100%">
+                            <tr style="vertical-align:top" ng-repeat="acc in invoiceData.invoiceData.accountlineItem">
+                                <td><strong style="width:130px;"></strong></td>
+                                <td style="text-transform:uppercase"></td>
+                                <td width="100">{{acc.account.accountName}} @@ {{acc.account.rate}}%</td>
+                                <td style="text-align:right">{{acc.amount}}</td>
+                            </tr>
+
+                            <tr style="vertical-align:top">
+                                <td><strong style="width:130px;">Excise Amount:</strong></td>
+                                <td style="text-transform:capitalize">{{totalExciseAmount|words}}</td>
+                                <td width="100"></td>
+                                <td style="text-align:right"></td>
+                            </tr>
+                            <tr style="vertical-align:top">
+                                <td><strong style="width:130px;">Aed Amount:</strong></td>
+                                <td style="text-transform:capitalize">{{totalSADAmount|words}}</td>
+                                <td width="100">Freight</td>
+                                <td style="text-align:right">{{}}</td>
+                            </tr>
+                            <tr style="vertical-align:top">
+                                <td><strong style="width:130px;">Cess Amount:</strong></td>
+                                <td style="text-transform:capitalize">{{totalCessAmount|words}}</td>
+                                <td width="100">Round Off</td>
+                                <td style="text-align:right">{{roundOff|number:2}}</td>
+
+                            </tr>
+                            <tr style="vertical-align:top">
+                                <td><strong style="width:130px;">H Cess Amount:</strong></td>
+                                <td style="text-transform:uppercase">{{totalHcessAmount|words}}</td>
+                                <td width="100" style="border-top:1px solid #e3e3e3; border-bottom:1px solid #e3e3e3"><strong>Invoice Total</strong></td>
+                                <td style="text-align:right; border-top:1px solid #e3e3e3; border-bottom:1px solid #e3e3e3"><strong>{{gTotal}}</strong></td>
+                            </tr>
+                            @*<tr style="vertical-align:top">
+                                    <td><strong style="width:130px;">Invoice Total:</strong></td>
+                                    <td style="text-transform:uppercase">{{gTotal|words}}
+
+                                </tr>*@
+
+                        </table>
+                        <table style="width:100%">
+                            <tr style="vertical-align:top">
+                                <td style="padding-top:4px"><strong style="width:130px;">Invoice Total:</strong></td>
+                                <td style="padding-top:4px; text-transform:capitalize">{{gTotal|words}}
+
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align:top; border-top:1px solid #e3e3e3">
+                        <table style="width:100%; font-size:12px; text-align:justify">
+                            <tr>
+                                <td style="border-right:1px solid #e3e3e3; padding:2px 5px; vertical-align:top; width:33.3%">
+                                    <strong>CERTIFICATION</strong>
+                                    <p>
+                                        Certified the goods covered under this invoice were,(a) imported directly by us or received directly from that party, who have imporanted the said goods,(b) Received directly from the factor/depot/consignment agent/authorised permises of M/s. <strong>{{supliersDetail.accountName}}</strong> (C) Received from M/s. <strong>{{supliersDetail.accountName}}. ({{supliersDetail.ProprietorName}})</strong> who are the first stage dealer of
+                                    </p>
+                                    <p>M/s <strong>{{supliersDetail.accountName}}</strong></p>
+
+                                    <p style="margin-top:42px">
+                                        <span>Place: </span>
+                                        <span style="float:right">
+                                            Date:
+                                        </span>
+                                    </p>
+                                </td>
+                                <td style="border-right:1px solid #e3e3e3; padding:2px 5px; vertical-align:top; width:33.3%">
+                                    <p>
+                                        VAT TIN NO. : {{company.TIN_NO}}
+                                    </p>
+
+                                    <p>
+                                        CST TIN NO. : {{company.CST_NO}}
+                                    </p>
+                                    <strong style="width:100%; float:left; text-align:center; border-bottom:1px solid #e3e3e3">Subject to Mumbai Jurisdiction</strong>
+                                    <p style="width:100%; float:left; border-bottom:1px solid #e3e3e3; padding:10px 0px 23px 0px">Certified that the particulars given above are true and correct and the amount indicated represents the price actually charged and that there is no additional consideration following directly or indirectly from the buyer.</p>
+                                    <p>FOR <strong>{{company.CompanyName}}</strong></p>
+                                    <p style="margin-top:20px">Proprietor/Authorised Signatory</p>
+                                </td>
+                                <td style="padding:2px 5px; vertical-align:top; width:33.3%">
+                                    <p style="width:100%; float:left; border-bottom:1px solid #e3e3e3; padding-bottom:20px">
+                                        'I/We hereby certify that my/our registration certification under the Maharashtra Value Added Tax Act, 2002 is in force on the date on which sale of goods specified in this tax invoice is made by me/us and that the transaction of sale covered by this Tax invoice has been effected by me/us and it shall be accounted for in the turnover of sales while filing my return and the due tax. If any payable on the sale has been paid or shall be paid.<br />
+
+                                    </p>
+                                    <p>FOR <strong>{{company.CompanyName}}</strong></p>
+                                    <p style="margin-top:20px">Proprietor/Authorised Signatory</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
 
 </script>
 
@@ -81,10 +452,7 @@
                     <input type="text" class="form-control" ng-model="settlementData.totalAmount" disabled />
 
                 </div>
-                <div class="col-sm-1 padding">
-                    <button type="button" style="margin-top:26px" class="btn btn-sm btn-primary" sales-Info billdata="settlementData" exciseData="settlementData">view</button>
-
-                </div>
+                
             </div>
 
             <div class="col-sm-1 padding">
@@ -93,11 +461,27 @@
                 <input type="text" class="form-control" ng-model="settlementData.vatAmount" />
 
             </div>
+            <div class="col-sm-1 padding">
+
+                <h4 class="tabheading font_11">VAT %</h4>
+                <input type="text" class="form-control" ng-model="vat" />
+
+            </div>
+            <div class="col-sm-1 padding">
+
+                <h4 class="tabheading font_11">Less Per Kg</h4>
+                <input type="text" class="form-control" ng-model="lessPerkg" />
+
+            </div>
 
             <div class="col-sm-1 padding">
 
                 <h4 class="tabheading font_11">Excise Amount</h4>
                 <input type="text" class="form-control" ng-model="settlementData.exciseAmount" />
+
+            </div>
+            <div class="col-sm-1 padding">
+                <button type="button" style="margin-top:26px" class="btn btn-sm btn-info" sales-Info billdata="invoiceId" exciseData="settlementData">View Invoice</button>
 
             </div>
 
@@ -136,7 +520,7 @@
         </div>
 
         <div class="col-sm-4 padding">
-            <div class="Settelmentbox">
+            @*<div class="Settelmentbox">
                 <h3><input type="radio" name="deduction" ng-click="selectBox('perKg')" class="Settelment_Radio" /> Ded/Kg</h3>
                 <hr />
                 <div class="col-sm-4">
@@ -163,6 +547,51 @@
                     <input type="text" class="form-control" ng-blur="vatDedPerkg()" ng-model="settlementData.totalLessPerKg" ng-disabled="isDisabled1" />
                 </div>
 
+            </div>*@
+            <div class="col-sm-12 Settelmentbox">
+                <h3><input type="radio" name="deduction" ng-click="selectBox('perKg')" class="Settelment_Radio" /> Ded/Kg</h3>
+                    <table class="table-bordered table-condensed table-hover " id="ItemTable">
+                        <thead style="width:70px">
+                            <tr>
+
+                                <th style="text-align:center">VAT /kg</th>
+                                <th style="text-align:center">Excise /kg</th>
+                                <th style="text-align:center">Total /kg</th>
+                                <th style="text-align:center">Less/kg </th>
+                                <th style="text-align:center">Total </th>
+                               
+
+                            </tr>
+                        </thead>
+                        <tbody ng-repeat="item in vatData">
+                            <tr>
+
+
+                                <td class="Count"><input style="text-align:center" ng:model="item.varPerKg" class="form-control" value="0.00" ng:required ng:validate="number" style="border:none;" /></td>
+                                <td class="Count"><input style="text-align:center" ng:model="item.excisePerKg" class="form-control" value="0.00" ng:required ng:validate="number" style="border:none;" /></td>
+                                <td class="Count"><input style="text-align:center" ng:model="item.totalPerKg" class="form-control" value="0.00" ng:required ng:validate="number" style="border:none;" /></td>
+                                <td class="Count"><input style="text-align:center" ng:model="item.less" class="form-control" value="0.00" ng:required ng:validate="number" style="border:none;" /></td>
+                                <td class="Count"><input style="text-align:center" ng:model="item.total" class="form-control" value="0.00" ng:required ng:validate="number" style="border:none;" /></td>
+                              
+                                
+                            </tr>
+                            
+
+
+                        </tbody>
+                        <tr>
+                            <th style="text-align:center"></th>
+                            <th style="text-align:center"></th>
+                            <th style="text-align:center"></th>
+                            <th style="text-align:center">Total</th>
+                            <th style="text-align:center">{{settlementData.totalLessPerKg | number:2}} </th>
+                        </tr>
+                    </table>
+
+                    
+
+
+               
             </div>
         </div>
 

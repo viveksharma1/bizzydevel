@@ -74,7 +74,7 @@
                 </thead>
                 <tbody>
                      <tr ng-repeat="data in userActivityLog">
-                         <td style="color:#3F9532">{{data.date}}</td>
+                         <td style="color:#3F9532">{{data.date | date:"medium"}} </td>
                          <td  style="color:#383B92">{{data.activityType}} </td>
                          <td>{{data.vochNo}}</td>
                          <td style="color:#C40C20" ><b>{{data.username | filter : upercase}}</b></td>

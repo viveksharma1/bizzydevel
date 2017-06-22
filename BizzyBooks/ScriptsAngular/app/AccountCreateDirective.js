@@ -8,7 +8,7 @@
             templateUrl: 'CreateAccount.html',
             transclude: true,
             replace: true,
-            controller: ['$scope', '$http', '$rootScope', 'config','$timeout', function ($scope, $http, $rootScope, config, $timeout) {
+            controller: ['$scope', '$http', '$rootScope', 'config', '$timeout', 'authService', function ($scope, $http, $rootScope, config, $timeout, authService) {
                 $(".my a").click(function (e) {
                     e.preventDefault();
                 });
@@ -33,7 +33,7 @@
 
                 });
                 $scope.clear = function ($event, $select) {
-                    $event.stopPropagation();
+                  //  $event.stopPropagation();
                     $select.selected = null;
                     $select.search = undefined;
 
@@ -121,6 +121,10 @@
                             $scope.accountId = $scope.value.id
                             $http.get(config.login + "getAccountOpeningBalnce/" + localStorage.CompanyId + "?accountId=" + $scope.accountId + "&role=" + localStorage.usertype).then(function (response) {
                                 $scope.openingBalance = Number(response.data.balance);
+                                $scope.obType = response.data.type
+                                if ($scope.openingBalance == 0) {
+                                    $scope.obType = $scope.value.balanceType;
+                                }
 
                             });
                             console.log($scope.value);
@@ -129,7 +133,7 @@
 
                             $scope.groupMasters = { selected: { name: $scope.value.Under } };
                             $scope.groupMasters.selected.type = $scope.value.type;
-                            $scope.obType = $scope.value.obType;
+                            
                             $scope.balanceType = $scope.value.balanceType;
                             $scope.email = $scope.value.email;
                             
@@ -178,11 +182,12 @@
                         clearScope();
                     }
                 });
-                $scope.$watch('groupMasters.selected', function () {
-                    if ($scope.groupMasters.selected)
-                        $scope.balanceType = $scope.groupMasters.selected.balanceType;
-                        $scope.obType = $scope.groupMasters.selected.balanceType;
-                });
+                // $scope.$watch('groupMasters.selected', function () {
+                $scope.getGroupData = function (data) {
+                    $scope.balanceType = data.balanceType;
+                    $scope.obType = data.balanceType;
+                    // });
+                }
                 $scope.createGroupBtn = function () {
 
                     $scope.isDisabled = true;
@@ -213,6 +218,7 @@
                             OBalance = true
                           }
                         var accountData = {
+                            username: authService.getAuthentication().username,
                             compCode: [localStorage.CompanyId],
                             accountName:    $scope.accountName.toUpperCase(),
                             Under:          $scope.groupMasters.selected.name,

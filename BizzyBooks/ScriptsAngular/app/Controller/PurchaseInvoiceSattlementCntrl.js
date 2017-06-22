@@ -44,14 +44,19 @@
     $scope.isDisabled1 = false;
     $scope.selectBox = function(type) {
         if (type == "interest") {
+            $('#interest').addClass('active');
+
             $scope.isDisabled = false;
             $scope.isDisabled1 = true;
             
         }
         if (type == "perKg") {
-            $scope.settlementData.vatPerKg = Number((Number($scope.settlementData.vatAmount) / Number($scope.settlementData.totalQty)).toFixed(2))
-            $scope.settlementData.excisePerKg = Number((Number($scope.settlementData.exciseAmount) / Number($scope.settlementData.totalQty)).toFixed(2))
-            $scope.settlementData.totalDedPerKg = ((Number($scope.settlementData.vatAmount) + Number($scope.settlementData.exciseAmount)) / Number($scope.settlementData.totalQty)).toFixed(2)
+            $('#perKg').addClass('active');
+            $scope.vatPerKg = true
+           // $scope.settlementData.vatPerKg = Number((Number($scope.settlementData.vatAmount) / Number($scope.settlementData.totalQty)).toFixed(2))
+          //  $scope.settlementData.excisePerKg = Number((Number($scope.settlementData.exciseAmount) / Number($scope.settlementData.totalQty)).toFixed(2))
+           // $scope.settlementData.totalDedPerKg = ((Number($scope.settlementData.vatAmount) + Number($scope.settlementData.exciseAmount)) / Number($scope.settlementData.totalQty)).toFixed(2)
+            calculateDedPerKg(type);
             $scope.isDisabled1 = false;
                 $scope.isDisabled = true;
             }
@@ -91,8 +96,13 @@
             $scope.supplierName = localStorage[$scope.settlementData.supplier];
             $scope.supplierName = localStorage[$scope.settlementData.supplier];
             $scope.vatAccount.selected = $scope.settlementData.vatAccount
+            $scope.vat = $scope.settlementData.vat
+            $scope.lessPerkg = $scope.settlementData.lessPerkg
             $scope.vatAccount = { selected: { accountName: localStorage[$scope.settlementData.vatAccount], id: $scope.settlementData.vatAccount } };
             $scope.otaxAccount = { selected: { accountName: localStorage[$scope.settlementData.otaxAccount], id: $scope.settlementData.otaxAccount } };
+           
+
+            $scope.selectBox(response.data.dedType)
         });
     }
     else {
@@ -102,8 +112,8 @@
     $scope.saveSettlement = function () {
 
         $rootScope.$broadcast('event:progress', { message: "Please wait while processing.." });
-        if ($scope.settlementData.vatPerKg) {
-            $scope.settlementData.ledgerDataFirst = { amount: $scope.settlementData.vatAmountPerKg, accountId: $scope.settlementData.supplier }
+        if ($scope.vatPerKg) {
+            $scope.settlementData.ledgerDataFirst = { amount: $scope.settlementData.totalLessPerKg, accountId: $scope.settlementData.supplier }
         }
         else {
             $scope.settlementData.ledgerDataFirst = { amount: $scope.settlementData.interestAmount, accountId: $scope.settlementData.supplier }
@@ -115,10 +125,16 @@
                 $scope.settlementData.ledgerDataThird = { amount: $scope.settlementData.totalDedExciseAmount, accountId: $scope.otaxAccount.selected.id }
                 
             }
-        $scope.settlementData.compCode = localStorage.CompanyId
+            $scope.settlementData.vat = $scope.vat
+            $scope.settlementData.lessPerkg = $scope.lessPerkg
+            $scope.settlementData.compCode = localStorage.CompanyId
+            $scope.settlementData.dedType = $scope.dedType
         $scope.settlementData.invoiceNo = $scope.invoiceNo
+        $scope.settlementData.vochNo = $scope.invoiceNo
         $scope.settlementData.vatAccount = $scope.vatAccount.selected.id
         $scope.settlementData.type = "Purchase Settelment"
+        $scope.settlementData.isUo = "true"
+        $scope.settlementData.visible = "true"
         $scope.settlementData.otaxAccount = $scope.otaxAccount.selected.id
         delete $scope.settlementData._id;
         
@@ -190,21 +206,24 @@
         //$scope.settlementData.vatAmountPerKg = totalDedvatAmount
        
     //
-    $scope.vatDedPerkg = function () {
-        $scope.settlementData.totalLessPerKg = (Number((Number($scope.settlementData.totalDedPerKg) - Number($scope.settlementData.lessPerKg))) * Number($scope.settlementData.totalQty)).toFixed(2)
-        $scope.settlementData.totalDedvatAmount = Number($scope.settlementData.vatAmount) > Number($scope.settlementData.totalLessPerKg) ? $scope.settlementData.totalLessPerKg : $scope.settlementData.vatAmount
-        $scope.settlementData.totalDedExciseAmount = Number($scope.settlementData.totalLessPerKg) > Number($scope.settlementData.vatAmount) ?Number($scope.settlementData.totalLessPerKg) - Number($scope.settlementData.totalDedvatAmount): 0
+    //$scope.vatDedPerkg = function () {
+    //    $scope.settlementData.totalLessPerKg = (Number((Number($scope.settlementData.totalDedPerKg) - Number($scope.settlementData.lessPerKg))) * Number($scope.settlementData.totalQty)).toFixed(2)
+    //    $scope.settlementData.totalDedvatAmount = Number($scope.settlementData.vatAmount) > Number($scope.settlementData.totalLessPerKg) ? $scope.settlementData.totalLessPerKg : $scope.settlementData.vatAmount
+    //    $scope.settlementData.totalDedExciseAmount = Number($scope.settlementData.totalLessPerKg) > Number($scope.settlementData.vatAmount) ?Number($scope.settlementData.totalLessPerKg) - Number($scope.settlementData.totalDedvatAmount): 0
 
-    }
+    //}
     function calculateTotalQty(data) {
         if (data) {
             var qty = 0;
             var excise = 0;
+            var AMOUNTINR = 0 
             for (var i = 0; i < data.length; i++) {
                 qty += data[i].NETWEIGHT;
                 excise += Number(data[i].dutyAmount);
+                AMOUNTINR += Number(data[i].AMOUNTINR);
             }
             $scope.settlementData.exciseAmount = excise
+            $scope.settlementData.totalAmount = AMOUNTINR
             console.log($scope.excise)
             return qty;
         }
@@ -212,6 +231,26 @@
             return
         }
       
+
+    }
+    function calculateDedPerKg(type) {
+        $scope.dedType = type
+        var data = $scope.settlementData.totalLineItemData
+        var obj1 = {}
+        var obj2 = {}
+        var obj3 = {}
+        var vatData = []
+        var vatPerKg
+        var total = 0;
+        for (var i = 0; i < data.length; i++) {
+            vatPerKg = (Number(data[i].BASERATE) * Number($scope.vat)) / 100;
+            vatData.push({ varPerKg: vatPerKg, excisePerKg: data[i].dutyPerUnit, totalPerKg: Number(data[i].dutyPerUnit) + Number(vatPerKg), less: $scope.lessPerkg, total: Number(((Number(data[i].dutyPerUnit) + Number(vatPerKg) - Number($scope.lessPerkg)) * Number(NETWEIGHT.toFixed(2))).toFixed(2)) })
+            total += Number(vatData[i].total)
+        }
+        $scope.vatData = vatData
+        $scope.settlementData.totalLessPerKg = Number(total)
+        $scope.settlementData.totalDedvatAmount = Number($scope.settlementData.vatAmount) > Number($scope.settlementData.totalLessPerKg) ? $scope.settlementData.totalLessPerKg : $scope.settlementData.vatAmount
+        $scope.settlementData.totalDedExciseAmount = Number($scope.settlementData.totalLessPerKg) > Number($scope.settlementData.vatAmount) ? Number($scope.settlementData.totalLessPerKg) - Number($scope.settlementData.totalDedvatAmount) : 0
 
     }
     $scope.bindSupplierName = function(supplierId) {
@@ -235,10 +274,10 @@
         } else {
             $scope.supplierType = " (Cr.)"
         }
-        var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
-        commonService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
-            if (response.data.openingBalance) {
-                $scope.vatAccountBalance = Math.abs(calculateOpenningBalnce(response.data.openingBalance, balanceType))
+       // var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
+        commonService.getOpeningBalance(data.id).then(function (response) {
+            if (response.data) {
+                $scope.vatAccountBalance = response.data.balance
             } else {
                 $scope.vatAccountBalance = 0.00;
             }
@@ -252,10 +291,10 @@
         } else {
             $scope.supplierType = " (Cr.)"
         }
-        var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
-        commonService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
-            if (response.data.openingBalance) {
-                $scope.oTaxBalance = Math.abs(calculateOpenningBalnce(response.data.openingBalance, balanceType))
+       // var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
+        commonService.getOpeningBalance(data.id).then(function (response) {
+            if (response.data) {
+                $scope.oTaxBalance = response.data.balance
             } else {
                 $scope.oTaxBalance = 0.00;
             }

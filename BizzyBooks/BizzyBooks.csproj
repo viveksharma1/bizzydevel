@@ -260,6 +260,7 @@
     <Content Include="js\accordion.min.js" />
     <Content Include="js\alertify.js" />
     <Content Include="js\angular-charts.js" />
+    <Content Include="js\angular-charts.min.js" />
     <Content Include="js\angular-datatables.min.css" />
     <Content Include="js\angular-fusioncharts.min.js" />
     <Content Include="js\bootstrap-datepicker.js" />
@@ -320,6 +321,7 @@
     <Content Include="js\moment.js" />
     <Content Include="js\moment\moment.js" />
     <Content Include="js\moment\moment.min.js" />
+    <Content Include="js\ng-infinite-scroll.min.js" />
     <Content Include="js\ng-jsoneditor.js" />
     <Content Include="js\ngtimeago.js" />
     <Content Include="js\nprogress.js" />
@@ -328,6 +330,7 @@
     <Content Include="js\sweetalert-dev.js" />
     <Content Include="js\SweetAlert.js" />
     <Content Include="js\sweetalert.min.js" />
+    <Content Include="js\ui-bootstrap-tpls-0.4.0.js" />
     <Content Include="js\underscore-min.js" />
     <Content Include="js\datatables\json\scroller-demo.json" />
     <Content Include="css\datatables\images\Sorting icons.psd" />
@@ -371,6 +374,7 @@
     <Content Include="js\waitMe.js" />
     <Content Include="js\xlsx.js" />
     <Content Include="paymentLog.html" />
+    <Content Include="salesinfo.html" />
     <Content Include="ScriptsAngular\Angular\._ion.sound.min.js" />
     <Content Include="ScriptsAngular\Angular\angluar.ieCors.js" />
     <Content Include="ScriptsAngular\Angular\angular-datatables.js" />
@@ -441,6 +445,7 @@
     <Content Include="ScriptsAngular\app\Controller\inventorystockCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\InvoiceCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\ProfitLossAccountCntrl.js" />
+    <Content Include="ScriptsAngular\app\Controller\salesInventoryCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\stockBalanceViewCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\JournalEntryCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\HomeCntrl.js" />
@@ -573,6 +578,7 @@
     <Content Include="ScriptsAngular\Angular\src\angular-animate.min.js.map" />
     <Content Include="ScriptsAngular\Angular\src\angular-sanitize.min.js.map" />
     <Content Include="ScriptsAngular\Angular\angular-route.min.js.map" />
+    <Content Include="Views\Customer\salesInventory.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

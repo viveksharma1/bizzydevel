@@ -1,5 +1,5 @@
-﻿myApp.controller('ExpenseCntrl', ['$scope', '$http', '$stateParams', '$timeout', '$rootScope', '$state', 'commonService', 'config','$filter','FileUploader',
-function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonService, config, $filter,FileUploader) {
+﻿myApp.controller('ExpenseCntrl', ['$scope', '$http', '$stateParams', '$timeout', '$rootScope', '$state', 'commonService', 'config','$filter','FileUploader','authService',
+function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonService, config, $filter,FileUploader,authService) {
         $.fn.datepicker.defaults.format = "dd/mm/yyyy";
         $(".my a").click(function (e) {
             e.preventDefault();
@@ -14,7 +14,7 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
         var files, res;
         $scope.visible = true
         $scope.clear = function ($event, $select) {
-            $event.stopPropagation();
+           // $event.stopPropagation();
             $select.selected = null;
             $select.search = undefined;
 
@@ -101,7 +101,15 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
         //    $scope.expenseDueDate = moment($scope.expenseDate, "DD/MM/YYYY").add($scope.paymentDays, 'days').format('DD/MM/YYYY');
         //}
 
-        
+        $scope.expenseDate = "expenseDate";
+        if ($stateParams.expenseDate != null) {
+            setDate($scope.expenseDate, $stateParams.expenseDate);
+        } else {
+            setDate($scope.expenseDate, new Date());
+        }
+       
+       
+
         //bind file attachement
         $scope.oldAttachment = null;
         function bindAttachments(attachments, callback) {
@@ -193,7 +201,7 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
             $scope.supliersDetail = response.data;
             console.log(response.data)
             $scope.email = $scope.supliersDetail.email;
-           
+            $scope.bindSupplierDetail(response.data)
             $scope.shippingAddress = $scope.supliersDetail.billingAddress[0].street;
             if ($scope.supliersDetail.phone != undefined) {
                 $scope.mobile = $scope.supliersDetail.mobile == undefined ? $scope.supliersDetail.phone : $scope.supliersDetail.mobile + "," + $scope.supliersDetail.phone
@@ -215,10 +223,11 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
         $scope.email  = ''
         $scope.mobile = ''
         var balanceType = data.balanceType
-        var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
-        commonService.getOpeningBalance(url, [localStorage.CompanyId]).then(function (response) {
-            if (response.data.openingBalance) {
-                $scope.supplierBalance = calculateOpenningBalnce(response.data.openingBalance, balanceType)
+        //var url = config.login + "getOpeningBalnceByAccountName/" + localStorage.CompanyId + "?date=" + localStorage.toDate + "&accountName=" + data.id + "&role=" + localStorage.usertype
+        commonService.getOpeningBalance(data.id).then(function (response) {
+            console.log(response)
+            if (response.data) {
+                $scope.supplierBalance = response.data.balance
             } else {
                 $scope.purchaseLedgerBalance = '';
             }
@@ -343,7 +352,7 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
 
         // save Expense new 
          $scope.saving = false;
-         $scope.saveExpenceNew = function (refNo) {
+         $scope.saveExpenceNew = function (reload,refNo) {
              if ($scope.receiptCount > 0) {
                  $rootScope.$broadcast('event:error', { message: "Can't Update" });
                  return;
@@ -382,12 +391,24 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
                  $scope.netAmount = Math.round(Number($scope.itemTableSum()) + Number($scope.accountTableSum()))
              } else {
                  $scope.netAmount = Math.round(Number($scope.itemTableSum()) + Number($scope.accountTableSum()) - Number($scope.tdsamount))
+
+             }
+             var isUo
+             var visible
+             if (authService.userHasPermission('usertype:O')) {
+                 isUo = "false"
+                 visible = $scope.visible              
+             }
+             if (authService.userHasPermission('usertype:UO')) {
+                 isUo = "true"
+                 visible = "true"    
              }
              var data = {
                  type: "EXPENSE",
                  state: "OPEN",
                  date: expenseDate,
                  amount: $scope.netAmount,
+                 username: authService.getAuthentication().username,
                  compCode: localStorage.CompanyId,
                  role: localStorage['usertype'],
                  refNo: $scope.refNo,
@@ -395,6 +416,8 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
                  vochNo: $scope.expenseId,
                  balance: $scope.netamount,
                  narration: $scope.narration,
+                 visible: visible,
+                 isUo: isUo,
                  uoVisible: $scope.visible,
                  transactionData: {
                      compCode: localStorage.CompanyId,
@@ -426,10 +449,18 @@ function ($scope, $http, $stateParams, $timeout, $rootScope, $state, commonServi
                  if (response.status == 200) {
                      $rootScope.$broadcast('event:success', { message: "Expense Created" });
                      $stateParams.expenceId = response.data
-                     if (refNo) {
-                         $state.go('Customer.Expense', { expenceId: null, no: refNo }, { location: 'replace' });
+                     if (reload == true) {
+                         if (refNo) {
+                             $state.go('Customer.Expense', { expenceId: null, no: refNo, expenseDate: expenseDate }, { location: 'replace' });
+                         }
+                         else {
+                             $state.go('Customer.Expense', { expenceId: null, no: null, expenseDate: expenseDate }, { location: 'replace' },{ reload: true });
+                         }
+                         
                      } else {
-                         $state.go('Customer.Expense', { expenceId: response.data, no: $stateParams.no }, { location: 'replace' });
+                        
+                             $state.go('Customer.Expense', { expenceId: response.data, no: $stateParams.no }, { location: 'replace' });
+                        
                      }
                     
                      

@@ -288,6 +288,10 @@ namespace Restaurant.Controllers
         public ActionResult stockBalanceView()
         {
             return View();
-}
+        }
+        public ActionResult salesInventory()
+        {
+            return View();
+        }
     }
 }

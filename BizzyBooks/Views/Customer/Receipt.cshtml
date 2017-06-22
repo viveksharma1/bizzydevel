@@ -37,7 +37,7 @@
                 <input permission="usertype:O" ng-model="visible" ng-init="visible=true"type="checkbox" />
                 <label style="color:#000">State :</label>
                 <span class="dropdown my" style="width:auto; margin-right:20px;">
-                    <a href="#" class="dropdown-toggle stagesdrpdwn" data-toggle="dropdown" style="color:#ff9800">Closed<span class="caret" style="margin-top:0px;color:#000"></span></a>
+                    <a href="#" class="dropdown-toggle stagesdrpdwn" data-toggle="dropdown" style="color:#ff9800">{{state}}<span class="caret" style="margin-top:0px;color:#000"></span></a>
                     <ul class="dropdown-menu dropmenu">
                         <li>Closed</li>
                         <li>Edit</li>
@@ -75,7 +75,7 @@
                 <create-account value="myValue"> </create-account>
                 <div class="col-sm-7 padding">
                     @*<h4 class="tabheading">Bank/Cash</h4>*@
-                    <h4 class="tabheading font_11">Bank/Cash <span class="pull-right" style="color:forestgreen"><i class="fa fa-rupee"></i> {{cashAccountBalance}} <em style="color:red">{{cashAccountType}}</em></span></h4>
+                    <h4 class="tabheading font_11">Bank/Cash <span class="pull-right" style="color:forestgreen"><i class="fa fa-rupee"></i> {{cashAccountBalance  | number:2}} <em style="color:red">{{cashAccountType}}</em></span></h4>
                     <ui-select  ng-model="bankAccount.selected" id="countryCode"
                                ui-select-focuser  on-select="cashAccountSelected($select.selected);" ng-init="$select.addnew=1;$select.type='buyer';"
                                theme="selectize" >
@@ -101,7 +101,7 @@
                 <div class="col-sm-7 padding" >
                     @*<create-account value="myValue"> </create-account>*@
                     @*<h4 class="tabheading" >Party Name</h4>*@
-                    <h4 class="tabheading font_11">Party Name <span class="pull-right" style="color:forestgreen"><i class="fa fa-rupee"></i> {{salesAccountBalance}} <em style="color:red">{{salesAccountType}}</em></span></h4>
+                    <h4 class="tabheading font_11">Party Name <span class="pull-right" style="color:forestgreen"><i class="fa fa-rupee"></i> {{salesAccountBalance | number:2}} <em style="color:red">{{salesAccountType }}</em></span></h4>
                     <ui-select ui-tree-select on-select="partyAccountSelected($select.selected);" ng-model="partyAccount.selected" id="countryCode"
                                ui-select-focuser  ng-init="$select.addnew=1;$select.type='buyer';"
                                theme="selectize">
@@ -183,8 +183,8 @@
                     <thead style="background:rgb(243, 245, 248)">
                         <tr>
                             <th width="50" style="padding:5px">&nbsp;</th>
-                            <th width="50" style="padding:5px">Total</th>
-                            <th width="50" style="padding:5px">Interest</th>
+                            <th width="50" style="padding:5px"></th>
+                            <th width="50" style="padding:5px"></th>
                             <th width="50" style="padding:5px">Diff</th>
                         </tr>
                     </thead>
@@ -192,13 +192,13 @@
                         <tr>
                             <td style="vertical-align:middle"><strong>DAYS</strong></td>
                             <td><input ng-disabled="badlaState()" type="number" ng-model="dayTotal" placeholder="days" class="form-control" /></td>
-                            <td><input ng-disabled="badlaState()" type="number" ng-model="dayInterest" placeholder="days" class="form-control" /></td>
+                            <td><input ng-disabled="badlaState()" type="number"  ng-blur = getDaysdiff(dayTotal,dayInterest) ng-model="dayInterest" placeholder="days" class="form-control" /></td>
                             <td><input ng-disabled="badlaState();" type="number" ng-model="dayDiff" placeholder="days" class="form-control" /></td>
                         </tr>
                         <tr>
                             <td style="vertical-align:middle"><strong>INTEREST (%)</strong></td>
                             <td><input ng-disabled="badlaState();" type="number" ng-model="perTotal" placeholder="%" step="0.01" class="form-control" /></td>
-                            <td><input ng-disabled="badlaState()" type="number" ng-model="perInterest" placeholder="%" step="0.01" class="form-control" /></td>
+                            <td><input ng-disabled="badlaState()" type="number" ng-blur = getInterestdiff(perTotal,perInterest) ng-model="perInterest" placeholder="%" step="0.01" class="form-control" /></td>
                             <td><input ng-disabled="badlaState()" type="number" ng-model="perDiff" placeholder="%" step="0.01" class="form-control" /></td>
                         </tr>
 
@@ -489,20 +489,25 @@
 
         <div class="pull-right">
             @*<button type="button" ng-show="mode!='new'" ng-confirm="Are you sure?" class="btn btn-sm btn-danger" ng-click="deleteReceipt()">Delete</button>*@
-            <button type="button" ng-show="mode=='edit'" class="btn btn-sm btn-danger" ng-confirm ng-click="deleteReceipt()">Delete</button>
-            <button type="button" class="btn btn-sm btn-primary" ng-click="receivePayment()">Save</button>
+            @*<button type="button" ng-show="mode=='edit'" class="btn btn-sm btn-danger" ng-confirm ng-click="deleteReceipt()">Delete</button>
+            <button type="button" class="btn btn-sm btn-primary" ng-click="receivePayment()">Save</button>*@
             <div class="btn-group dropup">
-                @*
-                    <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:25px">
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" style="right:-2px !important">
-                        <li><a href="#">Save and close</a></li>
-                        <li><a href="#">Save and send</a></li>
-                        <li><a href="#">Save and new</a></li>
-                        <li><a href="#">Save and share link</a></li>
-                    </ul>
-                *@
+                <span class="pull-right">
+                    <div class="btn-group dropup"ng-hide="mode=='deleted'">
+                        <button type="button" class="btn btn-sm btn-success" ng-click="receivePayment('false')">Save</button>
+                        <button type="button" class="btn btn-warning btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:25px">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" style="right:-2px; background:radial-gradient() !important">
+                            <li><a href="" ng-click="receivePayment('false')">Save</a></li>
+                            <li><a href="" ng-click="receivePayment('true')">Save And New</a></li>
+                            <li ng-show="mode=='edit'"><a href="" ng-click="deleteReceipt()">Delete</a></li>
+
+                        </ul>
+
+                    </div>
+
+                </span>
             </div>
         </div>
     </div>

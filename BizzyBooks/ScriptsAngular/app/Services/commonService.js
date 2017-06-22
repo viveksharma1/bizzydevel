@@ -10,11 +10,13 @@
 //});
 
 
-myApp.factory('commonService', ['$http', '$q', function ($http, $q) {
+myApp.factory('commonService', ['$http', '$q','config' ,function ($http, $q,config) {
     var commonServiceFactory = {};
-    var _getOpeningBalance = function (url, CompanyId) {
+    var _getOpeningBalance = function (accountId) {
         var deferred = $q.defer();
-        return $http.post(url, CompanyId).then(function (results) {
+        
+        var url = config.login + "closingBalance/" + accountId + "?compCode=" + localStorage.CompanyId + "&role=" + localStorage.usertype
+        return $http.get(url).then(function (results) {
             deferred.resolve(results);
             // promise is returned
             return deferred.promise;

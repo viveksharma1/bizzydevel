@@ -1,5 +1,6 @@
 var myApp = angular
-    .module('myApp', ['ui.router', 'datatables', 'angular-loading-bar', 'anguFixedHeaderTable', 'ngAnimate', 'oitozero.ngSweetAlert', 'fsm', 'ui.select', 'ngSanitize', 'angular.filter', 'angularFileUpload', 'angular-jwt', 'LocalStorageModule', 'ng.jsoneditor', 'ui.bootstrap', 'ngConfirm', 'oitozero.ngSweetAlert'])
+    .module('myApp', ['ui.router', 'datatables', 'angular-loading-bar', 'anguFixedHeaderTable', 'ngAnimate', 'oitozero.ngSweetAlert', 'fsm', 'ui.select', 'ngSanitize', 'angular.filter', 'angularFileUpload', 'angular-jwt', 'LocalStorageModule', 'ng.jsoneditor', 'ui.bootstrap', 'ngConfirm', 'oitozero.ngSweetAlert', 'angularCharts'])
+   
     .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
 
         $urlRouterProvider.otherwise('/');
@@ -154,8 +155,8 @@ var myApp = angular
             controller: "ReceiptCntrl",
             params: {
                 type: 'Receipt',
-                noBackTrack:false,
                 voId: null,
+                pdate: null,
                 partyAccountId: null,
             }
 
@@ -176,7 +177,7 @@ var myApp = angular
             url: "/PurchaseOrder/:enqNo/:edit",
             templateUrl: "Customer/PurchaseOrder",
             controller: "PurchaseOrderCntrl",
-            requiresAuthentication: true,
+            requiresAuthentication: false,
             permissions: 'Float.add.Suppliers.Purchase Order.active',
             params: {
                 poNo: null,
@@ -186,12 +187,13 @@ var myApp = angular
         });
 
         $stateProvider.state("Customer.Bill", {
-            url: "/Bill/:billNo/:suppliers",
+            url: "/Bill/:billNo/:billDate",
             templateUrl: "Customer/Bill",
             controller: "BillCntrl",
             params: {
                 type:"Purchase Invoice",
                 billNo: null,
+                billDate: null,
                 suppliers: null
 
             }
@@ -204,6 +206,7 @@ var myApp = angular
             controller: "ExpenseCntrl",
             params: {
                 no: null,
+                expenseDate:null,
                 expenceId: null,
                 suppliers: null
 
@@ -232,9 +235,9 @@ var myApp = angular
             requiresAuthentication: true,
             permissions: 'Float.add.Customers.Sales Invoice.active',
             params: {
-                type: "Sales Invoice",
                 voId: null,
-                noBackTrack:false
+                billDate:null,
+                type: "Sales Invoice"    
             }
 
         });
@@ -276,12 +279,14 @@ var myApp = angular
             templateUrl: "Customer/Payment",
             controller: "PaymentCntrl",
             params: {
+                voId: null,
+                pDate: null,
                 type:'Payment',
                 poNo: null,
                 partyAccountId: null,
-                Code: null,
-                voId: null,
-                noBackTrack: false
+                Code: null
+               
+          
 
             }
 
@@ -370,14 +375,15 @@ var myApp = angular
 
 
         $stateProvider.state("Customer.GeneralInvoice", {
-            url: "/GeneralInvoice/:voId",
+            url: "/GeneralInvoice/:voId/:billDate",
             templateUrl: "Customer/GeneralInvoice",
             controller: "GeneralInvoiceCntrl",
             requiresAuthentication: true,
             permissions: 'Float.add.Customers.General Invoice.active',
             params: {
                 voId: null,
-                type: 'General Invoice'
+                billDate:null,
+                type: "General Invoice",
             }
         });
           $stateProvider.state("Customer.RosemateVoucher", {
@@ -442,6 +448,14 @@ var myApp = angular
             url: "/StockBalanceInventory",
             templateUrl: "Customer/StockBalanceInventory",
             controller: "StockBalanceInventoryCntrl",
+            requiresAuthentication: true,
+            permissions: 'Inventory.Balance Stock.active'
+
+        });
+        $stateProvider.state("Customer.salesInventory", {
+            url: "/salesInventory",
+            templateUrl: "Customer/salesInventory",
+            controller: "salesInventoryCntrl",
             requiresAuthentication: true,
             permissions: 'Inventory.Balance Stock.active'
 
@@ -538,10 +552,12 @@ var myApp = angular
 
         });
 
+
         // Specify HTML5 mode (using the History APIs) or HashBang syntax.
         //$locationProvider.html5Mode(false).hashPrefix('!');
         //$locationProvider.html5Mode(true);
     }]);
+
     //.controller('AppController', ['$rootScope', '$state', function ($rootScope, $state)
     //{
     //    //added here to relive after refersh
@@ -592,6 +608,21 @@ myApp.service('selectsuppliers', ['$rootScope',
 }
 ])
 
+
+//myApp.run(['authService', '$location', '$rootScope', 'localStorageService', '$state', 'config', '$http', 'SweetAlert', function (authService, $location, $rootScope, localStorageService, $state, config, $http, SweetAlert) {
+//    var urlToChangeStream = config.api + "userActivities/change-stream?_format=event-stream";
+//    var src = new EventSource(urlToChangeStream);
+//    src.addEventListener('data', function (msg) {
+//        var d = JSON.parse(msg.data);
+//        console.log(d)
+//        if (d) {
+//            d.data.fromNow = moment(d.data.date).startOf('hour').fromNow()
+//            alert("fdf");
+//            $scope.$apply();
+//        }
+       
+//    })
+//}]);
 myApp.run(['authService', '$location', '$rootScope', 'localStorageService', '$state', 'config', '$http', 'SweetAlert', function (authService, $location, $rootScope, localStorageService, $state, config, $http, SweetAlert) {
     $http.get('config/config.json').then(function (response) {
         config.api = response.data.api;

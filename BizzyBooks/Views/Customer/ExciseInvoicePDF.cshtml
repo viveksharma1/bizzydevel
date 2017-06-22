@@ -241,7 +241,7 @@
                                         <table style="vertical-align:top; width:100%; font-size:12px; border-left:none; border-right:none; border-color:rgba(227, 227, 227, 0.44); border-top:none; border-bottom:none; margin-bottom:0px" border="1">
                                             <tr style="vertical-align:top">
                                                 <td style="padding:3px; text-align:right;width:67px; border:none">
-                                                    <p style="margin-bottom:2px">{{item.exciseDuty/item.NETWEIGHT |number : 2}}</p>
+                                                    <p style="margin-bottom:2px">{{item.dutyPerUnit |number : 2}}</p>
                                                     @*<p style="margin-bottom:2px">0.00</p>*@
                                                 </td>
                                                 <td style="padding:3px; text-align:right;width:81px; border:none; border-left:1px solid #e3e3e3">
@@ -253,7 +253,7 @@
                                                     @*<p style="margin-bottom:2px">0.00</p>*@
                                                 </td>
                                                 <td style="padding:3px; text-align:right;width:100px; border:none; border-left:1px solid #e3e3e3">
-                                                    <p style="margin-bottom:2px">{{item.SAD/item.NETWEIGHT |number : 2}}</p>
+                                                    <p style="margin-bottom:2px">{{item.sadPerUnit|number : 2}}</p>
                                                     @*<p style="margin-bottom:2px">0.00</p>*@
                                                 </td>
                                             </tr>

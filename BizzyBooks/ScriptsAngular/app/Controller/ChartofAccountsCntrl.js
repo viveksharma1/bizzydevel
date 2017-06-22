@@ -51,7 +51,9 @@
     //console.log(localStorage.DefaultCompanyName);
 
     
-
+    $scope.myPagingFunction = function () {
+        alert("fdfdfs")
+    }
     $('.btn-toggle').click(function () {
         $(this).find('.btn').toggleClass('active');
 
@@ -120,7 +122,7 @@
                     data[i].balance = (data[i].credit - data[i].debit).toFixed(2)
                 } else if (data[i].balanceType == 'debit') {
                     data[i].bType = " (Dr.) "
-                    data[i].balance = (data[i].credit - data[i].debit).toFixed(2)
+                    data[i].balance = (data[i].debit - data[i].credit).toFixed(2)
                 }
             
         }
