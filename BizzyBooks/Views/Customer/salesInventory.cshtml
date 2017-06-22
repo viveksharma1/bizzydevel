@@ -49,22 +49,7 @@
                     <i class="fa fa-filter tableicon" style="color:#6C04AC" data-toggle="tooltip" data-placement="bottom" title="Advance Filter"></i><i class="fa fa-caret-down" style="margin-left:-6px;"></i>
                 </span>
 
-                <span id="fileUpload" class="pull-right">
-                    <label class="btn btn-default btn-sm" style="height:32px;width:200px">
-                        <strong style="color:#6C04AC">Opening Stock</strong> (Choose file)
-                        <input type="file" id="imageUpload" file-model="myFile"
-                               style="display: none">
-
-                    </label>
-                    <button ng-click="uploadFile()" ng-hide="saving" id="fileUpload1"
-                            class="btn-sm" style="color:#6C04AC">
-                        <i class="fa fa-upload" style="color:#6C04AC"></i>
-                    </button>
-                    <button ng-click="uploadFile()" ng-show="saving" id="fileUpload1"
-                            class="btn btn-primary btn-sm">
-                        <i class="fa fa-spin fa-spinner"></i>
-                    </button>
-                </span>
+               
 
 
                 <input class="pull-left reportSearch" type="search" placeholder="search" name="lastname" ng-model="search" style="width:300px;height:30px; margin:0px 0px">
@@ -315,6 +300,7 @@
                                     <th>SAD/UNIT</th>
                                     <th>QUANTITY</th>
                                     <th>BALANCE </th>
+                                    <th>Status </th>
                                     <th>Action</th>
 
                                 </tr>
@@ -339,6 +325,7 @@
 
                                     <td style="text-align:right"> {{item.salesTransaction.saleQty |number : 3}}</td>
                                     <td style="text-align:right"> {{item.BALANCE |number : 3}}</td>
+                                    <td style="text-align:right; font-size:15px; text-transform:uppercase; color:#EF360C; font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif"> {{item.salesTransaction.status}} {{item.salesTransaction.statusDate}} </td>
                                     <td style="text-align:right;white-space:nowrap">
                                         <button type="button" class="editbtn cursor"  ng-click="showRemarkBox(item)">Change Status</></button>
                                         <class class="linkseparator" style="margin-top:4px; margin-right:0px"></class>

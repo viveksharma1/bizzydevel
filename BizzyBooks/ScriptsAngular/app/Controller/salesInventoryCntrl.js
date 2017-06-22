@@ -1,6 +1,10 @@
 ﻿myApp.controller('salesInventoryCntrl', ['$scope', '$http', '$timeout', '$stateParams', 'commonService', '$rootScope', '$state', 'config', '$filter', 'DTOptionsBuilder', function ($scope, $http, $timeout, $stateParams, commonService, $rootScope, $state, config, $filter, DTOptionsBuilder) {
 
-    $('#statusDateInventory').datepicker();
+    $('#statusDateInventory').datepicker({
+        assumeNearbyYear: true,
+        autoclose: true,
+        todayBtn: true
+    });
 
     $(".my a").click(function (e) {
         e.preventDefault();
@@ -115,7 +119,7 @@
     }
     $scope.applyFilter = function () {
         var qry = {
-            "where": {
+            $match: {
                 "visible": true,
                 "compCode": localStorage.CompanyId,
                 "no": $scope.invoiceno.selected ? $scope.invoiceno.selected._id.no : $scope.invoiceno.selected,
@@ -127,9 +131,11 @@
                 "SAD": $scope.SAD.selected ? $scope.SAD.selected._id.SAD : $scope.SAD.selected,
                 "NETWEIGHT": $scope.NETWEIGHT.selected ? $scope.NETWEIGHT.selected._id.NETWEIGHT : $scope.NETWEIGHT.selected,
                 "BALANCE": $scope.BALANCE.selected ? $scope.BALANCE.selected._id.BALANCE : $scope.BALANCE.selected,
-            }
+            },
+            $unwind: {path:"$salesTransaction",includeArrayIndex: "arrayIndex"},
+            salesTransaction: { $exists: true}
         }
-        $http.get(config.api + "Inventories?filter=" + encodeURIComponent(JSON.stringify(qry))).then(function (response) {
+        $http.get(config.login + "getSalesInventoryAgg" + "?queryData=" + encodeURIComponent(JSON.stringify(qry)) + "&compCode=" + localStorage.CompanyId + "&visible=" + true).then(function (response) {
             $scope.filterList = response.data;
             getTotalsum(response.data);
             $scope.datatable = true
@@ -137,34 +143,9 @@
             //$scope.filterList = $scope.ItemList2;
         });
     }
-    //$scope.applyFilter = function () {
-    //    var qry = "Inventories?filter[where][visible]=true";
-    //    if ($scope.invoiceno.selected)
-    //        qry = qry + "&filter[where][no]=" + $scope.invoiceno.selected._id.no;
-    //    if ($scope.godown.selected)
-    //        qry = qry + "&filter[where][GODOWN]=" + $scope.godown.selected._id.GODOWN;
-    //    if ($scope.description.selected)
-    //        qry = qry + "&filter[where][DESCRIPTION]=" + $scope.description.selected._id.DESCRIPTION;
-    //    if ($scope.remarks.selected)
-    //        qry = qry + "&filter[where][RRMARKS]=" + $scope.remarks.selected._id.RRMARKS;
-
-    //    $http.get(config.api + qry).then(function (response) {
-    //        $scope.filterList = response.data;
-    //        //console.log($scope.ItemList);
-    //        //$scope.ItemCount = response.data.length;
-    //    });
-    //}
+ 
     $scope.itemChecked = [];
-    $scope.selectAllLineItem = function (allItemData) {
-        if ($scope.selectAll) {
-            $scope.itemChecked = allItemData;
-        } else {
-            $scope.itemChecked = [];
-        }
-        angular.forEach(allItemData, function (item) {
-            item.selected = $scope.selectAll;
-        });
-    }
+   
     $scope.selectLineItem = function (itemData) {
         var item = {};
         //angular.copy(itemData, item);
@@ -203,39 +184,12 @@
         }
 
     }
-    $scope.changeStatus = function () {
-        var query = [];
-        if ($scope.currentItem.multi) {
-            for (var i = 0; i < $scope.currentItem.items.length; i++) { query.push($scope.currentItem.items[i].id) }
-        } else {
-            query.push($scope.currentItem.items.id);
-        }
-        var data = {
-            ids: query,
-            status: $scope.spnStatus,
-            dt: new Date(),
-            remarks: $scope.txtRemarks
-        }
-        $http.post(config.login + "updateInventoryStatus", data).then(function (response) {
-            showSuccessToast("Status updated.");
-            $scope.closeStatusBox();
-        }, function (err) {
-            showErrorToast("Error while updating status.");
-        });
-        //TODO: remove when api will be working
-        //$scope.closeStatusBox();
-
-    }
+   
     function clearStatusBox() {
         $scope.spnStatus = null;
         $scope.txtRemarks = null;
     }
-    function clearCheckBoxs() {
-        $scope.selectAll = false;
-        angular.forEach($scope.filterList, function (item) {
-            item.selected = $scope.selectAll;
-        });
-    }
+    
     $scope.closeStatusBox = function () {
         $('#ChangeStatusModal').modal('hide');
         clearStatusBox();
@@ -264,74 +218,37 @@
         $('#AddRemarksModal').modal('hide');
         clearCheckBoxs();
     }
-    $scope.addRemark = function () {
+    $scope.addStatus = function () {
         var query = [];
         if ($scope.currentItem.multi) {
-            for (var i = 0; i < $scope.currentItem.items.length; i++) { query.push($scope.currentItem.items[i].id) }
+            for (var i = 0; i < $scope.currentItem.items.length; i++) { query.push($scope.currentItem.items[i]._id) }
         } else {
-            query.push($scope.currentItem.items.id);
+            query.push($scope.currentItem.items._id);
         }
+        $scope.currentItem.items.salesTransaction.status = $scope.status
+        $scope.currentItem.items.salesTransaction.statusDate = $scope.statusDate
+        var salesTransaction = $scope.currentItem.items.salesTransaction
         var data = {
-            ids: query,
-            remarks: $scope.txtAddRemarks,
-            dt: new Date()
+            id: $scope.currentItem.items._id,
+            ids: $scope.currentItem.items.salesTransaction.id,
+            arrayIndex:$scope.currentItem.items.salesTransaction.arrayIndex,
+            salesTransaction: salesTransaction
         }
-        $http.post(config.login + "insertAddRemark", data).then(function (response) {
+        console.log($scope.currentItem.items.salesTransaction.id)
+        $http.post(config.login + "changeStatus", data).then(function (response) {
             showSuccessToast("Remark Added.");
             $scope.closeRemarkBox();
         }, function (err) {
             showErrorToast("Error while adding remark.");
         });
-        //TODO: remove when api will be working
-        //$scope.closeRemarkBox();
+       
     }
 
-    //Update Adjustment
 
-    function clearAdjustmentBox() {
-        $scope.netwt = null;
-        $scope.adjustmentWt = null;
-        $scope.totalNetWt = null;
-    }
-
-    $scope.showAddjustmentBox = function (item, multi) {
-        clearAdjustmentBox();
-        $('#AddjustmentbtnModal').modal('show');
-        if (multi) {
-            $scope.currentItem.items = item;
-            $scope.currentItem.multi = true;
-        } else {
-            $scope.currentItem.items = item;
-            $scope.currentItem.multi = false;
-        }
-    }
-    $scope.closeAddjustmentBox = function () {
-        clearAdjustmentBox();
-        $('#AddjustmentbtnModal').modal('hide');
-        clearCheckBoxs();
-    }
-    $scope.updateWt = function () {
-        var query = [];
-        if ($scope.currentItem.multi) {
-            for (var i = 0; i < $scope.currentItem.items.length; i++) { query.push($scope.currentItem.items[i].id) }
-        } else {
-            query.push($scope.currentItem.items.id);
-        }
-        var data = {
-            ids: query,
-            netwt: $scope.netwt,
-            ajustmentWt: $scope.adjustmentWt,
-            totalNetWt: $scope.totalNetWt
-        }
-        $http.post(config.login + "updateWt", data).then(function (response) {
-            showSuccessToast("Weigths updated.");
-            $scope.closeAddjustmentBox();
-        }, function (err) {
-            showErrorToast("Error while updating weigths.");
-        });
-        //TODO: remove when api will be working
-        // $scope.closeAddjustmentBox();
-    }
+   
+   
+   
+  
 
 
     $('.filenameDiv').hide();
@@ -349,14 +266,7 @@
     $(":file").filestyle({ buttonName: "btn-sm btn-info" });
 
     // stock upload
-    function uploadStockInventory(data) {
-
-
-        $http.post(config.login + "uploadInventory", data).then(function (response) {
-            $rootScope.$broadcast('event:success', { message: $scope.ExeclDataRows.length + " Opening Stock Uploaded Successfully " });
-            getInventory();
-        })
-    }
+   
     $http.get(config.api + "Inventories/count" + "?[where][visible]=true").then(function (response) {
 
         $scope.count = response.data.count
