@@ -299,11 +299,12 @@
                 <div class="col-sm-12 padding" id="balancetable">
                     <div ng-if="datatable">
                         @*<div style="overflow-x:auto; margin-top:2px;width:100%;">*@
-                        <table class="datatable table-bordered table-condensed table-hover" datatable="ng" cellspacing="0" dt-options="dtOptions" style="font-size:11px;font:bold;color:#0B6976;width:100%">
+                        <table class="datatable table-bordered table-condensed table-hover" datatable="ng" cellspacing="0" dt-options="dtOptions" style="font-size:11px;font:bold;color:#75706B;width:100%">
                             <thead style="background-color:#E5F3FC;color:black">
                                 <tr>
                                     <th style="text-align:center"><input ng-model="selectAll" ng-click="selectAllLineItem(filterList)" type="checkbox" /></th>
                                     <th>Invoice No</th>
+                                    <th>Customer </th>
                                     <th>GODOWN</th>
                                     <th>DESCRIPTION</th>
                                     <th>REMARKS</th>
@@ -325,6 +326,7 @@
                                 <tr ng-repeat="item in filterList | filter:search">
                                     <td style="text-align:center"><input ng-click="selectLineItem(item)" ng-model="item.selected" type="checkbox" /></td>
                                     <td> {{item.salesTransaction.vochNo}}</td>
+                                    <td> {{item.customerName}}</td>
                                     <td> {{item.GODOWN}}</td>
 
                                     <td> {{item.DESCRIPTION}}</td>
@@ -338,18 +340,9 @@
                                     <td style="text-align:right"> {{item.salesTransaction.saleQty |number : 3}}</td>
                                     <td style="text-align:right"> {{item.BALANCE |number : 3}}</td>
                                     <td style="text-align:right;white-space:nowrap">
-                                        <button type="button" class="editbtn"><a href="" ng-click="showStatusBox(item)">Change Status</a></button>
+                                        <button type="button" class="editbtn cursor"  ng-click="showRemarkBox(item)">Change Status</></button>
                                         <class class="linkseparator" style="margin-top:4px; margin-right:0px"></class>
-                                        <div class="btn-group editcaret">
-                                            <i class="fa fa-caret-down cursor" dropdown-toggle" data-toggle="dropdown"></i>
-                                            <ul class="dropdown-menu editdrpdwn" role="menu" style="left:-135px">
-                                                <li><a ng-click="showRemarkBox(item)" class="cursor">Add Remarks</a></li>
-                                                <li><a ng-click="showAddjustmentBox(item)" class="cursor">Adjustment</a></li>
-                                                <li><a ng-click="viewInfo(item);" class="cursor">View Info</a></li>
-                                                @*<li><a ui-sref="Customer.BalanceInventoryViewDetail()" class="cursor">View Detail</a></li>*@
-                                            </ul>
-
-                                        </div>
+                                       
                                     </td>
 
                                 </tr>
@@ -415,31 +408,7 @@
                         </div>
 
 
-                        <!-- AddRemarksModal -->
-                        <div id="AddRemarksModal" class="modal fade" role="dialog">
-                            <div class="modal-dialog modal-sm" style="margin-top:100px">
-
-                                <!-- Modal content-->
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        <h4 class="modal-title">Add Remarks</h4>
-                                    </div>
-                                    <div class="modal-body">
-
-                                        <div class="form-group">
-                                            <label>Remarks</label>
-                                            <textarea ng-model="txtAddRemarks" class="form-control" style="height:100px"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" ng-click="addRemark()" class="btn btn-primary">Save</button>
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
+                    
 
                         <!-- AddjustmentbtnModal -->
                         <div id="AddjustmentbtnModal" class="modal fade" role="dialog">
@@ -478,6 +447,38 @@
                     </div>
                 </div>
 
+            </div>
+            <!-- AddRemarksModal -->
+            <div id="AddRemarksModal" class="modal fade" role="dialog">
+                <div class="modal-dialog modal-sm" style="margin-top:100px">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Add Remarks</h4>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <div class='input-group date'>
+                                    <input type='text' class="form-control" ng-model="statusDate" id='statusDateInventory' />
+                                    <span class="input-group-addon ">
+                                        <span class="glyphicon glyphicon-calendar" style="color:forestgreen"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Status</label>
+                                <textarea ng-model="status" class="form-control" style="height:100px"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" ng-click="addStatus()" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
 

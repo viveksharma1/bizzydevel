@@ -1,13 +1,17 @@
 ﻿myApp.controller('salesInventoryCntrl', ['$scope', '$http', '$timeout', '$stateParams', 'commonService', '$rootScope', '$state', 'config', '$filter', 'DTOptionsBuilder', function ($scope, $http, $timeout, $stateParams, commonService, $rootScope, $state, config, $filter, DTOptionsBuilder) {
 
+    $('#statusDateInventory').datepicker();
 
     $(".my a").click(function (e) {
         e.preventDefault();
     });
 
+ 
+
     $scope.goBack = function () {
         window.history.back();
     }
+    $.fn.datepicker.defaults.format = "dd/mm/yyyy";
     $('#SearchFilter').hide();
     //$("#wrapper").addClass("toggled");
 
@@ -25,7 +29,8 @@
         $('#UploadOpeningStock').modal('show');
     }
 
-
+ 
+   // $scope.statusDate = "statusDate";
     var h = window.innerHeight;
 
 
@@ -58,12 +63,19 @@
 
 
     }
+
     $scope.datatable = false
+    function getCustomerName(data) {
+        for (var i = 0; i < data.length; i++) {
+           data[i].customerName = localStorage[data[i].customerId]
+        }
+        return data
+    }
     function getInventory() {
         // $http.get(config.api + "Inventories?filter[where][visible]=true&[filter][where][compCode]=" + localStorage.CompanyId ).then(function (response) {
         $http.get(config.login + "getSalesInventory" + "?compCode=" + localStorage.CompanyId + "&visible=" + true).then(function (response) {
-            $scope.ItemList2 = response.data;
-            $scope.filterList = $scope.ItemList2;
+          //  $scope.filterList = response.data;
+            $scope.filterList = getCustomerName(response.data)
             getTotalsum(response.data)
             $scope.datatable = true
 
@@ -452,5 +464,5 @@
         .withOption('paging', false)
        .withOption('bInfo', false)
        .withOption('searching', false)
-   .withOption('oLanguage', false)
+  
 }]);
