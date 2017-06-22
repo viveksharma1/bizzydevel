@@ -135,7 +135,7 @@
             $unwind: {path:"$salesTransaction",includeArrayIndex: "arrayIndex"},
             salesTransaction: { $exists: true}
         }
-        $http.get(config.login + "getSalesInventoryAgg" + "?queryData=" + encodeURIComponent(JSON.stringify(qry)) + "&compCode=" + localStorage.CompanyId + "&visible=" + true).then(function (response) {
+        $http.get(config.login + "getSalesInventoryAgg" + "?queryData=" + qry) + "&compCode=" + localStorage.CompanyId + "&visible=" + true).then(function (response) {
             $scope.filterList = response.data;
             getTotalsum(response.data);
             $scope.datatable = true
