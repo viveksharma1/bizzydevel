@@ -423,6 +423,7 @@
     <Content Include="ScriptsAngular\app\Controller\BalanceInventoryViewInfoCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\BalanceSheetCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\BankingCntrl.js" />
+    <Content Include="ScriptsAngular\app\Controller\BankReconciliationCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\BillCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\ChartofAccountsCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\ContraEntryCntrl.js" />
@@ -430,6 +431,7 @@
     <Content Include="ScriptsAngular\app\Controller\CustomerCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\CustomerdetailCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\CustomerPdfViewCntrl.js" />
+    <Content Include="ScriptsAngular\app\Controller\DirectoryCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\EnquiryCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\EnquirydetailCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\ExciseInvoiceCntrl.js" />
@@ -579,6 +581,8 @@
     <Content Include="ScriptsAngular\Angular\src\angular-sanitize.min.js.map" />
     <Content Include="ScriptsAngular\Angular\angular-route.min.js.map" />
     <Content Include="Views\Customer\salesInventory.cshtml" />
+    <Content Include="Views\Customer\Directory.cshtml" />
+    <Content Include="Views\Customer\BankReconciliation.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

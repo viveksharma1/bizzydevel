@@ -552,6 +552,20 @@ var myApp = angular
 
         });
 
+        $stateProvider.state("Customer.BankReconciliation", {
+            url: "/BankReconciliation",
+            templateUrl: "Customer/BankReconciliation",
+            controller: "BankReconciliationCntrl"
+
+        });
+
+        $stateProvider.state("Customer.Directory", {
+            url: "/Directory",
+            templateUrl: "Customer/Directory",
+            controller: "DirectoryCntrl"
+
+        });
+
 
         // Specify HTML5 mode (using the History APIs) or HashBang syntax.
         //$locationProvider.html5Mode(false).hashPrefix('!');

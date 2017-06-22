@@ -82,7 +82,7 @@
 
     <div id="sidebar-wrapper">
         @*<em ng-switch-when="3">*@
-            <ul class="sidebar-nav">
+            <ul class="sidebar-nav scrollbar scrollbarAngular" style="height:100%">
                 <li class="sidebar-brand" style="line-height:25px; margin-bottom:10px;">
                     <a href="#" class="logo" style="padding-bottom:3px;">
                         <i class="fa fa-compass"></i>  Account <span> Books </span>
@@ -97,6 +97,9 @@
                 <li permission="Customers.active">
                     <a ui-sref=".Customer"><i class="fa fa-users"></i> Customers</a>
                 </li>
+                <li permission="Directory.active">
+                    <a ui-sref=".Directory"><i class="fa fa-sitemap"></i> Directory</a>
+                </li>
                 <li permission="Suppliers.active">
                     <a ui-sref=".Suppliers"><i class="fa fa-street-view"></i> Suppliers</a>
                 </li>
@@ -107,6 +110,7 @@
 
                         @*<li permission="Transaction.Banking.active" ><a ui-sref=".Banking" style="font-size: 12px;  padding-left: 27px;  color: black;"><b>Banking</b></a></li>*@
                         <li permission="Transaction.Chart Of Accounts.active"><a ui-sref=".ChartofAccounts" style="font-size: 12px;  padding-left: 27px;  color: black;"><b>Chart of Accounts</b></a></li>
+                        <li permission="Transaction.Bank Reconciliation.active"><a ui-sref=".BankReconciliation" style="font-size: 12px;  padding-left: 27px;  color: black;"><b>Bank Reconciliation</b></a></li>
                         <li permission="Transaction.Voucher.active"><a ui-sref=".VoucherTransactions" style="font-size: 12px;  padding-left: 27px;  color: black;"><b>Voucher</b> </a></li>
                         @*<li permission="Transaction.Settlement.active"><a ui-sref=".SattlementTransactions" style="font-size: 12px;  padding-left: 27px;  color: black;"><b>Settlement</b> </a></li>*@
                         <li permission="Transaction.ActivityLog.active"><a ui-sref=".ActivityLog" style="font-size: 12px;  padding-left: 27px;  color: black;"><b>Activity Log</b> </a></li>
