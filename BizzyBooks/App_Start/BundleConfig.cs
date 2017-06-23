@@ -211,7 +211,9 @@ namespace Restaurant
                   "~/ScriptsAngular/app/Controller/ContraEntryCntrl.js",
                   "~/ScriptsAngular/app/Controller/BalanceSheetCntrl.js",
                  "~/ScriptsAngular/app/Controller/ProfitLossAccountCntrl.js",
-                  "~/ScriptsAngular/app/Controller/salesInventoryCntrl.js"
+                  "~/ScriptsAngular/app/Controller/salesInventoryCntrl.js",
+                   "~/ScriptsAngular/app/Controller/DirectoryCntrl.js",
+                    "~/ScriptsAngular/app/Controller/BankReconciliationCntrl.js"
 
 
 

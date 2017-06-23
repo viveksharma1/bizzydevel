@@ -293,5 +293,15 @@ namespace Restaurant.Controllers
         {
             return View();
         }
+
+        public ActionResult Directory()
+        {
+            return View();
+        }
+
+        public ActionResult BankReconciliation()
+        {
+            return View();
+        }
     }
 }
