@@ -441,6 +441,7 @@
     <Content Include="ScriptsAngular\app\Controller\ForexGainLossCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\GeneralInvoiceCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\GRNEntryCntrl.js" />
+    <Content Include="ScriptsAngular\app\Controller\GSTInvoiceCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\HomePageCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\ImportCntrl.js" />
     <Content Include="ScriptsAngular\app\Controller\InventoryCntrl.js" />
@@ -583,6 +584,7 @@
     <Content Include="Views\Customer\salesInventory.cshtml" />
     <Content Include="Views\Customer\Directory.cshtml" />
     <Content Include="Views\Customer\BankReconciliation.cshtml" />
+    <Content Include="Views\Customer\GSTInvoice.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

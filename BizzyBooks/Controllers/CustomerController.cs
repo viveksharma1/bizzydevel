@@ -303,5 +303,10 @@ namespace Restaurant.Controllers
         {
             return View();
         }
+
+        public ActionResult GSTInvoice()
+        {
+            return View();
+        }
     }
 }

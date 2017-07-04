@@ -213,7 +213,8 @@ namespace Restaurant
                  "~/ScriptsAngular/app/Controller/ProfitLossAccountCntrl.js",
                   "~/ScriptsAngular/app/Controller/salesInventoryCntrl.js",
                    "~/ScriptsAngular/app/Controller/DirectoryCntrl.js",
-                    "~/ScriptsAngular/app/Controller/BankReconciliationCntrl.js"
+                    "~/ScriptsAngular/app/Controller/BankReconciliationCntrl.js",
+                    "~/ScriptsAngular/app/Controller/GSTInvoiceCntrl.js"
 
 
 

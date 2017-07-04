@@ -566,6 +566,13 @@ var myApp = angular
 
         });
 
+        $stateProvider.state("Customer.GSTInvoice", {
+            url: "/GSTInvoice",
+            templateUrl: "Customer/GSTInvoice",
+            controller: "GSTInvoiceCntrl"
+
+        });
+
 
         // Specify HTML5 mode (using the History APIs) or HashBang syntax.
         //$locationProvider.html5Mode(false).hashPrefix('!');

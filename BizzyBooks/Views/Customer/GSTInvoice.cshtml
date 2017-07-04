@@ -1,0 +1,538 @@
+﻿
+@{
+    ViewBag.Title = "GSTInvoice";
+    Layout = null;
+}
+<style>
+    .no-padding{padding:0px; height:25px; width:50px;}
+</style>
+<div class="FlexPopup" style="display:block" ng-init="model = {}">
+    <div class="flexheader">
+        <ul class="list-unstyled submenu InvoiceMenu" ng-click="goBack()" style="float:left">
+            <li><a href="#/Customer/Suppliers"><i class="fa fa-arrow-left" aria-hidden="true"></i></a></li>
+
+
+        </ul>
+        <ul class="list-unstyled submenu InvoiceMenu my">
+            <li><a href="" style="font-size:18px"><i class="fa fa-envelope"></i> Send Email</a></li>
+            @*<li ng-hide="type =='1'"><a ui-sref="Customer.PurchaseOrder({enqNo:no,edit:1})" style="font-size:18px"><i class="fa fa-edit"></i> Edit</a></li>
+                <li ng-hide="type =='2'"><a ui-sref="Customer.Enquiry({email:data.no,edit:1})" style="font-size:18px"><i class="fa fa-edit"></i> Edit</a></li>*@
+            <li ng-click="printInvoice('printable');"><a href="" style="font-size:18px"><i class="fa fa-print"></i> Print</a></li>
+            <li><a href="" ng-click="goBack()"><i class="fa fa-times"></i></a></li>
+        </ul>
+    </div>
+
+
+
+    <div class="flexcontainer">
+
+        <div>
+            <div id="printable" class="page" ng-hide="type =='1'">
+               
+                <table id="table" style="border:1px solid #e3e3e3; vertical-align:top;" class="subpage" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td style="text-align:center; height:50px;">
+                            <h1 style="font-size:28px; margin:0px; font-weight:bold; text-transform:uppercase; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">AMKS & Co.</h1>
+                            <p style="font-size:14px; line-height:20px; font-weight:bold">
+                                1st Floor, Vikram - III, Plot No. 155<br />
+                                Sector - 1/A, Off Tagore Road, Gandhidham, Gujarat, India, Pin - 370201<br /> <strong>GSTIN: 24ABCPP1234Z1ZX</strong>
+                            </p>
+                        </td>
+                    </tr>
+                    <tr style="vertical-align:top">
+                        <td style="vertical-align:top; height:40px; border-bottom:1px solid #e3e3e3; border-top:1px solid #e3e3e3;">
+                            <table style="width:100%">
+                                <tr>
+
+                                    <td style="border-right:1px solid #e3e3e3; vertical-align:top; padding:5px; text-align:center">
+                                        <h4 style="text-align:center; margin:10px 0px; font-weight:bold">INVOICE</h4>
+
+                                    </td>
+                                    <td style="vertical-align:top; text-transform:uppercase; width:250px; font-size:10px;">
+                                        <p style="margin-bottom:2px; padding:2px 5px">
+                                            <em style="width:15px; height:10px; border:1px solid #666; float:left; margin:2px 5px 1px 0px"></em>
+                                            Original For Buyer
+
+                                        </p>
+                                        <p style="margin-bottom:2px;  padding:2px 5px">
+                                            <em style="width:15px; height:10px; border:1px solid #666; float:left; margin:2px 5px 1px 0px"></em>
+                                            Duplicate for transporter
+
+                                        </p>
+                                        <p style="margin-bottom:2px;  padding:2px 5px;">
+                                            <em style="width:15px; height:10px; border:1px solid #666; float:left; margin:2px 5px 1px 0px"></em>
+                                            triplicate for assets
+
+                                        </p>
+
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr style="vertical-align:top">
+                        <td style="vertical-align:top; height:50px;border-bottom:1px solid #e3e3e3;">
+                            <table style="width:100%; vertical-align:top;" cellpadding="5" cellspacing="5">
+                                <tr>
+                                    <td width="130" style="padding:2px 5px">Reverse Charge</td>
+                                    <td width="250" style="padding:2px 5px">: -</td>
+
+                                    <td width="130" style="padding:2px 5px">Transportation Mode</td>
+                                    <td style="padding:2px 5px; width:150px">: -</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:2px 5px">Invoice No.</td>
+                                    <td style="padding:2px 5px">: AMKS/17-18/00000</td>
+                                    <td style="padding:2px 5px">Vehicle Number</td>
+                                    <td style="padding:2px 5px">: -</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:2px 5px">Invoice Date</td>
+                                    <td style="padding:2px 5px">: -</td>
+                                    <td style="padding:2px 5px">Date of Supply</td>
+                                    <td style="padding:2px 5px">: -</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:2px 5px"><strong>State</strong></td>
+                                    <td style="padding:2px 5px">: <strong>Gujarat <span style="margin-left:50px">State Code : 24</span></strong></td>
+                                    <td style="padding:2px 5px">Place of Supply</td>
+                                    <td style="padding:2px 5px">: -</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align:top; height:10px; border-bottom:1px solid #e3e3e3; border-top:1px solid #e3e3e3;">&nbsp;</td>
+                    </tr>
+                    <tr style="vertical-align:top">
+                        <td style="vertical-align:top; height:50px;border-bottom:1px solid #e3e3e3;">
+                            <table style="width:100%;vertical-align:top">
+                                <tr>
+                                    <td style="border-right:1px solid #e3e3e3">
+                                        <table style="width:100%; vertical-align:top;" cellpadding="5" cellspacing="5">
+                                            <tr>
+                                                <td colspan="2" style="font-weight:bold; text-align:center;  border-bottom:1px solid #e3e3e3">Details of Receiver | Billed to:</td>
+                                            </tr>
+                                            <tr>
+                                                <td width="155" style="padding:2px 5px">Name</td>
+                                                <td width="250" style="padding:2px 5px">: -</td>
+
+
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:2px 5px">Address</td>
+                                                <td style="padding:2px 5px">: -</td>
+
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:2px 5px">GSTIN</td>
+                                                <td style="padding:2px 5px">: -</td>
+
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:2px 5px"><strong>State</strong></td>
+                                                <td style="padding:2px 5px">: <strong>- <span style="margin-left:50px">State Code : -</span></strong></td>
+
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table style="width:100%; vertical-align:top;" cellpadding="5" cellspacing="5">
+                                            <tr>
+                                                <td colspan="2" style="font-weight:bold; text-align:center;  border-bottom:1px solid #e3e3e3"> Details of Consignee | Shipped to:</td>
+                                            </tr>
+                                            <tr>
+                                                <td width="155" style="padding:2px 5px">Name</td>
+                                                <td width="250" style="padding:2px 5px">: -</td>
+
+
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:2px 5px">Address</td>
+                                                <td style="padding:2px 5px">: -</td>
+
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:2px 5px">GSTIN</td>
+                                                <td style="padding:2px 5px">: -</td>
+
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:2px 5px"><strong>State</strong></td>
+                                                <td style="padding:2px 5px">: <strong>- <span style="margin-left:50px">State Code : -</span></strong></td>
+
+                                        </table>
+                                    </td>
+                                </tr>
+
+                            </table>
+
+                        </td>
+                    </tr>
+
+
+                    <tr style="vertical-align:top">
+                        <td style="vertical-align:top; height:100px">
+                            <table style="vertical-align:top; width:100%; font-size:11px; border-left:none; border-right:none; border-color:rgba(227, 227, 227, 0.44)" border="1">
+                                <tr style="text-align:center; vertical-align:top; background:rgba(227, 227, 227, 0.18)">
+                                    <th style="padding:0px 3px; text-align:center">Sr No.</th>
+                                    <th style="padding:0px 3px;  text-align:center; width:180px">Name of Product / Service</th>
+                                    <th style="padding:0px 3px;  text-align:center">HSN ACS</th>
+                                    <th style="padding:0px 3px;  text-align:center">UOM</th>
+                                    <th style="padding:0px 3px; text-align:center">Qty</th>
+                                    <th style="padding:0px 3px; text-align:center">Rate</th>
+                                    <th style="padding:0px 3px; text-align:center">Amount</th>
+                                    <th style="padding:0px 3px; text-align:center">Less: Discount</th>
+                                    <th style="padding:0px 3px; text-align:center; width:50px !important">Taxable<br /> Value</th>
+                                    <th style="padding:0px 0px; font-size:11px;text-align:center; width:350px; ">
+                                        <table style="width:100%; text-align:center">
+                                            <tr>
+                                                <th style="text-align:center; border-right:1px solid #e3e3e3">
+                                                    <p style="border-bottom:1px solid #e3e3e3; margin-bottom:0px">CGST</p>
+                                                    <div class="col-sm-6 no-padding" style="border-right:1px solid #e3e3e3">Rate</div>
+                                                    <div class="col-sm-6 no-padding">Amount</div>
+                                                </th>
+                                                <th style="text-align:center; border-right:1px solid #e3e3e3">
+                                                    <p style="border-bottom:1px solid #e3e3e3; margin-bottom:0px">SGST</p>
+                                                    <div class="col-sm-6 no-padding" style="border-right:1px solid #e3e3e3">Rate</div>
+                                                    <div class="col-sm-6 no-padding">Amount</div>
+                                                </th>
+                                                <th style="text-align:center">
+                                                    <p style="border-bottom:1px solid #e3e3e3; margin-bottom:0px">IGST</p>
+                                                    <div class="col-sm-6 no-padding" style="border-right:1px solid #e3e3e3">Rate</div>
+                                                    <div class="col-sm-6 no-padding">Amount</div>
+                                                </th>
+                                            </tr>
+                                        </table>
+                                    </th>
+                                    <th style="padding:0px 3px;  text-align:center">
+                                        Total
+                                    </th>
+                                </tr>
+                   
+                                <tr style="text-align:center; vertical-align:top;">
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;">1</td>
+                                    <td style="padding:3px;  text-align:center; border:none; border-right:1px solid #e3e3e3;  width:180px; ">Coil</td>
+                                    <td style="padding:3px;  text-align:center; border:none; border-right:1px solid #e3e3e3;">&nbsp;</td>
+                                    <td style="padding:3px;  text-align:center; border:none; border-right:1px solid #e3e3e3;">&nbsp;</td>
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;">10</td>
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;">&nbsp;</td>
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;">&nbsp;</td>
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;">&nbsp;</td>
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;  width:50px !important;">&nbsp;</td>
+                                    <td style="padding:0px; font-size:11px;text-align:center; border:none; border-right:1px solid #e3e3e3;  width:350px; ">
+                                        <table style="width:100%; text-align:center">
+                                            <tr>
+                                                <td style="text-align:center; border:none; border-right:1px solid #e3e3e3;">
+                                                    <div class="col-sm-6 no-padding" style="border-right:1px solid #e3e3e3">&nbsp;</div>
+                                                    <div class="col-sm-6 no-padding">&nbsp;</div>
+                                                </td>
+                                                <td style="text-align:center; border:none; border-right:1px solid #e3e3e3;">
+                                                    <div class="col-sm-6 no-padding" style="border-right:1px solid #e3e3e3">&nbsp;</div>
+                                                    <div class="col-sm-6 no-padding">&nbsp;</div>
+                                                </td>
+                                                <td style="text-align:center; border:none">
+                                                    <div class="col-sm-6 no-padding" style="border-right:1px solid #e3e3e3">&nbsp;</div>
+                                                    <div class="col-sm-6 no-padding">&nbsp;</div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td style="padding:3px;  text-align:center; border:none">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+
+
+                                <tr style="text-align:center; vertical-align:top;">
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;">1</td>
+                                    <td style="padding:3px;  text-align:center; border:none; border-right:1px solid #e3e3e3;  width:180px; ">Coil</td>
+                                    <td style="padding:3px;  text-align:center; border:none; border-right:1px solid #e3e3e3;">&nbsp;</td>
+                                    <td style="padding:3px;  text-align:center; border:none; border-right:1px solid #e3e3e3;">&nbsp;</td>
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;">10</td>
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;">&nbsp;</td>
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;">&nbsp;</td>
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;">&nbsp;</td>
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;  width:50px !important;">&nbsp;</td>
+                                    <td style="padding:0px; font-size:11px;text-align:center; border:none; border-right:1px solid #e3e3e3;  width:350px; ">
+                                        <table style="width:100%; text-align:center">
+                                            <tr>
+                                                <td style="text-align:center; border:none; border-right:1px solid #e3e3e3;">
+                                                    <div class="col-sm-6 no-padding" style="border-right:1px solid #e3e3e3">&nbsp;</div>
+                                                    <div class="col-sm-6 no-padding">&nbsp;</div>
+                                                </td>
+                                                <td style="text-align:center; border:none; border-right:1px solid #e3e3e3;">
+                                                    <div class="col-sm-6 no-padding" style="border-right:1px solid #e3e3e3">&nbsp;</div>
+                                                    <div class="col-sm-6 no-padding">&nbsp;</div>
+                                                </td>
+                                                <td style="text-align:center; border:none">
+                                                    <div class="col-sm-6 no-padding" style="border-right:1px solid #e3e3e3">&nbsp;</div>
+                                                    <div class="col-sm-6 no-padding">&nbsp;</div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td style="padding:3px;  text-align:center; border:none">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr style="text-align:center; vertical-align:top;">
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;">1</td>
+                                    <td style="padding:3px;  text-align:center; border:none; border-right:1px solid #e3e3e3;  width:180px; ">Coil</td>
+                                    <td style="padding:3px;  text-align:center; border:none; border-right:1px solid #e3e3e3;">&nbsp;</td>
+                                    <td style="padding:3px;  text-align:center; border:none; border-right:1px solid #e3e3e3;">&nbsp;</td>
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;">10</td>
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;">&nbsp;</td>
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;">&nbsp;</td>
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;">&nbsp;</td>
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;  width:50px !important;">&nbsp;</td>
+                                    <td style="padding:0px; font-size:11px;text-align:center; border:none; border-right:1px solid #e3e3e3;  width:350px; ">
+                                        <table style="width:100%; text-align:center">
+                                            <tr>
+                                                <td style="text-align:center; border:none; border-right:1px solid #e3e3e3;">
+                                                    <div class="col-sm-6 no-padding" style="border-right:1px solid #e3e3e3">&nbsp;</div>
+                                                    <div class="col-sm-6 no-padding">&nbsp;</div>
+                                                </td>
+                                                <td style="text-align:center; border:none; border-right:1px solid #e3e3e3;">
+                                                    <div class="col-sm-6 no-padding" style="border-right:1px solid #e3e3e3">&nbsp;</div>
+                                                    <div class="col-sm-6 no-padding">&nbsp;</div>
+                                                </td>
+                                                <td style="text-align:center; border:none">
+                                                    <div class="col-sm-6 no-padding" style="border-right:1px solid #e3e3e3">&nbsp;</div>
+                                                    <div class="col-sm-6 no-padding">&nbsp;</div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td style="padding:3px;  text-align:center; border:none">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr style="text-align:center; vertical-align:top;">
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;">1</td>
+                                    <td style="padding:3px;  text-align:center; border:none; border-right:1px solid #e3e3e3;  width:180px; ">Coil</td>
+                                    <td style="padding:3px;  text-align:center; border:none; border-right:1px solid #e3e3e3;">&nbsp;</td>
+                                    <td style="padding:3px;  text-align:center; border:none; border-right:1px solid #e3e3e3;">&nbsp;</td>
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;">10</td>
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;">&nbsp;</td>
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;">&nbsp;</td>
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;">&nbsp;</td>
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;  width:50px !important;">&nbsp;</td>
+                                    <td style="padding:0px; font-size:11px;text-align:center; border:none; border-right:1px solid #e3e3e3;  width:350px; ">
+                                        <table style="width:100%; text-align:center">
+                                            <tr>
+                                                <td style="text-align:center; border:none; border-right:1px solid #e3e3e3;">
+                                                    <div class="col-sm-6 no-padding" style="border-right:1px solid #e3e3e3">&nbsp;</div>
+                                                    <div class="col-sm-6 no-padding">&nbsp;</div>
+                                                </td>
+                                                <td style="text-align:center; border:none; border-right:1px solid #e3e3e3;">
+                                                    <div class="col-sm-6 no-padding" style="border-right:1px solid #e3e3e3">&nbsp;</div>
+                                                    <div class="col-sm-6 no-padding">&nbsp;</div>
+                                                </td>
+                                                <td style="text-align:center; border:none">
+                                                    <div class="col-sm-6 no-padding" style="border-right:1px solid #e3e3e3">&nbsp;</div>
+                                                    <div class="col-sm-6 no-padding">&nbsp;</div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td style="padding:3px;  text-align:center; border:none">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr style="text-align:center; vertical-align:top;">
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;">1</td>
+                                    <td style="padding:3px;  text-align:center; border:none; border-right:1px solid #e3e3e3;  width:180px; ">Coil</td>
+                                    <td style="padding:3px;  text-align:center; border:none; border-right:1px solid #e3e3e3;">&nbsp;</td>
+                                    <td style="padding:3px;  text-align:center; border:none; border-right:1px solid #e3e3e3;">&nbsp;</td>
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;">10</td>
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;">&nbsp;</td>
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;">&nbsp;</td>
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;">&nbsp;</td>
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;  width:50px !important;">&nbsp;</td>
+                                    <td style="padding:0px; font-size:11px;text-align:center; border:none; border-right:1px solid #e3e3e3;  width:350px; ">
+                                        <table style="width:100%; text-align:center">
+                                            <tr>
+                                                <td style="text-align:center; border:none; border-right:1px solid #e3e3e3;">
+                                                    <div class="col-sm-6 no-padding" style="border-right:1px solid #e3e3e3">&nbsp;</div>
+                                                    <div class="col-sm-6 no-padding">&nbsp;</div>
+                                                </td>
+                                                <td style="text-align:center; border:none; border-right:1px solid #e3e3e3;">
+                                                    <div class="col-sm-6 no-padding" style="border-right:1px solid #e3e3e3">&nbsp;</div>
+                                                    <div class="col-sm-6 no-padding">&nbsp;</div>
+                                                </td>
+                                                <td style="text-align:center; border:none">
+                                                    <div class="col-sm-6 no-padding" style="border-right:1px solid #e3e3e3">&nbsp;</div>
+                                                    <div class="col-sm-6 no-padding">&nbsp;</div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td style="padding:3px;  text-align:center; border:none">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr style="text-align:center; vertical-align:top;">
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;">1</td>
+                                    <td style="padding:3px;  text-align:center; border:none; border-right:1px solid #e3e3e3;  width:180px; ">Coil</td>
+                                    <td style="padding:3px;  text-align:center; border:none; border-right:1px solid #e3e3e3;">&nbsp;</td>
+                                    <td style="padding:3px;  text-align:center; border:none; border-right:1px solid #e3e3e3;">&nbsp;</td>
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;">10</td>
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;">&nbsp;</td>
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;">&nbsp;</td>
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;">&nbsp;</td>
+                                    <td style="padding:3px; text-align:center; border:none; border-right:1px solid #e3e3e3;  width:50px !important;">&nbsp;</td>
+                                    <td style="padding:0px; font-size:11px;text-align:center; border:none; border-right:1px solid #e3e3e3;  width:350px; ">
+                                        <table style="width:100%; text-align:center">
+                                            <tr>
+                                                <td style="text-align:center; border:none; border-right:1px solid #e3e3e3;">
+                                                    <div class="col-sm-6 no-padding" style="border-right:1px solid #e3e3e3">&nbsp;</div>
+                                                    <div class="col-sm-6 no-padding">&nbsp;</div>
+                                                </td>
+                                                <td style="text-align:center; border:none; border-right:1px solid #e3e3e3;">
+                                                    <div class="col-sm-6 no-padding" style="border-right:1px solid #e3e3e3">&nbsp;</div>
+                                                    <div class="col-sm-6 no-padding">&nbsp;</div>
+                                                </td>
+                                                <td style="text-align:center; border:none">
+                                                    <div class="col-sm-6 no-padding" style="border-right:1px solid #e3e3e3">&nbsp;</div>
+                                                    <div class="col-sm-6 no-padding">&nbsp;</div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td style="padding:3px;  text-align:center; border:none">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+
+                                <tr style="text-align:center; vertical-align:top; background:rgba(227, 227, 227, 0.18)">
+
+                                    <th style="padding:3px;  text-align:right" colspan="4">Total</th>
+                                    <th style="padding:3px; text-align:right">-</th>
+                                    <th style="padding:3px; text-align:right">&nbsp;</th>
+                                    <th style="padding:3px; text-align:right">-</th>
+                                    <th style="padding:3px; text-align:right">-</th>
+                                    <th style="padding:3px; text-align:right; width:50px !important">-</th>
+                                    <th style="padding:0px; font-size:11px;text-align:center; width:350px; ">
+                                        <table style="width:100%; text-align:center">
+                                            <tr>
+                                                <td style="text-align:right; border-right:1px solid #e3e3e3">
+                                                    <div class="col-sm-6 no-padding" style="border-right:1px solid #e3e3e3">&nbsp;</div>
+                                                    <div class="col-sm-6 no-padding">-</div>
+                                                </td>
+                                                <td style="text-align:right; border-right:1px solid #e3e3e3">
+                                                    <div class="col-sm-6 no-padding" style="border-right:1px solid #e3e3e3">&nbsp;</div>
+                                                    <div class="col-sm-6 no-padding">-</div>
+                                                </td>
+                                                <td style="text-align:right">
+                                                    <div class="col-sm-6 no-padding" style="border-right:1px solid #e3e3e3">&nbsp;</div>
+                                                    <div class="col-sm-6 no-padding">-</div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </th>
+                                    <th style="padding:3px;  text-align:right">
+                                        -
+                                    </th>
+                                </tr>
+
+
+                            </table>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="vertical-align:top; height:10px; border-bottom:1px solid #e3e3e3;">&nbsp;</td>
+                    </tr>
+
+                    <tr>
+                        <td style="vertical-align:top; height:100px">
+                            <table style="width:100%;  border-bottom:1px solid #e3e3e3">
+                                <tr>
+                                    <td style="text-align:center; padding:3px; vertical-align:top; height:50px; width:60%; border-right:1px solid #e3e3e3">
+                                        <strong>Total Invoice Amount in Words:</strong>
+                                    </td>
+
+                                    <td style="vertical-align:top;">
+                                        <table style="width:100%; vertical-align:top; font-size:11px">
+                                            <tr style="background:rgba(227, 227, 227, 0.44)">
+                                                <td style="padding:3px"><strong>Total Amount Before Tax </strong></td>
+                                                <td style="text-align:right; padding:3px; width:120px"><strong><span class="pull-left">:</span> &nbsp;</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:3px; border-top:1px solid #e3e3e3; ">Add : CGST</td>
+                                                <td style="text-align:right; border-top:1px solid #e3e3e3;  padding:3px"><strong><span class="pull-left">:</span> &nbsp;</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:3px; border-top:1px solid #e3e3e3; ">Add : SGST</td>
+                                                <td style="text-align:right; border-top:1px solid #e3e3e3;  padding:3px"><strong><span class="pull-left">:</span> &nbsp;</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:3px; border-top:1px solid #e3e3e3; ">
+                                                    Add : IGST
+                                                </td>
+                                                <td style="text-align:right; border-top:1px solid #e3e3e3;  padding:3px"><strong><span class="pull-left">:</span> &nbsp;</strong></td>
+                                            </tr>
+                                            <tr style="background:rgba(227, 227, 227, 0.44)">
+                                                <td style="padding:3px; border-top:1px solid #e3e3e3; "><strong>Tax Amount : GST </strong></td>
+                                                <td style="text-align:right; border-top:1px solid #e3e3e3;  padding:3px"><strong><span class="pull-left">:</span> &nbsp;</strong></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="vertical-align:top; height:100px">
+                            <table style="width:100%; vertical-align:top; font-size:11px">
+                                <tr>
+                                    <td style="border-right:1px solid #e3e3e3; font-weight:bold; padding:5px; width:35%">
+                                        <strong style="text-align:center; width:100%; float:left;margin-bottom:10px">: Bank Details :</strong>
+                                        <p>  <span style="width:120px;float:left">Bank Account Number</span>:&nbsp; [[[Account Number]]]</p>
+                                        <p style="border-bottom:1px solid #e3e3e3; padding-bottom:5px">  <span style="width:120px;float:left">Bank Branch IFSC</span>:&nbsp; [[[IFSCCODE]]]</p>
+                                        <strong  style="text-align:center; width:100%; float:left; padding-bottom:5px">: Terms and Conditions :</strong>
+                                        <p style="height:80px;">&nbsp;</p>
+                                    </td>
+                                    
+                               
+                                    <td style="padding:3px;border-right:1px solid #e3e3e3; text-align:center; width:25%">
+                                        <p style="float:left; height:196px; width:100%">&nbsp;</p>
+                                       <strong style="margin-top:90px">(Common Seal)</strong>
+                                    </td>
+
+                                    <td style="width:40%">
+                                        <table style="width:100%; vertical-align:top;">
+                                            <tr style="background:rgba(227, 227, 227, 0.44)">
+                                                <td style="padding:3px"><strong>Total Amount After Tax </strong></td>
+                                                <td style="text-align:right; padding:3px; width:120px"><strong><span class="pull-left">:</span> &nbsp;</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:3px;border-top:1px solid #e3e3e3; "><strong>&nbsp; </strong></td>
+                                                <td style="text-align:right;border-top:1px solid #e3e3e3;  padding:3px; width:120px">&nbsp;</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:3px; border-top:1px solid #e3e3e3; "><strong>GST Payable on Reverse Charge </strong></td>
+                                                <td style="text-align:right;border-top:1px solid #e3e3e3;  padding:3px; width:120px; background:rgba(227, 227, 227, 0.44)"><strong><span class="pull-left">:</span> &nbsp;</strong></td>
+                                            </tr>
+                                            </table>
+                                        <p style="border-top:1px solid #e3e3e3; margin:5px; font-size:10px; text-align:center">Certified that the particulars given above are true and correct.</p>
+
+                                        <h4 style="text-align:center; margin:0px">For, AMKS & Co.</h4>
+
+                                        <strong style="text-align:center; margin:0px; margin-top:100px; float:left; width:100%">Authorised Signatory</strong>
+</td>
+</tr>
+                            </table>
+                            </td>
+                        </tr>
+                    <tr>
+                        <td style="vertical-align:top; text-align:right; height:20px; border-bottom:1px solid #e3e3e3; border-top:1px solid #e3e3e3;">[ E&OE ]</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
